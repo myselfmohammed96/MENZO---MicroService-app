@@ -1,0 +1,17 @@
+#Java & IntelliJ
+/.idea/
+/*.iml
+/target/
+/out/
+*.log
+*.class
+
+#Maven/Gradle
+/.mvn/
+/build/
+/.gradle/
+/*.jar
+
+#OS files
+.DS_Store
+Thumbs.db
