@@ -1,0 +1,52 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+#          filters:
+#            - AuthenticationFilter
+
+        - id: identity-service
+          uri: lb://IDENTITY-SERVICE
+          predicates:
+            - Path=/auth/**
+#          filters:
+#            - AuthenticationFilter
+
+        - id: home-service
+          uri: lb://HOME-SERVICE
+          predicates:
+            - Path=/**
+#          filters:
+#            - AuthenticationFilter
+#
+#        - id: admin-service
+#          uri: lb://ADMIN-SERVICE
+#          predicates:
+#            - Path=/admin/**
+#          filters:
+#            - AuthenticationFilter
+#
+#        - id: identity-service
+#          uri: lb://IDENTITY-SERVICE
+#          predicates:
+#            - Path=/**
+#          filters:
+#            - AuthenticationFilter
+
+  application:
+    name: API-GATEWAY
+
+  server:
+    port: 8080
+
+  eureka:
+    instance:
+      hostname: localhost
+      prefer-ip-address: false
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/

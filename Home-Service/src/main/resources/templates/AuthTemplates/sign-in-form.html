@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www/thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="AuthAccessories/style2.css">
+    <link rel="stylesheet" href="AuthAccessories/user-reg-form.css">
+    <title>MENZO | Sign in</title>
+</head>
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div class="top-nav-bar-elements" id="nav-bar-logo">
+        <a href="/"><img src="media/MENZO_logo.jpg"></a>
+    </div>
+</nav>
+
+<!-- Login page content -->
+
+<div class="reg-page-content">
+    <div class="reg-profile-pic-container">
+
+        <!-- Custom upload Box Click or Drag Image Here -->
+
+        <div id="uploadBox">
+            <span id="upload-box-plus-sign" class="plus-sign">+</span>
+            <input type="file" id="uploadImage" accept="image/*">
+            <img id="uploadedPreview">
+        </div>
+
+        <!-- Cropping area -->
+
+        <div id="modal-back-drop">
+            <div id="imageContainer">
+                <span><p id="close-modal">X</p></span>
+                <div id="previewImage">
+                    <img id="previewImage-img"/>
+                </div>
+                <button id="cropButton">Crop image</button>
+            </div>
+        </div>
+
+        <!-- form -->
+
+    </div>
+    <div class="reg-profile-details-container">
+        <h1 class="reg-page-heading">Hi! Welcome</h1>
+        <p>Let's create an account</p>
+        <form class="reg-form" th:action="@{/user/user-signin}" th:object="${user}" method="post">
+            <input type="text" th:field="*{firstName}" class="reg-form-inputs" name="first-name" placeholder="First Name" required>
+            <input type="text" th:field="*{lastName}" class="reg-form-inputs" name="last-name" placeholder="Last Name" required>
+            <input type="text" th:field="*{phoneNumber}" class="reg-form-inputs" name="phone-number" placeholder="Phone Number" required>
+            <div id="dob-container">
+                <label for="dateOfBirth" id="dob-label">Date of Birth</label>
+                <input type="date" class="reg-form-inputs" id="dateOfBirth" name="dateOfBirth" required>
+            </div>
+            <input type="email" th:field="*{email}" class="reg-form-inputs" name="email" placeholder="Email" required>
+            <select name="gender" th:field="*{gender}" class="reg-form-inputs" id="reg-form-gender" required>
+                <option value="" selected hidden>Gender</option>
+                <option th:each="g : ${T(com.menzo.Home_Service.Enum.Gender).values()}"
+                        th:value="${g}"
+                        th:text="${g.displayName}">
+                </option>
+            </select>
+            <input type="password" th:field="*{password}" class="reg-form-inputs" id="password" name="password" placeholder="Password" required>
+            <input type="password" th:field="*{confirmPassword}" class="reg-form-inputs" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+            <p id="password-match-error">*Passwords do not match. Please re-enter.</p>
+            <input type="hidden" th:field="*{profilePic}" name="croppedImage" id="croppedImageInput">
+
+            <button class="form-button" type="submit">Sign up</button>
+        </form>
+    </div>
+</div>
+
+<!-- Don't have an account - redirection to the sign in page -->
+
+<div id="log-in-redirection">
+    <p>Have an account?</p>
+    <a href="/login"><strong>Log in</strong></a>
+</div>
+
+<!-- footer -->
+
+<div class="login-page-footer">
+    <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="AuthAccessories/reg-form.js"></script>
+</body>
+</html>

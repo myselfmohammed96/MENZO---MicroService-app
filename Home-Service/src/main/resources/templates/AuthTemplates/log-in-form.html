@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="AuthAccessories/style2.css">
+    <link rel="stylesheet" href="AuthAccessories/auth-forms.css">
+    <title>MENZO | Log in</title>
+</head>
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div class="top-nav-bar-elements" id="nav-bar-logo">
+        <a href="/"><img src="media/MENZO_logo.jpg" alt=""></a>
+    </div>
+</nav>
+
+<!-- Login page content -->
+
+<div>
+    <h1 class="login-page-heading">Log in</h1>
+    <form class="login-form" th:action="@{/auth/login}" th:object="${loginCred}" method="post">
+        <input type="email" th:field="*{email}" class="login-form-inputs" name="email" placeholder="Email">
+        <input type="password" th:field="*{password}" class="login-form-inputs" name="password" placeholder="Password">
+        <a href="" id="forgot-password">Forgot password?</a>
+        <button class="form-button" type="submit">Log In</button>
+    </form>
+</div>
+
+<!-- Don't have an account - redirection to the sign in page -->
+
+<div id="sign-in-redirection">
+    <p>Don't have an account?</p>
+    <a href="/sign-in"><strong>Sign in</strong></a>
+</div>
+
+<!-- footer -->
+
+<div class="login-page-footer">
+    <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+</div>
+
+</body>
+</html>
