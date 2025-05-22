@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www/thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-side-menu.css" />
+    <link rel="stylesheet" href="/css/admin-accordion.css" />
+    <link rel="stylesheet" href="/css/admin-accordion-modal.css" />
+    <title>MENZO | Admin-Variations</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-profile">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="profile-icon" src="/media/profile_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p>sign in</p>
+                        </div>
+                        <div><strong>Account</strong></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+    <div class="side-menu-bar-container">
+        <h3>Categories</h3>
+        <ul class="category-menu">
+            <li class="category-item">
+                <a href="">Shirts & T-Shirts</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">pants</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Hoodies</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Coats & Jackets</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Perfumes</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Watches</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Caps</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Shoes</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Sunglasses</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Belts & Wallets</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">Sports Fit</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <a href="">More</a>
+                <ul class="sub-category-menu">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Modal for Variations -->
+
+    <div id="variation-modal" class="modal">
+        <div id="modal-container">
+            <h1 id="modal-title">Add Variation</h1>
+            <input type="text" id="modal-variation-input" placeholder="Variation name" />
+            <input type="text" placeholder="Description" />
+            <div>
+                <button id="save-variation-btn">Save</button>
+                <button onclick="closeVariationModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for variation options -->
+
+    <div id="option-modal" class="modal">
+        <div id="option-modal-container">
+            <h1 id="option-modal-title">Add Option</h1>
+            <input type="text" id="option-modal-input" placeholder="Option name" />
+            <input type="text" placeholder="Description" />
+            <div>
+                <button id="save-option-btn">Save</button>
+                <button onclick="closeOptionModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!--    Variations and options accordion-->
+
+    <div class="main-content-container">
+        <div id="page-title-container">
+            <h1 id="page-title">Variations</h1>
+            <button onclick="openVariationModal()" id="add-button">Add Variation</button>
+        </div>
+
+        <div class="accordion-container" id="accordion-container"></div>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+<script src="/js/variations-accordion-script.js"></script>
+</body>
+
+</html>

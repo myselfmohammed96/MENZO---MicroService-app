@@ -1,6 +1,7 @@
 package com.menzo.Identity_Service.Controller;
 
 import com.menzo.Identity_Service.Dto.PasswordDto;
+import com.menzo.Identity_Service.Entity.Token;
 import com.menzo.Identity_Service.Service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,11 @@ public class AuthRestController {
         System.out.println("Received PasswordDto object from controller: " + userPassword);
         System.out.println("Password from the controller: " + userPassword.getPassword());
         return authService.encryptPassword(userPassword);
+    }
+
+    @GetMapping("get-by-token")
+    public Token getByToken(@RequestParam String token){
+        return authService.getByToken(token);
     }
 
 //    @GetMapping("/health-check")

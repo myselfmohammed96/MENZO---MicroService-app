@@ -4,6 +4,7 @@ import com.menzo.Identity_Service.Dto.*;
 import com.menzo.Identity_Service.Entity.Token;
 import com.menzo.Identity_Service.Feign.UserFeign;
 import com.menzo.Identity_Service.Repository.TokenRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -92,6 +94,13 @@ public class AuthService {
         return cookie;
     }
 
-
+    public Token getByToken(String token) {
+        Token tokenInDB = tokenRepository.findByToken(token).orElseThrow(() ->
+                new EntityNotFoundException("TokenEntity not found with the token: " + token));
+        if (tokenInDB == null){
+            throw new RuntimeException("Token entity not found.!");
+        }
+        return tokenInDB;
+    }
 }
 

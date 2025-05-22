@@ -33,11 +33,17 @@ public class JwtService {
     }
 
     private String createToken(Map<String, Object> claims, String userEmail){
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + 1000L * 60 * 60 * 24 * 30);
+
+        System.out.println("Token generation time: " + now);
+        System.out.println("Token expiry time: " + expiry);
+        System.out.println("Current server time: " + new Date());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

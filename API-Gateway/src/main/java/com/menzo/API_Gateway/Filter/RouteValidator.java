@@ -10,22 +10,21 @@ import java.util.function.Predicate;
 public class RouteValidator {
 
     public static final List<String> openApiEndpoints = List.of(
-//            "/auth/register",
-//            "/auth/token",
-//            "/user-register-form",
-//            "/auth/admin-register",
-//            "/favicon.ico"
 
-            "/",
-            "sign-in",
-            "login",
+//            "/",
+            "/sign-in",
+            "/login",
             "/user/user-signin",
             "/auth/encode-pwd",
             "/auth/login"
+//            "/admin/categories"
+//            "/categories/health-check"
     );
 
     public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()
-                    .noneMatch(uri -> request.getURI().getPath().contains(uri));
+//                    .noneMatch(uri -> request.getURI().getPath().contains(uri));
+                    .noneMatch(uri -> request.getURI().getPath().startsWith(uri));
+//                    && !request.getURI().getPath().matches(".+\\.(css|js|png|jpg|jpeg|gif|svg|woff2?|ttf|eot)$");
 }

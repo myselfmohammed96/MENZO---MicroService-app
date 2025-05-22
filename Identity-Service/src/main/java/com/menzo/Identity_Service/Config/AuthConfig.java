@@ -25,8 +25,8 @@ public class AuthConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    @Autowired
-    private CustomLogoutHandler logoutHandler;
+//    @Autowired
+//    private CustomLogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -35,8 +35,9 @@ public class AuthConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/encode-pwd",
-                                "/auth/login"
+                                "/auth/login",
 //                                "/auth/health-check"
+                                "/auth/get-by-token"
                         )
                         .permitAll()
                         .anyRequest().authenticated());

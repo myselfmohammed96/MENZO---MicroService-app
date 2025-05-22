@@ -2,16 +2,31 @@ package com.menzo.API_Gateway.Dto;
 
 public class TokenDto {
 
-    private Integer tokenId;
+    private Long tokenId;
     private String token;
     private boolean loggedOut;
-    private Integer userId;
+    private Long userId;
 
-    public Integer getTokenId() {
+    public TokenDto(){}
+
+    public TokenDto(String token, boolean loggedOut, Long userId){
+        this.token = token;
+        this.loggedOut = loggedOut;
+        this.userId = userId;
+    }
+
+    public TokenDto(Long tokenId, String token, boolean loggedOut, Long userId){
+        this.tokenId = tokenId;
+        this.token = token;
+        this.loggedOut = loggedOut;
+        this.userId = userId;
+    }
+
+    public Long getTokenId() {
         return tokenId;
     }
 
-    public void setTokenId(Integer tokenId) {
+    public void setTokenId(Long tokenId) {
         this.tokenId = tokenId;
     }
 
@@ -31,11 +46,11 @@ public class TokenDto {
         this.loggedOut = loggedOut;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

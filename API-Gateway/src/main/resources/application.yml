@@ -6,36 +6,53 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user/**
-#          filters:
-#            - AuthenticationFilter
+          filters:
+            - AuthenticationFilter
+
+        - id: admin-service
+          uri: lb://ADMIN-SERVICE
+          predicates:
+            - Path=/admin/**, /css/**, /js/**, /media/**
+#            - Path=/**
+          filters:
+            - AuthenticationFilter
+#            - RewritePath=/admin/(?<path>.*), /${path}
 
         - id: identity-service
           uri: lb://IDENTITY-SERVICE
           predicates:
-            - Path=/auth/**
-#          filters:
-#            - AuthenticationFilter
+            - Path=/auth/**, /logout
+          filters:
+            - AuthenticationFilter
+
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/products/**,/categories/**,/variations/**
+          filters:
+            - AuthenticationFilter
+
+
+
+        #        - id: admin-static
+        #          uri: lb://ADMIN-SERVICE
+        #          predicates:
+        #            - Path=/admin/**/*.css
+        #            - Path=/admin/**/*.js
 
         - id: home-service
           uri: lb://HOME-SERVICE
           predicates:
             - Path=/**
-#          filters:
-#            - AuthenticationFilter
-#
-#        - id: admin-service
-#          uri: lb://ADMIN-SERVICE
-#          predicates:
-#            - Path=/admin/**
-#          filters:
-#            - AuthenticationFilter
-#
-#        - id: identity-service
-#          uri: lb://IDENTITY-SERVICE
-#          predicates:
-#            - Path=/**
-#          filters:
-#            - AuthenticationFilter
+          filters:
+            - AuthenticationFilter
+  #
+  #      globalcors:
+  #        corsConfigurations:
+  #          '[/**]':
+  #            allowedOrigins: "http://localhost:8282"
+  #            allowedMethods: "*"
+  #            allowedHeaders: "*"
 
   application:
     name: API-GATEWAY
@@ -50,3 +67,4 @@ spring:
     client:
       service-url:
         defaultZone: http://localhost:8761/eureka/
+
