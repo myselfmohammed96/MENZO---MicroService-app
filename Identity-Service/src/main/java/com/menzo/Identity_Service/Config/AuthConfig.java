@@ -1,10 +1,10 @@
 package com.menzo.Identity_Service.Config;
 
-import com.netflix.discovery.converters.Auto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,33 +22,37 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class AuthConfig {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthConfig.class);
+    private static final String logoutRedirectUrl = "http://localhost:8080/index";
+
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-//    @Autowired
-//    private CustomLogoutHandler logoutHandler;
+    @Autowired
+    private CustomLogoutHandler customLogoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/encode-pwd",
+                        .requestMatchers(
+                                "/auth/encode-pwd",
                                 "/auth/login",
-//                                "/auth/health-check"
                                 "/auth/get-by-token"
-                        )
-                        .permitAll()
-                        .anyRequest().authenticated());
-//                .logout(l -> l.logoutUrl("/logout")
-//                        .addLogoutHandler(logoutHandler)
-//                        .logoutSuccessHandler(
-//                                (request, response, authentication) -> {
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .logout(l -> l.logoutUrl("/logout")
+                        .addLogoutHandler(customLogoutHandler)
+//                        .logoutSuccessHandler((request, response, authentication) -> {
 //                                    SecurityContextHolder.clearContext();
-//                                    response.sendRedirect("http://localhost:8080/");
-//                                }
-//                        ));
+//                                    logger.info("Logout successful. Redirecting to {}", logoutRedirectUrl);
+//                                    response.sendRedirect(logoutRedirectUrl);
+//                        })
+                );
         return http.build();
     }
 

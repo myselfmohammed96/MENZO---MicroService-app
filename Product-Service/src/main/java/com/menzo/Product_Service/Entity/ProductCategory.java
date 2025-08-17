@@ -1,25 +1,38 @@
 package com.menzo.Product_Service.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "product_categories")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Self-referencing relationship
-//    @ManyToOne
-//    @JoinColumn(name = "parent_category_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "product_categories_ibfk_1"))
     @Column(name = "parent_category_id")
     private Long parentCategoryId;
 
     @Column(name = "category_name", nullable = false, unique = true, length = 100)
     private String categoryName;
+
+//    @JsonManagedReference("category-variation")
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "category_variation_configuration",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns =  @JoinColumn(name = "variation_id")
+    )
+    private Set<Variation> variations = new HashSet<>();
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
@@ -34,14 +47,27 @@ public class ProductCategory {
 
     public ProductCategory(){}
 
-    public ProductCategory(Long parentCategoryId,
-                           String categoryName){
+    public ProductCategory(String categoryName){
+        this.categoryName = categoryName;
+    }
+
+    public ProductCategory(Long parentCategoryId, String categoryName){
         this.parentCategoryId = parentCategoryId;
         this.categoryName = categoryName;
     }
 
-    public ProductCategory(String categoryName){
+    public ProductCategory(Long parentCategoryId, String categoryName, Set<Variation> variations) {
+        this.parentCategoryId = parentCategoryId;
         this.categoryName = categoryName;
+        this.variations = variations;
+    }
+
+    public ProductCategory(SubCategoryDto subCategoryDto) {
+        this.id = subCategoryDto.getId();
+        this.parentCategoryId = subCategoryDto.getParentCategoryId();
+        this.categoryName = subCategoryDto.getCategoryName();
+        this.isActive = subCategoryDto.getIsActive();
+        this.createdAt = subCategoryDto.getCreatedAt();
     }
 
     public Long getId() {
@@ -57,7 +83,7 @@ public class ProductCategory {
     }
 
     public void setParentCategoryId(Long parentCategoryId) {
-        this.parentCategoryId = this.parentCategoryId;
+        this.parentCategoryId = parentCategoryId;
     }
 
     public String getCategoryName() {
@@ -66,6 +92,14 @@ public class ProductCategory {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Set<Variation> getVariations() {
+        return variations;
+    }
+
+    public void setVariations(Set<Variation> variations) {
+        this.variations = variations;
     }
 
     public Boolean getIsActive() {
@@ -82,5 +116,11 @@ public class ProductCategory {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void display() {
+        System.out.println("id: " + id + "\nparentCategoryId: " + parentCategoryId +
+                "\ncategoryName: " + categoryName + "\nvariations: " + variations +
+                "\nisActive: " + isActive + "\ncreatedAt: " + createdAt);
     }
 }

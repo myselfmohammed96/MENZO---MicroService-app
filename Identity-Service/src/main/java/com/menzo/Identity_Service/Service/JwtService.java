@@ -34,7 +34,7 @@ public class JwtService {
 
     private String createToken(Map<String, Object> claims, String userEmail){
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + 1000L * 60 * 60 * 24 * 30);
+        Date expiry = new Date(now.getTime() + 1000L * 60 * 60 * 24 * 10);
 
         System.out.println("Token generation time: " + now);
         System.out.println("Token expiry time: " + expiry);
@@ -43,7 +43,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 10))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

@@ -18,6 +18,22 @@ public class RegNewUser {
     private String confirmPassword;
     private String profilePic;
 
+    public RegNewUser() {}
+
+    public RegNewUser(String firstName, String lastName, String phoneNumber,
+                      LocalDate dateOfBirth, String email, Gender gender,
+                      String password, String confirmPassword, String profilePic) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.gender = gender;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.profilePic = profilePic;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -88,5 +104,20 @@ public class RegNewUser {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+
+    public void display() {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.gender = gender;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.profilePic = profilePic;
+        System.out.println("firstName: " + firstName + "\nlastName: " + lastName +
+                "\nphoneNumber: " + phoneNumber + "\ndateOfBirth: " + dateOfBirth +
+                "\nemail: " + email + "\ngender: " + gender);
     }
 }

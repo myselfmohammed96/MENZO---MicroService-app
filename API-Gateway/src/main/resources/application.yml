@@ -28,10 +28,9 @@ spring:
         - id: product-service
           uri: lb://PRODUCT-SERVICE
           predicates:
-            - Path=/products/**,/categories/**,/variations/**
+            - Path=/products/**, /categories/**, /variations/**, /search-filter/**, /uploads/**
           filters:
             - AuthenticationFilter
-
 
 
         #        - id: admin-static
@@ -43,7 +42,7 @@ spring:
         - id: home-service
           uri: lb://HOME-SERVICE
           predicates:
-            - Path=/**
+            - Path=/index, /login, /sign-in, /all-categories, /home-css/**, /home-js/**, /home-media/**
           filters:
             - AuthenticationFilter
   #

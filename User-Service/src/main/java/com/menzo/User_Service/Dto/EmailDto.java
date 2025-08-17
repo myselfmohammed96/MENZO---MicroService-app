@@ -17,4 +17,8 @@ public class EmailDto {
     public void setEmail(String email){
         this.email = email;
     }
+
+    public void display() {
+        System.out.println("email: " + email);
+    }
 }

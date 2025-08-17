@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AuthFeign {
 
     @PostMapping("/auth/encode-pwd")
-    public String encodePassword(@RequestBody PasswordDto userPassword);
+    public PasswordDto encodePassword(@RequestBody PasswordDto userPassword);
 }

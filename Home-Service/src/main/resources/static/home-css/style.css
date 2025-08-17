@@ -1,0 +1,533 @@
+/* Contains styling for - nav bar, footer menu, view all button */
+
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Nav bar */
+
+#nav-bar-container{
+    width: 100%;
+    height: 4.5vh;
+}
+
+/* Top nav bar */
+
+#top-nav-bar{
+    width: 100%;
+    height: 8.5vh;
+    display: flex;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.top-nav-bar-elements{
+    height: 100%;
+}
+
+#nav-bar-logo{
+    flex: 1;
+    overflow: hidden;
+}
+
+#nav-bar-logo img{
+    width:62%;
+    margin-left: 15%;
+}
+
+#nav-bar-search-bar{
+    flex: 3;
+}
+
+#search-bar{
+    width: 75%;
+    height: 30px;
+    border-radius: 20px;
+    background-color: #333;
+    border: none;
+    margin:14px 10%;
+    padding-left: 30px;
+    color: rgb(222, 222, 222);
+    font-size: 16px;
+}
+
+#search-bar:focus{
+    outline: 2px solid #494949;
+}
+
+#nav-bar-icons{
+    flex: 1.5;
+    display: flex;
+    padding-top: 5px;
+    overflow: hidden;
+}
+
+#nav-icon-wishlist{
+    height: 100%;
+    flex: 1;
+}
+
+#nav-icon-cart{
+    height: 100%;
+    flex: 1;
+}
+
+#user-profile-icon {
+    height: 100%;
+    flex: 1.4;
+    margin-right: -15px;
+    cursor: pointer;
+}
+
+#nav-icon-wishlist a, #nav-icon-cart a, #user-profile-icon{
+    display: flex;
+    text-decoration: none;
+    color: #e9e9e9;
+    font-size: 12.5px;
+}
+
+
+/* ----------- */
+
+#user-dropdown {
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    background-color: #222;
+    color: white;
+    list-style: none;
+    padding: 10px 0;
+    border-radius: 4px;
+    min-width: 150px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 1001;
+}
+
+#user-dropdown li {
+    padding: 8px 20px;
+}
+
+#user-dropdown li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+#user-dropdown li:hover {
+    background-color: #444;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ----------- */
+
+#heart-icon{
+    width: 30px;
+    margin-top: 7px;
+}
+
+#cart-icon, #profile-icon{
+    width: 37px;
+    margin-top: 7px;
+}
+
+.icon-details-container{
+    padding-top: 9px;
+    padding-left: 5px;
+}
+
+.icon-details-container div{
+    margin-bottom: 2px;
+}
+
+#wishlist-count{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(233, 233, 233);
+    border-radius: 15px;
+    color: rgb(33, 33, 33);
+    min-width: 20px;
+    width: 15px;
+}
+
+#cart-count{
+    display: flex;
+    justify-content: center;
+    background-color: red;
+    border-radius: 15px;
+    color: rgb(0, 0, 0);
+    min-width: 20px;
+    width: 15px;
+}
+
+/* Bottom nav bar */
+
+#bottom-nav-bar{
+    height: 4.5vh;
+    background-color: black;
+    color: #e9e9e9;
+    margin-top: 59.5px;
+}
+
+#bottom-nav-bar ul{
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    overflow: hidden;
+    white-space: nowrap;    /* prevents line breaks */
+}
+
+#bottom-nav-bar ul li{
+    flex-grow: 1;
+    text-align: center;
+    margin-top: 7px;
+}
+
+#bottom-nav-bar ul li a{
+    color: #e9e9e9;
+    text-decoration: none;
+}
+
+#bottom-nav-bar ul li a:hover{
+    color: rgb(193, 193, 193);
+}
+
+#bottom-nav-bar ul li a:active{
+    color: #fff;
+}
+
+/* View all button */
+
+#view-all-button{
+    height: 50px;
+    margin: 0px 50px;
+    padding: 40px 0px 25px 0px;
+    display: flex;
+    justify-content: center;
+}
+
+#view-all-button button{
+    font-size: 16px;
+    padding: 0px 25px;
+    height: 35px;
+    border-radius: 18px;
+    background-color: transparent;
+    color: #787878;
+    border: 1.5px solid #787878;
+    cursor: pointer;
+    transition:0.2, transform 0.1s ease;
+}
+
+#view-all-button button:hover{
+    background-color: #eeeeee;
+    color:#282828;
+    border: 1.8px solid #282828;
+}
+
+#view-all-button button:active{
+    transform: scale(0.95);
+}
+
+/* Footer menu */
+
+.footer-menu-container{
+    width: 100%;
+    height: 700px;
+    background-color: black;
+}
+
+/* Footer - Email subscription part */
+
+.email-sub-container{
+    width: 90%;
+    height: 9vw;
+    margin: 0px auto;
+    border-bottom: 2px solid #555;
+    display: flex;
+}
+
+.email-sub-label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.email-sub-label img{
+    width: 45px;
+    border-radius: 85px;
+}
+
+.email-sub-label p{
+    color: white;
+}
+
+.email-sub-input{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.email-sub-input p{
+    color: white;
+    font-size: 10px;
+    margin-bottom: 5px;
+    margin-left: 15%;
+}
+
+.email-input-wrapper{
+    position: relative;
+    max-width: 70%;
+    margin-left: 15%;
+}
+
+.email-input-wrapper input{
+    width: 100%;
+    height: 5vh;
+    padding: 12px 100px 12px 15px;
+    font-size: 13px;
+    border-radius: 4.5px;
+    border: none;
+    box-sizing: border-box;
+}
+
+.email-input-wrapper input:focus{
+    outline: 2.5px solid #5d5d5d;
+}
+
+.email-input-wrapper button{
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    height: 90%;
+    padding: 0 20px;
+    border-radius: 4px;
+    border: none;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.email-input-wrapper button:hover{
+    color: rgb(205, 205, 205);
+}
+
+.email-input-wrapper button:active{
+    transform: scale(0.95);
+}
+
+/* Footer - Options part */
+
+.footer-options-container{
+    width: 100%;
+    height: 400px;
+    display: flex;
+    padding-top: 4vw;
+    color: white;
+}
+
+.footer-contact-wrapper{
+    flex: 2;
+}
+
+.footer-contact-wrapper img{
+    width: 40%;
+    margin-left: 35%;
+}
+
+.footer-contacts{
+    margin-left: 20px;
+}
+
+.footer-contacts{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#footer-address img, #footer-telephone img{
+    width: 5.5%;
+}
+
+#footer-email img{
+    width: 6.5%;
+}
+
+#footer-address p{
+    font-size: 0.8em;
+    margin-top: 15px;
+}
+
+#footer-telephone p, #footer-email p{
+    font-size: 0.8em;
+}
+
+.footer-pages-wrapper, .footer-categories-wrapper, .footer-support-wrapper{
+    flex: 1;
+}
+
+.footer-pages-wrapper h2, .footer-categories-wrapper h2, .footer-support-wrapper h2, .footer-social-media-wrapper h2{
+    margin: 20px 0 40px 25px;
+}
+
+.footer-pages-wrapper ul, .footer-categories-wrapper ul, .footer-support-wrapper ul{
+    list-style-type: none;
+    margin-left: 25px;
+    font-size: 13px;
+}
+
+.footer-pages-wrapper li, .footer-categories-wrapper li, .footer-support-wrapper li{
+    margin-top: 20px;
+}
+
+.footer-pages-wrapper a, .footer-categories-wrapper a, .footer-support-wrapper a{
+    text-decoration: none;
+    color: #e9e9e9;
+}
+
+.footer-pages-wrapper a:hover, .footer-categories-wrapper a:hover, .footer-support-wrapper a:hover{
+    color: rgb(147, 151, 194);
+}
+
+.footer-pages-wrapper a:active, .footer-categories-wrapper a:active, .footer-support-wrapper a:active{
+    color: #fff;
+}
+
+.footer-social-media-wrapper{
+    flex: 1.5;
+}
+
+.footer-social-media-wrapper h2{
+    margin: 20px 0 40px 5px;
+}
+
+#social-media-links-wrapper{
+    margin-top: -15px;
+}
+
+#footer-facebook-link, #footer-instagram-link{
+    width: 35px;
+    margin-right: 7px;
+}
+
+#footer-whatsapp-link{
+    width: 45px;
+    position: relative;
+    top: 7px;
+}
+
+#footer-tiktok-link, #footer-twitter-link{
+    width: 40px;
+    position: relative;
+    margin-right: 5px;
+    top: 5px;
+}
+
+/* Social media link icons styling */
+
+#social-media-links-wrapper a img{
+    transition: filter 2s ease, transform 0.3s ease;
+    filter: invert(0%) sepia(0%) hue-rotate(0deg) saturate(100%);
+}
+
+#footer-facebook-link:hover, #footer-instagram-link:hover, #footer-whatsapp-link:hover, #footer-tiktok-link:hover, #footer-twitter-link:hover{
+    transform: scale(1.1);
+}
+
+#footer-whatsapp-link:hover{
+    filter: sepia(100%) saturate(1000%) hue-rotate(80deg) brightness(85%) contrast(95%);
+}
+
+#footer-instagram-link:hover{
+    filter: sepia(100%) saturate(6000%) hue-rotate(265deg) brightness(95%) contrast(100%);
+}
+
+#footer-tiktok-link:hover{
+    filter: sepia(200%) saturate(2000%) hue-rotate(300deg) brightness(60%) contrast(300%);
+}
+
+#footer-facebook-link:hover{
+    filter: sepia(200%) saturate(2000%) hue-rotate(170deg) brightness(60%) contrast(300%);
+}
+
+#footer-twitter-link:hover{
+    filter: sepia(200%) saturate(2000%) hue-rotate(170deg) brightness(65%) contrast(300%);
+}
+
+/* End footer - with copyright claims */
+
+.end-footer{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    margin-top: 50px;
+    padding: 0 11vw;
+    box-sizing: border-box;
+}
+
+#copy-right-container{
+    flex: 1;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 13px;
+}
+
+#copy-right-container p{
+    color: #acacac;
+}
+
+#payment-cards-container{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+}
+
+#visa-card-logo{
+    width: 40px;
+    margin-right: 7px;
+}
+
+#apple-pay-logo{
+    width: 45px;
+    height: 32px;
+    margin-right: 7px;
+}
+
+#mastercard-logo{
+    width: 40px;
+    height: 27px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+#paypal-logo{
+    width: 40px;
+    height: 35;
+    border-radius: 3px;
+    margin-right: 9px;
+}
+
+#stripe-pay-logo{
+    width: 40px;
+    height: 27px;
+    border-radius: 5px;
+}

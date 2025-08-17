@@ -6,18 +6,24 @@ import com.menzo.Identity_Service.Feign.UserFeign;
 import com.menzo.Identity_Service.Repository.TokenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     UserFeign userFeign;
@@ -34,73 +40,106 @@ public class AuthService {
     @Autowired
     TokenRepository tokenRepository;
 
-//    Encoding password with the Bcrypt encoder
-
-    public String encryptPassword(PasswordDto password) {
-        System.out.println("Password from the AuthSErvice layer: " + password.getPassword());
+    //    Encrypt password with the Bcrypt encoder
+    public PasswordDto encryptPassword(PasswordDto password) {
         if (password == null || password.getPassword() == null) {
             throw new IllegalArgumentException("Password must not be null");
         }
-        return passwordEncoder.encode(password.getPassword());
+        try {
+            logger.info("Encrypting password");
+            String encodedPasswordString = passwordEncoder.encode(password.getPassword());
+            return new PasswordDto(encodedPasswordString);
+        } catch (Exception e) {
+            logger.error("Error during password encryption", e);
+            throw new RuntimeException("Failed to encrypt password", e);
+        }
     }
 
-//    logging in user - by authentication, token generation, cookie building & returning the cookies
-
-    public Cookie loginUser(LoginCredentials loginCred) {     // HttpServletResponse response
-        Authentication authentication = authenticationManager.authenticate(new
-                UsernamePasswordAuthenticationToken(loginCred.getEmail(), loginCred.getPassword()));
-        if (authentication.isAuthenticated()){
-//            User user = userFeign.getUserbyUserEmail(new EmailDto(loginCred.getEmail()));
+    //    logging in user - (authentication, token generation, cookie building & return the cookies)
+    public Cookie loginUser(LoginCredentials loginCred) {
+        try {
+            logger.info("Authenticating user: {}", loginCred.getEmail());
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginCred.getEmail(), loginCred.getPassword())
+            );
+            if (!authentication.isAuthenticated()) {
+                throw new BadCredentialsException("Invalid credentials");
+            }
             String token = generateToken(loginCred.getEmail());
-            Cookie cookie = createCookie(token);
-            return cookie;
-        } else{
-            throw new RuntimeException("Invalid access");
+            logger.info("User authenticated successfully: {}", loginCred.getEmail());
+
+            return createCookie(token);
+
+        } catch (DisabledException e) {
+            logger.warn("Blocked user tried logging in: {}", loginCred.getEmail());
+            throw new RuntimeException(e.getMessage());
+        } catch (AuthenticationException e) {
+            logger.warn("Authentication failed for: {}", loginCred.getEmail());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error during login", e);
+            throw new RuntimeException("Login failed", e);
         }
     }
 
-//    generate new Token for the given userEmail, after revoking the previous tokens
-
-    public String generateToken(String userEmail){
+    //    generate new Token for the given userEmail, after revoking the previous tokens
+    public String generateToken(String userEmail) {
+        logger.info("Generating token for user: {}", userEmail);
         User user = userFeign.getUserbyUserEmail(new EmailDto(userEmail));
-        String generatedToken = jwtService.generateToken(userEmail);
+        System.out.println("generate Token method:");
+        user.display(); //*** check ***
+        String token = jwtService.generateToken(userEmail);
+
         boolean oldTokensRevoked = revokeAllTokensByUser(user);
-        if (oldTokensRevoked){
-            Token token = new Token(generatedToken, false, user.getId());
-            tokenRepository.save(token);
+        if (oldTokensRevoked) {
+            tokenRepository.save(new Token(token, false, user.getId()));
         }
-        return generatedToken;
+
+        logger.info("Token generated and saved for user ID: {}", user.getId());
+        return token;
     }
 
-//    Revoking the previous tokens
-
-    private boolean revokeAllTokensByUser(User user){
+    //    Revoking the previous tokens
+    private boolean revokeAllTokensByUser(User user) {
         List<Token> tokenList = tokenRepository.findAllTokensByUser(user.getId());
-//        if (tokenList != null && !tokenList.isEmpty()){
-        tokenList.forEach(t -> {t.setLoggedOut(true);});
+
+        if (tokenList.isEmpty()) {
+            logger.info("No active tokens found for user ID: {}", user.getId());
+            return true;
+        }
+        tokenList.stream()
+                .filter(t -> !t.isLoggedOut())
+                .forEach(t -> t.setLoggedOut(true));
         tokenRepository.saveAll(tokenList);
+
+        logger.info("Revoked {} tokens for user ID: {}", tokenList.size(), user.getId());
         return true;
-//        }
     }
 
-//    Creates HttpOnly Secure Cookie
-
-    private Cookie createCookie(String token){
+    //    Creates HttpOnly Secure Cookie
+    private Cookie createCookie(String token) {
         Cookie cookie = new Cookie("JWT", token);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");
-        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setMaxAge(10 * 24 * 60 * 60);
         return cookie;
     }
 
-    public Token getByToken(String token) {
-        Token tokenInDB = tokenRepository.findByToken(token).orElseThrow(() ->
-                new EntityNotFoundException("TokenEntity not found with the token: " + token));
-        if (tokenInDB == null){
-            throw new RuntimeException("Token entity not found.!");
-        }
-        return tokenInDB;
+    //    Get token entity by token
+    public TokenDto getByToken(String token) {
+        logger.info("Fetching token entity");
+        Token tokenInDB = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new EntityNotFoundException("Token not found: " + token));
+        UserStatusDto userDto = userFeign.getUserByUserId(tokenInDB.getUserId());
+        return new TokenDto(
+                tokenInDB.getTokenId(),
+                tokenInDB.getToken(),
+                tokenInDB.isLoggedOut(),
+                tokenInDB.getUserId(),
+                userDto.isActive()
+        );
     }
+
 }
 

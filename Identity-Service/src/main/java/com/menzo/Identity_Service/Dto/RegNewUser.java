@@ -89,4 +89,9 @@ public class RegNewUser {
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
+
+    public void display() {
+        System.out.println("firstName: " + firstName + "\nlastName: " + lastName + "\nphoneNumber: " + phoneNumber +
+                "\ndateOfBirth: " + dateOfBirth + "\nemail: " + email + "\ngender: " + gender);
+    }
 }

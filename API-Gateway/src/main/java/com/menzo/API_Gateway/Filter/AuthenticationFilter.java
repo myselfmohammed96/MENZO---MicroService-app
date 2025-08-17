@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.*;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -42,12 +44,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             String path = request.getURI().getPath();
-            System.out.println("This is a normal trigger.......!");
 
             if (validator.isSecured.test(request)) {
                 log.info("Secured request to: {}", path);
                 Optional<String> jwtToken = extractJwtFromCookies(request);
-//                System.out.println("This is what inside this token: " + jwtToken.get());
 
                 if (jwtToken.isEmpty()) {
                     log.warn("JWT missing for secured path: {}", path);
@@ -56,32 +56,30 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
                 try {
                     String token = jwtToken.get();
-                    System.out.println("JWT found: " + token);
+                    log.info("JWT found for token: {}", token.substring(0, 21) + "...");
                     TokenDto tokenInDB;
 
                     try {
                         tokenInDB = gatewayFeign.getByToken(token);
-                        System.out.println("Token found in DB: loggedOut = " + tokenInDB.isLoggedOut());
                     } catch (FeignException fe) {
-                        System.out.println("FeignException: " + fe.status() + " - " + fe.getMessage());
-                        System.out.println("X - FeignException while fetching token from DB: " + fe.getMessage());
                         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token validation service unavailable " + fe.getMessage());
                     }
 
                     if (tokenInDB.isLoggedOut()) {
-//                        log.warn("Blocked! logged-out token for path: {}", path);
                         log.warn("Token is marked as logged out.");
                         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token logged out");
                     }
 
+                    if (!tokenInDB.isUserIsActive()) {
+                        log.warn("User is marked as inActive");
+                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You've been blocked. Your account is inactive..!");
+                    }
+
                     jwtUtil.validateToken(token);
-                    System.out.println("JWT is valid");
+                    log.info("JWT validation successful");
 
                     String email = jwtUtil.extractUserEmail(token);
                     String roles = jwtUtil.extractRoles(token);
-
-                    System.out.println("Extracted Email: " + email);
-                    System.out.println("Extracted Roles: " + roles);
 
                     request = request.mutate()
                             .header("loggedInUser", email)
@@ -89,24 +87,37 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                             .build();
 
                 } catch (Exception e) {
-                    System.out.println("X - JWT Validation failed: " + e.getMessage());
+                    log.warn("JWT validation failed: {}", e.getMessage());
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
                 }
             } else {
                 log.debug("Open(non-secured) request to: {}", path);
             }
 
-            System.out.println("-> forwarding request downstream...");
+            log.info("Forwarding request downstream ->");
             return chain.filter(exchange.mutate().request(request).build());
         };
 
     }
 
+//    private Optional<String> extractJwtFromCookies(ServerHttpRequest request) {
+//        log.info("Extracting JWT from cookie");
+//        request.getCookies().forEach((name, cookieList) ->
+//                System.out.println("cookie Found: " + name + " -> " + cookieList.get(0).getValue()));
+//        return Optional.ofNullable(request.getCookies().getFirst("JWT"))
+//                .map(cookie -> cookie.getValue());
+//    }
     private Optional<String> extractJwtFromCookies(ServerHttpRequest request) {
-        request.getCookies().forEach((name, cookieList) ->
-                System.out.println("cookie Found: " + name + " -> " + cookieList.get(0).getValue()));
-        return Optional.ofNullable(request.getCookies().getFirst("JWT"))
-                .map(cookie -> cookie.getValue());
+        log.info("Extracting JWT from cookie");
+        MultiValueMap<String, HttpCookie> cookies = request.getCookies();
+        HttpCookie jwtCookie = cookies.getFirst("JWT");
+
+        if (jwtCookie == null) {
+            log.warn("JWT cookie not found.");
+            return Optional.empty();
+        }
+        log.info("JWT cookie found: {}", jwtCookie.getValue());
+        return Optional.of(jwtCookie.getValue());
     }
 
     public static class Config {

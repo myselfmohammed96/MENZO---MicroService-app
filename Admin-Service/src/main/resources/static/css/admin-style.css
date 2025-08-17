@@ -10,12 +10,12 @@
 
 #nav-bar-container{
     width: 100%;
-    height: 4.5vh;
+    height: 60px;
 }
 
 #top-nav-bar{
     width: 100%;
-    height: 9vh;
+    height: 60px;
     display: flex;
     background-color: black;
     position: fixed;
@@ -27,7 +27,6 @@
 
 .top-nav-bar-elements{
     height: 100%;
-    width: 20px;
 }
 
 #nav-bar-logo{
@@ -36,12 +35,15 @@
 }
 
 #nav-bar-logo img{
-    width:62%;
+    height: 100%;
+    width: auto;
     margin-left: 15%;
 }
 
 #nav-bar-search-bar{
     flex: 3;
+    position: relative;
+    display: inline-block;
 }
 
 #search-bar{
@@ -54,6 +56,28 @@
     padding-left: 30px;
     color: rgb(222, 222, 222);
     font-size: 16px;
+    /* display: block; */
+}
+
+#clear-search {
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    color: #aaa;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    display: none;
+}
+
+#search-lens-btn {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 30px;
+    display: none;
 }
 
 #search-bar:focus{
@@ -95,37 +119,257 @@
     margin-bottom: 2px;
 }
 
-/* View all button */
+/* Ham burger & search icons */
 
-/* #view-all-button{
-    height: 50px;
-    margin: 0px 50px;
-    padding: 40px 0px 25px 0px;
+#hamBurger-searchIcon-container {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    display: none;
 }
 
-#view-all-button button{
-    font-size: 16px;
-    padding: 0px 25px;
-    height: 35px;
-    border-radius: 18px;
-    background-color: transparent;
-    color: #787878;
-    border: 1.5px solid #787878;
+#search-icon, #hamBurger-icon {
+    width: 100%;
+    height: 100%;
+}
+
+#search-icon img {
+    width: 30px;
+    height: 30px;
+    margin-top: 4px;
+    margin-left: 20px;
     cursor: pointer;
-    transition:0.2, transform 0.1s ease;
 }
 
-#view-all-button button:hover{
-    background-color: #eeeeee;
-    color:#282828;
-    border: 1.8px solid #282828;
+#hamBurger-icon img {
+    width: 40px;
+    height: 40px;
+    margin-top: -2px;
+    margin-left: 8px;
+    cursor: pointer;
 }
 
-#view-all-button button:active{
-    transform: scale(0.95);
-} */
+/* Media queries - Nav bar */
+
+/* Breaking point for Laptops & smaller */
+@media (max-width: 1070px) {
+    #nav-bar-container{
+        height: 55px;
+    }
+
+    #top-nav-bar{
+        height: 55px;
+    }
+
+    #search-bar{
+        margin:12px 10%;
+    }
+
+    #nav-icon-profile{
+        margin-right: 45px;
+        margin-top: -2px
+    }
+}
+
+@media (max-width: 960px) {
+    #nav-bar-container{
+        height: 50px;
+    }
+
+    #top-nav-bar{
+        height: 50px;
+    }
+
+    #nav-icon-profile{
+        margin-right: 40px;
+        margin-top: -5px
+    }
+
+    #search-bar{
+        margin:10px 10%;
+    }
+}
+
+/* -- Medium (tablets) - 992px > and >= 768px -- */
+
+@media (max-width: 840px) {
+    #nav-bar-logo{
+        flex: 1;
+    }
+
+    #nav-bar-search-bar{
+        flex: 2;
+    }
+
+    #nav-icon-profile{
+        margin-right: 35px;
+        margin-top: -5px
+    }
+
+    #search-bar{
+        margin:10px 10%;
+    }
+}
+
+/* -- Small (phones) - 768px > and >= 576px -- */
+
+@media (max-width: 768px) {
+    #nav-bar-container{
+        height: 47px;
+    }
+
+    #top-nav-bar{
+        height: 47px;
+    }
+
+    #nav-bar-logo{
+        flex: 2;
+    }
+
+    #nav-bar-logo img{
+        margin-left: 5%;
+    }
+
+    #nav-bar-search-bar{
+        flex: 4;
+    }
+
+    #nav-bar-icons{
+        flex: 1.3;
+    }
+
+    #search-bar{
+        width: 100%;
+        height: 28px;
+        margin:9px 8% 10px 5%;
+        display: none;
+    }
+
+    #clear-search {
+        display: none;
+    }
+
+    #search-lens-btn {
+        display: none;
+    }
+
+    #nav-icon-profile{
+        display: none;
+    }
+
+    #hamBurger-searchIcon-container {
+        display: flex;
+    }
+}
+
+@media (max-width: 640px) {
+    #search-icon img {
+        margin-top: 3px;
+        margin-left: 7px;
+    }
+
+    #hamBurger-icon img {
+        margin-top: -2px;
+        margin-left: 2px;
+    }
+}
+
+/* -- Extra small - 576px > -- */
+
+@media (max-width: 540px) {
+    #nav-bar-container{
+        height: 45px;
+    }
+
+    #top-nav-bar{
+        height: 45px;
+    }
+
+    #nav-bar-logo img{
+        margin-left: 3%;
+        height: 95%;
+    }
+
+    #search-bar{
+        width: 95%;
+        margin:8px 8% 10px 5%;
+    }
+
+    #clear-search {
+    right: 10px;
+    top: 47%;
+    }
+
+    #search-lens-btn {
+        right: -25px;
+    }
+
+    #search-icon img {
+        width: 25px;
+        height: 25px;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+
+    #hamBurger-icon img {
+        width: 35px;
+        height: 35px;
+        margin-top: 0px;
+        margin-left: 2px;
+    }
+}
+
+@media (max-width: 460px) {
+    #nav-bar-logo img{
+        margin-left: 0%;
+        height: 90%;
+    }
+
+    #search-bar {
+        font-size: 13px;
+    }
+
+    #search-icon img {
+        margin-left: 5px;
+    }
+
+    #hamBurger-icon img {
+        margin-left: 2px;
+    }
+}
+
+@media (max-width: 375px) {
+    #nav-bar-logo img{
+        height: 85%;
+    }
+
+    #search-icon img {
+        margin-left: 0px;
+    }
+    #hamBurger-icon img {
+        margin-left: -5px;
+    }
+}
+
+@media (max-width: 330px) {
+    #nav-bar-logo img{
+        height: 82%;
+    }
+
+    #search-bar{
+        width: 90%;
+        font-size: 12px;
+    }
+
+    #clear-search {
+        right: 15px;
+        top: 50%;
+    }
+
+    #search-lens-btn {
+        right: -15px;
+    }
+}
 
 /* Footer menu */
 
@@ -140,42 +384,133 @@
 
 .footer-options-container{
     width: 100%;
-    padding-top: 4vw;
+    padding-bottom: 30px;
+    padding: 40px 0px 20px 0px;
+    margin: auto 30px;
     color: white;
-    border: 1px solid blue;
     display: flex;
     justify-content: center;
 }
 
 .footer-contact-wrapper{
-    /* flex: 2; */
-    border: 1px solid red;
+    display: flex;
+    justify-content: center;
 }
 
 .footer-contact-wrapper img{
-    /* width: 40%; */
-    /* margin-left: 35%; */
+    width: 80%;
 }
 
 /* End footer - with copyright claims */
 
 .end-footer{
-    width: 100%;
-    height: 30px;
-    display: flex;
-    margin-top: 50px;
-    padding: 0 11vw;
+    width: 90%;
+    margin: 50px 10px 0px 10px;
+    padding: 25px 0px;
     box-sizing: border-box;
+    border-top: 2px solid #555555;
 }
 
 #copy-right-container{
-    flex: 1;
     display: flex;
-    justify-content: left;
-    align-items: center;
+    justify-content: center;
     font-size: 13px;
 }
 
 #copy-right-container p{
     color: #acacac;
+}
+
+/* Media queries - Footer */
+
+/* XXL (4K/large desktops) >= 1400px */
+
+/* Extra large - 1400px > and >= 1200px */
+
+/* Large (desktops) - 1200px > and >= 992px */
+
+/* Medium (tablets) - 992px > and >= 768px */
+
+/* Small (phones) - 768px > and >= 576px */
+
+/* Extra small - 576px >  */
+
+
+#page-title-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.page-title-container-top {
+    padding-top: 0px !important;
+}
+
+.title-option-button, #add-button, #filter-button{
+    padding: 5px 20px;
+    margin-top: 10px;
+    margin-right: 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.2, transform 0.1s ease;
+}
+
+.title-option-button, #add-button {
+    background-color: rgba(189, 189, 189, 0.5);
+    color: #696969;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/*#add-button:hover{*/
+.title-option-button:hover, #add-button:hover {
+    background-color: rgba(158, 158, 158, 0.5);
+    color: #575757;
+}
+
+.title-option-button:active, #add-button:active {
+    transform: scale(0.95);
+}
+
+#filter-button {
+    background-color: transparent;
+    color: #a7a7a7;
+    text-decoration: none;
+}
+
+.filter-icon {
+    font-size: 1.3em;
+    line-height: 0.8;
+    margin-right: 4px;
+}
+
+#filter-button:hover {
+    background-color: rgba(189, 189, 189, 0.5);
+    color: #696969;
+}
+
+#filter-button:active {
+    transform: scale(0.95);
+}
+
+.top-delete-button {
+    display: inline-block;
+    text-decoration: none;
+    color: #CB2020;
+    margin-right: 50px;
+    /* background-color: gold; */
+    padding: 4px;
+    transition: transform 0.1s ease;
+}
+
+.top-delete-button:hover {
+    color: #b11818;
+    text-decoration: underline;
+}
+
+.top-delete-button:active {
+    transform: scale(0.95);
 }

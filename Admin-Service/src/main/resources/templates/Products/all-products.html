@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-side-menu.css" />
+    <link rel="stylesheet" href="/css/admin-table.css" />
+    <link rel="stylesheet" href="/css/admin-filter-menu.css" />
+    <title>MENZO | Admin-All Products</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href="http://localhost:8080/index"><img src="/media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+            <span id="clear-search">&#10005;</span>
+            <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-profile">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="profile-icon" src="/media/profile_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p>sign in</p>
+                        </div>
+                        <div><strong>Account</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="hamBurger-searchIcon-container">
+                <div id="search-icon">
+                    <img id="search-icon-img" src="/media/search-v3.png" alt="">
+                </div>
+                <div id="hamBurger-icon">
+                    <img src="/media/hamburger-icon-v3.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+    <div class="side-menu-bar-container">
+        <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+        <h2>Inventory</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
+            <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>
+            <li class="menu-item" id="current-option"><a href="">Products</a></li>
+            <li class="menu-item"><a href="">Discount & offers</a></li>
+            <li class="menu-item"><a href="">Coupons</a></li>
+            <li class="menu-item"><a href="">Order management</a></li>
+            <li class="menu-item"><a href="">Return & cancellation</a></li>
+            <li class="menu-item"><a href="">Sales & revenue</a></li>
+        </ul>
+        <h2>Users</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
+            <li class="menu-item"><a href="">Blocked users</a></li>
+            <li class="menu-item"><a href="">Subscriptions</a></li>
+            <li class="menu-item"><a href="">News letters</a></li>
+            <li class="menu-item"><a href="">Contact requests</a></li>
+            <li class="menu-item"><a href="">Sent messages</a></li>
+        </ul>
+        <h2>Others</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Banners</a></li>
+            <li class="menu-item"><a href="">About Us</a></li>
+        </ul>
+    </div>
+
+
+
+    <!-- Products - Listing table -->
+
+    <div class="main-content-container">
+        <div id="page-title-container">
+            <h1 id="page-title">All products</h1>
+            <div>
+                <button class="title-option-button">Product by Category</button>
+                <a href="http://localhost:8080/admin/add-product" class="title-option-button" id="add-button">Add Product</a>
+                <button id="filter-button"><span class="filter-icon">⏚</span> Filter</button>
+
+                <!-- Floating filter panel -->
+                <div id="filter-panel" class="hidden">
+                    <div id="filter-container">
+<!--                        <h3 id="filter-heading">Filters</h3>-->
+<!--                        <hr class="filter-hr">-->
+
+<!--                        <div class="filter-section">-->
+<!--                            <p class="filter-title">Category</p>-->
+<!--                            <label>-->
+<!--                                <input type="checkbox" name="category" value="shirts">-->
+<!--                                <span class="checkmark"></span> Shirts-->
+<!--                            </label>-->
+<!--                            <label>-->
+<!--                                <input type="checkbox" name="category" value="tshirts">-->
+<!--                                <span class="checkmark"></span> T-Shirts-->
+<!--                            </label>-->
+<!--                            <label>-->
+<!--                                <input type="checkbox" name="category" value="jeans">-->
+<!--                                <span class="checkmark"></span> Jeans-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <hr class="filter-hr">-->
+
+<!--                        <div class="filter-section">-->
+<!--                            <p class="filter-title">Status</p>-->
+<!--                            <label>-->
+<!--                                <input type="checkbox" name="status" value="in-stock">-->
+<!--                                <span class="checkmark"></span> In Stock-->
+<!--                            </label>-->
+<!--                            <label>-->
+<!--                                <input type="checkbox" name="status" value="out-of-stock">-->
+<!--                                <span class="checkmark"></span> Out of Stock-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <button type="submit" class="apply-filter-btn">Apply Filters</button>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th class="first-table-heading">Products</th>
+                    <th class="center-text">Sub-category</th>
+                    <th class="center-text">Starting price</th>
+                    <th class="center-text">Total items</th>
+                    <th class="center-text">Status</th>
+                    <th class="center-text">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="product-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+
+        <div class="pagination"></div>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+<script src="/js/nav-bar-script.js"></script>
+<script src="/js/filter-menu-script.js"></script>
+<script src="/js/all-products-listing.js"></script>
+</body>
+
+</html>

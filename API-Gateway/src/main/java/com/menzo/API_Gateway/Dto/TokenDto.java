@@ -6,20 +6,16 @@ public class TokenDto {
     private String token;
     private boolean loggedOut;
     private Long userId;
+    private boolean userIsActive;
 
     public TokenDto(){}
 
-    public TokenDto(String token, boolean loggedOut, Long userId){
-        this.token = token;
-        this.loggedOut = loggedOut;
-        this.userId = userId;
-    }
-
-    public TokenDto(Long tokenId, String token, boolean loggedOut, Long userId){
+    public TokenDto(Long tokenId, String token, boolean loggedOut, Long userId, boolean userIsActive){
         this.tokenId = tokenId;
         this.token = token;
         this.loggedOut = loggedOut;
         this.userId = userId;
+        this.userIsActive = userIsActive;
     }
 
     public Long getTokenId() {
@@ -52,5 +48,13 @@ public class TokenDto {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public boolean isUserIsActive() {
+        return userIsActive;
+    }
+
+    public void setUserIsActive(boolean userIsActive) {
+        this.userIsActive = userIsActive;
     }
 }

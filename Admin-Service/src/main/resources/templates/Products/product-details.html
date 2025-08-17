@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/admin-style.css">
+  <link rel="stylesheet" href="/css/admin-side-menu.css">
+  <link rel="stylesheet" href="/css/admin-details.css">
+  <link rel="stylesheet" href="/css/admin-product-details.css">
+  <link rel="stylesheet" href="/css/admin-table.css">
+  <link rel="stylesheet" href="/css/admin-image-preview-modal.css">
+  <title>MENZO | Admin-All Products</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+  <div id="top-nav-bar">
+    <div class="top-nav-bar-elements" id="nav-bar-logo">
+      <a href="http://localhost:8080/index"><img src="/media/MENZO_logo.jpg" alt=""></a>    </div>
+    <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+      <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+      <span id="clear-search">&#10005;</span>
+      <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
+    </div>
+    <div class="top-nav-bar-elements" id="nav-bar-icons">
+      <div id="nav-icon-profile">
+        <a href="">
+          <div class="icon-image-container">
+            <img id="profile-icon" src="/media/profile_icon.png" alt="">
+          </div>
+          <div class="icon-details-container">
+            <div>
+              <p>sign in</p>
+            </div>
+            <div><strong>Account</strong></div>
+          </div>
+        </a>
+      </div>
+      <div id="hamBurger-searchIcon-container">
+        <div id="search-icon">
+          <img id="search-icon-img" src="/media/search-v3.png" alt="">
+        </div>
+        <div id="hamBurger-icon">
+          <img src="/media/hamburger-icon-v3.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+  <div class="side-menu-bar-container">
+    <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+    <h2>Inventory</h2>
+    <ul class="category-menu">
+      <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
+      <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>
+      <li class="menu-item" id="current-option"><a href="http://localhost:8080/admin/all-products">Products</a></li>
+      <li class="menu-item"><a href="">Discount & offers</a></li>
+      <li class="menu-item"><a href="">Coupons</a></li>
+      <li class="menu-item"><a href="">Order management</a></li>
+      <li class="menu-item"><a href="">Return & cancellation</a></li>
+      <li class="menu-item"><a href="">Sales & revenue</a></li>
+    </ul>
+    <h2>Users</h2>
+    <ul class="category-menu">
+      <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
+      <li class="menu-item"><a href="">Blocked users</a></li>
+      <li class="menu-item"><a href="">Subscriptions</a></li>
+      <li class="menu-item"><a href="">News letters</a></li>
+      <li class="menu-item"><a href="">Contact requests</a></li>
+      <li class="menu-item"><a href="">Sent messages</a></li>
+    </ul>
+    <h2>Others</h2>
+    <ul class="category-menu">
+      <li class="menu-item"><a href="">Banners</a></li>
+      <li class="menu-item"><a href="">About Us</a></li>
+    </ul>
+  </div>
+
+  <!-- Categories and sub categories accordion -->
+
+  <div class="main-content-container">
+
+    <!-- Product image preview modal -->
+
+    <div id="open-image-preview-modal">
+      <div id="image-preview-modal-container">
+        <div id="modal-header"><span id="modal-close">&#10005;</span></div>
+        <div id="modal-body">
+          <div id="modal-body-left"><span class="left-nav-btn">&lsaquo;</span></div>
+          <div id="modal-body-center"><img id="modal-image" src="" alt=""></div>
+          <div id="modal-body-right"><span class="right-nav-btn">&rsaquo;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product details -->
+
+<!--    <div class="product-details-wrapper">-->
+<!--      <div class="product-display-col-1">-->
+<!--        <div id="image-icons-wrapper">-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="image-icon-container">-->
+<!--            <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div id="image-zoom" style="-->
+<!--                        &#45;&#45;url: url(media/51NW7DOyfEL._SY741_.jpg);-->
+<!--                        &#45;&#45;zoom-x: 0%; &#45;&#45;zoom-y: 0%;-->
+<!--                        &#45;&#45;display: none;-->
+<!--                        ">-->
+<!--          <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">-->
+<!--        </div>-->
+
+<!--      </div>-->
+      <div class="product-display-col-2">
+        <!-- <span class="product-name">Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket Design
+            & Spread Collar Full Sleeves Formal Shirt</span> -->
+        <h2 class="details-heading top-details-heading">Product details</h2>
+        <div class="details-text">
+          <strong class="details-key">Product name:</strong>
+          <p class="details-value">
+            Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket Design & Spread Collar
+            Full Sleeves Formal Shirt</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Category: </strong>
+          <p class="details-value">Shirts & t-shirts</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Sub-category: </strong>
+          <p class="details-value">Formal shirts</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Description: </strong>
+          <p class="details-value">Solid shirts are easy to match with different bottoms, such as jeans,
+            chinos, or shorts, making them suitable for various outfits. Short-sleeve shirts are perfect
+            for layering with jackets or sweaters during cooler weather or for creating stylish looks.
+            Solid short-sleeve shirts serve as go-to options for days when you need a quick and stylish
+            outfit without much fuss.</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Pay on Delivery: </strong>
+          <p class="details-value "><span class="pod-indicator">Available</span></p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Product added at: </strong>
+          <p class="details-value ">22 June 2025</p>
+        </div>
+
+        <h2 class="details-heading">Item details</h2>
+        <div class="details-text">
+          <strong class="details-key">SKU:</strong>
+          <p class="details-value">Black-Shirt-L-435</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Color: </strong>
+          <p class="details-value"><span class="color-indicator"></span>Black</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Size: </strong>
+          <p class="details-value">L</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Stock qty: </strong>
+          <p class="details-value">249 units</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Price: </strong>
+          <p class="details-value">₹ 2499/-</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Item status: </strong>
+          <p class="details-value "><span class="pod-indicator">Active</span></p>
+        </div>
+
+        <h2 class="details-heading">Other details</h2>
+        <div class="details-text">
+          <strong class="details-key">Item weight: </strong>
+          <p class="details-value">150 g</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Generic name: </strong>
+          <p class="details-value">Cotton shirt</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Country of Origin: </strong>
+          <p class="details-value">India</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Manufactured by: </strong>
+          <p class="details-value">abc enterprises, Bangalore</p>
+        </div>
+        <div class="details-text">
+          <strong class="details-key">Packed by: </strong>
+          <p class="details-value">xyz private ltd., Mumbai</p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+  <div class="footer-options-container">
+    <div class="footer-options footer-contact-wrapper">
+      <img src="/media/MENZO_logo.jpg" alt="">
+    </div>
+  </div>
+
+  <div class="end-footer">
+    <div id="copy-right-container">
+      <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+    </div>
+  </div>
+</div>
+<script src="/js/nav-bar-script.js"></script>
+<script src="/js/product-details-script.js"></script>
+</body>
+
+</html>

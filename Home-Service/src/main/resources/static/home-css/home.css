@@ -1,0 +1,395 @@
+/* Banner */
+
+.banner-container{
+    position: relative;
+    width: 100%;
+    height: 35.5vw;
+    overflow: hidden;
+}
+
+.banner-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.banner-filter{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2;
+}
+
+.banner-content{
+    position: absolute;
+    top: 48%;
+    left: 18%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: left;
+    z-index: 3;
+}
+
+.banner-content h1{
+    font-size: 2.5rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.banner-content p{
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+#banner-button, #banner-2-button{
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: .8rem;
+    border-radius: 25px;
+    margin-top: 10px;
+    transition: 0.3s ease-in-out, transform 0.1s ease;
+    text-decoration: none;
+}
+
+#banner-button:hover, #banner-2-button:hover{
+    background-color: rgba(220, 220, 220, 0.4);
+}
+
+#banner-button:active, #banner-2-button:active{
+    transform: scale(0.9);
+}
+
+/* info tags (below the banner) */
+
+#info-tags-container{
+    width: 100%;
+    height: 8vw;
+    display: flex;
+    padding-bottom: 20px;
+}
+
+.info-tag-head{
+    flex: 1.13;
+    font-size: 1.5em;
+}
+
+.info-tag-head{
+    padding-top: 45px;
+    display: flex;
+    justify-content: center;
+}
+
+.info-tags{
+    flex: 1;
+    text-align: center;
+    padding-top: 15px;
+}
+
+.info-tags img, .info-tags strong, .info-tags p{
+    display: block;
+    margin: 0 auto;
+}
+
+#trend-tag-icon{
+    width:40px;
+    margin-bottom: 5px;
+}
+
+#fast-delivery-tag-icon{
+    width: 55px;
+    margin-bottom: -9px;
+}
+
+#exchange-tag-icon{
+    width: 34px;
+    margin-bottom: 7px;
+    margin-top: 5px;
+}
+
+#loyalty-tag-icon{
+    width: 35px;
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
+
+#secure-payment-tag-icon{
+    width: 42px;
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
+
+.info-tags strong{
+    margin-bottom: 5px;
+}
+
+.info-tags p{
+    font-size: 14px;
+    color: #5e5e5e;
+}
+
+/* Categories banners */
+
+.cat-banner-container{
+    width: 100%;
+    height: 28vw;
+    display: flex;
+    justify-content: center;
+}
+
+.cat-banners{
+    object-fit: cover;
+    overflow: hidden;
+    position: relative;
+}
+
+.cat-banners img{
+    width:100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cat-banners-filter{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.cat-banners-content{
+    position: absolute;
+    left: 50%;
+    bottom: 37%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    z-index: 3;
+}
+
+.cat-banners-content h2{
+    margin-bottom: 22px;
+    white-space: nowrap;
+    font-size: 30px;
+}
+
+.cat-banners-content button{
+    background-color: rgba(255, 255, 255, 0.201);
+    color: white;
+    border: 1.5px solid white;
+    padding: 7px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 23px;
+    transition: 0.3s;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.1s ease;
+}
+
+.cat-banners:hover .cat-banners-content button{
+    opacity: 1;
+}
+
+.cat-banners-content button:hover{
+    border: 1.8px solid white;
+    background-color: rgba(255, 255, 255, 0.323);
+    transition: 0.1s;
+}
+
+.cat-banners-content button:active{
+    transform: scale(0.9);
+}
+
+/* New arrivals */
+
+.new-arrivals-container{
+    width: 100%;
+}
+
+.new-arrivals-container h2{
+    font-size: 1.9em;
+    margin: 4vw auto 2vw 3%;
+}
+
+.new-arrivals-options-container{
+    width: 100%;
+}
+
+.new-arrivals-options-wrap{
+    margin: 0px 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap:25px;
+}
+
+.product-details-container{
+    flex: 1;
+    min-width: 150px;
+    max-width: 250px;
+    aspect-ratio: 1/2;
+}
+
+.product-details-container a{
+    text-decoration: none;
+}
+
+.new-arrivals-image-preview{
+    width: 100%;
+}
+
+.new-arrivals-image-preview img{
+    width: 100%;
+    border-radius: 3px;
+}
+
+.new-arrivals-product-name{
+    color: #3480b2;
+    margin: 7px 0px 10px 0px;
+}
+
+.new-arrivals-product-name:hover{
+    text-decoration: underline;
+    color: #246088;
+}
+
+.na-discount, .na-price{
+    display: inline;
+}
+
+.na-discount{
+    color: #d03e3e;
+}
+
+.na-price{
+    color: black;
+    font-size: 1.2em;
+    margin-left: 3px;
+}
+
+.na-discount-price-wishlist{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Wishlist - heart checkbox button */
+
+.wishlist-label {
+    cursor: pointer;
+    font-size: 25px;
+    margin-top: -9px;
+}
+
+.wishlist-checkbox {
+    display: none;  /* Hide the checkbox */
+}
+
+.wishlist-heart {
+    color: white;
+    transition: color 0.1s ease-in-out;
+    -webkit-text-stroke: 2px black;
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+}
+
+.wishlist-checkbox:checked + .wishlist-heart {
+    color: red; /* Stays red when checked */
+    -webkit-text-stroke: 1.5px black;
+}
+
+/* Banner 2 */
+
+.banner-content-2{
+    position: absolute;
+    top: 48%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: left;
+    z-index: 3;
+    white-space: nowrap;
+}
+
+.banner-content-2 h1{
+    font-size: 2.5rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.banner-content-2 p{
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* FAQ - with accordion */
+
+.FAQ-container{
+    width: 100%;
+}
+
+.FAQ-heading{
+    margin: 5vw 0px 3vw 0px;
+}
+
+.FAQ-heading h1{
+    text-align: center;
+}
+
+.FAQ-accordian-container{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 4vw;
+    margin-bottom: 2.5vw;
+}
+
+.FAQ-accordian{
+    cursor: pointer;
+    width: 60%;
+    padding: 20px;
+    padding-bottom: 20px ;
+    text-align: left;
+    font-weight: 550;
+    color: #151515;
+    white-space: normal;
+    font-size: 15px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #cccccc;
+    transition: 0.3s;
+}
+
+.FAQ-accordian.active{
+    border-bottom: none;
+}
+
+.FAQ-accordian-panel{
+    width:57.4%;
+    text-align: left;
+    padding: 15px 20px;
+    margin: 0 auto 0px auto;
+    border-bottom: 2px solid #cccccc;
+    color: #686868;
+    overflow: hidden;
+    transition: 0.3s ease;
+    display: none;
+}
+
+.FAQ-accordian-panel.active{
+    display: block;
+    transition: 0.9s;
+}
+

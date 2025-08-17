@@ -23,4 +23,5 @@ public class AuthController {
         model.addAttribute("loginCred", new LoginCredectials());
         return "AuthTemplates/log-in-form";
     }
+
 }

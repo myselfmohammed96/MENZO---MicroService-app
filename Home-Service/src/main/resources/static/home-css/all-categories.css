@@ -1,0 +1,102 @@
+
+.categories-container{
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    gap: 11px;
+}
+
+.category-box{
+    width: calc(25% - 10px);
+    aspect-ratio: 16 / 10;
+    border-radius: 5px;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 1024px) {
+    .category-box{
+      width: calc(33.33% - 10px); /* 3 per row */
+    }
+}
+
+@media (max-width: 768px) {
+    .category-box{
+      width: calc(50% - 10px); /* 2 per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .category-box{
+      width: 100%; /* 1 per row */
+    }
+}
+
+.categories-banner{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    display: block;
+    margin: 0px;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.categories-banner-filter{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.categories-banner-content{
+    position: absolute;
+    left: 0;
+    top: 40%;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.categories-banner-content h2{
+    font-size: 1.4em;
+    margin-bottom: 5px;
+}
+
+.categories-banner-content button{
+    cursor: pointer;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1.5px solid white;
+    padding: 5px 10px;
+    border-radius: 25px;
+    transition: opacity 0.2s ease-in-out, transform 0.1s ease;
+    opacity: 0;
+}
+
+.categories-banner-content:hover button{
+    opacity: 1;
+}
+
+.categories-banner-content button:hover{
+    border: 2px solid white;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.categories-banner-content button:active{
+    transform: scale(0.9);
+}

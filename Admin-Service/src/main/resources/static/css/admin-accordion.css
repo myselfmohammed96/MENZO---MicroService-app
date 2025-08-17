@@ -3,35 +3,6 @@
     margin: 20px auto;
 }
 
-#page-title-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-}
-
-#add-button{
-    padding: 5px 20px;
-    margin-top: 10px;
-    margin-right: 20px;
-    font-size: 15px;
-    background-color: rgba(189, 189, 189, 0.5);
-    border: none;
-    border-radius: 3px;
-    color: #696969;
-    cursor: pointer;
-    transition: 0.2, transform 0.1s ease;
-}
-
-#add-button:hover{
-    background-color: rgba(158, 158, 158, 0.5);
-    color: #575757;
-}
-
-#add-button:active{
-    transform: scale(0.95);
-}
-
 #view-all-button button:hover{
     background-color: #eeeeee;
     color:#282828;

@@ -10,10 +10,12 @@ public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
+    private boolean isActive;
 
     CustomUserDetails(User user){
         this.username = user.getEmail();
         this.password = user.getPassword();
+        this.isActive = user.isActive();
     }
 
     @Override
@@ -48,6 +50,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActive;
     }
 }

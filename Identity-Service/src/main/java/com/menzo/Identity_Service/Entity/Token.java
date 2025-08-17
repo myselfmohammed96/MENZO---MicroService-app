@@ -28,6 +28,13 @@ public class Token {
         this.userId = userId;
     }
 
+    public Token(Long tokenId, String token, boolean loggedOut, Long userId) {
+        this.tokenId = tokenId;
+        this.token = token;
+        this.loggedOut = loggedOut;
+        this.userId = userId;
+    }
+
     public Long getTokenId() {
         return tokenId;
     }
@@ -59,4 +66,5 @@ public class Token {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
 }

@@ -165,4 +165,10 @@ public class User {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    public void display() {
+        System.out.println("User:\nid: " + id + "\nfirstName: " + firstName + "\nlastName: " + lastName +
+                "\nemail: " + email + "\nphoneNumber: " + phoneNumber + "\ndateOfBirth: " + dateOfBirth +
+                "\ngender: " + gender + "\nroles: " + roles + "\nisActive: " + isActive);
+    }
 }

@@ -19,10 +19,12 @@
 <nav id="nav-bar-container">
     <div id="top-nav-bar">
         <div class="top-nav-bar-elements" id="nav-bar-logo">
-            <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>
+            <a href="http://localhost:8080/index"><img src="/media/MENZO_logo.jpg" alt=""></a>
         </div>
         <div class="top-nav-bar-elements" id="nav-bar-search-bar">
             <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+            <span id="clear-search">&#10005;</span>
+            <img id="search-lens-btn" src="/media/search-icon-thin.png" alt=""/>
         </div>
         <div class="top-nav-bar-elements" id="nav-bar-icons">
             <div id="nav-icon-profile">
@@ -38,6 +40,14 @@
                     </div>
                 </a>
             </div>
+            <div id="hamBurger-searchIcon-container">
+                <div id="search-icon">
+                    <img id="search-icon-img" src="/media/search-v3.png" alt="">
+                </div>
+                <div id="hamBurger-icon">
+                    <img src="/media/hamburger-icon-v3.png" alt="">
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -46,107 +56,31 @@
 
 <div class="page-container">
     <div class="side-menu-bar-container">
-        <h3>Categories</h3>
+        <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+        <h2>Inventory</h2>
         <ul class="category-menu">
-            <li class="category-item">
-                <a href="">Shirts & T-Shirts</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
-                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
-                    <li class="sub-category-item"><a href="">T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">pants</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
-                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
-                    <li class="sub-category-item"><a href="">T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Hoodies</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
-                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
-                    <li class="sub-category-item"><a href="">T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Coats & Jackets</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
-                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
-                    <li class="sub-category-item"><a href="">T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
-                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Perfumes</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Watches</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Caps</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Shoes</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Sunglasses</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Belts & Wallets</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">Sports Fit</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
-
-            <li class="category-item">
-                <a href="">More</a>
-                <ul class="sub-category-menu">
-                    <li class="sub-category-item"></li>
-                </ul>
-            </li>
+            <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
+            <li class="menu-item" id="current-option"><a href="">Variations</a></li>
+            <li class="menu-item"><a href="http://localhost:8080/admin/all-products">Products</a></li>
+            <li class="menu-item"><a href="">Discount & offers</a></li>
+            <li class="menu-item"><a href="">Coupons</a></li>
+            <li class="menu-item"><a href="">Order management</a></li>
+            <li class="menu-item"><a href="">Return & cancellation</a></li>
+            <li class="menu-item"><a href="">Sales & revenue</a></li>
+        </ul>
+        <h2>Users</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
+            <li class="menu-item"><a href="">Blocked users</a></li>
+            <li class="menu-item"><a href="">Subscriptions</a></li>
+            <li class="menu-item"><a href="">News letters</a></li>
+            <li class="menu-item"><a href="">Contact requests</a></li>
+            <li class="menu-item"><a href="">Sent messages</a></li>
+        </ul>
+        <h2>Others</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Banners</a></li>
+            <li class="menu-item"><a href="">About Us</a></li>
         </ul>
     </div>
 
@@ -207,6 +141,7 @@
     </div>
 </div>
 <script src="/js/variations-accordion-script.js"></script>
+<script src="/js/nav-bar-script.js"></script>
 </body>
 
 </html>

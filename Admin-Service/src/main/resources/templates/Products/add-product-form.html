@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en"
+  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/admin-style.css" />
+  <link rel="stylesheet" href="/css/admin-side-menu.css" >
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <link rel="stylesheet" href="/css/admin-add-product-form-style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css" />
+  <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" />
+  <title>MENZO | Admin-Add product</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+  <div id="top-nav-bar">
+    <div class="top-nav-bar-elements" id="nav-bar-logo">
+      <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>
+    </div>
+    <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+      <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+      <span id="clear-search">&#10005;</span>
+      <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
+    </div>
+    <div class="top-nav-bar-elements" id="nav-bar-icons">
+      <div id="nav-icon-profile">
+        <a href="">
+          <div class="icon-image-container">
+            <img id="profile-icon" src="/media/profile_icon.png" alt="">
+          </div>
+          <div class="icon-details-container">
+            <div>
+              <p>sign in</p>
+            </div>
+            <div><strong>Account</strong></div>
+          </div>
+        </a>
+      </div>
+      <div id="hamBurger-searchIcon-container">
+        <div id="search-icon">
+          <img id="search-icon-img" src="/media/search-v3.png" alt="">
+        </div>
+        <div id="hamBurger-icon">
+          <img src="/media/hamburger-icon-v3.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+  <div class="side-menu-bar-container">
+    <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+    <h2>Inventory</h2>
+    <ul class="category-menu">
+      <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
+      <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>
+      <li class="menu-item" id="current-option"><a href="http://localhost:8080/admin/all-products">Products</a></li>
+      <li class="menu-item"><a href="">Discount & offers</a></li>
+      <li class="menu-item"><a href="">Coupons</a></li>
+      <li class="menu-item"><a href="">Order management</a></li>
+      <li class="menu-item"><a href="">Return & cancellation</a></li>
+      <li class="menu-item"><a href="">Sales & revenue</a></li>
+    </ul>
+    <h2>Users</h2>
+    <ul class="category-menu">
+      <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
+      <li class="menu-item"><a href="">Blocked users</a></li>
+      <li class="menu-item"><a href="">Subscriptions</a></li>
+      <li class="menu-item"><a href="">News letters</a></li>
+      <li class="menu-item"><a href="">Contact requests</a></li>
+      <li class="menu-item"><a href="">Sent messages</a></li>
+    </ul>
+    <h2>Others</h2>
+    <ul class="category-menu">
+      <li class="menu-item"><a href="">Banners</a></li>
+      <li class="menu-item"><a href="">About Us</a></li>
+    </ul>
+  </div>
+
+
+  <!-- Main page content -->
+
+  <div class="main-content-container">
+    <div id="page-title-container">
+      <h1 id="page-title">Add product</h1>
+      <!-- <button onclick="addCategory()" id="add-button">Add new</button> -->
+    </div>
+    <hr class="custom-line-1" />
+
+    <form id="addProductForm" enctype="multipart/form-data" th:action="@{/products/add-product}" th:object="${newProduct}" method="POST">
+
+      <!-- General Information -->
+      <fieldset id="general-info">
+        <legend>General Information</legend>
+
+        <label class="general-info-label">Product Name:
+          <div style="position: relative;">
+            <input type="text" th:field="*{productName}" name="productName" id="product-name" placeholder="Product Name" required />
+            <ul class="suggestion-box" id="suggestions"></ul>
+          </div>
+        </label>
+
+        <label class="general-info-label">Category:
+          <div class="custom-select-wrapper">
+            <select th:field="*{categoryId}" id="category-select" class="custom-select" name="categoryId" required></select>
+          </div>
+        </label>
+
+        <label class="general-info-label">Sub Category:
+          <div class="custom-select-wrapper">
+            <select th:field="*{subCategoryId}" id="sub-category-select" name="subCategoryId" required>
+              <option value="">Sub-category</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="general-info-label">Description:
+          <textarea th:field="*{description}" name="description" placeholder="Description" required></textarea>
+        </label>
+
+        <label class="general-info-label">Pay on Delivery:
+          <input type="radio" th:field="*{cod}" name="cod" value="available" checked /> Available
+          <input type="radio" th:field="*{cod}" name="cod" value="not_available" /> Not Available
+        </label>
+      </fieldset>
+
+        <!-- Product Details -->
+        <fieldset id="product-details">
+          <legend>Product Details</legend>
+
+          <label class="product-details-label">Item Weight (g):
+            <input type="number" th:field="*{itemWeight}" name="weight">
+          </label>
+
+          <label class="product-details-label">Generic Name:
+            <input type="text" th:field="*{genericName}" name="genericName">
+          </label>
+
+          <label class="product-details-label">Country of Origin:
+            <input type="text" th:field="*{countryOfOrigin}" name="countryOfOrigin">
+          </label>
+
+<!--          <label class="product-details-label">Manufacturer:-->
+<!--            <input type="text" th:field="*{manufacturer}" name="manufacturer">-->
+<!--          </label>-->
+
+<!--          <label class="product-details-label">Packer:-->
+<!--            <input type="text" th:field="*{packer}" name="packer">-->
+<!--          </label>-->
+        </fieldset>
+
+        <!-- Image Upload -->
+        <fieldset>
+          <legend>Upload Images (max 3)</legend>
+          <input type="file" name="images" id="product-images" multiple />
+          <div id="image-stats"></div>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <button type="submit">Add Product</button>
+    </form>
+
+  </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+  <div class="footer-options-container">
+    <div class="footer-options footer-contact-wrapper">
+      <img src="/media/MENZO_logo.jpg" alt="">
+    </div>
+  </div>
+
+  <div class="end-footer">
+    <div id="copy-right-container">
+      <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+    </div>
+  </div>
+</div>
+<script src="/js/nav-bar-script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
+<script src="/js/add-product-form-fields.js"></script>
+</body>
+
+</html>
+
+
+<!--        <label class="general-info-label">SKU:-->
+<!--          <input type="text" th:field="*{sku}" name="sku" placeholder="SKU" required />-->
+<!--        </label>-->
+<!--        <label class="general-info-label">Stock:-->
+<!--          <input type="number" th:field="*{stock}" name="stock" placeholder="Stock count" required />-->
+<!--        </label>-->
+<!--        <label class="general-info-label">Price:-->
+<!--          <input type="number" th:field="*{price}" name="price" placeholder="Price" required />-->
+<!--        </label>-->
+
+
+
+<!--        <label class="general-info-label">Status:-->
+<!--          <input type="radio" th:field="*{status}" name="status" value="active" checked /> Active-->
+<!--          <input type="radio" th:field="*{status}" name="status" value="inactive" /> Inactive-->
+<!--        </label>-->
+
+
+<!--      Product Variations-->
+
+<!--      <fieldSet id="variations-fieldset">-->
+<!--      </fieldSet>-->
+
+
+
+<!--          <label>Material Composition: <input type="text" name="materialComposition"></label>accept="image/*"-->
+<!--          <label>Pattern: <input type="text" name="pattern"></label>-->
+<!--          <label>Fit Type: <input type="text" name="fitType"></label>-->
+<!--          <label>Sleeve Type: <input type="text" name="sleeveType"></label>-->
+<!--          <label>Length: <input type="text" name="length"></label>-->
+<!--          <label>Collar Style: <input type="text" name="collarStyle"></label>-->
+
+<!--          <label>About this Item:-->
+<!--            <textarea name="aboutItem" placeholder="Use bullet points or separate lines"></textarea>-->
+<!--          </label>-->
+
+
+
+<!-- Additional Information -->
+<!--        <fieldset>-->
+<!--          <legend>Additional Information</legend>-->
+
+
+<!--          <label>Item Dimensions:-->
+<!--            <input type="number" name="length" placeholder="Length (cm)">-->
+<!--            <input type="number" name="width" placeholder="Width (cm)">-->
+<!--            <input type="number" name="height" placeholder="Height (cm)">-->
+<!--          </label>-->
+
+<!--        </fieldset>-->

@@ -18,14 +18,14 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-//    End point for submitting the login form
-
+    //    End point for submitting the login form
     @PostMapping("/login")
     public String loginUser(@ModelAttribute LoginCredentials loginCred, HttpServletResponse response) throws Exception{
         Cookie cookie = authService.loginUser(loginCred);
         response.addCookie(cookie);
         String redirectUrl = UriComponentsBuilder
-                .fromUriString("http://localhost:8080/")
+                .fromUriString("http://localhost:8080")
+                .pathSegment("index")
                 .toUriString();
         return "redirect:" + redirectUrl;
     }

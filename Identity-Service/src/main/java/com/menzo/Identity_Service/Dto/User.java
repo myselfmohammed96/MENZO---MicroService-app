@@ -14,6 +14,21 @@ public class User {
     private String phoneNumber;
     private String password;
     private Roles roles;
+    private boolean isActive;
+
+    public User() {}
+
+    public User(Long id, String firstName, String lastName, String email,
+                String phoneNumber, String password, Roles roles, boolean isActive) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.roles = roles;
+        this.isActive = isActive;
+    }
 
     public Long getId(){
         return id;
@@ -69,6 +84,20 @@ public class User {
 
     public void setRoles(Roles roles) {
         this.roles = roles;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void display() {
+        System.out.println("id: " + id + "\nfirstName: " + firstName + "\nlastName: " + lastName +
+                "\nemail: " + email + "\nphoneNumber: " + phoneNumber + "\nroles: " + roles +
+                "\nisActive: " + isActive);
     }
 }
 

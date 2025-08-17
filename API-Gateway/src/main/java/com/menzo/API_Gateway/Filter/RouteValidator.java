@@ -12,11 +12,22 @@ public class RouteValidator {
     public static final List<String> openApiEndpoints = List.of(
 
 //            "/",
-            "/sign-in",
+            "/index",
+            "/all-categories",
             "/login",
+            "/logout",
+            "/sign-in",
             "/user/user-signin",
             "/auth/encode-pwd",
-            "/auth/login"
+            "/auth/login",
+
+        //  static end points
+            "/home-css/",
+            "/home-js/",
+            "/home-media/",
+            "/css/",
+            "/js/",
+            "/media/"
 //            "/admin/categories"
 //            "/categories/health-check"
     );
@@ -24,7 +35,5 @@ public class RouteValidator {
     public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()
-//                    .noneMatch(uri -> request.getURI().getPath().contains(uri));
                     .noneMatch(uri -> request.getURI().getPath().startsWith(uri));
-//                    && !request.getURI().getPath().matches(".+\\.(css|js|png|jpg|jpeg|gif|svg|woff2?|ttf|eot)$");
 }
