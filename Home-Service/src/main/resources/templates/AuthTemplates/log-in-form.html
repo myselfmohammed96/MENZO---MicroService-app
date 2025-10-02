@@ -4,29 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/home-css/style2.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/home-css/components.css">
+    <link rel="stylesheet" href="/home-css/components-media-queries.css">
+
+    <link rel="stylesheet" href="/home-css/theme-fonts-effects.css">
+    <link rel="stylesheet" href="/home-css/theme-fonts-effects-media-queries.css">
+
     <link rel="stylesheet" href="/home-css/auth-forms.css">
+    <link rel="stylesheet" href="/home-css/auth-forms-media-queries.css">
+
+<!--    <link rel="stylesheet" href="/home-css/style2-dep.css">-->
+<!--    <link rel="stylesheet" href="/home-css/auth-forms.css">-->
     <title>MENZO | Log in</title>
 </head>
 <body>
 
 <!-- Nav bar -->
 
-<nav id="nav-bar-container">
-    <div class="top-nav-bar-elements" id="nav-bar-logo">
+<nav id="min-nav-bar-container">
+    <div class="top-nav-bar-elements" id="min-nav-bar-logo">
         <a href="/index"><img src="/home-media/utility-media/MENZO_logo.jpg" alt=""></a>
     </div>
 </nav>
 
-<!-- Login page content -->
+<!-- Login page content login-form-->
 
 <div>
-    <h1 class="login-page-heading">Log in</h1>
-    <form class="login-form" th:action="@{/auth/login}" th:object="${loginCred}" method="post">
-        <input type="email" th:field="*{email}" class="login-form-inputs" name="email" placeholder="Email">
-        <input type="password" th:field="*{password}" class="login-form-inputs" name="password" placeholder="Password">
+    <h1 class="login-page-heading auth-heading">Log in</h1>
+    <form class="auth-form" th:action="@{/auth/login}" th:object="${loginCred}" method="post">
+        <div class="login-input-container">
+            <input type="email" th:field="*{email}" class="login-form-inputs form-input" id="email" name="email" placeholder="Email">
+            <p id="email-error-message" class="error-message"></p>
+        </div>
+        <div class="login-input-container">
+            <input type="password" th:field="*{password}" class="login-form-inputs form-input" id="password" name="password" placeholder="Password">
+            <p id="password-error-message" class="error-message"></p>
+        </div>
         <a href="" id="forgot-password">Forgot password?</a>
-        <button class="form-button" type="submit">Log In</button>
+        <button class="login-submit-button button-form-1" type="submit">Log In</button>
+
+        <div class="divider login-divider"><span>or</span></div>
+        <a class="login-google-button-link" href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/auth/grantcode&response_type=code&client_id=692936531788-hrsvcv5ckbhnc42kvvo0ktqpek3itf7e.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline">
+            <button type="button" class="button-google login-google-button">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
+                <span>Sign in with Google</span>
+            </button>
+        </a>
     </form>
 </div>
 
@@ -39,9 +65,11 @@
 
 <!-- footer -->
 
+<hr class="hr-line-10">
 <div class="login-page-footer">
     <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
 </div>
 
+<script src="/home-js/login-form.js"></script>
 </body>
 </html>

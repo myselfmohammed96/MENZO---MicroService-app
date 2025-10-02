@@ -1,9 +1,6 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.CategoriesDto.NestedCategoryDto;
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
-import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
+import com.menzo.Product_Service.Dto.CategoriesDto.*;
 import com.menzo.Product_Service.Entity.ProductCategory;
 import com.menzo.Product_Service.Repository.CategoriesRepo;
 import com.menzo.Product_Service.Repository.ProductsRepo;
@@ -12,9 +9,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoriesRetrievalService {
@@ -124,6 +123,18 @@ public class CategoriesRetrievalService {
         log.info("Found sub-category with ID: {}", subCategoryId);
         subCategory.display();  // *** check ***
         return subCategory;
+    }
+
+    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
+        List<ParentCategoryDto> allParentCategories = getAllParents();
+        return allParentCategories.stream().map(parent -> new CategoryMinimalDto(parent.getId(), parent.getCategoryName(), null))
+                .collect(Collectors.toList());
+    }
+
+    public List<CategoryMinimalDto> getAllSubCategoriesByParentIdWithBanner(Long parentId) {
+        List<SubCategoryDto> allSubByParentId = getAllSubOfParentId(parentId);
+        return allSubByParentId.stream().map(sub -> new CategoryMinimalDto(sub.getId(), sub.getCategoryName(), null))
+                .collect(Collectors.toList());
     }
 
 //    public ProductCategory getSubByProductId(Long productId) {

@@ -82,11 +82,11 @@ public class ProductRestController {
         return ResponseEntity.ok(productDetails);
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<?> getProductItemDetailsById(@RequestParam("id") Long itemId) {
-        Optional<ProductItem> p =productsRetrievalService.getProductItemDetailsById(itemId);
-        return ResponseEntity.ok(p);
-    }
+//    @GetMapping("/hello")
+//    public ResponseEntity<?> getProductItemDetailsById(@RequestParam("id") Long itemId) {
+//        Optional<ProductItem> p = productsRetrievalService.getProductItemDetailsById(itemId);
+//        return ResponseEntity.ok(p);
+//    }
 
 
 

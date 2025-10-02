@@ -41,27 +41,25 @@ public class CategoriesRestController {
 
     //    Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     @GetMapping("/get-all")
-    public List<NestedCategoryDto> getAllParentCategories(@RequestHeader("roles") String roles) {
-        if (roles.equals("ADMIN")) {
+    public List<NestedCategoryDto> getAllParentCategories() {
         return categoriesRetrievalService.getAllParentWithSub();
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
+    }
+
+    //    Get all parent categories with Banner images - without sub-categories (id, categoryName, categoryBannerImg)
+    @GetMapping("/get-all-with-banner")
+    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
+        return categoriesRetrievalService.getAllCategoriesWithBanner();
     }
 
     //    Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)
     @GetMapping("/get-parent")
-    public ResponseEntity<?> getParentCategoryById(@RequestHeader("roles") String roles, @RequestParam("id") Long parentCategoryId) {
-        if (roles.equals("ADMIN")) {
-            if (parentCategoryId == null || parentCategoryId <= 0) {
-                log.warn("Invalid parent category ID: {}", parentCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
-            }
-            ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
-            return ResponseEntity.ok(parentCategoryDto);
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
+        if (parentCategoryId == null || parentCategoryId <= 0) {
+            log.warn("Invalid parent category ID: {}", parentCategoryId);
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
         }
+        ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
+        return ResponseEntity.ok(parentCategoryDto);
     }
 
     //    Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName)) --- @RequestHeader("roles") String roles,
@@ -81,27 +79,34 @@ public class CategoriesRestController {
     @GetMapping("get-all-sub")
     public ResponseEntity<?> getAllSubCategoriesByParentId(@RequestHeader("roles") String roles, @RequestParam("id") Long parentId) {
         if (roles.equals("ADMIN")) {
-        if (parentId == null || parentId <= 0) {
-            log.warn("Invalid parent ID: {}", parentId);
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
-        }
-        List<SubCategoryDto> allSubOfParentId = categoriesRetrievalService.getAllSubOfParentId(parentId);
-        return ResponseEntity.ok(allSubOfParentId);
+            if (parentId == null || parentId <= 0) {
+                log.warn("Invalid parent ID: {}", parentId);
+                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
+            }
+            List<SubCategoryDto> allSubOfParentId = categoriesRetrievalService.getAllSubOfParentId(parentId);
+            return ResponseEntity.ok(allSubOfParentId);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    //    Get all sub-categories by parent id with Banner images - (id, categoryName, categoryBannerImg)
+    @GetMapping("/get-sub-with-banner")
+    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
+        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService.getAllSubCategoriesByParentIdWithBanner(parentId);
+        return ResponseEntity.ok(subCategoriesList);
     }
 
     //    Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
     @GetMapping("/get-sub")
     public ResponseEntity<?> getSubCategoryById(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId) {
         if (roles.equals("ADMIN")) {
-        if (subCategoryId == null || subCategoryId <= 0) {
-            log.warn("Invalid sub-category ID: {}", subCategoryId);
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
-        }
-        SubCategoryDto subCategoryDto = categoriesRetrievalService.getSubCategoryById(subCategoryId);
-        return ResponseEntity.ok(subCategoryDto);
+            if (subCategoryId == null || subCategoryId <= 0) {
+                log.warn("Invalid sub-category ID: {}", subCategoryId);
+                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
+            }
+            SubCategoryDto subCategoryDto = categoriesRetrievalService.getSubCategoryById(subCategoryId);
+            return ResponseEntity.ok(subCategoryDto);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }

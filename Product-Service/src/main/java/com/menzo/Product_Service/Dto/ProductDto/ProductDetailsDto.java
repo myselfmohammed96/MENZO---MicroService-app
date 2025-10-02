@@ -139,6 +139,7 @@ public class ProductDetailsDto {
         System.out.println("ProductDetailsDto:\nproductId: " + productId + "\nproductName: " + productName +
                 "\ncategoryName: " + categoryName + "\nsubCategoryName: " + subCategoryName + "\nproductDescription: " +
                 productDescription + "\npodAvailable: " + podAvailable + "\nitemWeight: " + itemWeight + "\ngenericName: " +
-                genericName + "\ncountryOfOrigin: " + countryOfOrigin + "\nmanufacturer: " + manufacturer + "\npacker: " + packer);
+                genericName + "\ncountryOfOrigin: " + countryOfOrigin + "\nmanufacturer: " + manufacturer + "\npacker: " +
+                packer + "\n");
     }
 }

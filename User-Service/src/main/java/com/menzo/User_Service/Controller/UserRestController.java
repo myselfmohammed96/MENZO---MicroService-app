@@ -4,6 +4,10 @@ import com.menzo.User_Service.Dto.*;
 import com.menzo.User_Service.Entity.User;
 import com.menzo.User_Service.Service.UserRetrievalService;
 import com.menzo.User_Service.Service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,15 +20,51 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserRestController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
+
     @Autowired
     UserService userService;
 
     @Autowired
     UserRetrievalService userRetrievalService;
 
+    @PostMapping("user-signin")
+    public ResponseEntity<?> createNewUser(@RequestBody RegNewUser newUser,
+                                                HttpServletResponse response){
+        Cookie jwtCookie = userService.registerNewUser(newUser);
+        response.addCookie(jwtCookie);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // User email existence check - for user sign-in validation
+    @PostMapping("/is-exists")
+    public ResponseEntity<Map<String, Boolean>> isUserEmailExists(@RequestBody EmailDto emailDto) {
+        boolean emailExists = userService.isUserEmailExists(emailDto);
+        return ResponseEntity.ok(Map.of("exists", emailExists));
+    }
+
     //  Get user by email - for IDENTITY-SERVICE (id, firstName, lastName, email, phoneNumber, password, roles, isActive)
     @PostMapping("/get-by-email")
     public ResponseEntity<UserDto> getUserbyUserEmail(@RequestBody EmailDto userEmail) {
+        if (userEmail == null || userEmail.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("user email unavailable");
+        }
+        System.out.println("From user rest controller: " + userEmail.getEmail());
         UserDto user = userRetrievalService.getUserbyEmail(userEmail);
         return ResponseEntity.ok(user);
     }
@@ -63,4 +103,25 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("message", "User activeStatus updated successfully"));
     }
+
+//    =========
+
+    @PutMapping("/update-user")
+    public ResponseEntity<?> updateUserDetialsByEmail(@RequestHeader("loggedInUser") String userEmail,
+                                                      @RequestBody UserMinimalDto latestUserDetails) {
+        Long updatedUserId = userService.updateUserDetails(userEmail, latestUserDetails);
+        return (updatedUserId != null) ? ResponseEntity.ok(updatedUserId) : null;
+    }
+
+
+//    ********* Google OAuth user *********
+
+    @PostMapping("/google-oauth-access")
+    public ResponseEntity<UserDto> googleOAuthUser(@RequestBody OAuthUserDto googleUser) {
+//        System.out.println(googleUser.getUserName() + "\n" + googleUser.getEmail() + "\n" + googleUser.getProfileUrl());
+        UserDto user = userService.saveGoogleOAuthUser(googleUser);
+
+        return ResponseEntity.ok(user);
+    }
+
 }

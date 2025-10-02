@@ -1,10 +1,7 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
-import com.menzo.Product_Service.Dto.ProductDto.ProductDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductItemListingDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductMinimalDto;
+import com.menzo.Product_Service.Dto.ProductDto.*;
 import com.menzo.Product_Service.Dto.SpecificationsDto.RequestDto;
 import com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto;
 import com.menzo.Product_Service.Entity.*;
@@ -135,8 +132,24 @@ public class ProductsRetrievalService {
 
     }
 
-    public Optional<ProductItem> getProductItemDetailsById(Long itemId) {
-        return productItemsRepo.findById(itemId);
+    public ProductItemDetailsDto getProductItemDetailsById(Long itemId) {
+        ProductItem p = productItemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("ProductItem not found with ID: " + itemId));
+        return new ProductItemDetailsDto(
+                p.getId(),
+                p.getProduct().getProductName(),
+                null,
+                p.getProduct().getCategory().getCategoryName(),
+                p.getProduct().getProductDescription(),
+                p.getProduct().getPodAvailable(),
+                p.getProduct().getCreatedAt(),
+                p.getSKU(),
+                p.getQtyInStock(),
+                p.getPrice(),
+                null,
+                null,
+                p.getIsActive()
+        );
     }
 
 

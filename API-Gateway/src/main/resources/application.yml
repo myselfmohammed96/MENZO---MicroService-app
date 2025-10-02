@@ -5,7 +5,7 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/**
+            - Path=/user/**, /user-css/**, /user-js/**, /user-media/**
           filters:
             - AuthenticationFilter
 
@@ -21,7 +21,7 @@ spring:
         - id: identity-service
           uri: lb://IDENTITY-SERVICE
           predicates:
-            - Path=/auth/**, /logout
+            - Path=/auth/**, /logout, /oauth2/**
           filters:
             - AuthenticationFilter
 
@@ -42,7 +42,7 @@ spring:
         - id: home-service
           uri: lb://HOME-SERVICE
           predicates:
-            - Path=/index, /login, /sign-in, /all-categories, /home-css/**, /home-js/**, /home-media/**
+            - Path=/index, /login, /sign-in, /all-categories, /product-listing, /category/**, /home-css/**, /home-js/**, /home-media/**
           filters:
             - AuthenticationFilter
   #

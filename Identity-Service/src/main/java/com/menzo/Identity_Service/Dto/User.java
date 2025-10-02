@@ -15,6 +15,7 @@ public class User {
     private String password;
     private Roles roles;
     private boolean isActive;
+    ///////////////////////////////////
 
     public User() {}
 

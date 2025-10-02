@@ -1,0 +1,16 @@
+/* Footer */
+
+
+@media(max-width: 475px){
+    .login-page-footer{
+        margin: 10px 30px;
+        padding: 10px;
+    }
+}
+
+@media(max-width: 380px){
+    .login-page-footer{
+        margin: 10px 15px;
+        padding: 10px;
+    }
+}

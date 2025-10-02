@@ -4,17 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
-    <link rel="stylesheet" href="/home-css/style2.css">
-    <link rel="stylesheet" href="/home-css/user-reg-form.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <link rel="stylesheet" href="/home-css/components.css">
+    <link rel="stylesheet" href="/home-css/components-media-queries.css">
+
+    <link rel="stylesheet" href="/home-css/theme-fonts-effects.css">
+    <link rel="stylesheet" href="/home-css/theme-fonts-effects-media-queries.css">
+
+    <link rel="stylesheet" href="/home-css/auth-forms.css">
+    <link rel="stylesheet" href="/home-css/auth-forms-media-queries.css">
+
+<!--    <link rel="stylesheet" href="/home-css/style2.css">-->
+<!--    <link rel="stylesheet" href="/home-css/user-reg-form.css">-->
     <title>MENZO | Sign in</title>
 </head>
 <body>
 
 <!-- Nav bar -->
 
-<nav id="nav-bar-container">
-    <div class="top-nav-bar-elements" id="nav-bar-logo">
+<nav id="min-nav-bar-container">
+    <div class="top-nav-bar-elements" id="min-nav-bar-logo">
         <a href="/index"><img src="/home-media/utility-media/MENZO_logo.jpg"></a>
     </div>
 </nav>
@@ -43,35 +56,66 @@
                 <button id="cropButton">Crop image</button>
             </div>
         </div>
-
-        <!-- form -->
-
     </div>
+
+    <!-- form -->
+
     <div class="reg-profile-details-container">
-        <h1 class="reg-page-heading">Hi! Welcome</h1>
-        <p>Let's create an account</p>
+        <h1 class="reg-page-heading auth-heading">Hi! Welcome</h1>
+        <p class="auth-text">Let's create an account</p>
         <form class="reg-form" th:action="@{/user/user-signin}" th:object="${user}" method="post">
-            <input type="text" th:field="*{firstName}" class="reg-form-inputs" name="first-name" placeholder="First Name" required>
-            <input type="text" th:field="*{lastName}" class="reg-form-inputs" name="last-name" placeholder="Last Name" required>
-            <input type="text" th:field="*{phoneNumber}" class="reg-form-inputs" name="phone-number" placeholder="Phone Number" required>
-            <div id="dob-container">
-                <label for="dateOfBirth" id="dob-label">Date of Birth</label>
-                <input type="date" class="reg-form-inputs" id="dateOfBirth" name="dateOfBirth" required>
+            <div class="input-container">
+                <input type="text" th:field="*{firstName}" class="reg-form-inputs" id="first-name" name="first-name" placeholder="First Name">
+                <p id="first-name-error-message" class="error-message"></p>
             </div>
-            <input type="email" th:field="*{email}" class="reg-form-inputs" name="email" placeholder="Email" required>
-            <select name="gender" th:field="*{gender}" class="reg-form-inputs" id="reg-form-gender" required>
-                <option value="" selected hidden>Gender</option>
-                <option th:each="g : ${T(com.menzo.Home_Service.Enum.Gender).values()}"
-                        th:value="${g}"
-                        th:text="${g.displayName}">
-                </option>
-            </select>
-            <input type="password" th:field="*{password}" class="reg-form-inputs" id="password" name="password" placeholder="Password" required>
-            <input type="password" th:field="*{confirmPassword}" class="reg-form-inputs" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
-            <p id="password-match-error">*Passwords do not match. Please re-enter.</p>
+            <div class="input-container">
+                <input type="text" th:field="*{lastName}" class="reg-form-inputs" id="last-name" name="last-name" placeholder="Last Name">
+                <p id="last-name-error-message" class="error-message"></p>
+            </div>
+            <div class="input-container">
+                <input type="text" th:field="*{phoneNumber}" class="reg-form-inputs" id="phone-number" name="phone-number" placeholder="Phone Number">
+                <p id="phone-number-error-message" class="error-message"></p>
+            </div>
+            <div class="input-container">
+                <input type="date" class="reg-form-inputs" id="dateOfBirth" name="dateOfBirth" placeholder="Date of Birth">
+                <p id="dob-error-message" class="error-message"></p>
+            </div>
+            <div class="input-container">
+                <input type="email" th:field="*{email}" class="reg-form-inputs" id="email" name="email" placeholder="Email">
+                <p id="email-error-message" class="error-message"></p>
+            </div>
+            <div class="input-container">
+                <select name="gender" th:field="*{gender}" class="reg-form-inputs" id="reg-form-gender">
+                    <option value="" selected hidden>Gender</option>
+                    <option th:each="g : ${T(com.menzo.Home_Service.Enum.Gender).values()}"
+                            th:value="${g}"
+                            th:text="${g.displayName}">
+                    </option>
+                </select>
+                <p id="gender-error-message" class="error-message"></p>
+            </div>
+            <div class="input-container">
+                <input type="password" th:field="*{password}" class="reg-form-inputs" id="password" name="password" placeholder="Password">
+                <p id="password-error-message" class="error-message"></p>
+            </div>
+            <div class="input-container">
+                <input type="password" th:field="*{confirmPassword}" class="reg-form-inputs" id="confirm-password" name="confirm-password" placeholder="Confirm Password">
+                <p id="confirm-password-error-message" class="error-message"></p>
+            </div>
+<!--            <p id="password-match-error" class="validation-alerts"></p>-->
             <input type="hidden" th:field="*{profilePic}" name="croppedImage" id="croppedImageInput">
 
-            <button class="form-button" type="submit">Sign up</button>
+            <button class="signin-submit-button button-form-1" type="submit">Sign up</button>
+
+            <div class="divider signin-divider"><span>or</span></div>
+<!--            <a class="google-button-link" href="/oauth2/authorization/google">-->
+            <a class="google-button-link" href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/auth/grantcode&response_type=code&client_id=692936531788-hrsvcv5ckbhnc42kvvo0ktqpek3itf7e.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline">
+                <button type="button" class="button-google signin-google-button">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
+                    <span>Sign in with Google</span>
+                </button>
+            </a>
+
         </form>
     </div>
 </div>
@@ -85,11 +129,21 @@
 
 <!-- footer -->
 
+<hr class="hr-line-10">
 <div class="login-page-footer">
     <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<script>
+    flatpickr("#dateOfBirth", {
+        dateFormat: "d-m-Y",
+        maxDate: "today"
+    });
+</script>
 <script src="/home-js/reg-form.js"></script>
+
 </body>
 </html>

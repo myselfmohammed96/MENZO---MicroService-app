@@ -1,0 +1,166 @@
+#user-modal,
+#sub-category-modal,
+#variation-modal,
+#option-modal,
+#confirm-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+}
+
+#modal-container, #sub-modal-container, #option-modal-container{
+    background: #fff;
+    padding: 30px 50px;
+    border-radius: 5px;
+    width: 20%;
+    min-width: 200px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-title, #sub-modal-title, #option-modal-title, #confirm-title {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.confirm-message {
+    color: #7c7c7c;
+    font-size: 1em;
+}
+
+#modal-container input, #sub-modal-container input, #option-modal-container input, #sub-modal-container select{
+    width: 90%;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #cacaca;
+    margin-bottom: 10px;
+    color: #383838;
+    padding: 10px 25px 5px 15px;
+    font-size: 1em;
+}
+
+#modal-container input:focus, #sub-modal-container input:focus, #option-modal-container input:focus{
+    border-bottom: 2px solid #969696;
+}
+
+input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+}
+
+#modal-container div, #sub-modal-container div, #option-modal-container div{
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+#modal-container div button, #sub-modal-container div button, #option-modal-container div button{
+    width: 35%;
+    background-color: #3e3e3e;
+    color: rgb(226, 226, 226);
+    padding: 7px 0px;
+    border-radius: 5px;
+    font-size: 1em;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.05s ease;
+}
+
+#modal-container div button:hover, #sub-modal-container div button:hover, #option-modal-container div button:hover{
+    color: #fff;
+}
+
+#modal-container div button:active, #sub-modal-container div button:active, #option-modal-container div button:active{
+    transform: scale(0.95);
+}
+
+/* Toast notification */
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    min-width: 250px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);;
+    z-index: 9999;
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.toast.show {
+    animation: slideInBounce 0.6s ease-out forwards;
+}
+
+.toast.hide {
+    animation: slideOut 0.6s ease-in forwards;
+}
+
+@keyframes slideInBounce {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    60% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+    80% {
+        transform: translateX(5px);
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast-success {
+    background-color: #28a745;
+}
+
+.toast-fail {
+    background-color: #e02538;
+}
+
+.toast-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    background-size: cover;
+    margin-right: 20px;
+}
+
+.toast-success-icon {
+    background-image: url('/media/green-tick.jpg');
+}
+
+.toast-fail-icon {
+    background-image: url('/media/red-cross.jpg');
+}

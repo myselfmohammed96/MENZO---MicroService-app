@@ -1,29 +1,38 @@
 package com.menzo.User_Service.Controller;
 
-import com.menzo.User_Service.Dto.RegNewUser;
+import com.menzo.User_Service.Dto.ClientSideUserDetailsDto;
+import com.menzo.User_Service.Dto.EmailDto;
+import com.menzo.User_Service.Dto.UserDetailsDto;
 import com.menzo.User_Service.Dto.UserDto;
-import com.menzo.User_Service.Entity.User;
+import com.menzo.User_Service.Service.UserRetrievalService;
 import com.menzo.User_Service.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @PostMapping("user-signin")
-    public String createNewUser(@ModelAttribute RegNewUser newUser){
-        UserDto savedUser = userService.saveNewUser(newUser);
-        String redirectUrl = UriComponentsBuilder
-                .fromUriString("http://localhost:8080")
-                .pathSegment("index")
-                .toUriString();
-        return "redirect:" + redirectUrl;
+    @Autowired
+    private UserRetrievalService userRetrievalService;
+
+
+
+    //    -------------------------
+
+    @GetMapping("/profile")
+    public String getUserProfileByEmail(@RequestHeader("loggedInUser") String userEmail, Model model) {
+        ClientSideUserDetailsDto user = userRetrievalService.getUserDetailsForClientSide(new EmailDto(userEmail));
+        UserDetailsDto userDetails = userRetrievalService.getUserDetailsByEmail(userEmail);
+
+        model.addAttribute("user", user);
+        model.addAttribute("userDetails", userDetails);
+        return "Users/user-profile";
     }
 
 }

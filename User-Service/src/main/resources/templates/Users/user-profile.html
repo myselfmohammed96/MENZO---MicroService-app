@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/user-css/navbar-footer-sidenav-theme-font-effects.css">
+    <link rel="stylesheet" href="/user-css/navbar-footer-sidenav-styling.css">
+
+    <link rel="stylesheet" href="/user-css/components-styling.css">
+    <link rel="stylesheet" href="/user-css/components-theme-fonts-effects.css">
+
+    <link rel="stylesheet" href="/user-css/details-styling.css">
+    <link rel="stylesheet" href="/user-css/details-theme-fonts-effects.css">
+
+<!--    <link rel="stylesheet" href="/user-css/style.css">-->
+<!--    <link rel="stylesheet" href="/user-css/side-menu.css">-->
+<!--    <link rel="stylesheet" href="/user-css/details.css">-->
+    <link rel="stylesheet" href="/user-css/user-modal.css">
+    <title>MENZO | Categories</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+
+    <!-- Top nav bar -->
+
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href="/index"><img src="/user-media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-wishlist">
+                <a id="wishlist-icon-container" href="">
+                    <div class="icon-image-container">
+                        <img id="heart-icon" src="/user-media/heart_icon.jpeg" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div><p id="wishlist-count">0</p></div>
+                        <div><strong>Saved</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="nav-icon-cart">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="cart-icon" src="/user-media/cart_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div><p id="cart-count">50</p></div>
+                        <div><strong>My cart</strong></div>
+                    </div>
+                </a>
+            </div>
+<!--            <div id="nav-icon-profile">-->
+<!--                <a href="">-->
+<!--                    <div class="icon-image-container">-->
+<!--                        <img id="profile-icon" src="/user-media/profile_icon.png" alt="">-->
+<!--                    </div>-->
+<!--                    <div class="icon-details-container">-->
+<!--                        <div>-->
+<!--                            <p>sign in</p>-->
+<!--                        </div>-->
+<!--                        <div><strong>Account</strong></div>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+            <div id="user-profile-icon" class="dropdown-toggle">
+                <div class="icon-image-container">
+                    <img id="profile-icon" src="/home-media/utility-media/profile_icon.png" alt=""/>
+                </div>
+                <div class="icon-details-container">
+                    <div>
+                        <p id="profile-greeting">Sign in</p>
+                    </div>
+                    <div>
+                        <strong id="profile-label">Account</strong>
+                    </div>
+                </div>
+                <ul id="user-dropdown" class="dropdown hidden">
+                    <li><a href="/sign-in">Create an account</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom nav bar (for categories) -->
+
+    <div id="bottom-nav-bar">
+        <ul id="bottom-nav-options-container"></ul>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+
+    <!-- working area -->
+
+    <div class="side-menu-bar-container no-select">
+
+        <h2 class="main-menu-options" id="categories-menu-option">
+            <span id="categories-heading">Categories</span>
+<!--            <a href="" id="categories-link">Categories</a>-->
+            <span id="categories-option-arrow"><img src="/user-media/down-arrow.png" alt=""></span>
+        </h2>
+
+        <ul class="menu category-menu" id="categories-menu-content">
+<!--            <li class="category-item">-->
+
+<!--                <span>Shirts & T-Shirts</span>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"><a href="">Formal shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Casual shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">pants</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"><a href="">Formal shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Casual shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Hoodies</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"><a href="">Formal shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Casual shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Coats & Jackets</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"><a href="">Formal shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Casual shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>-->
+<!--                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Perfumes</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Watches</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Caps</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Shoes</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Sunglasses</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Belts & Wallets</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">Sports Fit</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+
+<!--            <li class="category-item">-->
+<!--                <a href="">More</a>-->
+<!--                <ul class="sub-category-menu">-->
+<!--                    <li class="sub-category-item"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+        </ul>
+
+        <hr class="side-menu-custom-line"/>
+
+        <h2 class="main-menu-options" id="profile-menu-option">
+<!--            <a href="" id="profile-link">Profile</a>-->
+            <span id="profile-heading">Profile</span>
+            <span id="profile-option-arrow" class="flip"><img src="/user-media/down-arrow.png" alt=""></span>
+        </h2>
+        <ul class="menu profile-menu display" id="profile-menu-content">
+            <li class="profile-item current-option">
+                <a href="">My account</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Orders</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Addresses</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Wishlist</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Wallet</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Coupons</a>
+            </li>
+            <li class="profile-item">
+                <a href="/logout">Logout</a>
+            </li>
+        </ul>
+        <hr class="side-menu-custom-line"/>
+    </div>
+
+    <!--  Edit user modal  -->
+
+    <div id="user-modal" class="modal">
+        <div id="modal-container">
+            <h1 id="modal-title">Edit Profile</h1>
+            <input type="text" id="modal-first-name" placeholder="First Name"/>
+            <input type="text" id="modal-last-name" placeholder="Last Name"/>
+            <input type="text" id="modal-phone-number" placeholder="Phone Number"/>
+            <!--            <input type="text" id="modal-email" placeholder="Email"/>-->
+            <input type="text" id="modal-category-input" placeholder="Date of Birth"/>
+            <!--            <input type="text" placeholder="Description"/>-->
+            <div>
+                <button id="save-btn">Save</button>
+                <button onclick="closeUserEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="main-content-container">
+        <h1>My account</h1>
+        <hr class="hr-line-11"/>
+
+        <div class="user-details-wrapper">
+            <div class="user-display-col-1">
+
+                <div id="user-profile-image">
+                    <img src="media/51NW7DOyfEL._SY741_.jpg" alt="">
+                </div>
+
+            </div>
+            <div class="user-display-col-2">
+
+                <!-- Full name -->
+                <div class="details-text">
+                    <strong class="details-key">Full name:</strong>
+                    <p th:text="${userDetails.firstName + (userDetails.lastName != null ? ' ' + userDetails.lastName : '')}"
+                       class="details-value">Daniel Cormier</p>
+                    <button class="button-transparent-4" id="edit-name-button">Edit</button>
+                </div>
+
+                <!-- Email -->
+                <div class="details-text">
+                    <strong class="details-key">Email: </strong>
+                    <p th:text="${userDetails.email}" class="details-value">danielcormier@gmail.com</p>
+                </div>
+                <span class="profile-details-description">
+                    <p class="profile-details-description-message">Secure login, easily recover passwords and
+                            receive security notifications with this email ID.</p>
+                </span>
+
+                <!-- Phone number -->
+                <div class="details-text">
+                    <strong class="details-key">Phone number: </strong>
+                    <p th:text="${userDetails.phoneNumber != null ? userDetails.phoneNumber : 'Unavailable'}" class="details-value">98765 43210</p>
+                    <button th:text="${userDetails.phoneNumber != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-phone-number-button">Edit</button>
+                </div>
+                <span th:if="${userDetails.phoneNumber == null}" class="profile-details-description" id="phone-number-absent">
+                    <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
+                    <p class="profile-details-description-message">For stronger account security, add your phone number. If there's an unusual sign-in, we'll notify you.</p>
+                </span>
+                <span th:unless="${userDetails.phoneNumber == null}" class="profile-details-description" id="phone-number-present">
+                    <p class="profile-details-description-message">You'll get notifications about security
+                            updates and exciting offers available with this phone number.</p>
+                </span>
+
+                <!--  Date of birth  -->
+                <div class="details-text">
+                    <strong class="details-key">Date of birth: </strong>
+                    <p th:text="${userDetails.dateOfBirth != null ? #temporals.format(userDetails.dateOfBirth, 'dd MMM yyyy') : 'Unavailable'}" class="details-value">21
+                        Jun 2010</p>
+                    <button th:text="${userDetails.dateOfBirth != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-dob-button">Edit</button>
+                </div>
+                <span th:if="${userDetails.dateOfBirth == null}" class="profile-details-description">
+                    <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
+                    <p class="profile-details-description-message">Please add your date of birth to complete your
+                            profile and get personalized suggestions.</p>
+                </span>
+
+                <!--  Gender  -->
+                <div class="details-text">
+                    <strong class="details-key">Gender: </strong>
+                    <p th:text="${userDetails.gender != null ? #strings.capitalize(userDetails.gender.toString().toLowerCase()) : 'Unavailable'}"
+                       class="details-value">Male</p>
+                    <button th:text="${userDetails.gender != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-gender-button">Edit</button>
+                </div>
+                <span th:if="${userDetails.gender == null}" class="profile-details-description">
+                    <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
+                    <p class="profile-details-description-message">Please add your gender to complete your
+                            profile and get personalized suggestions.</p>
+                </span>
+
+                <!-- password -->
+                <div class="details-text">
+                    <strong class="details-key">Password: </strong>
+                    <p th:text="${userDetails.passwordPresent} ? '********' : 'Unavailable'" class="details-value"></p>
+                    <button th:text="${userDetails.passwordPresent} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-password-button"></button>
+                </div>
+                <span th:if="${!userDetails.passwordPresent}" class="profile-details-description">
+                    <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
+                    <p class="profile-details-description-message">Please add password to secure your account.</p>
+                </span>
+
+<!--                <div id="btn-container">-->
+<!--                    <button onclick="openUserEditModal(userDetails)" id="edit-profile-button">Edit profile</button>-->
+<!--                    <button id="change-pwd-button">Change password</button>-->
+<!--                </div>-->
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+    <div class="email-sub-container">
+        <div class="email-sub-label">
+            <img src="/user-media/paper-rocket.jpg" alt="">
+            <p>SUBSCRIBE OUR NEWSLETTER & GET ALL OUR NEWS <br>ABOUT NEW PRODUCTS, OFFERS AND BLOGS.</p>
+        </div>
+        <div class="email-sub-input">
+            <p>*Get a 5% offer by subscribing our newsletter. Expires on 31 May.</p>
+            <div class="email-input-wrapper">
+                <input type="email" placeholder="Enter your email..."/>
+                <button>Subscribe</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/user-media/MENZO_logo.jpg" alt="">
+
+            <div class="footer-contacts" id="footer-address">
+                <img src="/user-media/location-icon.png" alt="">
+                <strong>Address: </strong>
+                <p>Road No, Street line 1, <br>City, State.</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-telephone">
+                <img src="/user-media/telephone-icon.jpg" alt="">
+                <strong>Telephone: </strong>
+                <p>09876 54321</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-email">
+                <img src="/user-media/Email-icon.png" alt="">
+                <strong>Email Address: </strong>
+                <p>info@menzo.in</p>
+            </div>
+        </div>
+
+        <div class="footer-options footer-pages-wrapper">
+            <h2>PAGES</h2>
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="">About us</a></li>
+                <li><a href="">Shop</a></li>
+                <li><a href="">Cart</a></li>
+                <li><a href="">Wishlist</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-categories-wrapper">
+            <h2>CATEGORIES</h2>
+            <ul>
+                <li><a href="">Shirts & T-Shirts</a></li>
+                <li><a href="">Pants</a></li>
+                <li><a href="">Hoodies</a></li>
+                <li><a href="">Coats & Jackets</a></li>
+                <li><a href="">Perfumes</a></li>
+                <li><a href="">Watches</a></li>
+                <li><a href="">Caps</a></li>
+                <li><a href="">Shoes</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-support-wrapper">
+            <h2>SUPPORT</h2>
+            <ul>
+                <li><a href="">My Account</a></li>
+                <li><a href="">My Orders</a></li>
+                <li><a href="">My wallet</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="">FAQs</a></li>
+                <li><a href="">Privacy policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-social-media-wrapper">
+            <h2>SOCIAL MEDIA</h2>
+            <div id="social-media-links-wrapper">
+                <a href=""><img id="footer-facebook-link" src="/user-media/facebook.jpg" alt=""></a>
+                <a href=""><img id="footer-instagram-link" src="/user-media/Instagram.png" alt=""></a>
+                <a href=""><img id="footer-whatsapp-link" src="/user-media/whatsapp-icon.jpg" alt=""></a>
+                <a href=""><img id="footer-tiktok-link" src="/user-media/tiktok.png" alt=""></a>
+                <a href=""><img id="footer-twitter-link" src="/user-media/twitter.jpg" alt=""></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+        <div id="payment-cards-container">
+            <img id="visa-card-logo" src="/user-media/visa.png" alt="">
+            <img id="apple-pay-logo" src="/user-media/apple-pay.png" alt="">
+            <img id="mastercard-logo" src="/user-media/mastercart-logo.webp" alt="">
+            <img id="paypal-logo" src="/user-media/paypal.png" alt="">
+            <img id="stripe-pay-logo" src="/user-media/stripe-pay.png" alt="">
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    const userDetails = /*[[${userDetails}]]*/ {};
+</script>
+<script>
+    window.user = /*[[${user}]]*/ null;
+</script>
+<script src="/user-js/nav-bar-script.js"></script>
+<script src="/user-js/user-side-menu-script.js"></script>
+<script src="/user-js/user-profile-modal.js"></script>
+</body>
+
+</html>

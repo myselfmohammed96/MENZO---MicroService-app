@@ -14,6 +14,7 @@ public class UserDetailsDto {
     private String phoneNumber;
     private LocalDate dateOfBirth;
     private Gender gender;
+    private boolean passwordPresent;
     private LocalDateTime createdAt;
     private boolean isActive;
 
@@ -29,6 +30,7 @@ public class UserDetailsDto {
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+//        this.passwordPresent = passwordPresent;boolean passwordPresent,
         this.createdAt = createdAt;
         this.isActive = isActive;
     }
@@ -87,6 +89,14 @@ public class UserDetailsDto {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public boolean isPasswordPresent() {
+        return passwordPresent;
+    }
+
+    public void setPasswordPresent(boolean passwordPresent) {
+        this.passwordPresent = passwordPresent;
     }
 
     public LocalDateTime getCreatedAt() {

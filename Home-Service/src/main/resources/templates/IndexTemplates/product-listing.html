@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/home-css/style.css" rel="stylesheet">
+    <link href="/home-css/home.css" rel="stylesheet">
+    <link href="/home-css/side-menu.css" rel="stylesheet">
+<!--    <link href="/home-css/categories.css" rel="stylesheet">-->
+    <link href="/home-css/products-display.css" rel="stylesheet">
+    <title>MENZO | Categories</title>
+</head>
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+
+    <!-- Top nav bar -->
+
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href="/index"><img alt="" src="/home-media/utility-media/MENZO_logo.jpg"></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input class="search-bar" id="search-bar" placeholder="What are you looking for..." type="text">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-wishlist">
+                <a href="" id="wishlist-icon-container">
+                    <div class="icon-image-container">
+                        <img alt="" id="heart-icon" src="/home-media/utility-media/heart_icon.jpeg">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p id="wishlist-count">0</p>
+                        </div>
+                        <div><strong>Saved</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="nav-icon-cart">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img alt="" id="cart-icon" src="/home-media/utility-media/cart_icon.png">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p id="cart-count">50</p>
+                        </div>
+                        <div><strong>My cart</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div class="dropdown-toggle" id="user-profile-icon">
+                <div class="icon-image-container">
+                    <img alt="" id="profile-icon" src="/home-media/utility-media/profile_icon.png">
+                </div>
+                <div class="icon-details-container">
+                    <div>
+                        <p id="profile-greeting">sign in</p>
+                    </div>
+                    <div>
+                        <strong id="profile-label">Account</strong>
+                    </div>
+                </div>
+                <ul class="dropdown hidden" id="user-dropdown">
+                    <li><a href="">Create an account</a></li>
+                    <li><a href="">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom nav bar (for categories) -->
+
+    <div id="bottom-nav-bar">
+        <ul id="bottom-nav-options-container"></ul>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+    <div class="side-menu-bar-container no-select">
+        <h2 class="main-menu-options" id="categories-menu-option">
+            <a href="" id="categories-link">Categories</a>
+            <span class="flip" id="categories-option-arrow"><img alt="" src="/home-media/utility-media/down-arrow.png"></span>
+        </h2>
+
+        <ul class="menu category-menu display" id="categories-menu-content"></ul>
+
+        <hr class="side-menu-custom-line"/>
+
+        <h2 class="main-menu-options" id="profile-menu-option">
+            <a href="" id="profile-link">Profile</a>
+            <span id="profile-option-arrow"><img alt="" src="/home-media/utility-media/down-arrow.png"></span>
+        </h2>
+        <ul class="menu profile-menu" id="profile-menu-content">
+            <li class="profile-item">
+                <a href="">My account</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Orders</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Addresses</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Wishlist</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Wallet</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Coupons</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Logout</a>
+            </li>
+        </ul>
+        <hr class="side-menu-custom-line"/>
+    </div>
+
+    <!--    th:text="${category.categoryName}"-->
+    <div class="main-content-container">
+        <h1>Shop by Categories</h1>
+        <hr class="hr-line-1">
+        <p class="page-results-stat">1-48 of over 30,000 results for <span
+                class="page-result-category">"belt"</span></p>
+
+        <div class="categories-container">
+            <!-- Product Grid -->
+            <div class="product-grid">
+
+
+
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="">
+                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                        <div class="discount-card">
+                            <p class="discount-text">45% off</p>
+                        </div>
+                        <div class="discount-price-wishlist-container">
+                            <div class="na-discount-price">
+                                <strong class="current-price">₹ 1,500</strong>
+                                <p class="deprecated-price">₹ 2,500</p>
+                            </div>
+                            <label class="wishlist-label">
+                                <input type="checkbox" class="wishlist-checkbox">
+                                <span class="wishlist-heart">❤</span>
+                            </label>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a href="" class="active-page">1</a>
+                <a href="">2</a>
+                <a href="">3</a>
+                <a href="">4</a>
+                <a href="">5</a>
+                <a href="">6</a>
+                <a href="#">&raquo;</a>
+            </div>
+
+        </div>
+        <hr class="hr-line-2">
+
+
+    <!-- New arrivals -->
+
+        <div class="new-arrivals-container">
+            <h2>TOP RATED</h2>
+            <div class="new-arrivals-options-container">
+                <div class="new-arrivals-options-wrap">
+
+                <!-- Wrapper containing individual product - begins -->
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img alt="" class="new-arrivals-image-preview" src="/home-media/banner-images/tshirt_preview image.webp">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input class="wishlist-checkbox" type="checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Wrapper containing individual product - ends -->
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img alt="" class="new-arrivals-image-preview" src="/home-media/banner-images/tshirt_preview image.webp">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input class="wishlist-checkbox" type="checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img alt="" class="new-arrivals-image-preview" src="/home-media/banner-images/tshirt_preview image.webp">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input class="wishlist-checkbox" type="checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img alt="" class="new-arrivals-image-preview" src="/home-media/banner-images/tshirt_preview image.webp">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input class="wishlist-checkbox" type="checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img alt="" class="new-arrivals-image-preview" src="/home-media/banner-images/tshirt_preview image.webp">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input class="wishlist-checkbox" type="checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img alt="" class="new-arrivals-image-preview" src="/home-media/banner-images/tshirt_preview image.webp">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input class="wishlist-checkbox" type="checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+            <!-- View all button -->
+
+                <div id="view-all-button">
+                    <button>View all</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+    <div class="email-sub-container">
+        <div class="email-sub-label">
+            <img alt="" src="/home-media/utility-media/paper-rocket.jpg">
+            <p>SUBSCRIBE OUR NEWSLETTER & GET ALL OUR NEWS <br>ABOUT NEW PRODUCTS, OFFERS AND BLOGS.</p>
+        </div>
+        <div class="email-sub-input">
+            <p>*Get a 5% offer by subscribing our newsletter. Expires on 31 May.</p>
+            <div class="email-input-wrapper">
+                <input placeholder="Enter your email..." type="email"/>
+                <button>Subscribe</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img alt="" src="/home-media/utility-media/MENZO_logo.jpg">
+
+            <div class="footer-contacts" id="footer-address">
+                <img alt="" src="/home-media/utility-media/location-icon.png">
+                <strong>Address: </strong>
+                <p>Road No, Street line 1, <br>City, State.</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-telephone">
+                <img alt="" src="/home-media/utility-media/telephone-icon.jpg">
+                <strong>Telephone: </strong>
+                <p>09876 54321</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-email">
+                <img alt="" src="/home-media/utility-media/Email-icon.png">
+                <strong>Email Address: </strong>
+                <p>info@menzo.in</p>
+            </div>
+        </div>
+
+        <div class="footer-options footer-pages-wrapper">
+            <h2>PAGES</h2>
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="">About us</a></li>
+                <li><a href="">Shop</a></li>
+                <li><a href="">Cart</a></li>
+                <li><a href="">Wishlist</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-categories-wrapper">
+            <h2>CATEGORIES</h2>
+            <ul>
+                <li><a href="">Shirts & T-Shirts</a></li>
+                <li><a href="">Pants</a></li>
+                <li><a href="">Hoodies</a></li>
+                <li><a href="">Coats & Jackets</a></li>
+                <li><a href="">Perfumes</a></li>
+                <li><a href="">Watches</a></li>
+                <li><a href="">Caps</a></li>
+                <li><a href="">Shoes</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-support-wrapper">
+            <h2>SUPPORT</h2>
+            <ul>
+                <li><a href="">My Account</a></li>
+                <li><a href="">My Orders</a></li>
+                <li><a href="">My wallet</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="">FAQs</a></li>
+                <li><a href="">Privacy policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-social-media-wrapper">
+            <h2>SOCIAL MEDIA</h2>
+            <div id="social-media-links-wrapper">
+                <a href=""><img alt="" id="footer-facebook-link" src="/home-media/utility-media/facebook.jpg"></a>
+                <a href=""><img alt="" id="footer-instagram-link" src="/home-media/utility-media/Instagram.png"></a>
+                <a href=""><img alt="" id="footer-whatsapp-link" src="/home-media/utility-media/whatsapp-icon.jpg"></a>
+                <a href=""><img alt="" id="footer-tiktok-link" src="/home-media/utility-media/tiktok.png"></a>
+                <a href=""><img alt="" id="footer-twitter-link" src="/home-media/utility-media/twitter.jpg"></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+        <div id="payment-cards-container">
+            <img alt="" id="visa-card-logo" src="/home-media/utility-media/visa.png">
+            <img alt="" id="apple-pay-logo" src="./home-media/utility-media/apple-pay.png">
+            <img alt="" id="mastercard-logo" src="/home-media/utility-media/mastercart-logo.webp">
+            <img alt="" id="paypal-logo" src="/home-media/utility-media/paypal.png">
+            <img alt="" id="stripe-pay-logo" src="/home-media/utility-media/stripe-pay.png">
+        </div>
+    </div>
+</div>
+
+<script src="/home-js/script.js"></script>
+<script th:inline="javascript">
+    window.user = /*[[${user}]]*/ null;
+</script>
+<script src="/home-js/nav-bar-script.js"></script>
+<script src="/home-js/user-side-menu-script.js"></script>
+</body>
+</html>

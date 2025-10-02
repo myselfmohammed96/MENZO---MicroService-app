@@ -113,4 +113,23 @@ public class UserRetrievalService {
         );
     }
 
+    public UserDetailsDto getUserDetailsByEmail(String userEmail) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("No user found with Email: " + userEmail));
+        UserDetailsDto userDetails = new UserDetailsDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getDateOfBirth(),
+                user.getGender(),
+                user.getCreatedAt(),
+                user.isActive()
+        );
+        userDetails.setPasswordPresent(user.getPassword() != null ? true : false);
+
+        return userDetails;
+    }
+
 }

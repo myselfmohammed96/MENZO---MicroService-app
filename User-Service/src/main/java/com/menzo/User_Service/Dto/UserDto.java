@@ -1,17 +1,21 @@
 package com.menzo.User_Service.Dto;
 
+//import com.menzo.User_Service.Entity.OauthUser;
 import com.menzo.User_Service.Entity.User;
 import com.menzo.User_Service.Enums.Roles;
 
 public class UserDto {
 
     private Long id;
+    private String userName;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private String password;
     private Roles roles;
+    private String profileUrl;
+    private User mainUser;
     private boolean isActive;
 
     public UserDto() {}
@@ -28,6 +32,16 @@ public class UserDto {
         this.roles = roles;
         this.isActive = isActive;
     }
+
+//    public UserDto(OauthUser user) {
+//        this.id = user.getId();
+//        this.userName = user.getUserName();
+//        this.email = user.getEmail();
+//        this.profileUrl = user.getProfileUrl();
+//        this.roles = user.getRoles();
+//        this.mainUser = user.getMainUser();
+//        this.isActive = isActive();
+//    }
 
     public UserDto(User user) {
         this.id = user.getId();
@@ -46,6 +60,14 @@ public class UserDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getFirstName() {
@@ -94,6 +116,22 @@ public class UserDto {
 
     public void setRoles(Roles roles) {
         this.roles = roles;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public User getMainUser() {
+        return mainUser;
+    }
+
+    public void setMainUser(User mainUser) {
+        this.mainUser = mainUser;
     }
 
     public boolean isActive() {

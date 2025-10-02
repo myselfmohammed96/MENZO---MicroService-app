@@ -14,12 +14,18 @@ public class RouteValidator {
 //            "/",
             "/index",
             "/all-categories",
+            "/category",
             "/login",
             "/logout",
             "/sign-in",
             "/user/user-signin",
             "/auth/encode-pwd",
             "/auth/login",
+            "/auth/grantcode",
+            "/oauth2/",
+            "product-listing",
+
+            "/categories/get-all-parents",
 
         //  static end points
             "/home-css/",

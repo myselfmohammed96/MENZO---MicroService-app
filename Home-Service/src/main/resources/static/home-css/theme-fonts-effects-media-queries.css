@@ -1,0 +1,100 @@
+/* Nav bar */
+
+@media(max-width: 475px) {
+    .login-page-footer {
+        font-size: 10px;
+    }
+}
+
+@media(max-width: 380px) {
+    .login-page-footer {
+        font-size: 10px;
+    }
+}
+
+/* Auth forms styling */
+
+
+@media(max-width: 1000px) {
+    .forgot-password-page-heading {
+        font-size: 2.3em;
+    }
+}
+
+@media(max-width: 825px) {
+    .forgot-password-page-heading {
+        font-size: 2.3em;
+    }
+}
+
+@media(max-width: 625px) {
+    .forgot-password-page-heading {
+        font-size: 2.3em;
+    }
+}
+
+@media(max-width: 475px) {
+    .forgot-password-page-heading {
+        font-size: 2.3em;
+    }
+
+    /* .forgot-password-page-heading{
+        font-size: 2em;
+    } */
+
+    #forgot-password-heading-container p {
+        font-size: 13px;
+    }
+
+    .login-form-inputs {
+        font-size: 0.95em;
+    }
+
+    .forget-password-form-input {
+        font-size: 0.95em;
+    }
+
+    #sign-in-redirection {
+        font-size: 0.85em;
+    }
+}
+
+@media(max-width: 400px) {
+    .forgot-password-page-heading {
+        font-size: 1.9em;
+    }
+
+    .forgot-password-page-heading {
+        font-size: 2.3em;
+    }
+
+    #forgot-password-heading-container p {
+        font-size: 12px;
+    }
+}
+
+@media(max-width: 380px) {
+    .forgot-password-page-heading {
+        font-size: 1.6em;
+    }
+
+    #forgot-password-heading-container p {
+        font-size: 11px;
+    }
+
+    .login-form-inputs {
+        font-size: 0.9em;
+    }
+
+    .forget-password-form-input {
+        font-size: 0.9em;
+    }
+
+    #forgot-password {
+        font-size: 0.85em;
+    }
+
+    #sign-in-redirection {
+        font-size: 0.8em;
+    }
+}

@@ -15,3 +15,14 @@
 #OS files
 .DS_Store
 Thumbs.db
+
+#credential .properties files
+creds.properties
+
+
+
+# Intellij - .idea/, *iml, /out/ - IDE configs/build
+# Build outputs - /target/, /build/, *.class, /*.jar - compiled artifacts
+# Maven/Gradle - .mvn/, .gradle/ - tool folders
+# Logs/OS junk - *.log, .DS_Store, Thumbs.db
+# service-specific cred file - demo-service/src/main/resources/creds.properties

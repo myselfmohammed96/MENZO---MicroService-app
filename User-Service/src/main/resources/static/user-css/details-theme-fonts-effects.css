@@ -1,0 +1,27 @@
+#user-profile-image {
+    border: 8px solid #c9c9c9;
+    border-radius: 50%;
+}
+
+/* ----------------- */
+
+div.order-details-text {
+    font-size: 1.2em;
+}
+
+div.details-text {
+    font-size: 1.2em;
+}
+
+strong.details-key {
+    color: #000000;
+}
+
+p.details-value {
+    color: #414141;
+}
+
+.profile-details-description-message {
+    font-size: 13px;
+    color: #555;
+}

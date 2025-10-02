@@ -1,0 +1,106 @@
+/* ******* Buttons ******* */
+
+/* form submit buttons */
+.button-form-1 {
+    padding: 8px 0px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, color 0.15s ease, transform 0.07s ease !important;
+}
+
+.button-form-1:active,
+.button-google:active {
+    transform: scale(0.98);
+}
+
+/* google button */
+.button-google {
+    cursor: pointer;
+    transition: box-shadow 0.2s, color 0.15s ease, transform 0.07s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-google img {
+    width: 20px;
+    height: 20px;
+}
+
+/* view all button */
+#view-all-button-container {
+    height: 50px;
+    margin: 0px 50px;
+    padding: 40px 0px 25px 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.button-transparent-1 {
+    padding: 0px 25px;
+    height: 35px;
+    cursor: pointer;
+    transition: 0.2, transform 0.1s ease;
+}
+
+.button-transparent-1:active {
+    transform: scale(0.95);
+}
+
+.button-transparent-4 {
+    padding: 0px 15px;
+    transition: 0.2, transform 0.1s ease;
+}
+
+.button-transparent-4:active {
+    transform: scale(0.95);
+}
+
+/* ////////////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* custom rulers ******* */
+
+/* custom hr for footer - auth pages */
+.hr-line-10 {
+    width: 96%;
+    margin-left: 2%;
+    margin-top: 10px;
+    height: 1.5px;
+}
+
+.hr-line-11 {
+    width: 97%;
+    margin-left: 1.5%;
+    height: 1px;
+}
+
+/* Social login button divider */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+}
+
+.divider:not(:empty)::before {
+    margin-right: .75em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: .75em;
+}
+
+/* ///////////////////////////////////// */

@@ -1,4 +1,452 @@
-.login-page-heading{
+/* ******* sign in page - alignment ******* */
+
+.reg-page-content {
+  width: 100%;
+  margin: 60px 0 1% 0;
+  display: flex;
+  position: relative;
+}
+
+.reg-profile-pic-container {
+  flex: 1.3;
+}
+
+.reg-profile-details-container {
+  flex: 2;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* ******* profile pic upload ******* */
+
+#uploadBox {
+  width: 42%;
+  width: 255px;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 20% 30px 0 40%;
+  position: relative;
+}
+
+.plus-sign {
+  position: absolute;
+  pointer-events: none;
+}
+
+#uploadBox img {
+  max-width: 100%;
+  max-height: 100%;
+  display: none;
+}
+
+#uploadBox img.show {
+  display: block;
+}
+
+#uploadBox .plus-sign.hide {
+  display: none;
+}
+
+#modal-back-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  display: none;
+}
+
+#imageContainer {
+  width: 35%;
+  aspect-ratio: 1/1;
+  margin: auto;
+  padding: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+#imageContainer span {
+  display: flex;
+  justify-content: end;
+}
+
+#imageContainer span p {
+  width: fit-content;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+#previewImage {
+  width: 100%;
+  max-height: 90%;
+}
+
+#previewImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+
+
+/* ******* Headings ******* */
+
+/* login page heading */
+.login-page-heading {
+  padding: 20px 0px;
+  margin: 150px 0 1% 0;
+}
+
+/* signin page heading */
+.reg-page-heading {
+  padding: 20px 10px 0 10px;
+  margin: 40px 0 0 0;
+}
+
+.reg-profile-details-container p {
+  margin: 0 0 4% 10px;
+}
+
+/* forgot password, reset password heading */
+#forgot-password-heading-container,
+#reset-password-heading-container,
+#otp-verification-heading-container {
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+  margin: 10vw auto 75px auto;
+}
+
+#otp-verification-heading-container {
+  margin-bottom: 50px !important;
+}
+
+#reset-password-heading-container p,
+#otp-verification-heading-container p {
+  margin-top: 20px;
+}
+
+#forgot-password-heading-container p {
+  margin-top: 10px;
+}
+
+
+
+/* ******* Forms ******* */
+
+/* Registration form */
+
+.reg-form {
+  max-width: 700px;
+  margin: auto;
+  margin-left: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.login-input-container {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 5px;
+  box-sizing: border-box;
+}
+
+
+/* login & forgot password form */
+
+.login-form-inputs {
+  margin-bottom: 0 !important;
+}
+
+.forget-password-form-input,
+.reset-password-form-input {
+  width: 20%;
+}
+
+/* OTP form */
+
+.otp-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.otp-input {
+  width: 40px;
+  height: 50px;
+}
+
+.reset-password-form {
+  margin-bottom: 90px;
+}
+
+.otp-verification-form {
+  margin-bottom: 30px;
+}
+
+
+/* ******* forgot password link ******* */
+
+#forgot-password {
+  margin: -10px 0 0 22%;
+  transition: transform 0.1s ease;
+}
+
+#forgot-password:active {
+  transform: scale(0.95);
+}
+
+
+
+/* ******* Button styling ******* */
+
+.login-submit-button {
+  width: 30%;
+  margin-top: 45px;
+}
+
+.login-google-button {
+  width: 100%;
+  padding: 8px !important;
+}
+
+.forgot-password-button,
+.reset-password-button,
+.otp-verification-button {
+  width: 20%;
+  margin-top: 40px;
+}
+
+.signin-submit-button {
+  grid-column: span 2;
+  padding: 12px !important;
+}
+
+.google-button-link {
+    grid-column: span 2;
+}
+
+.login-google-button-link {
+    width: 30%;
+}
+
+.signin-google-button {
+    width: 100%;
+    padding: 12px !important;
+}
+
+.signin-submit-button {
+  margin-top: 20px;
+}
+
+.login-divider {
+  width: 30%;
+  margin: 15px;
+}
+
+.signin-divider {
+  grid-column: span 2;
+}
+
+
+
+/* ******* Error messages - form validation ******* */
+
+.error-message {
+  display: block;
+  margin: 0px !important;
+}
+
+
+
+/* ******* redirection link ******* */
+
+#sign-in-redirection,
+#log-in-redirection,
+#send-otp-again {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+#sign-in-redirection a,
+#log-in-redirection a,
+#send-otp-again a {
+  margin-left: 10px;
+  transition: color 0.15s ease, transform 0.1s ease;
+}
+
+#sign-in-redirection a:active,
+#log-in-redirection a:active,
+#send-otp-again a:active {
+  transform: scale(0.95);
+}
+
+
+
+/* OTP verification timer */
+
+.otp-timer {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.otp-timer p,
+.otp-timer strong {
+  display: inline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .login-page-heading{
     text-align: center;
     padding: 20px 0px;
     font-size: 2.3em;
@@ -79,10 +527,10 @@ input:-webkit-autofill{
 
 #forgot-password:active{
     transform: scale(0.95);
-}
+}  */
 
 /* Button styling */
-
+/*
 .form-button{
     width: 32.5%;
     background-color: #3e3e3e;
@@ -113,10 +561,10 @@ input:-webkit-autofill{
 
 .form-button:hover, .forgot-password-button:hover{
     color: #fff;
-}
+} */
 
 /* Sign in redirection */
-
+/*
 #sign-in-redirection{
     text-align: center;
     display: flex;
@@ -143,11 +591,11 @@ input:-webkit-autofill{
 #sign-in-redirection a:active{
     transform: scale(0.95);
 }
-
+*/
 /* Media querying */
 /* Primary screen size starts from 1200px(avg size of a laptop screen) */
 /* Media query changes - for every 200px or less */
-
+/*
 @media(max-width: 1000px){
     .forgot-password-page-heading{
         font-size: 2.3em;
@@ -340,7 +788,7 @@ input:-webkit-autofill{
     }
 }
 
-
+*/
 
 
 

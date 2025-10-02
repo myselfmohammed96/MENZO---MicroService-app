@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/home-css/style.css">
     <link rel="stylesheet" href="/home-css/home.css">
     <title>MENZO | Men's fashion</title>
@@ -18,7 +20,7 @@
 
     <div id="top-nav-bar">
         <div class="top-nav-bar-elements" id="nav-bar-logo">
-            <a href=""><img src="/home-media/utility-media/MENZO_logo.jpg" alt=""></a>
+            <a href="/index"><img src="/home-media/utility-media/MENZO_logo.jpg" alt=""></a>
         </div>
         <div class="top-nav-bar-elements" id="nav-bar-search-bar">
             <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
@@ -46,24 +48,13 @@
                     </div>
                 </a>
             </div>
-<!--            <div id="nav-icon-profile">-->
-<!--                <a href="/login" id="user-profile-icon">-->
-<!--                    <div class="icon-image-container">-->
-<!--                        <img id="profile-icon" src="/home-media/utility-media/profile_icon.png" alt="">-->
-<!--                    </div>-->
-<!--                    <div class="icon-details-container">-->
-<!--                        <div><p>Login</p></div>-->
-<!--                        <div><strong>Account</strong></div>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </div>-->
             <div id="user-profile-icon" class="dropdown-toggle">
                 <div class="icon-image-container">
                     <img id="profile-icon" src="/home-media/utility-media/profile_icon.png" alt=""/>
                 </div>
                 <div class="icon-details-container">
                     <div>
-                        <p id="profile-greeting">sign in</p>
+                        <p id="profile-greeting">Sign in</p>
                     </div>
                     <div>
                         <strong id="profile-label">Account</strong>
@@ -80,17 +71,7 @@
     <!-- Bottom nav bar (for categories) -->
 
     <div id="bottom-nav-bar">
-        <ul>
-            <li><a href="">Shirts & T-Shirts</a></li>
-            <li><a href="">Pants</a></li>
-            <li><a href="">Hoodies</a></li>
-            <li><a href="">Coats & Jackets</a></li>
-            <li><a href="">Perfumes</a></li>
-            <li><a href="">Watches</a></li>
-            <li><a href="">Caps</a></li>
-            <li><a href="">Shoes</a></li>
-            <li><a href="">More</a></li>
-        </ul>
+        <ul id="bottom-nav-options-container"></ul>
     </div>
 </nav>
 
@@ -114,7 +95,7 @@
     </div>
     <div class="info-tags">
         <img id="trend-tag-icon" src="/home-media/utility-media/trend-icon-symbol.jpg" alt="">
-        <strong>Trend-Forword Collections</strong>
+        <strong>Trend-Forward Collections</strong>
         <p>Stay fashionable with our <br>latest styles</p>
     </div>
     <div class="info-tags">
@@ -485,10 +466,11 @@
         </div>
     </div>
 </div>
-<script src="/home-js/nav-bar-script.js"></script>
 <script th:inline="javascript">
-    const user = /*[[${user}]]*/ null;
-    updateUserProfileUI(user);
+<!--    const user = /*[[${user}]]*/ null;-->
+    window.user = /*[[${user}]]*/ null;
+<!--    updateUserProfileUI(user);-->
 </script>
+<script src="/home-js/nav-bar-script.js"></script>
 </body>
 </html>

@@ -1,0 +1,100 @@
+.user-details-wrapper {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.user-details-wrapper {
+    margin-bottom: 10px !important;
+}
+
+.user-title-custom-line {
+    width: 97%;
+    margin-left: 1.5%;
+    height: 1px;
+    background-color: #adadad;
+    border: none;
+}
+
+.user-display-col-1 {
+    flex: 1;
+    display: flex;
+    min-width: 300px;
+    align-self: flex-start;
+    height: fit-content;
+    flex-shrink: 0;
+    min-height: 30vh !important;
+    justify-content: center;
+}
+
+.user-display-col-2 {
+    flex: 1.3;
+    min-width: 0;
+    max-width: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    margin-top: 30px;
+}
+
+#user-profile-image {
+    border: 8px solid #c9c9c9;
+    width: 260px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+/* ----------------- */
+
+div.details-text, div.order-details-text {
+    display: flex;
+    margin: 15px 10px;
+    font-size: 1.2em;
+}
+
+div.order-details-text {
+    margin: 20px;
+}
+
+strong.details-key {
+    color: #000000;
+    flex: 1;
+}
+
+p.details-value {
+    color: #414141;
+    flex: 3;
+}
+
+/* Button styling */
+
+#btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 50px;
+}
+
+#edit-profile-button, #change-pwd-button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #3e3e3e;
+    color: #ffffff;
+    min-width: 400px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    margin: 7px 10px;
+    font-size: 1.1em;
+}
+
+#edit-profile-button:hover, #change-pwd-button:hover {
+    background-color: #555;
+}
+
+#edit-profile-button:active, #change-pwd-button:active {
+    transform: scale(0.95);
+}

@@ -18,7 +18,7 @@ public class EmailDto {
         this.email = email;
     }
 
-    public void display() {
-        System.out.println("email: " + email);
+    public String toString() {
+        return "EmailDto:\nemail: " + email;
     }
 }

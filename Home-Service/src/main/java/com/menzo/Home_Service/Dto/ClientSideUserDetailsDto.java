@@ -40,8 +40,8 @@ public class ClientSideUserDetailsDto {
         this.roles = roles;
     }
 
-    public void display() {
-        System.out.println("firstName: " + firstName + "\nlastName: " + lastName +
-                "\nroles: " + roles);
+    public String toString() {
+        return "ClientSideUserDetailsDto:\nfirstName: " + firstName + "\nlastName: " + lastName +
+                "\nroles: " + roles + "\n";
     }
 }

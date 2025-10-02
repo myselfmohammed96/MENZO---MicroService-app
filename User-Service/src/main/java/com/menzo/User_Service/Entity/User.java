@@ -1,6 +1,7 @@
 package com.menzo.User_Service.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.menzo.User_Service.Dto.OAuthUserDto;
 import com.menzo.User_Service.Enums.Gender;
 import com.menzo.User_Service.Enums.Roles;
 import jakarta.persistence.*;
@@ -21,28 +22,28 @@ public class User {
     @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(nullable = false, name = "last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(nullable = false, name = "email")
     private String email;
 
-    @Column(nullable = false, name = "phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(nullable = false, name = "date_of_birth")
+    @Column(name = "date_of_birth")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false, name = "user_password")
+    @Column(name = "user_password")
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "gender")
+    @Column(name = "gender")
     private Gender gender;
 
     @Column(name = "profile_pic")
-    private String profilePicLink;
+    private String profileUrl;
 
     @Column(nullable = false, name = "created_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -55,8 +56,15 @@ public class User {
 
     @Column(name = "is_active")
     private boolean isActive;
+    ///////////////////////////////////////////////
 
     public User(){}
+
+    public User(OAuthUserDto user) {
+        this.firstName = user.getUserName();
+        this.email = user.getEmail();
+        this.profileUrl = user.getProfileUrl();
+    }
 
     public User(String firstName, String lastName, String phoneNumber,
          String email, LocalDate dateOfBirth, Gender gender,
@@ -134,12 +142,12 @@ public class User {
         this.gender = gender;
     }
 
-    public String getProfilePicLink() {
-        return profilePicLink;
+    public String getProfileUrl() {
+        return profileUrl;
     }
 
-    public void setProfilePicLink(String profilePicLink) {
-        this.profilePicLink = profilePicLink;
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -166,9 +174,9 @@ public class User {
         isActive = active;
     }
 
-    public void display() {
-        System.out.println("User:\nid: " + id + "\nfirstName: " + firstName + "\nlastName: " + lastName +
+    public String toString() {
+        return "User:\nid: " + id + "\nfirstName: " + firstName + "\nlastName: " + lastName +
                 "\nemail: " + email + "\nphoneNumber: " + phoneNumber + "\ndateOfBirth: " + dateOfBirth +
-                "\ngender: " + gender + "\nroles: " + roles + "\nisActive: " + isActive);
+                "\ngender: " + gender + "\nroles: " + roles + "\nisActive: " + isActive + "\n";
     }
 }

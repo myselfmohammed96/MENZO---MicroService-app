@@ -13,7 +13,7 @@
     flex: 2;
 }
 
-/* Registration profile pic field */
+/* profile pic upload */
 
 #uploadBox {
     width: 42%;
@@ -104,6 +104,7 @@
     border: 1px solid green;
     max-height: 90%;
 }
+
 .cropper-bg {
     background: transparent !important;
 }
@@ -120,7 +121,7 @@ input[type="file"] {
     display: none;
 }
 
-/* Registration details input fields */
+/* Registration form */
 
 .reg-page-heading{
     text-align: left;
@@ -146,16 +147,32 @@ input[type="file"] {
     gap: 15px;
 }
 
-.reg-form-inputs, .reg-form select{
-    width: 90%;
+/* Form fields */
+
+.input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.phone-dob-inputs {
+    margin-bottom: -13px;
+}
+
+input,
+select {
+    width: 100%;
     outline: none;
     border: none;
     border-bottom: 2px solid #cacaca;
     color: #383838;
-    padding: 10px 0 5px 0;
+    padding: 10px 5px;
+    box-sizing: border-box;
     font-size: 1em;
-    margin: auto;
-    padding: 5px 10px;
+    background: transparent;
 }
 
 input[type="date"]::-webkit-datetime-edit{
@@ -168,54 +185,128 @@ input[type="date"]::-webkit-input-placeholder{
 
 #dob-container{
     position: relative;
-    top: -10px;
-    margin-left: 10px;
+    top: -15px;
 }
 
-#dob-container label{
+#dob-container input {
+    margin-top: -5px;
+}
+
+#dob-container label {
     margin-top: 8px;
-    margin-left: 10px;
+    margin-bottom: -10px;
+    margin-left: 5px;
     color: #656565;
-}
-
-#password-match-error{
-    color: red;
     font-size: 13px;
-    padding-left: 5px;
-    margin-top: -10px;
-    display: none;
 }
 
-.login-form-inputs:focus{
+.error-message {
+    color: red !important;
+    font-size: 13px !important;
+    display: none;
+    margin: 0px !important;
+}
+
+.login-form-inputs:focus {
     border-bottom: 2px solid #969696;
     background-color: none;
 }
 
-input:-webkit-autofill{
+input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px white inset !important;
     box-shadow: 0 0 0 1000px white inset !important;
     -webkit-text-fill-color: #000 !important;
 }
 
-.form-button, #imageContainer button{
-    width: 40.5%;
-    background-color: #3e3e3e;
-    color: rgb(226, 226, 226);
-    padding: 8px 0px;
+/* ------------- */
+
+.validation-alerts {
+    color: red;
+    font-size: 13px;
+    padding-left: 5px;
+    margin-top: -10px;
+}
+
+#email-duplication-error {
+    display: block;
+}
+
+/* -------------- */
+
+/* Buttons */
+
+.form-button,
+.google-btn {
+    grid-column: span 2;
+    padding: 12px;
     border-radius: 5px;
     font-size: 1em;
-    margin: 45px auto 50px auto;
     cursor: pointer;
-    transition:color 0.15s ease, transform 0.05s ease;
-    grid-column: span 2;
+    transition: box-shadow 0.2s, transform 0.05s ease;
 }
 
-.form-button:active, #imageContainer button:active{
-    transform: scale(0.95);
-}
-
-.form-button:hover, #imageContainer button:hover{
+.form-button {
+    background-color: #3e3e3e;
     color: #fff;
+    border: none;
+    margin-top: 20px;
+}
+
+.form-button:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.form-button:active {
+    transform: scale(0.97);
+}
+
+.divider {
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.divider:not(:empty)::before {
+    margin-right: .75em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: .75em;
+}
+
+.google-btn {
+    background-color: #fff;
+    color: #444;
+    border: 1.5px solid #dbdbdb;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-btn:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.google-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.google-btn:active {
+    transform: scale(0.97);
 }
 
 /* Log in redirection */
@@ -247,6 +338,7 @@ input:-webkit-autofill{
     transform: scale(0.95);
 }
 
+/* ----------- */
 
 @media(max-width: 800px){
     .reg-form{

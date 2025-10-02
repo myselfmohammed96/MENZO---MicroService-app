@@ -1,6 +1,8 @@
 package com.menzo.User_Service.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.User_Service.Enums.Gender;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -10,7 +12,7 @@ public class RegNewUser {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
     private String email;
     private Gender gender;

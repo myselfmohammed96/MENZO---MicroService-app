@@ -1,14 +1,17 @@
 package com.menzo.Home_Service.Controller;
 
+import com.menzo.Home_Service.Dto.CategoryMinimalDto;
 import com.menzo.Home_Service.Dto.ClientSideUserDetailsDto;
+import com.menzo.Home_Service.Dto.ParentCategoryDto;
+import com.menzo.Home_Service.Service.ProductService;
 import com.menzo.Home_Service.Service.UserService;
 import com.menzo.Home_Service.Util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class IndexController {
@@ -17,38 +20,65 @@ public class IndexController {
     private UserService userService;
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
-//    @GetMapping("/index")
-//    public String indexPage(@RequestHeader(value = "loggedInUser", required = false) String userEmail, Model model){
-//        if (userEmail != null) {
-//            ClientSideUserDetailsDto user = userService.getUserDetailsForClientSide(userEmail);
-//            model.addAttribute("user", user);
-//        } else {
-//            model.addAttribute("user", null);
-//        }
-//        return "IndexTemplates/index-page.html";
-//    }
-
     @GetMapping("/index")
-    public String indexPage(@CookieValue(value = "JWT", required = false) String token, Model model) {
+    public String indexPage(@CookieValue(value = "JWT", required = false) String token,
+                            Model model) {
         if (token != null && jwtUtil.validateToken(token)) {
             String userEmail = jwtUtil.extractUserEmail(token);
-            System.out.println("Vanthudichi... " + userEmail);
             ClientSideUserDetailsDto user = userService.getUserDetailsForClientSide(userEmail);
-            user.display(); // *** check ***
             model.addAttribute("user", user);
+            System.out.println("this one is running..." + user);
         } else {
-            System.out.println("Varala....**");
             model.addAttribute("user", null);
+            System.out.println("This 2 is running...");
         }
+//        System.out.println("Index user details: " + token);
         return "IndexTemplates/index-page.html";
     }
 
     @GetMapping("/all-categories")
-    public String allCategories(Model model) {
-        model.addAttribute("user", null);
+    public String allCategories(@CookieValue(value = "JWT", required = false) String token,
+                                Model model) {
+        if(token != null && jwtUtil.validateToken(token)) {
+            String userEmail = jwtUtil.extractUserEmail(token);
+            ClientSideUserDetailsDto user = userService.getUserDetailsForClientSide(userEmail);
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null);
+        }
+        List<CategoryMinimalDto> allCategories = productService.getAllCategories();
+        model.addAttribute("categories", allCategories);
         return "IndexTemplates/all-categories";
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public String categoryById(@CookieValue(value = "JWT", required = false) String token,
+                               @PathVariable("categoryId") Long id,
+                               Model model) {
+        if(token != null && jwtUtil.validateToken(token)) {
+            String userEmail = jwtUtil.extractUserEmail(token);
+            ClientSideUserDetailsDto user = userService.getUserDetailsForClientSide(userEmail);
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null);
+        }
+
+        ParentCategoryDto parentCategory = productService.getParentCategoryById(id);
+        List<CategoryMinimalDto> subCategories = productService.getAllSubCategoriesByCategoryId(id);
+
+        model.addAttribute("category", parentCategory);
+        model.addAttribute("subCategories", subCategories);
+        return "IndexTemplates/category";
+    }
+
+    @GetMapping("/product-listing")
+    public String productListing() {
+        return "IndexTemplates/product-listing";
     }
 
 }

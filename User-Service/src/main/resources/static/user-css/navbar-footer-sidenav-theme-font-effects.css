@@ -1,0 +1,356 @@
+* {
+    /* font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; */
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+/* ******* Nav bars *******  */
+
+/* Top nav bar & Minimal nav bar */
+
+#top-nav-bar,
+#min-nav-bar-container {
+    background-color: black;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#search-bar {
+    background-color: #333;
+    color: rgb(222, 222, 222);
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+}
+
+#search-bar:focus {
+    outline: 2px solid #494949;
+}
+
+#nav-icon-wishlist a,
+#nav-icon-cart a,
+#user-profile-icon {
+    color: #e9e9e9;
+    text-decoration: none;
+    font-size: 12.5px;
+}
+
+#wishlist-count {
+    background-color: rgb(233, 233, 233);
+    border-radius: 15px;
+    color: rgb(33, 33, 33);
+}
+
+#cart-count {
+    background-color: red;
+    border-radius: 15px;
+    color: rgb(0, 0, 0);
+}
+
+/* collapsible menu  */
+
+#user-dropdown,
+.more-dropdown {
+    background-color: #222;
+    color: white;
+    list-style: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#user-dropdown li a {
+    color: white;
+    text-decoration: none;
+}
+
+#user-dropdown li:hover {
+    background-color: #444;
+}
+
+.more-dropdown li a {
+    color: white;
+    text-decoration: none;
+    text-align: left;
+}
+
+.more-dropdown li:hover {
+    background-color: #444;
+}
+
+.more-dropdown li a:hover {
+    color: white !important;
+}
+
+/* Bottom nav bar  */
+
+#bottom-nav-bar {
+    background-color: black;
+    color: #e9e9e9;
+}
+
+#bottom-nav-options-container {
+    font-size: 13px;
+    list-style: none;
+}
+
+.bottom-nav-options {
+    text-align: center;
+}
+
+.bottom-nav-options a,
+.bottom-nav-options span {
+    color: #e9e9e9;
+    text-decoration: none;
+}
+
+.bottom-nav-options a:hover,
+.bottom-nav-options span:hover {
+    color: rgb(193, 193, 193);
+}
+
+.bottom-nav-options a:active,
+.bottom-nav-options span:active {
+    color: #fff;
+}
+
+/* /////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Footer menu ******* */
+
+/* Minimal footer - for authentication form pages */
+
+.login-page-footer {
+    text-align: center;
+    color: #cacaca;
+    font-size: 15px;
+}
+
+/* Normal footer */
+
+.footer-menu-container {
+    background-color: black;
+}
+
+.email-sub-container {
+    border-bottom: 2px solid #555;
+}
+
+.email-sub-label img {
+    border-radius: 85px;
+}
+
+.email-sub-label p {
+    color: white;
+}
+
+.email-sub-input p {
+    color: white;
+    font-size: 10px;
+}
+
+.email-input-wrapper input {
+    font-size: 13px;
+    border-radius: 4.5px;
+    border: none;
+    background-color: white;
+}
+
+.email-input-wrapper input:focus {
+    outline: 2.5px solid #5d5d5d;
+}
+
+.email-input-wrapper button {
+    border-radius: 4px;
+    border: none;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+}
+
+.email-input-wrapper button:hover {
+    color: rgb(205, 205, 205);
+}
+
+/* Footer - options part */
+
+.footer-options-container {
+    color: white;
+}
+
+#footer-address p,
+#footer-telephone p,
+#footer-email p {
+    font-size: 0.8em;
+}
+
+.footer-pages-wrapper ul,
+.footer-categories-wrapper ul,
+.footer-support-wrapper ul {
+    font-size: 13px;
+    list-style-type: none;
+}
+
+.footer-pages-wrapper a,
+.footer-categories-wrapper a,
+.footer-support-wrapper a {
+    text-decoration: none;
+    color: #e9e9e9;
+}
+
+.footer-pages-wrapper a:hover,
+.footer-categories-wrapper a:hover,
+.footer-support-wrapper a:hover {
+    color: rgb(147, 151, 194);
+}
+
+.footer-pages-wrapper a:active,
+.footer-categories-wrapper a:active,
+.footer-support-wrapper a:active {
+    color: #fff;
+}
+
+/* Social media icons styling */
+
+#social-media-links-wrapper a img {
+    filter: invert(0%) sepia(0%) hue-rotate(0deg) saturate(100%);
+}
+
+#footer-whatsapp-link:hover {
+    filter: sepia(100%) saturate(1000%) hue-rotate(80deg) brightness(85%) contrast(95%);
+}
+
+#footer-instagram-link:hover {
+    filter: sepia(100%) saturate(6000%) hue-rotate(265deg) brightness(95%) contrast(100%);
+}
+
+#footer-tiktok-link:hover {
+    filter: sepia(200%) saturate(2000%) hue-rotate(300deg) brightness(60%) contrast(300%);
+}
+
+#footer-facebook-link:hover {
+    filter: sepia(200%) saturate(2000%) hue-rotate(170deg) brightness(60%) contrast(300%);
+}
+
+#footer-twitter-link:hover {
+    filter: sepia(200%) saturate(2000%) hue-rotate(170deg) brightness(65%) contrast(300%);
+}
+
+/* End footer - with copyright claims */
+
+#copy-right-container {
+    font-size: 13px;
+}
+
+#copy-right-container p {
+    color: #acacac;
+}
+
+#mastercard-logo,
+#paypal-logo {
+    border-radius: 3px;
+}
+
+#stripe-pay-logo {
+    border-radius: 5px;
+}
+
+/* /////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Side nav - menu bar ******* */
+
+.side-menu-bar-container {
+    background-color: #d9d9d9;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+#categories-heading,
+#profile-heading {
+    color: #363636;
+    text-decoration: none;
+}
+
+.all-categories-active {
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-menu,
+.profile-menu{
+    list-style: none;
+}
+
+.side-menu-custom-line {
+    background-color: #adadad;
+    border: none;
+}
+
+.profile-item:active,
+.category-item:active {
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    box-shadow: inset  0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.current-option {
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    font-weight: 550;
+    color: #4e4e4e;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-item a,
+.profile-item a {
+    text-decoration: none;
+    color: black;
+}
+
+.category-item a:hover,
+.profile-item a:hover {
+    color: rgb(80, 100, 135);
+}
+
+.current-category-option {
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    font-weight: 550;
+    color: #4e4e4e;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Categories items */
+
+.sub-category-menu{
+    list-style: none;
+    border-bottom: 1px solid #bebebe;
+}
+
+.sub-category-menu li a{
+    color: rgb(65, 65, 65);
+}
+
+.sub-category-menu li a:hover{
+    color: rgb(112, 115, 122);
+}
+
+.menu-active-indicator {
+    font-weight: 400;
+    color: black;
+}
