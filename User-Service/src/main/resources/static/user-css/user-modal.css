@@ -1,8 +1,4 @@
-#user-modal,
-#sub-category-modal,
-#variation-modal,
-#option-modal,
-#confirm-modal {
+#user-modal {
     display: none;
     position: fixed;
     inset: 0;
@@ -13,7 +9,7 @@
     z-index: 1000;
 }
 
-#modal-container, #sub-modal-container, #option-modal-container{
+#modal-container {
     background: #fff;
     padding: 30px 50px;
     border-radius: 5px;
@@ -26,17 +22,25 @@
     align-items: center;
 }
 
-#modal-title, #sub-modal-title, #option-modal-title, #confirm-title {
+#modal-title {
     text-align: center;
     margin-bottom: 15px;
 }
 
-.confirm-message {
+/* .confirm-message {
     color: #7c7c7c;
     font-size: 1em;
+} */
+
+#modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
 }
 
-#modal-container input, #sub-modal-container input, #option-modal-container input, #sub-modal-container select{
+#modal-container input,
+#modal-container select{
     width: 90%;
     box-sizing: border-box;
     outline: none;
@@ -48,7 +52,7 @@
     font-size: 1em;
 }
 
-#modal-container input:focus, #sub-modal-container input:focus, #option-modal-container input:focus{
+#modal-container input:focus {
     border-bottom: 2px solid #969696;
 }
 
@@ -58,7 +62,15 @@ input:-webkit-autofill{
     -webkit-text-fill-color: #000 !important;
 }
 
-#modal-container div, #sub-modal-container div, #option-modal-container div{
+.error-message {
+    display: block;
+    margin: 0px !important;
+    color: red !important;
+    font-size: 13px !important;
+    padding-left: 15px;
+}
+
+#modal-container div {
     width: 100%;
     text-align: center;
     display: flex;
@@ -66,7 +78,7 @@ input:-webkit-autofill{
     margin-top: 15px;
 }
 
-#modal-container div button, #sub-modal-container div button, #option-modal-container div button{
+#modal-container div button {
     width: 35%;
     background-color: #3e3e3e;
     color: rgb(226, 226, 226);
@@ -78,11 +90,11 @@ input:-webkit-autofill{
     transition: color 0.15s ease, transform 0.05s ease;
 }
 
-#modal-container div button:hover, #sub-modal-container div button:hover, #option-modal-container div button:hover{
+#modal-container div button:hover {
     color: #fff;
 }
 
-#modal-container div button:active, #sub-modal-container div button:active, #option-modal-container div button:active{
+#modal-container div button:active {
     transform: scale(0.95);
 }
 

@@ -8,6 +8,8 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <link rel="stylesheet" href="/user-css/navbar-footer-sidenav-theme-font-effects.css">
     <link rel="stylesheet" href="/user-css/navbar-footer-sidenav-styling.css">
 
@@ -260,12 +262,13 @@
     <div id="user-modal" class="modal">
         <div id="modal-container">
             <h1 id="modal-title">Edit Profile</h1>
-            <input type="text" id="modal-first-name" placeholder="First Name"/>
-            <input type="text" id="modal-last-name" placeholder="Last Name"/>
-            <input type="text" id="modal-phone-number" placeholder="Phone Number"/>
-            <!--            <input type="text" id="modal-email" placeholder="Email"/>-->
-            <input type="text" id="modal-category-input" placeholder="Date of Birth"/>
-            <!--            <input type="text" placeholder="Description"/>-->
+            <div id="modal-body"></div>
+<!--            <input type="text" id="modal-first-name" placeholder="First Name"/>-->
+<!--            <input type="text" id="modal-last-name" placeholder="Last Name"/>-->
+<!--            <input type="text" id="modal-phone-number" placeholder="Phone Number"/>-->
+<!--            &lt;!&ndash;            <input type="text" id="modal-email" placeholder="Email"/>&ndash;&gt;-->
+<!--            <input type="text" id="modal-category-input" placeholder="Date of Birth"/>-->
+<!--            &lt;!&ndash;            <input type="text" placeholder="Description"/>&ndash;&gt;-->
             <div>
                 <button id="save-btn">Save</button>
                 <button onclick="closeUserEditModal()">Cancel</button>
@@ -293,7 +296,7 @@
                     <strong class="details-key">Full name:</strong>
                     <p th:text="${userDetails.firstName + (userDetails.lastName != null ? ' ' + userDetails.lastName : '')}"
                        class="details-value">Daniel Cormier</p>
-                    <button class="button-transparent-4" id="edit-name-button">Edit</button>
+                    <button onclick="openModal('name')" class="button-transparent-4" id="edit-name-button">Edit</button>
                 </div>
 
                 <!-- Email -->
@@ -310,7 +313,7 @@
                 <div class="details-text">
                     <strong class="details-key">Phone number: </strong>
                     <p th:text="${userDetails.phoneNumber != null ? userDetails.phoneNumber : 'Unavailable'}" class="details-value">98765 43210</p>
-                    <button th:text="${userDetails.phoneNumber != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-phone-number-button">Edit</button>
+                    <button onclick="openModal('name')" th:text="${userDetails.phoneNumber != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-phone-number-button">Edit</button>
                 </div>
                 <span th:if="${userDetails.phoneNumber == null}" class="profile-details-description" id="phone-number-absent">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -326,7 +329,7 @@
                     <strong class="details-key">Date of birth: </strong>
                     <p th:text="${userDetails.dateOfBirth != null ? #temporals.format(userDetails.dateOfBirth, 'dd MMM yyyy') : 'Unavailable'}" class="details-value">21
                         Jun 2010</p>
-                    <button th:text="${userDetails.dateOfBirth != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-dob-button">Edit</button>
+                    <button onclick="openModal('name')" th:text="${userDetails.dateOfBirth != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-dob-button">Edit</button>
                 </div>
                 <span th:if="${userDetails.dateOfBirth == null}" class="profile-details-description">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -339,7 +342,7 @@
                     <strong class="details-key">Gender: </strong>
                     <p th:text="${userDetails.gender != null ? #strings.capitalize(userDetails.gender.toString().toLowerCase()) : 'Unavailable'}"
                        class="details-value">Male</p>
-                    <button th:text="${userDetails.gender != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-gender-button">Edit</button>
+                    <button onclick="openModal('name')" th:text="${userDetails.gender != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-gender-button">Edit</button>
                 </div>
                 <span th:if="${userDetails.gender == null}" class="profile-details-description">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -351,7 +354,7 @@
                 <div class="details-text">
                     <strong class="details-key">Password: </strong>
                     <p th:text="${userDetails.passwordPresent} ? '********' : 'Unavailable'" class="details-value"></p>
-                    <button th:text="${userDetails.passwordPresent} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-password-button"></button>
+                    <button onclick="openModal('name')" th:text="${userDetails.passwordPresent} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-password-button"></button>
                 </div>
                 <span th:if="${!userDetails.passwordPresent}" class="profile-details-description">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -469,6 +472,9 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script th:inline="javascript">
     const userDetails = /*[[${userDetails}]]*/ {};
 </script>
