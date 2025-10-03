@@ -4,6 +4,7 @@ import com.menzo.User_Service.Dto.*;
 import com.menzo.User_Service.Entity.User;
 import com.menzo.User_Service.Enums.Roles;
 import com.menzo.User_Service.Exceptions.AuthFeignException;
+import com.menzo.User_Service.Exceptions.PasswordMismatchException;
 import com.menzo.User_Service.Feign.AuthFeign;
 import com.menzo.User_Service.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -43,7 +47,7 @@ public class UserService {
     }
 
     //    Saving new Registered user
-    private UserDto saveNewUser(RegNewUser newUser){
+    private UserDto saveNewUser(RegNewUser newUser) {
         try {
             logger.info("Registering new user with email: {}", newUser.getEmail());
             if (userRepo.existsByEmail(newUser.getEmail())) {
@@ -69,7 +73,7 @@ public class UserService {
         }
     }
 
-    private String encodePassword(String userPassword){
+    private String encodePassword(String userPassword) {
         try {
             logger.info("Encoding password");
             PasswordDto encodedPasswordDto = null;
@@ -100,17 +104,6 @@ public class UserService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     public User updateUserActiveStatus(UpdateUserActiveStatusDto statusDto) {
         try {
             User user = userRepo.findById(statusDto.getUserId())
@@ -127,20 +120,72 @@ public class UserService {
 
     }
 
-    public Long updateUserDetails(String userEmail, UserMinimalDto latestUser) {
+    public Long updateUserDetails(String userEmail, UserDto latestUser) {
+        System.out.println(latestUser);
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with Email: " + userEmail));
-        user.setFirstName(latestUser.getFirstName() != null && !latestUser.getFirstName().isEmpty() ? latestUser.getFirstName() : user.getFirstName());
-        user.setLastName(latestUser.getLastName() != null && !latestUser.getLastName().isEmpty() ? latestUser.getLastName() : user.getLastName());
-        user.setPhoneNumber(latestUser.getPhoneNumber() != null && !latestUser.getPhoneNumber().isEmpty() ? latestUser.getPhoneNumber() : user.getPhoneNumber());
 
-        User updatedUser = userRepo.save(user);
-        if(latestUser.getFirstName().equals(updatedUser.getFirstName()) ||
-                latestUser.getLastName().equals(updatedUser.getLastName()) ||
-                latestUser.getPhoneNumber().equals(updatedUser.getPassword())) {
+        User updatedUser = null;
+        try {
+            user.setFirstName(latestUser.getFirstName() != null && !latestUser.getFirstName().isEmpty() ? latestUser.getFirstName() : user.getFirstName());
+            user.setLastName(latestUser.getLastName() != null && !latestUser.getLastName().isEmpty() ? latestUser.getLastName() : user.getLastName());
+
+            user.setPhoneNumber(latestUser.getPhoneNumber() != null && !latestUser.getPhoneNumber().isEmpty() ? latestUser.getPhoneNumber() : user.getPhoneNumber());
+            user.setDateOfBirth(latestUser.getDateOfBirth() != null ? latestUser.getDateOfBirth() : user.getDateOfBirth());
+            user.setGender(latestUser.getGender() != null ? latestUser.getGender() : user.getGender());
+
+            updatedUser = userRepo.save(user);
+        } catch (RuntimeException e) {
+            logger.error("Error while updating user with email: {}", userEmail);
+            throw new RuntimeException("Error while updating User with email: " + userEmail);
+        }
+        if (Objects.equals(latestUser.getFirstName(), updatedUser.getFirstName()) ||
+                Objects.equals(latestUser.getLastName(), updatedUser.getLastName()) ||
+                Objects.equals(latestUser.getPhoneNumber(), updatedUser.getPhoneNumber()) ||
+                Objects.equals(latestUser.getDateOfBirth(), updatedUser.getDateOfBirth()) ||
+                Objects.equals(latestUser.getGender(), updatedUser.getGender())) {
             return updatedUser.getId();
         } else {
             return null;
+        }
+    }
+
+    public boolean updatePassword(String userEmail, boolean passwordPresent, ChangePasswordDto passwordDto) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with Email: " + userEmail));
+        try {
+            User updatedUser = null;
+            if (passwordPresent) {
+                logger.info("Verifying current password to user: {}", userEmail);
+                Boolean passwordMatches = authFeign.verifyPassword(new VerifyPasswordDto(passwordDto.getCurrentPassword(), user.getPassword()));
+                if (passwordMatches) {
+                    logger.info("Current password verification successful.");
+                    updatedUser = changePassword(user, passwordDto.getNewPassword());
+                } else {
+                    logger.error("Current password mismatched.");
+                    throw new PasswordMismatchException("Current password didn't match.");
+                }
+            } else {
+                logger.info("Adding new password to user: {}", userEmail);
+                updatedUser = changePassword(user, passwordDto.getNewPassword());
+            }
+            return updatedUser != null;
+        } catch (PasswordMismatchException e) {
+            throw new PasswordMismatchException(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Password update failed.");
+            throw new RuntimeException("Password update failed", e);
+        }
+    }
+
+    private User changePassword(User user, String newPassword) {
+        try {
+            String encodedPassword = encodePassword(newPassword);
+            user.setPassword(encodedPassword);
+            return userRepo.save(user);
+        } catch (Exception e) {
+            logger.error("Password changing failed.");
+            throw new RuntimeException("Password changing failed.", e);
         }
     }
 
@@ -152,7 +197,7 @@ public class UserService {
 //    ********* Google OAuth *********
 
     public UserDto saveGoogleOAuthUser(OAuthUserDto googleUser) {
-        if(googleUser == null || googleUser.getEmail() == null) {
+        if (googleUser == null || googleUser.getEmail() == null) {
             logger.error("Google OAuth user or email is null");
             throw new IllegalArgumentException("Invalid Google OAuth user data");
         }
@@ -173,39 +218,10 @@ public class UserService {
         } catch (DataAccessException e) {
             logger.error("Database error while saving/fetching Google OAuth user: {}", googleUser.getEmail(), e);
             throw new RuntimeException("Database error while processing OAuth login", e);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Unexpected error during Google OAuth user save: {}", googleUser.getEmail(), e);
             throw new RuntimeException("Unexpected error during OAuth login", e);
         }
-
-//        boolean existsInUserRepo = userRepo.existsByEmail(googleUser.getEmail());
-//
-//        if (existsInUserRepo) {
-//            User user = userRepo.findByEmail(googleUser.getEmail())
-//                    .orElse(null);
-//            return new UserDto(user);
-//        } else {
-//            User savedUser = userRepo.save(new User(googleUser));
-//            return new UserDto(savedUser);
-//        }
     }
-
-
-
-
-
-
-
-
-//    @PostConstruct
-//    public void saveNewUsers() {
-//        for(int i=0; i<50; i++) {
-//            RegNewUser newUser = new RegNewUser("user ", String.valueOf(i+1), String.valueOf(123456+i),
-//                    LocalDate.of(2000, 1, 1), "user"+i+1+"@gmail.com", Gender.MALE,
-//                    "user"+String.valueOf(i+1)+"@gmail.com", "user"+String.valueOf(i+1)+"@gmail.com", null);
-//            saveNewUser(newUser);
-//        }
-//    }
 
 }

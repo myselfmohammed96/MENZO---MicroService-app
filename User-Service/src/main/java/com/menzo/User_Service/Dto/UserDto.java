@@ -1,21 +1,25 @@
 package com.menzo.User_Service.Dto;
 
-//import com.menzo.User_Service.Entity.OauthUser;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.User_Service.Entity.User;
+import com.menzo.User_Service.Enums.Gender;
 import com.menzo.User_Service.Enums.Roles;
+
+import java.time.LocalDate;
 
 public class UserDto {
 
     private Long id;
-    private String userName;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+    @JsonFormat(pattern = "dd-MM-yyy")
+    private LocalDate dateOfBirth;
+    private Gender gender;
     private String password;
     private Roles roles;
     private String profileUrl;
-    private User mainUser;
     private boolean isActive;
 
     public UserDto() {}
@@ -32,16 +36,6 @@ public class UserDto {
         this.roles = roles;
         this.isActive = isActive;
     }
-
-//    public UserDto(OauthUser user) {
-//        this.id = user.getId();
-//        this.userName = user.getUserName();
-//        this.email = user.getEmail();
-//        this.profileUrl = user.getProfileUrl();
-//        this.roles = user.getRoles();
-//        this.mainUser = user.getMainUser();
-//        this.isActive = isActive();
-//    }
 
     public UserDto(User user) {
         this.id = user.getId();
@@ -62,19 +56,11 @@ public class UserDto {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String fullName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -102,6 +88,22 @@ public class UserDto {
         this.phoneNumber = phoneNumber;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -126,14 +128,6 @@ public class UserDto {
         this.profileUrl = profileUrl;
     }
 
-    public User getMainUser() {
-        return mainUser;
-    }
-
-    public void setMainUser(User mainUser) {
-        this.mainUser = mainUser;
-    }
-
     public boolean isActive() {
         return isActive;
     }
@@ -142,9 +136,9 @@ public class UserDto {
         isActive = active;
     }
 
-    public void display() {
-        System.out.println("firstName: " + firstName + "\nlastName: " + lastName +
-                "\nemail: " + email + "\nphoneNumber: " + phoneNumber + "\nroles: " + roles +
-                "\nisActive: " + isActive);
+    public String toString() {
+        return "\nUserDto:\nid: " + id + "\nfirstName: " + firstName + "\nlastName: " + lastName +
+                "\nemail: " + email + "\nphoneNumber: " + phoneNumber + "\ngender: " + gender +
+                "\nroles: " + roles;
     }
 }

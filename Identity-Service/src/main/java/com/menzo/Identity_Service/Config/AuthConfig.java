@@ -39,6 +39,7 @@ public class AuthConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/auth/encode-pwd",
+                                "/auth/verify-password",
                                 "/auth/login",
                                 "/auth/grantcode",
                                 "/auth/get-by-token",

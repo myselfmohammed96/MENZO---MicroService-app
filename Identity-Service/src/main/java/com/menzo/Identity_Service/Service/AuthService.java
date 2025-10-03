@@ -4,15 +4,11 @@ import com.menzo.Identity_Service.Dto.*;
 import com.menzo.Identity_Service.Entity.Token;
 import com.menzo.Identity_Service.Feign.UserFeign;
 import com.menzo.Identity_Service.Repository.TokenRepository;
-import com.nimbusds.jose.shaded.gson.Gson;
-import com.nimbusds.jose.shaded.gson.JsonObject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -21,12 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AuthService {
@@ -60,6 +52,17 @@ public class AuthService {
         } catch (Exception e) {
             logger.error("Error during password encryption", e);
             throw new RuntimeException("Failed to encrypt password", e);
+        }
+    }
+
+    public boolean verifyPassword(VerifyPasswordDto passwordDto) {
+        try {
+            return passwordEncoder.matches(passwordDto.getCurrentPassword(), passwordDto.getPasswordInDB());
+        } catch (IllegalArgumentException e) {
+            logger.error("Verification password invalid");
+            throw new IllegalArgumentException("Password invalid" + e);
+        } catch (Exception e) {
+            throw new RuntimeException("Password verification failed" + e);
         }
     }
 

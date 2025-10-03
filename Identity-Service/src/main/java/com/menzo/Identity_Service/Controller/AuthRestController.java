@@ -7,7 +7,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -27,6 +26,16 @@ public class AuthRestController {
     public ResponseEntity<PasswordDto> encodePassword(@RequestBody PasswordDto userPassword){
         PasswordDto encodedPassword = authService.encryptPassword(userPassword);
         return ResponseEntity.ok(encodedPassword);
+    }
+
+    @PostMapping("verify-password")
+    public ResponseEntity<Boolean> verifyPassword(@RequestBody VerifyPasswordDto passwordDto) {
+        if (passwordDto == null || passwordDto.getCurrentPassword() == null || passwordDto.getCurrentPassword().isEmpty() ||
+            passwordDto.getPasswordInDB() == null || passwordDto.getPasswordInDB().isEmpty()) {
+            throw new IllegalArgumentException("Invalid passwordDto");
+        }
+        boolean matches = authService.verifyPassword(passwordDto);
+        return ResponseEntity.ok(matches);
     }
 
     @GetMapping("get-by-token")

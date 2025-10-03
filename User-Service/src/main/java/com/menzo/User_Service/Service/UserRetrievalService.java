@@ -3,6 +3,7 @@ package com.menzo.User_Service.Service;
 import com.menzo.User_Service.Dto.*;
 import com.menzo.User_Service.Entity.User;
 import com.menzo.User_Service.Enums.ActiveStatus;
+import com.menzo.User_Service.Enums.Gender;
 import com.menzo.User_Service.Enums.Roles;
 import com.menzo.User_Service.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;

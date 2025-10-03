@@ -3,6 +3,7 @@ package com.menzo.User_Service.Feign;
 import com.menzo.User_Service.Dto.EmailDto;
 import com.menzo.User_Service.Dto.PasswordDto;
 import com.menzo.User_Service.Dto.TokenMinimalDto;
+import com.menzo.User_Service.Dto.VerifyPasswordDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,4 +16,7 @@ public interface AuthFeign {
 
     @PostMapping("/auth/get-token")
     public TokenMinimalDto getToken(@RequestBody EmailDto userEmail);
+
+    @PostMapping("/auth/verify-password")
+    public Boolean verifyPassword(@RequestBody VerifyPasswordDto passwordDto);
 }

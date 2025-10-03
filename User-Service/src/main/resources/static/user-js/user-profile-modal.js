@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     document.addEventListener("keydown", function(e) {
         if(e.key === "Escape") {
@@ -8,13 +8,31 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+
+//    const gender = await genderEnum();
+//    console.log(gender);
 });
+
+const genderEnum = async function() {
+    try {
+        const response = await fetch("/user/user-gender");
+        if(response.ok) {
+            return await response.json();
+        } else {
+            console.log("Error fetching gender enum.");
+            return;
+        }
+    } catch (err) {
+        console.error("Gender fetching failed", err);
+        throw err;
+    }
+}
 
 const userModal = document.getElementById('user-modal');
 const modalBody = document.getElementById('modal-body');
 const modalTitle = document.getElementById('modal-title');
 
-function openModal(field, status = null) {
+window.openModal = async function(field, status = null) {
     const saveBtn = document.getElementById('save-btn');
     let value;
     let saveBtnNew;
@@ -103,19 +121,19 @@ function openModal(field, status = null) {
             saveBtnNew = document.getElementById('save-btn');
             saveBtnNew.addEventListener("click", () => {
                 value = {
-                    dob: document.getElementById('modal-dob').value
+                    dateOfBirth: document.getElementById('modal-dob').value
                 };
 
                 const dobErrorMsg = document.getElementById('dob-error-message');
                 dobErrorMsg.textContent = '';
 
-                if (!value.dob) {
+                if (!value.dateOfBirth) {
                     dobErrorMsg.textContent = '*This field cannot be empty.';
                     return;
                 }
 
-                if (value.dob) {
-                    const dobDate = new Date(value.dob);
+                if (value.dateOfBirth) {
+                    const dobDate = new Date(value.dateOfBirth);
                     const today = new Date();
                     const minDate = new Date(today.getFullYear()-5, today.getMonth(), today.getDate());
                     if(dobDate > minDate) {
@@ -130,18 +148,24 @@ function openModal(field, status = null) {
             break;
 
         case "gender":
+            const gender = await genderEnum();
             modalTitle.textContent = status === null ? "Add Gender" : "Edit Gender";
             modalBody.innerHTML = `
                 <div class="input-container">
                     <select id="modal-gender">
                         <option value="" disabled selected hidden>Gender</option>
-                        <option value="MALE">Male</option>
-                        <option value="FEMALE">Female</option>
-                        <option value="OTHER">Other</option>
                     </select>
                 </div>
                 <p id="gender-error-message" class="error-message"></p>
             `;
+            const genderSelect = document.getElementById('modal-gender');
+            gender.forEach(g => {
+                const genderOption = document.createElement('option');
+                genderOption.value = g;
+                genderOption.textContent = g.charAt(0).toUpperCase() + g.substring(1).toLowerCase();
+                genderSelect.appendChild(genderOption);
+            });
+
             saveBtn.replaceWith(saveBtn.cloneNode(true));
             saveBtnNew = document.getElementById('save-btn');
             saveBtnNew.addEventListener("click", () => {
@@ -267,16 +291,86 @@ function openModal(field, status = null) {
             }
             break;
     }
-
     userModal.style.display = "flex";
 }
 
+async function updateUser(value) {
+    try {
+        const response = await fetch("http://localhost:8080/user/update-user", {
+            method: "PUT",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(value)
+        });
+        if(response.ok) {
+            console.log("yes");
+            return await response.json();
+        } else {
+            console.error("no");
+            return;
+        }
+    } catch (err) {
+        console.error("User update failed", err);
+        throw err;
+    }
+}
+
+async function changePassword(value, status) {
+    try {
+        const response = await fetch(`http://localhost:8080/user/update-password?present=${status}`, {
+            method: "PUT",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(value)
+        });
+        if(response.ok) {
+            console.log("password changed");
+            return await response.json();
+        } else if(response.status === 401) {
+            console.error("password mismatch");
+            return;
+        } else {
+            console.error("Error changing password.");
+            return;
+        }
+    } catch (err) {
+        console.error("Password update failed", err);
+        throw err;
+    }
+}
 
 
-
-function processData(field, status, value) {
+async function processData(field, status, value) {
     console.log(field + " " + status);
     console.log(value);
+
+    let response;
+    switch(field) {
+        case 'name':
+            response = await updateUser(value);
+            console.log(response);
+            console.log("hello");
+            break;
+        case 'phone':
+            response = await updateUser(value);
+            console.log(response);
+            console.log("phone is here");
+            break;
+        case 'dob':
+            response = await updateUser(value);
+            console.log(response);
+            console.log("dob here");
+            break;
+        case 'gender':
+            response = await updateUser(value);
+            console.log(response);
+            console.log("gender done")
+            break;
+        case 'password':
+            response = await changePassword(value, status);
+            console.log("password update.");
+            break;
+    }
 }
 
 

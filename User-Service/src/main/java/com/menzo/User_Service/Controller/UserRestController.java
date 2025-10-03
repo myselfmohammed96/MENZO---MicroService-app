@@ -2,6 +2,7 @@ package com.menzo.User_Service.Controller;
 
 import com.menzo.User_Service.Dto.*;
 import com.menzo.User_Service.Entity.User;
+import com.menzo.User_Service.Enums.Gender;
 import com.menzo.User_Service.Service.UserRetrievalService;
 import com.menzo.User_Service.Service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -14,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -104,13 +107,60 @@ public class UserRestController {
                 .body(Map.of("message", "User activeStatus updated successfully"));
     }
 
+
+
+
+    @GetMapping("/user-gender")
+    public ResponseEntity<Gender[]> getUserGender() {
+//        GenderDto gender = userRetrievalService.getUserGender();
+        return ResponseEntity.ok(Gender.values());
+    }
+
+
+
+
+
+
+
+
+
 //    =========
 
     @PutMapping("/update-user")
-    public ResponseEntity<?> updateUserDetialsByEmail(@RequestHeader("loggedInUser") String userEmail,
-                                                      @RequestBody UserMinimalDto latestUserDetails) {
+    public ResponseEntity<?> updateUserDetailsByEmail(@RequestHeader("loggedInUser") String userEmail,
+                                                      @RequestBody UserDto latestUserDetails) {
+        if(latestUserDetails == null) {
+            logger.error("User details unavailable while updating user: {}", userEmail);
+            throw new IllegalArgumentException("User details unavailable while updating user: " + userEmail);
+        }
         Long updatedUserId = userService.updateUserDetails(userEmail, latestUserDetails);
-        return (updatedUserId != null) ? ResponseEntity.ok(updatedUserId) : null;
+
+        Map<String, Object> response = new HashMap<>();
+        if (updatedUserId != null) {
+            response.put("success", true);
+            response.put("data", Map.of("id", updatedUserId));
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("success", false);
+            response.put("error", "User update failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestHeader("loggedInUser") String userEmail,
+                                            @RequestParam("present") boolean passwordPresent,
+                                            @RequestBody ChangePasswordDto passwordDto) {
+        if (passwordDto == null ||
+            passwordDto.getNewPassword() == null || passwordDto.getNewPassword().isEmpty() ||
+            passwordDto.getConfirmPassword() == null || passwordDto.getConfirmPassword().isEmpty() ||
+            !Objects.equals(passwordDto.getNewPassword(), passwordDto.getConfirmPassword()) ||
+            (passwordPresent && (passwordDto.getCurrentPassword() == null || passwordDto.getCurrentPassword().isEmpty()))) {
+            throw new IllegalArgumentException("Password dto invalid.");
+        }
+        boolean passwordUpdated = userService.updatePassword(userEmail, passwordPresent, passwordDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("success", passwordUpdated));
     }
 
 

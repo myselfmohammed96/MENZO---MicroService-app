@@ -313,7 +313,7 @@
                 <div class="details-text">
                     <strong class="details-key">Phone number: </strong>
                     <p th:text="${userDetails.phoneNumber != null ? userDetails.phoneNumber : 'Unavailable'}" class="details-value">98765 43210</p>
-                    <button onclick="openModal('name')" th:text="${userDetails.phoneNumber != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-phone-number-button">Edit</button>
+                    <button onclick="openModal('phone', userDetails.phoneNumber)" th:text="${userDetails.phoneNumber != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-phone-number-button">Edit</button>
                 </div>
                 <span th:if="${userDetails.phoneNumber == null}" class="profile-details-description" id="phone-number-absent">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -329,7 +329,7 @@
                     <strong class="details-key">Date of birth: </strong>
                     <p th:text="${userDetails.dateOfBirth != null ? #temporals.format(userDetails.dateOfBirth, 'dd MMM yyyy') : 'Unavailable'}" class="details-value">21
                         Jun 2010</p>
-                    <button onclick="openModal('name')" th:text="${userDetails.dateOfBirth != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-dob-button">Edit</button>
+                    <button onclick="openModal('dob', userDetails.dateOfBirth)" th:text="${userDetails.dateOfBirth != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-dob-button">Edit</button>
                 </div>
                 <span th:if="${userDetails.dateOfBirth == null}" class="profile-details-description">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -342,7 +342,11 @@
                     <strong class="details-key">Gender: </strong>
                     <p th:text="${userDetails.gender != null ? #strings.capitalize(userDetails.gender.toString().toLowerCase()) : 'Unavailable'}"
                        class="details-value">Male</p>
-                    <button onclick="openModal('name')" th:text="${userDetails.gender != null} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-gender-button">Edit</button>
+                    <button onclick="openModal('gender', userDetails.gender)"
+                            th:text="${userDetails.gender != null} ? 'Edit' : 'Add'"
+                            class="button-transparent-4"
+                            id="edit-gender-button">
+                    </button>
                 </div>
                 <span th:if="${userDetails.gender == null}" class="profile-details-description">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
@@ -354,7 +358,11 @@
                 <div class="details-text">
                     <strong class="details-key">Password: </strong>
                     <p th:text="${userDetails.passwordPresent} ? '********' : 'Unavailable'" class="details-value"></p>
-                    <button onclick="openModal('name')" th:text="${userDetails.passwordPresent} ? 'Edit' : 'Add'" class="button-transparent-4" id="edit-password-button"></button>
+                    <button onclick="openModal('password', userDetails.passwordPresent)"
+                            th:text="${userDetails.passwordPresent} ? 'Edit' : 'Add'"
+                            class="button-transparent-4"
+                            id="edit-password-button">
+                    </button>
                 </div>
                 <span th:if="${!userDetails.passwordPresent}" class="profile-details-description">
                     <img src="/user-media/attention.png" class="profile-details-description-icon" alt="">
