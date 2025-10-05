@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const greeting = document.getElementById("profile-greeting");
         const label = document.getElementById("profile-label");
 
-        userIconDropDown.innerHTML = ""; // Clear previous options
+        userIconDropDown.innerHTML = "";
 
         console.log(user);
         if (!user) {

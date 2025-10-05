@@ -4,9 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="/home-css/style.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/home-css/navbar-footer-sidenav-styling.css" >
+    <link rel="stylesheet" href="/home-css/navbar-footer-sidenav-theme-font-effects.css">
+
+    <link rel="stylesheet" href="/home-css/components-styling.css">
+    <link rel="stylesheet" href="/home-css/Components-theme-fonts-effects.css">
+
+<!--    <link href="/home-css/style.css" rel="stylesheet">-->
     <link href="/home-css/home.css" rel="stylesheet">
-    <link href="/home-css/side-menu.css" rel="stylesheet">
+<!--    <link href="/home-css/side-menu.css" rel="stylesheet">-->
 <!--    <link href="/home-css/categories.css" rel="stylesheet">-->
     <link href="/home-css/products-display.css" rel="stylesheet">
     <title>MENZO | Categories</title>
@@ -83,9 +92,11 @@
 <!-- All categories page content -->
 
 <div class="page-container">
+
     <div class="side-menu-bar-container no-select">
+
         <h2 class="main-menu-options" id="categories-menu-option">
-            <a href="" id="categories-link">Categories</a>
+            <span id="categories-heading">Categories</span>
             <span class="flip" id="categories-option-arrow"><img alt="" src="/home-media/utility-media/down-arrow.png"></span>
         </h2>
 
@@ -94,9 +105,10 @@
         <hr class="side-menu-custom-line"/>
 
         <h2 class="main-menu-options" id="profile-menu-option">
-            <a href="" id="profile-link">Profile</a>
+            <span id="profile-heading">Profile</span>
             <span id="profile-option-arrow"><img alt="" src="/home-media/utility-media/down-arrow.png"></span>
         </h2>
+
         <ul class="menu profile-menu" id="profile-menu-content">
             <li class="profile-item">
                 <a href="">My account</a>
@@ -120,11 +132,13 @@
                 <a href="">Coupons</a>
             </li>
             <li class="profile-item">
-                <a href="">Logout</a>
+                <a href="/logout">Logout</a>
             </li>
         </ul>
         <hr class="side-menu-custom-line"/>
     </div>
+
+    <!--    ********* Main page content *********   -->
 
     <!--    th:text="${category.categoryName}"-->
     <div class="main-content-container">
@@ -508,6 +522,19 @@
 
 </div>
 
+<!-- Toast notification -->
+
+<div class="toast show" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span>&#10005;</span>
+    </div>
+</div>
+
 <!-- Footer menu -->
 
 <div class="footer-menu-container">
@@ -609,11 +636,12 @@
     </div>
 </div>
 
-<script src="/home-js/script.js"></script>
 <script th:inline="javascript">
     window.user = /*[[${user}]]*/ null;
 </script>
 <script src="/home-js/nav-bar-script.js"></script>
 <script src="/home-js/user-side-menu-script.js"></script>
+
+<script src="/home-js/script.js"></script>
 </body>
 </html>

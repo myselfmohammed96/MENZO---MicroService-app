@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //    ********* Categories & Sub-categories population *********
 
-    const sideNavCategories = document.getElementById('categories-menu-content');
+    const categoryMenu = document.getElementById('categories-menu-content');
 
-    async function getCategoriesWithSubCategories() {
+    async function getCategories() {
         try {
             const response = await fetch(getCategoriesWithSubCategoriesUrl);
             if(!response.ok) throw new Error("Failed to load Categories in side nav");
@@ -17,63 +17,60 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function populateSideNavCategories() {
-        const categories = await getCategoriesWithSubCategories();
+    async function populateCategories() {
+        const categories = await getCategories();
 
-        sideNavCategories.innerHTML = '';
+        categoryMenu.innerHTML = '';
 
-        categories.forEach(category => {
-            const li = document.createElement('li');
-            li.classList.add('category-item');
+        if(categories) {
+            categories.forEach(category => {
+                const categoryLi = document.createElement("li");
+                categoryLi.classList.add("category-item");
 
-            const categoryTitleContainer = document.createElement('div');
-            categoryTitleContainer.classList.add('category-item-title-container');
+                const categoryTitle = document.createElement("div");
+                categoryTitle.classList.add("category-item-title-container");
+                categoryTitle.innerHTML = `
+                    <span>${category.categoryName}</span>
+        //                    <span class="menu-active-indicator">+</span>
+                `;
 
-            const categoryTitle = document.createElement('span');
-            categoryTitle.textContent = category.categoryName;
+                const subCategoryList = document.createElement("ul");
+                subCategoryList.classList.add("sub-category-menu", "hidden");
 
-            categoryTitleContainer.appendChild(categoryTitle);
+                category.subCategories.forEach(subCategory => {
+                    const subCategoryLi = document.createElement("li");
+                    subCategoryLi.classList.add("sub-category-item");
+                    subCategoryLi.innerHTML = `
+                        <a href="/url/${subCategory.id}">${subCategory.categoryName}</a>
+                    `;
+                    subCategoryList.appendChild(subCategoryLi);
+                });
 
-            const subCategoryList = document.createElement('ul');
-            subCategoryList.classList.add('sub-category-menu', 'hidden');
-
-            (category.subCategories || []).forEach(sub => {
-                const subLi = document.createElement('li');
-                subLi.classList.add('sub-category-item');
-
-                const a = document.createElement('a');
-                a.setAttribute('href', `/url?id=${sub.id}`);
-                a.textContent = sub.categoryName;
-
-                subLi.appendChild(a);
-                subCategoryList.appendChild(subLi);
+                categoryLi.append(categoryTitle, subCategoryList);
+                categoryMenu.appendChild(categoryLi);
             });
 
-            li.append(categoryTitleContainer, subCategoryList);
-            sideNavCategories.appendChild(li);
-        });
+            // ********* Sub-categories menu toggle *********
 
-        // ********* Sub-categories menu toggle *********
+            const categoryItems = document.querySelectorAll('.category-item');
 
-        const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                const titleContainer = item.querySelector('.category-item-title-container');
+                const subMenu = item.querySelector('.sub-category-menu');
 
-        categoryItems.forEach(item => {
-            const titleContainer = item.querySelector('.category-item-title-container');
-            const subMenu = item.querySelector('.sub-category-menu');
-
-            if(titleContainer && subMenu) {
-                titleContainer.addEventListener('click', () => {
-
-                    categoryItems.forEach(other => {
-                        if(other !== item) {
-                            other.querySelector('.sub-category-menu')?.classList.add('hidden');
-                        }
+                if(titleContainer && subMenu) {
+                    titleContainer.addEventListener('click', () => {
+                        categoryItems.forEach(other => {
+                            if(other !== item) {
+                                other.querySelector('.sub-category-menu')?.classList.add('hidden');
+                            }
+                        });
+                        const isHidden = subMenu.classList.contains('hidden');
+                        subMenu.classList.toggle('hidden', !isHidden);
                     });
-                    const isHidden = subMenu.classList.contains('hidden');
-                    subMenu.classList.toggle('hidden', !isHidden);
-                });
-            }
-        });
+                }
+            });
+        }
     }
 
     populateSideNavCategories();

@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const categoryTitle = document.createElement("div");
                 categoryTitle.classList.add("category-item-title-container");
                 categoryTitle.innerHTML = `
-                    <a href="/category/${category.id}">${category.categoryName}</a>
-                    <span class="menu-active-indicator">+</span>
+                    <span>${category.categoryName}</span>
+//                    <span class="menu-active-indicator">+</span>
                 `;
 
                 const subCategoryList = document.createElement("ul");
@@ -48,60 +48,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 categoryMenu.appendChild(categoryLi);
             });
 
+
+
             // ********* Sub-categories menu toggle *********
             const categoryItems = document.querySelectorAll('.category-item');
 
             categoryItems.forEach(item => {
                 const titleContainer = item.querySelector('.category-item-title-container');
                 const subMenu = item.querySelector('.sub-category-menu');
-                const indicator = item.querySelector('.menu-active-indicator');
+//                const indicator = item.querySelector('.menu-active-indicator');
 
-                if(titleContainer && subMenu && indicator) {
-                    indicator.addEventListener('click', (e) => {
+                if(titleContainer && subMenu) {
+                    indicator.addEventListener('click', () => {
                         categoryItems.forEach(other => {
                             if(other !== item) {
                                 other.querySelector('.sub-category-menu')?.classList.add('hidden');
-                                const otherIndicator = other.querySelector('.menu-active-indicator');
-                                if(otherIndicator) otherIndicator.textContent = '+';
+//                                const otherIndicator = other.querySelector('.menu-active-indicator');
+//                                if(otherIndicator) otherIndicator.textContent = '+';
                             }
                         });
                         const isHidden = subMenu.classList.contains('hidden');
                         subMenu.classList.toggle('hidden', !isHidden);
-                        indicator.textContent = isHidden ? '-' : '+';
+//                        indicator.textContent = isHidden ? '-' : '+';
                     });
                 }
             });
         }
-
-
     }
 
     populateCategories();
 
 // ********* Menu elements toggle *********
-    //  ****** Categories menu elements *******
     const categories = {
         option: document.getElementById('categories-menu-option'),
         content: document.getElementById('categories-menu-content'),
         arrow: document.getElementById('categories-option-arrow'),
-        link: document.getElementById('categories-link')
     }
 
-    //  ******* Profile menu elements *******
     const profile = {
         option: document.getElementById('profile-menu-option'),
         content: document.getElementById('profile-menu-content'),
         arrow: document.getElementById('profile-option-arrow'),
-        link: document.getElementById('profile-link')
-    }
-
-    //  Heading link - click event management
-    categories.link.addEventListener("click", (e) => {
-        e.stopPropagation();
-    });
-
-    profile.link.onclick = (e) => {
-        e.preventDefault();
     }
 
     //  accordion toggle

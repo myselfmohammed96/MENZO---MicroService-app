@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 const genderEnum = async function() {
     try {
-        const response = await fetch("/user/user-gender");
+        const response = await fetch("http://localhost:8080/user/user-gender");
         if(response.ok) {
             return await response.json();
         } else {
@@ -302,13 +302,7 @@ async function updateUser(value) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(value)
         });
-        if(response.ok) {
-            console.log("yes");
-            return await response.json();
-        } else {
-            console.error("no");
-            return;
-        }
+        return response;
     } catch (err) {
         console.error("User update failed", err);
         throw err;
@@ -323,16 +317,7 @@ async function changePassword(value, status) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(value)
         });
-        if(response.ok) {
-            console.log("password changed");
-            return await response.json();
-        } else if(response.status === 401) {
-            console.error("password mismatch");
-            return;
-        } else {
-            console.error("Error changing password.");
-            return;
-        }
+        return response;
     } catch (err) {
         console.error("Password update failed", err);
         throw err;
@@ -348,27 +333,65 @@ async function processData(field, status, value) {
     switch(field) {
         case 'name':
             response = await updateUser(value);
-            console.log(response);
-            console.log("hello");
+            if(response.ok) {
+                const fullName = document.getElementById('full-name');
+                fullName.textContent = value.firstName + " " + value.lastName;
+                window.showToast("User name update successful.", true);
+            } else {
+                  console.error(response);
+                  window.showToast("User name update failed. Try again.", false);
+            }
             break;
         case 'phone':
             response = await updateUser(value);
-            console.log(response);
-            console.log("phone is here");
+            if(response.ok) {
+                const phoneNumber = document.getElementById('phone-number');
+                phoneNumber.textContent = value.phoneNumber;
+                window.showToast("Phone number update successful.", true);
+            } else {
+                console.error(response);
+                window.showToast("Phone number update failed. Try again.", false);
+            }
             break;
         case 'dob':
             response = await updateUser(value);
-            console.log(response);
-            console.log("dob here");
+            if(response.ok) {
+                const dob = new Date(value.dateOfBirth);
+                const dateOfBirth = document.getElementById('dob');
+                dateOfBirth.textContent = dob.toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+                window.showToast("Date of Birth update successful.", true);
+            } else {
+                console.error(response);
+                window.showToast("Date of Birth update failed. Try again.", false);
+            }
             break;
         case 'gender':
             response = await updateUser(value);
-            console.log(response);
-            console.log("gender done")
+            if(response.ok) {
+                const gender = document.getElementById('gender');
+                gender.textContent = value.gender.charAt(0).toUpperCase() + value.gender.substring(1).toLowerCase();
+                window.showToast("Gender update successful.", true);
+            } else {
+                console.error(response);
+                window.showToast("Gender update failed. Try again.", false);
+            }
             break;
         case 'password':
             response = await changePassword(value, status);
-            console.log("password update.");
+            if(response.ok) {
+                const password = document.getElementById('password');
+                password.textContent = '********';
+                window.showToast("Password changed successfully.", true);
+            } else if(response.status === 401) {
+                window.showToast("Current password didn't match. Try again.", false);
+            } else {
+                console.error("Error changing password: " + response);
+                window.showToast("Password change failed. Try again.", false);
+            }
             break;
     }
 }

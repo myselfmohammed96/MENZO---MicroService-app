@@ -170,11 +170,11 @@
 }
 
 .toast-success-icon {
-    background-image: url('/user-media/check-mark.png');
+    background-image: url('/home-media/utility-media/check-mark.png');
 }
 
 .toast-fail-icon {
-    background-image: url('/user-media/red-cross.png');
+    background-image: url('/home-media/utility-media/red-cross.png');
 }
 
 .toast-message-container h3 {
@@ -264,4 +264,3 @@ input:-webkit-autofill{
 }
 
 /* ///////////////////////////////////// */
-
