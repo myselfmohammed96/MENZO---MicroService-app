@@ -3,7 +3,6 @@ package com.menzo.User_Service.Controller;
 import com.menzo.User_Service.Dto.ClientSideUserDetailsDto;
 import com.menzo.User_Service.Dto.EmailDto;
 import com.menzo.User_Service.Dto.UserDetailsDto;
-import com.menzo.User_Service.Dto.UserDto;
 import com.menzo.User_Service.Service.UserRetrievalService;
 import com.menzo.User_Service.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,11 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("userDetails", userDetails);
         return "Users/user-profile";
+    }
+
+    @GetMapping("/address")
+    public String getUserAddressByEmail(@RequestHeader("loggedInUser") String userEmail, Model model) {
+        return "Users/user-address";
     }
 
 }

@@ -174,4 +174,11 @@ public class UserRestController {
         return ResponseEntity.ok(user);
     }
 
+//    ********* User Address *********
+//    @PostMapping("/address")
+//    public ResponseEntity<?> addUserAddress(@RequestHeader("loggedInUser") String userEmail,
+//                                            @RequestBody UserAddressDto userAddress) {
+//        return ;
+//    }
+
 }

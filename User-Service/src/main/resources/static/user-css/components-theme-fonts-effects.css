@@ -210,7 +210,8 @@
     backdrop-filter: blur(3px);
 }
 
-#modal-container {
+#modal-container,
+#modal-container-1 {
     background: #fff;
     border-radius: 5px;
 }
@@ -225,6 +226,7 @@
 }
 
 #modal-container input,
+#modal-container-1 input,
 #modal-container select {
     outline: none;
     border: none;
@@ -233,7 +235,8 @@
     font-size: 1em;
 }
 
-#modal-container input:focus {
+#modal-container input:focus,
+##modal-container-1 input: focus {
     border-bottom: 2px solid #969696;
 }
 
@@ -243,23 +246,31 @@ input:-webkit-autofill{
     -webkit-text-fill-color: #000 !important;
 }
 
-.error-message {
+.error-message,
+.error-message-1 {
     color: red !important;
     font-size: 13px !important;
 }
 
-#modal-container div {
+.error-message-1 {
+    text-align: left;
+}
+
+#modal-container div,
+#modal-container-1 div {
     text-align: center;
 }
 
-#modal-container div button {
+#modal-container div button,
+#modal-container-1 div button {
     background-color: #3e3e3e;
     color: rgb(226, 226, 226);
     border-radius: 5px;
     font-size: 1em;
 }
 
-#modal-container div button:hover {
+#modal-container div button:hover,
+#modal-container-1 div button:hover {
     color: #fff;
 }
 

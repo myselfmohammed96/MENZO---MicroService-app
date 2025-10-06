@@ -78,3 +78,61 @@ p.details-value {
 .profile-details-description-message {
     max-width: 550px;
 }
+
+/* //////////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* User address */
+
+#no-address-container {
+    height: 10vh;
+}
+
+#no-address-message {
+    margin-top: 30px;
+}
+
+.address-entity {
+    padding: 20px 40px;
+}
+
+.address-header {
+    display: flex;
+    padding-bottom: 10px;
+    align-items: center;
+}
+
+.user-name {
+    flex: 1;
+}
+
+.edit-button,
+.delete-button {
+    padding: 4px 10px 5px 10px;
+    transition: ease 0.15s;
+}
+
+.edit-button:active,
+.delete-button:active {
+    transform: scale(0.95);
+}
+
+#add-address-button-container {
+    padding: 0 40px;
+}
+
+.address {
+    padding-bottom: 20px;
+    max-width: 1200px;
+}
+
+.add-address-button {
+    width: 15%;
+}
