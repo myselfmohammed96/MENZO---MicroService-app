@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">-->
+
+    <link rel="stylesheet" href="/user-css/navbar-footer-sidenav-styling.css">
+    <link rel="stylesheet" href="/user-css/navbar-footer-sidenav-theme-font-effects.css">
+
+    <link rel="stylesheet" href="/user-css/components-styling.css">
+    <link rel="stylesheet" href="/user-css/components-theme-fonts-effects.css">
+
+    <link rel="stylesheet" href="/user-css/details-styling.css">
+    <link rel="stylesheet" href="/user-css/details-theme-fonts-effects.css">
+
+    <title>MENZO | Categories</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+
+    <!-- Top nav bar -->
+
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href="/index"><img src="/user-media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-wishlist">
+                <a id="wishlist-icon-container" href="">
+                    <div class="icon-image-container">
+                        <img id="heart-icon" src="/user-media/heart_icon.jpeg" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div><p id="wishlist-count">0</p></div>
+                        <div><strong>Saved</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="nav-icon-cart">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="cart-icon" src="/user-media/cart_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div><p id="cart-count">50</p></div>
+                        <div><strong>My cart</strong></div>
+                    </div>
+                </a>
+            </div>
+            <!--            <div id="nav-icon-profile">-->
+            <!--                <a href="">-->
+            <!--                    <div class="icon-image-container">-->
+            <!--                        <img id="profile-icon" src="/user-media/profile_icon.png" alt="">-->
+            <!--                    </div>-->
+            <!--                    <div class="icon-details-container">-->
+            <!--                        <div>-->
+            <!--                            <p>sign in</p>-->
+            <!--                        </div>-->
+            <!--                        <div><strong>Account</strong></div>-->
+            <!--                    </div>-->
+            <!--                </a>-->
+            <!--            </div>-->
+            <div id="user-profile-icon" class="dropdown-toggle">
+                <div class="icon-image-container">
+                    <img id="profile-icon" src="/home-media/utility-media/profile_icon.png" alt=""/>
+                </div>
+                <div class="icon-details-container">
+                    <div>
+                        <p id="profile-greeting">Sign in</p>
+                    </div>
+                    <div>
+                        <strong id="profile-label">Account</strong>
+                    </div>
+                </div>
+                <ul id="user-dropdown" class="dropdown hidden">
+                    <li><a href="/sign-in">Create an account</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom nav bar (for categories) -->
+
+    <div id="bottom-nav-bar">
+        <ul id="bottom-nav-options-container"></ul>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+
+    <div class="side-menu-bar-container no-select">
+
+        <h2 class="main-menu-options" id="categories-menu-option">
+            <span id="categories-heading">Categories</span>
+            <span id="categories-option-arrow"><img src="/user-media/down-arrow.png" alt=""></span>
+        </h2>
+
+        <ul class="menu category-menu" id="categories-menu-content"></ul>
+
+        <hr class="side-menu-custom-line"/>
+
+        <h2 class="main-menu-options" id="profile-menu-option">
+            <span id="profile-heading">Profile</span>
+            <span id="profile-option-arrow" class="flip"><img src="/user-media/down-arrow.png" alt=""></span>
+        </h2>
+        <ul class="menu profile-menu display" id="profile-menu-content">
+            <li class="profile-item">
+                <a href="">My account</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Orders</a>
+            </li>
+
+            <li class="profile-item current-option">
+                <a href="">Addresses</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Wishlist</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Wallet</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Coupons</a>
+            </li>
+            <li class="profile-item">
+                <a href="/logout">Logout</a>
+            </li>
+        </ul>
+        <hr class="side-menu-custom-line"/>
+    </div>
+
+    <div class="main-content-container">
+        <h1>My Address</h1>
+        <hr class="hr-line-11"/>
+
+        <div id="no-address-container">
+            <p id="no-address-message">Addresses not added yet. Add one to get started.</p>
+        </div>
+
+        <div id="address-container">
+            <div class="address-entity">
+                <div class="address-header">
+                    <h2 class="user-name">Daniel Cormier</h2>
+                    <div class="action-buttons">
+                        <button class="edit-button">Edit</button>
+                        <button class="delete-button">Delete</button>
+                    </div>
+                </div>
+                <p class="address">Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra West, Mumbai,
+                    Maharashtra, India – 400050</p>
+                <hr class="hr-line-12">
+            </div>
+            <div class="address-entity">
+                <div class="address-header">
+                    <h2 class="user-name">Daniel Cormier</h2>
+                    <div class="action-buttons">
+                        <button class="edit-button">Edit</button>
+                        <button class="delete-button">Delete</button>
+                    </div>
+                </div>
+                <p class="address">Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra West, Mumbai,
+                    Maharashtra, India – 400050</p>
+                <hr class="hr-line-12">
+            </div>
+            <div class="address-entity">
+                <div class="address-header">
+                    <h2 class="user-name">Daniel Cormier</h2>
+                    <div class="action-buttons">
+                        <button class="edit-button">Edit</button>
+                        <button class="delete-button">Delete</button>
+                    </div>
+                </div>
+                <p class="address">Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra West, Mumbai,
+                    Maharashtra, India – 400050Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra
+                    West, Mumbai, Maharashtra, India – 400050Flat No. 10, 2nd Floor, Sunrise Apartments, Linking
+                    Road, Bandra West, Mumbai, Maharashtra, India – 400050Flat No. 10, 2nd Floor, Sunrise
+                    Apartments, Linking Road, Bandra West, Mumbai, Maharashtra, India – 400050</p>
+                <hr class="hr-line-12">
+            </div>
+        </div>
+        <div id="add-address-button-container">
+            <button class="add-address-button button-form-1" type="submit">Add new address</button>
+        </div>
+    </div>
+</div>
+
+<!--  Edit user modal  -->
+
+<div id="user-modal" class="modal">
+    <div id="modal-container-1">
+        <h1 id="modal-title">Add Address</h1>
+        <!--        <div id="modal-body"></div>-->
+        <input type="text" id="modal-first-name" placeholder="First Name"/>
+        <p id="first-name-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-last-name" placeholder="Last Name"/>
+        <p id="last-name-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-phone-number" placeholder="Phone Number"/>
+        <p id="phone-number-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-house-no" placeholder="Flat, House no., Building, Apartment"/>
+        <p id="house-no-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-street" placeholder="Area, Street, Sector, Village"/>
+        <p id="street-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-landmark" placeholder="Landmark (Optional)"/>
+        <p id="landmark-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-city" placeholder="Town/City"/>
+        <p id="city-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-state" placeholder="State"/>
+        <p id="state-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-country" placeholder="Country"/>
+        <p id="country-error-message" class="error-message-1"></p>
+        <input type="text" id="modal-pincode" placeholder="Pincode"/>
+        <p id="pincode-error-message" class="error-message-1"></p>
+        <input type="hidden" id="new-address-indicator"/>
+        <div>
+            <button onclick="saveModalData()" id="save-btn">Save</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+
+<div class="toast" id="toast">
+    <div class="toast-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+    <div class="email-sub-container">
+        <div class="email-sub-label">
+            <img src="/user-media/paper-rocket.jpg" alt="">
+            <p>SUBSCRIBE OUR NEWSLETTER & GET ALL OUR NEWS <br>ABOUT NEW PRODUCTS, OFFERS AND BLOGS.</p>
+        </div>
+        <div class="email-sub-input">
+            <p>*Get a 5% offer by subscribing our newsletter. Expires on 31 May.</p>
+            <div class="email-input-wrapper">
+                <input type="email" placeholder="Enter your email..."/>
+                <button>Subscribe</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/user-media/MENZO_logo.jpg" alt="">
+
+            <div class="footer-contacts" id="footer-address">
+                <img src="/user-media/location-icon.png" alt="">
+                <strong>Address: </strong>
+                <p>Road No, Street line 1, <br>City, State.</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-telephone">
+                <img src="/user-media/telephone-icon.jpg" alt="">
+                <strong>Telephone: </strong>
+                <p>09876 54321</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-email">
+                <img src="/user-media/Email-icon.png" alt="">
+                <strong>Email Address: </strong>
+                <p>info@menzo.in</p>
+            </div>
+        </div>
+
+        <div class="footer-options footer-pages-wrapper">
+            <h2>PAGES</h2>
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="">About us</a></li>
+                <li><a href="">Shop</a></li>
+                <li><a href="">Cart</a></li>
+                <li><a href="">Wishlist</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-categories-wrapper">
+            <h2>CATEGORIES</h2>
+            <ul>
+                <li><a href="">Shirts & T-Shirts</a></li>
+                <li><a href="">Pants</a></li>
+                <li><a href="">Hoodies</a></li>
+                <li><a href="">Coats & Jackets</a></li>
+                <li><a href="">Perfumes</a></li>
+                <li><a href="">Watches</a></li>
+                <li><a href="">Caps</a></li>
+                <li><a href="">Shoes</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-support-wrapper">
+            <h2>SUPPORT</h2>
+            <ul>
+                <li><a href="">My Account</a></li>
+                <li><a href="">My Orders</a></li>
+                <li><a href="">My wallet</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="">FAQs</a></li>
+                <li><a href="">Privacy policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-social-media-wrapper">
+            <h2>SOCIAL MEDIA</h2>
+            <div id="social-media-links-wrapper">
+                <a href=""><img id="footer-facebook-link" src="/user-media/facebook.jpg" alt=""></a>
+                <a href=""><img id="footer-instagram-link" src="/user-media/Instagram.png" alt=""></a>
+                <a href=""><img id="footer-whatsapp-link" src="/user-media/whatsapp-icon.jpg" alt=""></a>
+                <a href=""><img id="footer-tiktok-link" src="/user-media/tiktok.png" alt=""></a>
+                <a href=""><img id="footer-twitter-link" src="/user-media/twitter.jpg" alt=""></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+        <div id="payment-cards-container">
+            <img id="visa-card-logo" src="/user-media/visa.png" alt="">
+            <img id="apple-pay-logo" src="/user-media/apple-pay.png" alt="">
+            <img id="mastercard-logo" src="/user-media/mastercart-logo.webp" alt="">
+            <img id="paypal-logo" src="/user-media/paypal.png" alt="">
+            <img id="stripe-pay-logo" src="/user-media/stripe-pay.png" alt="">
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    window.user = /*[[${user}]]*/ null;
+</script>
+<script src="/user-js/nav-bar-script.js"></script>
+<script src="/user-js/user-side-menu-script.js"></script>
+
+<script src="/user-js/user-profile.js"></script>
+<script src="/user-js/toaster-script.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>-->
+
+<script src="/user-js/user-address-script.js"></script>
+
+<script th:inline="javascript">
+    const userDetails = /*[[${userDetails}]]*/ {};
+</script>
+
+</body>
+
+</html>
