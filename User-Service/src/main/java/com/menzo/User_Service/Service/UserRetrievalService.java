@@ -2,9 +2,12 @@ package com.menzo.User_Service.Service;
 
 import com.menzo.User_Service.Dto.*;
 import com.menzo.User_Service.Entity.User;
+import com.menzo.User_Service.Entity.UserAddress;
 import com.menzo.User_Service.Enums.ActiveStatus;
 import com.menzo.User_Service.Enums.Gender;
 import com.menzo.User_Service.Enums.Roles;
+import com.menzo.User_Service.Repository.AddressRepository;
+import com.menzo.User_Service.Repository.UserAddressRepository;
 import com.menzo.User_Service.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserRetrievalService {
@@ -25,6 +29,12 @@ public class UserRetrievalService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private UserAddressRepository userAddressRepo;
+
+    @Autowired
+    private AddressRepository addressRepo;
 
     public UserDto getUserbyEmail(EmailDto userEmail) {
         try {
@@ -39,7 +49,7 @@ public class UserRetrievalService {
     }
 
     public UserStatusDto getUserByUserId(Long userId) {
-        try{
+        try {
             logger.info("Fetching user by ID: {}", userId);
             User user = userRepo.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
@@ -133,4 +143,61 @@ public class UserRetrievalService {
         return userDetails;
     }
 
+//    ********* User Address *********
+
+    public List<UserAddressDto> getAllAddressByEmail(String userEmail) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
+        List<UserAddress> userAddresses = userAddressRepo.findByUser(user);
+        if (userAddresses == null) {
+            throw new EntityNotFoundException("User has no addresses");
+        }
+        List<UserAddressDto> userAddressDtos = userAddresses.stream()
+                .map(userAddress -> {
+                    return new UserAddressDto(
+                            userAddress.getId(),
+                            userAddress.getFirstName(),
+                            userAddress.getLastName(),
+                            userAddress.getPhoneNumber(),
+                            userAddress.getAddress().getUnitAddress(),
+                            userAddress.getAddress().getStreet(),
+                            userAddress.getAddress().getLandmark(),
+                            userAddress.getAddress().getCity(),
+                            userAddress.getAddress().getState(),
+                            userAddress.getAddress().getCountry().getCountryName(),
+                            userAddress.getAddress().getPincode(),
+                            userAddress.getIsDefault()
+                    );
+                }).collect(Collectors.toList());
+
+        return userAddressDtos;
+    }
+
+    public UserAddressDto getDefaultAddressByEmail(String userEmail) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
+        List<UserAddress> userAddresses = userAddressRepo.findByUser(user);
+        if (userAddresses == null) {
+            throw new EntityNotFoundException("User has no addresses");
+        }
+        UserAddress defaultAddress = userAddresses.stream()
+                .filter(userAddress -> userAddress.getIsDefault())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User doesn't have default address"));
+
+        return new UserAddressDto(
+                defaultAddress.getId(),
+                defaultAddress.getFirstName(),
+                defaultAddress.getLastName(),
+                defaultAddress.getPhoneNumber(),
+                defaultAddress.getAddress().getUnitAddress(),
+                defaultAddress.getAddress().getStreet(),
+                defaultAddress.getAddress().getLandmark(),
+                defaultAddress.getAddress().getCity(),
+                defaultAddress.getAddress().getState(),
+                defaultAddress.getAddress().getCountry().getCountryName(),
+                defaultAddress.getAddress().getPincode(),
+                defaultAddress.getIsDefault()
+        );
+    }
 }

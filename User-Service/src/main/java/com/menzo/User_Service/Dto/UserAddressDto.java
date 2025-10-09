@@ -3,6 +3,9 @@ package com.menzo.User_Service.Dto;
 public class UserAddressDto {
 
     private Long id;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private String unitAddress;
     private String street;
     private String landmark;
@@ -10,13 +13,18 @@ public class UserAddressDto {
     private String state;
     private String country;
     private String pincode;
+    private boolean isDefault;
 
     public UserAddressDto() {}
 
-    public UserAddressDto(Long id, String unitAddress, String street,
+    public UserAddressDto(Long id, String firstName, String lastName,
+                          String phoneNumber, String unitAddress, String street,
                           String landmark, String city, String state,
-                          String country, String pincode) {
+                          String country, String pincode, boolean isDefault) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.unitAddress = unitAddress;
         this.street = street;
         this.landmark = landmark;
@@ -24,6 +32,7 @@ public class UserAddressDto {
         this.state = state;
         this.country = country;
         this.pincode = pincode;
+        this.isDefault = isDefault;
     }
 
     public Long getId() {
@@ -32,6 +41,30 @@ public class UserAddressDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getUnitAddress() {
@@ -90,11 +123,20 @@ public class UserAddressDto {
         this.pincode = pincode;
     }
 
+    public boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
+
     public String toString() {
-        return "\nUserAddressDto:\nid: " + id + "\nunitAddress: " + unitAddress +
+        return "\nUserAddressDto:\nid: " + id + "\nfirstName: " + firstName + "\nlastName: " +
+                lastName + "\nphoneNumber: " + phoneNumber + "\nunitAddress: " + unitAddress +
                 "\nstreet: " + street + "\nlandmark: " + landmark + "\ncity: " +
                 city + "\nstate: " + state + "\ncountry: " + country + "\npincode: " +
-                pincode + "\n";
+                pincode + "\nisDefault: " + isDefault + "\n";
     }
 
 }

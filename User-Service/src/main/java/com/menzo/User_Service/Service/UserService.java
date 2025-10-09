@@ -1,22 +1,30 @@
 package com.menzo.User_Service.Service;
 
 import com.menzo.User_Service.Dto.*;
+import com.menzo.User_Service.Entity.Address;
+import com.menzo.User_Service.Entity.Country;
 import com.menzo.User_Service.Entity.User;
+import com.menzo.User_Service.Entity.UserAddress;
 import com.menzo.User_Service.Enums.Roles;
 import com.menzo.User_Service.Exceptions.AuthFeignException;
+import com.menzo.User_Service.Exceptions.DuplicateAddressException;
 import com.menzo.User_Service.Exceptions.PasswordMismatchException;
 import com.menzo.User_Service.Feign.AuthFeign;
+import com.menzo.User_Service.Repository.AddressRepository;
+import com.menzo.User_Service.Repository.CountryRepository;
+import com.menzo.User_Service.Repository.UserAddressRepository;
 import com.menzo.User_Service.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
+import jdk.jshell.spi.ExecutionControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,6 +33,15 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private AddressRepository addressRepo;
+
+    @Autowired
+    private UserAddressRepository userAddressRepo;
+
+    @Autowired
+    private CountryRepository countryRepo;
 
     @Autowired
     private AuthFeign authFeign;
@@ -224,4 +241,107 @@ public class UserService {
         }
     }
 
+//    ********* User Address *********
+
+    public Long addUserAddress(String userEmail, UserAddressDto userAddress) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
+        Country country = countryRepo.findByCountryNameIgnoreCase(userAddress.getCountry())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found with name: " + userAddress.getCountry()));
+
+        Address address = addressRepo.findByUnitAddressIgnoreCaseAndStreetIgnoreCaseAndLandmarkIgnoreCaseAndCityIgnoreCaseAndStateIgnoreCaseAndCountryAndPincode(
+                userAddress.getUnitAddress(), userAddress.getStreet(), userAddress.getLandmark(), userAddress.getCity(), userAddress.getState(),
+                country, userAddress.getPincode())
+                .orElseGet(() -> {
+                    return addressRepo.save(new Address(
+                            userAddress.getUnitAddress(),
+                            userAddress.getStreet(),
+                            userAddress.getLandmark(),
+                            userAddress.getCity(),
+                            userAddress.getState(),
+                            country,
+                            userAddress.getPincode()
+                    ));
+                });
+
+        if(userAddressRepo.existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndPhoneNumberAndUserAndAddress(
+                userAddress.getFirstName(),
+                userAddress.getLastName(),
+                userAddress.getPhoneNumber(),
+                user,
+                address
+        )) {
+            throw new DuplicateAddressException("User Address already exists.");
+        }
+        UserAddress savedUserAddress = userAddressRepo.save(new UserAddress(
+                userAddress.getFirstName(),
+                userAddress.getLastName(),
+                userAddress.getPhoneNumber(),
+                user,
+                address,
+                userAddress.getIsDefault()
+        ));
+        return savedUserAddress.getId();
+    }
+
+    public Long updateUserAddress(String userEmail, Long addressId, UserAddressDto latestUserAddress) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
+
+        List<UserAddress> userAddresses = userAddressRepo.findByUser(user);
+        if(userAddresses == null) {
+            throw new EntityNotFoundException("User has no addresses.");
+        }
+        UserAddress matchedUserAddress = userAddresses.stream()
+                .filter((userAddress) -> Objects.equals(userAddress.getId(), addressId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Address doesn't exist with user: " + user.getEmail()));
+
+        Address matchedAddress = matchedUserAddress.getAddress();
+
+        matchedAddress.setUnitAddress(latestUserAddress.getUnitAddress() != null && !latestUserAddress.getUnitAddress().isEmpty() ? latestUserAddress.getUnitAddress() : matchedAddress.getUnitAddress());
+        matchedAddress.setStreet(latestUserAddress.getStreet() != null && !latestUserAddress.getStreet().isEmpty() ? latestUserAddress.getStreet() : matchedAddress.getStreet());
+        matchedAddress.setLandmark(latestUserAddress.getLandmark() != null && !latestUserAddress.getLandmark().isEmpty() ? latestUserAddress.getLandmark() : matchedAddress.getLandmark());
+        matchedAddress.setCity(latestUserAddress.getCity() != null && !latestUserAddress.getCity().isEmpty() ? latestUserAddress.getCity() : matchedAddress.getCity());
+        matchedAddress.setState(latestUserAddress.getState() != null && !latestUserAddress.getState().isEmpty() ? latestUserAddress.getState() : matchedAddress.getState());
+        matchedAddress.setPincode(latestUserAddress.getPincode() != null && !latestUserAddress.getPincode().isEmpty() ? latestUserAddress.getPincode() : matchedAddress.getPincode());
+
+        Address updatedAddress = addressRepo.save(matchedAddress);
+
+        if (updatedAddress == null) {
+            throw new RuntimeException("Update address failed.");
+        }
+        matchedUserAddress.setFirstName(latestUserAddress.getFirstName() != null && !latestUserAddress.getFirstName().isEmpty() ? latestUserAddress.getFirstName() : matchedUserAddress.getFirstName());
+        matchedUserAddress.setLastName(latestUserAddress.getLastName() != null && !latestUserAddress.getLastName().isEmpty() ? latestUserAddress.getLastName() : matchedUserAddress.getLastName());
+        matchedUserAddress.setPhoneNumber(latestUserAddress.getPhoneNumber() != null && !latestUserAddress.getPhoneNumber().isEmpty() ? latestUserAddress.getPhoneNumber() : matchedUserAddress.getPhoneNumber());
+
+        if (latestUserAddress.getIsDefault()) {
+            userAddresses.stream()
+                    .filter((userAddress) -> userAddress.getIsDefault())
+                    .forEach((userAddress) -> userAddress.setIsDefault(false));
+        }
+        matchedUserAddress.setIsDefault(latestUserAddress.getIsDefault());
+
+        UserAddress updatedUserAddress = userAddressRepo.save(matchedUserAddress);
+
+        if (updatedUserAddress == null) {
+            throw new RuntimeException("Update User address failed");
+        }
+        return updatedUserAddress.getId();
+    }
+
+    public void deleteUserAddress(String userEmail, Long addressId) {
+        User user = userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
+        List<UserAddress> userAddresses = userAddressRepo.findByUser(user);
+        if (userAddresses == null) {
+            throw new EntityNotFoundException("User has no addresses");
+        }
+        UserAddress matchedUserAddress = userAddresses.stream()
+                .filter((userAddress) -> userAddress.getId().equals(addressId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Address doesn't exist with user: " + user.getEmail()));
+
+        userAddressRepo.deleteById(matchedUserAddress.getId());
+    }
 }

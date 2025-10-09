@@ -247,6 +247,14 @@
 
 #modal-container-1 {
     width: 40%;
+    max-height: 700px;
+}
+
+#modal-container div {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
 }
 
 #modal-title {
@@ -260,19 +268,33 @@
     justify-content: center;
 }
 
+#form-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+    width: 100%;
+}
+
+#modal-container-1 div {
+    width: 100%;
+}
+
+#form-container div {
+    display: flex;
+    flex-direction: column;
+}
+
 #modal-container input,
-#modal-container select {
+#modal-container select,
+#form-container div input {
     width: 90%;
     box-sizing: border-box;
     margin-bottom: 5px;
     padding: 10px 25px 5px 15px;
 }
 
-#modal-container-1 input {
-    width: 80%;
-    box-sizing: border-box;
-    margin-bottom: 5px;
-    padding: 10px 25px 5px 15px;
+#form-container div input {
+    width: 90% !important;
 }
 
 .error-message {
@@ -285,15 +307,22 @@
     display: block;
     margin: 0px !important;
     width: 100%;
-    padding-left: 20%;
 }
 
-#modal-container div,
-#modal-container-1 div {
-    width: 100%;
+#default-check-container {
     display: flex;
-    justify-content: space-around;
-    margin-top: 15px;
+    padding-left: 15px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+#default-check-container label {
+    margin-left: 5px;
+}
+
+#modal-button-container {
+    display: flex;
+    justify-content: space-evenly !important;
 }
 
 #modal-container div button,

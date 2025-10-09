@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -112,7 +113,6 @@ public class UserRestController {
 
     @GetMapping("/user-gender")
     public ResponseEntity<Gender[]> getUserGender() {
-//        GenderDto gender = userRetrievalService.getUserGender();
         return ResponseEntity.ok(Gender.values());
     }
 
@@ -168,17 +168,84 @@ public class UserRestController {
 
     @PostMapping("/google-oauth-access")
     public ResponseEntity<UserDto> googleOAuthUser(@RequestBody OAuthUserDto googleUser) {
-//        System.out.println(googleUser.getUserName() + "\n" + googleUser.getEmail() + "\n" + googleUser.getProfileUrl());
         UserDto user = userService.saveGoogleOAuthUser(googleUser);
-
         return ResponseEntity.ok(user);
     }
 
 //    ********* User Address *********
-//    @PostMapping("/address")
-//    public ResponseEntity<?> addUserAddress(@RequestHeader("loggedInUser") String userEmail,
-//                                            @RequestBody UserAddressDto userAddress) {
-//        return ;
-//    }
+
+    @GetMapping("/user-address")
+    public ResponseEntity<?> getAllAddressByEmail(@RequestHeader("loggedInUser") String userEmail) {
+        List<UserAddressDto> userAddresses = userRetrievalService.getAllAddressByEmail(userEmail);
+
+        Map<String, Object> response = new HashMap<>();
+        if (userAddresses != null) {
+            response.put("success", true);
+            response.put("data", Map.of("userAddresses", userAddresses));
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("success", false);
+            response.put("error", "User addresses fetching failed.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/default-address")
+    public ResponseEntity<?> getDefaultAddressByEmail(@RequestHeader("loggedInUser") String userEmail) {
+        UserAddressDto userAddress = userRetrievalService.getDefaultAddressByEmail(userEmail);
+
+        Map<String, Object> response = new HashMap<>();
+        if (userAddress != null) {
+            response.put("success", true);
+            response.put("data", Map.of("userAddress", userAddress));
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("success", false);
+            response.put("error", "User addresses fetching failed.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/address")
+    public ResponseEntity<?> addUserAddress(@RequestHeader("loggedInUser") String userEmail,
+                                            @RequestBody UserAddressDto userAddress) {
+        Long id = userService.addUserAddress(userEmail, userAddress);
+
+        Map<String, Object> response = new HashMap<>();
+        if(id != null) {
+            response.put("success", true);
+            response.put("data", Map.of("id", id));
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("success", false);
+            response.put("error", "User address adding failed.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PutMapping("/address")
+    public ResponseEntity<?> updateUserAddress(@RequestHeader("loggedInUser") String userEmail,
+                                               @RequestParam("id") Long addressId,
+                                               @RequestBody UserAddressDto userAddress) {
+        Long userAddressId = userService.updateUserAddress(userEmail, addressId, userAddress);
+
+        Map<String, Object> response = new HashMap<>();
+        if(userAddressId != null) {
+            response.put("success", true);
+            response.put("data", Map.of("id", userAddressId));
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("success", false);
+            response.put("error", "User address update failed.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @DeleteMapping("/address")
+    public ResponseEntity<?> deleteUserAddress(@RequestHeader("loggedInUser") String userEmail,
+                                               @RequestParam("id") Long addressId) {
+        userService.deleteUserAddress(userEmail, addressId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 }

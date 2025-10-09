@@ -256,6 +256,12 @@ input:-webkit-autofill{
     text-align: left;
 }
 
+#default-check-container {
+    color: #666666;
+    font-size: 13px;
+    text-align: center;
+}
+
 #modal-container div,
 #modal-container-1 div {
     text-align: center;

@@ -207,28 +207,53 @@
 <div id="user-modal" class="modal">
     <div id="modal-container-1">
         <h1 id="modal-title">Add Address</h1>
-        <!--        <div id="modal-body"></div>-->
-        <input type="text" id="modal-first-name" placeholder="First Name"/>
-        <p id="first-name-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-last-name" placeholder="Last Name"/>
-        <p id="last-name-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-phone-number" placeholder="Phone Number"/>
-        <p id="phone-number-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-house-no" placeholder="Flat, House no., Building, Apartment"/>
-        <p id="house-no-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-street" placeholder="Area, Street, Sector, Village"/>
-        <p id="street-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-landmark" placeholder="Landmark (Optional)"/>
-        <p id="landmark-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-city" placeholder="Town/City"/>
-        <p id="city-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-state" placeholder="State"/>
-        <p id="state-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-country" placeholder="Country"/>
-        <p id="country-error-message" class="error-message-1"></p>
-        <input type="text" id="modal-pincode" placeholder="Pincode"/>
-        <p id="pincode-error-message" class="error-message-1"></p>
-        <input type="hidden" id="new-address-indicator"/>
+        <div id="form-container">
+            <div>
+                <input type="text" id="modal-first-name" placeholder="First Name" />
+                <p id="first-name-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-last-name" placeholder="Last Name" />
+                <p id="last-name-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-phone-number" placeholder="Phone Number" />
+                <p id="phone-number-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-house-no" placeholder="Flat, House no., Building" />
+                <p id="house-no-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-street" placeholder="Area, Street, Sector, Village" />
+                <p id="street-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-landmark" placeholder="Landmark (Optional)" />
+                <p id="landmark-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-city" placeholder="Town/City" />
+                <p id="city-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-state" placeholder="State" />
+                <p id="state-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-country" placeholder="Country" />
+                <p id="country-error-message" class="error-message-1"></p>
+            </div>
+            <div>
+                <input type="text" id="modal-pincode" placeholder="Pincode" />
+                <p id="pincode-error-message" class="error-message-1"></p>
+            </div>
+            <input type="hidden" id="new-address-indicator" />
+        </div>
+        <div id="default-check-container">
+            <input type="checkbox" id="isDefault" name="isDefault">
+            <label for="isDefault">Make this my default address</label>
+        </div>
         <div>
             <button onclick="saveModalData()" id="save-btn">Save</button>
             <button onclick="closeModal()">Cancel</button>
