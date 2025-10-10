@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/user-css/details-styling.css">
     <link rel="stylesheet" href="/user-css/details-theme-fonts-effects.css">
 
-    <title>MENZO | Categories</title>
+    <title>MENZO | Address</title>
 </head>
 
 <body>
@@ -59,19 +59,6 @@
                     </div>
                 </a>
             </div>
-            <!--            <div id="nav-icon-profile">-->
-            <!--                <a href="">-->
-            <!--                    <div class="icon-image-container">-->
-            <!--                        <img id="profile-icon" src="/user-media/profile_icon.png" alt="">-->
-            <!--                    </div>-->
-            <!--                    <div class="icon-details-container">-->
-            <!--                        <div>-->
-            <!--                            <p>sign in</p>-->
-            <!--                        </div>-->
-            <!--                        <div><strong>Account</strong></div>-->
-            <!--                    </div>-->
-            <!--                </a>-->
-            <!--            </div>-->
             <div id="user-profile-icon" class="dropdown-toggle">
                 <div class="icon-image-container">
                     <img id="profile-icon" src="/home-media/utility-media/profile_icon.png" alt=""/>
@@ -120,7 +107,7 @@
         </h2>
         <ul class="menu profile-menu display" id="profile-menu-content">
             <li class="profile-item">
-                <a href="">My account</a>
+                <a href="/user/profile">My account</a>
             </li>
 
             <li class="profile-item">
@@ -151,53 +138,27 @@
         <h1>My Address</h1>
         <hr class="hr-line-11"/>
 
-        <div id="no-address-container">
+        <div th:if="${userAddresses == null or #lists.isEmpty(userAddresses)}" id="no-address-container">
             <p id="no-address-message">Addresses not added yet. Add one to get started.</p>
         </div>
 
-        <div id="address-container">
-            <div class="address-entity">
+        <div th:if="${userAddresses != null and !#lists.isEmpty(userAddresses)}" id="address-container">
+            <div th:each="userAddress : ${userAddresses}"
+                 th:attr="data-id=${userAddress.id}"
+                 class="address-entity">
                 <div class="address-header">
-                    <h2 class="user-name">Daniel Cormier</h2>
+                    <h2 th:text="${userAddress.firstName} + ' ' + ${userAddress.lastName}" class="user-name"></h2>
                     <div class="action-buttons">
-                        <button class="edit-button">Edit</button>
-                        <button class="delete-button">Delete</button>
+                        <button th:onclick="'openModal(' + ${userAddress.id} + ')'" class="edit-button">Edit</button>
+                        <button th:onclick="'deleteUserAddress(' + ${userAddress.id} + ')'" class="delete-button">Delete</button>
                     </div>
                 </div>
-                <p class="address">Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra West, Mumbai,
-                    Maharashtra, India – 400050</p>
-                <hr class="hr-line-12">
-            </div>
-            <div class="address-entity">
-                <div class="address-header">
-                    <h2 class="user-name">Daniel Cormier</h2>
-                    <div class="action-buttons">
-                        <button class="edit-button">Edit</button>
-                        <button class="delete-button">Delete</button>
-                    </div>
-                </div>
-                <p class="address">Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra West, Mumbai,
-                    Maharashtra, India – 400050</p>
-                <hr class="hr-line-12">
-            </div>
-            <div class="address-entity">
-                <div class="address-header">
-                    <h2 class="user-name">Daniel Cormier</h2>
-                    <div class="action-buttons">
-                        <button class="edit-button">Edit</button>
-                        <button class="delete-button">Delete</button>
-                    </div>
-                </div>
-                <p class="address">Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra West, Mumbai,
-                    Maharashtra, India – 400050Flat No. 10, 2nd Floor, Sunrise Apartments, Linking Road, Bandra
-                    West, Mumbai, Maharashtra, India – 400050Flat No. 10, 2nd Floor, Sunrise Apartments, Linking
-                    Road, Bandra West, Mumbai, Maharashtra, India – 400050Flat No. 10, 2nd Floor, Sunrise
-                    Apartments, Linking Road, Bandra West, Mumbai, Maharashtra, India – 400050</p>
+                <p th:text="|${userAddress.unitAddress}, ${userAddress.street}, ${userAddress.landmark?:''}${userAddress.landmark?.length()>0?', ':''}${userAddress.city}, ${userAddress.state}, ${userAddress.country}, ${userAddress.pincode}.|" class="address"></p>
                 <hr class="hr-line-12">
             </div>
         </div>
         <div id="add-address-button-container">
-            <button class="add-address-button button-form-1" type="submit">Add new address</button>
+            <button onclick="openModal()" class="add-address-button button-form-1" type="submit">Add new address</button>
         </div>
     </div>
 </div>
@@ -248,7 +209,8 @@
                 <input type="text" id="modal-pincode" placeholder="Pincode" />
                 <p id="pincode-error-message" class="error-message-1"></p>
             </div>
-            <input type="hidden" id="new-address-indicator" />
+<!--            <input type="hidden" id="new-address-indicator" />-->
+            <input type="hidden" id="address-id" />
         </div>
         <div id="default-check-container">
             <input type="checkbox" id="isDefault" name="isDefault">
@@ -381,7 +343,7 @@
 <script src="/user-js/nav-bar-script.js"></script>
 <script src="/user-js/user-side-menu-script.js"></script>
 
-<script src="/user-js/user-profile.js"></script>
+<!--<script src="/user-js/user-profile.js"></script>-->
 <script src="/user-js/toaster-script.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>-->
 
