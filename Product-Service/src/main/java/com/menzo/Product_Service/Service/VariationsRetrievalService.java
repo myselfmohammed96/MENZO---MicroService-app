@@ -98,4 +98,21 @@ public class VariationsRetrievalService {
         return sizeList;
     }
 
+    public List<Long> getOptionIdsByVariation(String variationName) {
+
+        return getSizes(variationName).getOptions()
+                .stream()
+                .map(opt -> opt.getId())
+                .collect(Collectors.toList());
+    }
+
+    public List<VariationOption> getOptionsByIds(List<Long> idList) {
+        return optionsRepo.findAllById(idList);
+    }
+
+    public VariationOption getOptionById(Long id) {
+        return optionsRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No variation option found for Option ID: " + id));
+    }
+
 }

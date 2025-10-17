@@ -85,7 +85,7 @@ public class Product {
         this.podAvailable = podAvailable;
         this.itemWeight = itemWeight;
         this.genericName = genericName;
-        this. countryOfOriginId = countryOfOriginId;
+        this.countryOfOriginId = countryOfOriginId;
         this.manufacturerId = manufacturerId;
         this.packersId = packersId;
     }

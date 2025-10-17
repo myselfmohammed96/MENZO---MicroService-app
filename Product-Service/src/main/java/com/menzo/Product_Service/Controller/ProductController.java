@@ -5,7 +5,7 @@ import com.menzo.Product_Service.Dto.ProductDto.NewProductItemDto;
 import com.menzo.Product_Service.Entity.Product;
 import com.menzo.Product_Service.Entity.ProductItem;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
-//import com.menzo.Product_Service.Service.ProductsService;
+import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +20,8 @@ import java.util.Map;
 @RequestMapping("/products")
 public class ProductController {
 
-//    @Autowired
-//    private ProductsService productsService;
+    @Autowired
+    private ProductsService productsService;
 
     @Autowired
     private ProductsRetrievalService productsRetrievalService;
@@ -43,9 +43,17 @@ public class ProductController {
 //    }
 
     @PostMapping("/add-product-v2")
-    public String addProductV2(@ModelAttribute NewProductDto newProduct) {
+    public String addProductV2(@ModelAttribute NewProductDto newProduct,
+                               @RequestParam Map<String, String> variationMap,
+                               @RequestParam("images") List<MultipartFile> images) {
+        if(images.size() > 9) {
+            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+        }
         System.out.println(newProduct);
         System.out.println(newProduct.getSizeStockMap());
+
+        productsService.addNewProductV2(newProduct, variationMap, images);
+
         return "redirect:http://localhost:8080/index";
     }
 
