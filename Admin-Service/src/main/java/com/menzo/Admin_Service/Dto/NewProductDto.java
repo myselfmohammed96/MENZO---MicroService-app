@@ -1,20 +1,17 @@
 package com.menzo.Admin_Service.Dto;
 
-import java.util.List;
 import java.util.Map;
 
 public class NewProductDto {
 
     private String productName;
     private String description;
-//    private List<String> sizes;
     private Map<Long, Integer> sizeStockMap;
     private Long color;
     private String status;
     private String pod;
 
     private Float price;
-    private Integer stockQty;
     //    discount
     //    discountType
 
@@ -68,14 +65,6 @@ public class NewProductDto {
         this.description = description;
     }
 
-//    public List<String> getSizes() {
-//        return sizes;
-//    }
-//
-//    public void setSizes(List<String> sizes) {
-//        this.sizes = sizes;
-//    }
-
     public Map<Long, Integer> getSizeStockMap() {
         return sizeStockMap;
     }
@@ -114,14 +103,6 @@ public class NewProductDto {
 
     public void setPrice(Float price) {
         this.price = price;
-    }
-
-    public Integer getStockQty() {
-        return stockQty;
-    }
-
-    public void setStockQty(Integer stockQty) {
-        this.stockQty = stockQty;
     }
 
     public Float getItemWeight() {

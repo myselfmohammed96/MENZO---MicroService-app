@@ -40,9 +40,14 @@ legend {
 }
 
 .general-info-label {
+  display: block;
   color: #474747;
   font-weight: bold;
   font-size: 1rem;
+}
+
+.general-info-label:has(div select) {
+    padding: 5px 0;
 }
 
 .option-description {
@@ -110,16 +115,15 @@ textarea {
   font-size: 0.95rem;
 }
 
-input[type="text"]:disabled {
+input[type="number"]:disabled {
     background: #fff;
     border-bottom: 1.3px solid #cecece;
     color: #cecece;
     cursor: not-allowed;
 }
 
-input[type="text"]:disabled::placeholder {
+input[type="number"]:disabled::placeholder {
     color: #cecece;
-
 }
 
 .custom-select-wrapper {
@@ -300,10 +304,10 @@ div.choices {
 .choices__inner {
   border: none !important;
   border-radius: 0px;
-  padding: 0px !important;
   background-color: #fff !important;
   outline: none;
   flex-direction: column;
+  padding: 0px !important;
   margin-top: 0px !important;
   padding-top: 0px !important;
 }
