@@ -56,7 +56,7 @@ public class ProductController {
 
         model.addAttribute("sizesList", sizesDto.getOptions());
         model.addAttribute("colorsList", colorsDto.getOptions());
-        model.addAttribute("newProduct", new NewProductDto());
+        model.addAttribute("newProduct", new NewProductDto("active", "available"));
         return "Products/add-product-formV2";
     }
 

@@ -1,15 +1,15 @@
 package com.menzo.Admin_Service.Dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class NewProductDto {
 
     private String productName;
     private String description;
-    //    size;
-    //    color;
-    private List<String> sizes;
-    private List<String> colors;
+//    private List<String> sizes;
+    private Map<Long, Integer> sizeStockMap;
+    private Long color;
     private String status;
     private String pod;
 
@@ -31,6 +31,11 @@ public class NewProductDto {
     //////////////////////////////////////////
 
     public NewProductDto() {}
+
+    public NewProductDto(String status, String pod) {
+        this.status = status;
+        this.pod = pod;
+    }
 
     public NewProductDto(String productName, Long categoryId, Long subCategoryId,
                         String description, String pod, Float itemWeight, String genericName,
@@ -63,20 +68,28 @@ public class NewProductDto {
         this.description = description;
     }
 
-    public List<String> getSizes() {
-        return sizes;
+//    public List<String> getSizes() {
+//        return sizes;
+//    }
+//
+//    public void setSizes(List<String> sizes) {
+//        this.sizes = sizes;
+//    }
+
+    public Map<Long, Integer> getSizeStockMap() {
+        return sizeStockMap;
     }
 
-    public void setSizes(List<String> sizes) {
-        this.sizes = sizes;
+    public void setSizeStockMap(Map<Long, Integer> sizeStockMap) {
+        this.sizeStockMap = sizeStockMap;
     }
 
-    public List<String> getColors() {
-        return colors;
+    public Long getColor() {
+        return color;
     }
 
-    public void setColors(List<String> colors) {
-        this.colors = colors;
+    public void setColor(Long color) {
+        this.color = color;
     }
 
     public String getStatus() {

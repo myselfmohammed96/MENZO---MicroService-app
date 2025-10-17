@@ -7,7 +7,7 @@ import com.menzo.Product_Service.Dto.ProductDto.ProductMinimalDto;
 import com.menzo.Product_Service.Dto.SpecificationsDto.RequestDto;
 import com.menzo.Product_Service.Entity.ProductItem;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
-import com.menzo.Product_Service.Service.ProductsService;
+//import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ import java.util.Optional;
 @RequestMapping("/products")
 public class ProductRestController {
 
-    @Autowired
-    private ProductsService productsService;
+//    @Autowired
+//    private ProductsService productsService;
 
     @Autowired
     private ProductsRetrievalService productsRetrievalService;
