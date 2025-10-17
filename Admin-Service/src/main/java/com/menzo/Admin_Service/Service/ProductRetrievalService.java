@@ -1,5 +1,6 @@
 package com.menzo.Admin_Service.Service;
 
+import com.menzo.Admin_Service.Dto.NestedVariationDto;
 import com.menzo.Admin_Service.Dto.ProductDetailsDto;
 import com.menzo.Admin_Service.Dto.ProductMinimalDto;
 import com.menzo.Admin_Service.Feign.ProductServiceFeign;
@@ -18,5 +19,13 @@ public class ProductRetrievalService {
 
     public ProductDetailsDto getProductDetailsById(Long productId) {
         return productFeign.getProductDetailsById(productId);
+    }
+
+    public NestedVariationDto getSizes() {
+        return productFeign.getSizes();
+    }
+
+    public NestedVariationDto getColors() {
+        return productFeign.getColors();
     }
 }

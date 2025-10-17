@@ -1,13 +1,19 @@
 const getAllCategories = "http://localhost:8080/categories/get-all-parents";
 const getAllSub = "http://localhost:8080/categories/get-all-sub";
 
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     const categorySelect = document.getElementById('category-select');
     const subCategorySelect = document.getElementById('sub-category-select');
 //    const variationsFieldSet = document.querySelector('#variations-fieldset');
     let subCategoryChoices;
 
-    //  Parent Categories in select
+
+
+    // ******* Choice.js - select config *******
+
+    //  Parent Categories - select
     async function loadCategoriesInOptions() {
         try{
             const response = await fetch(getAllCategories, {
@@ -21,19 +27,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!Array.isArray(categories)) {
                 throw new Error("Invalid data format: categories should be array");
             }
-
-            categories.forEach(c => {
-                if (c && c.id !== undefined && c.categoryName) {
-                    addCategorySelectOptions(c.id, c.categoryName);
+            categories.forEach(cat => {
+                if (cat && cat.id !== undefined && cat.categoryName) {
+                    addCategorySelectOptions(cat.id, cat.categoryName);
                 } else {
-                    console.warn("Skipping invalid categories: ", c);
+                    console.warn("Skipping invalid categories: ", cat);
                 }
             });
 
             initializeCategoriesChoices();
         } catch (error) {
             console.error("Load Error: ",error);
-            alert("Unable to load categories. Please try again.");
+//            alert("Unable to load categories. Please try again.");
         }
     }
 
@@ -59,10 +64,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         } catch (error) {
             console.error("Choices Initialization Error: ", error);
-            alert("Unable to initialize categories selector.");
+//            alert("Unable to initialize categories selector.");
         }
     }
 
+
+
+    // Sub-categories - select
     async function loadSubCategoriesInOptions(categoryId) {
         try {
             const response = await fetch(`${getAllSub}?id=${categoryId}`, {
@@ -88,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 //            subCategoryChoices.enable();
         } catch (error) {
             console.error("Sub-category Load Error: ", error);
-            alert("Unable to load sub-categories. Please try again.");
+//            alert("Unable to load sub-categories. Please try again.");
         }
     }
 
@@ -139,12 +147,43 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         subCategoryChoices.enable();    //
     });
+
     initializeSubCategoriesChoices();
     subCategoryChoices.disable();
-
     await loadCategoriesInOptions();
 
-    //  Image adding - FilePond
+
+
+    //    Color variation - select
+    function initializeColorsChoices() {
+        try {
+            new Choices('#colors', {
+                placeholder: true,
+                placeholderValue: "Color",
+                searchEnabled: true,
+                searchPlaceholderValue: "Search color...",
+                shouldSort: true
+            });
+        } catch (error) {
+            console.error("Color choice initialization error", error);
+        }
+    }
+    initializeColorsChoices();
+
+
+
+    //    ******* Size & stock - check box & text mapping *******
+
+    document.querySelectorAll('.size-wrapper').forEach(size => {
+        size.querySelector('.size-checkbox').addEventListener('change', (e) => {
+            size.querySelector('.text-input-2').disabled = !e.target.checked;
+        });
+    });
+
+
+
+    //  ******* Image adding - FilePond *******
+
     FilePond.registerPlugin(
         FilePondPluginImagePreview,
         FilePondPluginImageValidateSize,

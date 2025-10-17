@@ -1,9 +1,6 @@
 package com.menzo.Product_Service.Controller;
 
-import com.menzo.Product_Service.Dto.VariationsDto.CreateVariationDto;
-import com.menzo.Product_Service.Dto.VariationsDto.CreateVariationOptionDto;
-import com.menzo.Product_Service.Dto.VariationsDto.OptionDto;
-import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
+import com.menzo.Product_Service.Dto.VariationsDto.*;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
 import com.menzo.Product_Service.Service.VariationsRetrievalService;
@@ -189,4 +186,14 @@ public class VariationsRestController {
 //    public List<String> hello(@RequestParam("name") String variationName) {
 //        return variationsRetrievalService.getOptionsByVariationName(variationName);
 //    }
+
+    @GetMapping("size")
+    public NestedVariationDto getSizes() {
+        return variationsRetrievalService.getSizes("Size");
+    }
+
+    @GetMapping("colors")
+    public NestedVariationDto getColors() {
+        return variationsRetrievalService.getSizes("Colors");
+    }
 }

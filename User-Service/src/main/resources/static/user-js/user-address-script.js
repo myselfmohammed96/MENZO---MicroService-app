@@ -114,7 +114,7 @@ function openModal(id = null) {
 
     if(id === null) {
         document.getElementById('modal-title').textContent = "Add Address";
-        document.getElementById('address-id').value = null;
+          document.getElementById('address-id').value = null;
         modal.style.display = "flex";
     }
     if (id) {

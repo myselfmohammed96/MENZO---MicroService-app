@@ -48,18 +48,30 @@ public class ProductController {
         return "Products/add-product-form";
     }
 
-    //  Product item - add form
-    @GetMapping("/add-item")
-    public String adminAddProductItemForm(@RequestHeader("roles") String roles,
-//                                          @RequestParam("category-id") Long subCategoryId,
-                                          @RequestParam("id") Long productId,
-                                          Model model) {
-//        categoriesService.getSubCategoryByProductId(productId);
-        ProductMinimalDto productDto = productRetrievalService.getProductById(productId);
-        model.addAttribute("product", productDto);
-        model.addAttribute("newProductItem", new NewProductItemDto(productDto.getProductId()));
-        return "Products/add-product-item-form";
+    @GetMapping("/add-product-v2")
+    public String addProductFormV2(@RequestHeader("roles") String roles,
+                                   Model model) {
+        NestedVariationDto sizesDto = productRetrievalService.getSizes();
+        NestedVariationDto colorsDto = productRetrievalService.getColors();
+
+        model.addAttribute("sizesList", sizesDto.getOptions());
+        model.addAttribute("colorsList", colorsDto.getOptions());
+        model.addAttribute("newProduct", new NewProductDto());
+        return "Products/add-product-formV2";
     }
+
+    //  Product item - add form
+//    @GetMapping("/add-item")
+//    public String adminAddProductItemForm(@RequestHeader("roles") String roles,
+////                                          @RequestParam("category-id") Long subCategoryId,
+//                                          @RequestParam("id") Long productId,
+//                                          Model model) {
+////        categoriesService.getSubCategoryByProductId(productId);
+//        ProductMinimalDto productDto = productRetrievalService.getProductById(productId);
+//        model.addAttribute("product", productDto);
+//        model.addAttribute("newProductItem", new NewProductItemDto(productDto.getProductId()));
+//        return "Products/add-product-item-form";
+//    }
 
     //  ********* Listing pages *********
     //  Products listing

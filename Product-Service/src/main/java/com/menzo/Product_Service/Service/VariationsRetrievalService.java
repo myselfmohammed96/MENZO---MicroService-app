@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Service;
 
+import com.menzo.Product_Service.Dto.VariationsDto.NestedVariationDto;
 import com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationWithOptionsDto;
@@ -7,6 +8,7 @@ import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
 import com.menzo.Product_Service.Repository.VariationsOptionsRepo;
 import com.menzo.Product_Service.Repository.VariationsRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +83,19 @@ public class VariationsRetrievalService {
         } else {
             return null;
         }
+    }
+
+//    Get sizes
+
+    public NestedVariationDto getSizes(String variationName) {
+        Variation size = variationsRepo.findVariationByVariationName(variationName)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
+//        size.get().display();
+        NestedVariationDto sizeList = new NestedVariationDto(size.getId(), size.getVariationName());
+        List<NestedVariationDto> sizes = size.getOptions().stream().map(opt -> new NestedVariationDto(opt.getId(), opt.getOptionValue()))
+                .collect(Collectors.toList());
+        sizeList.setOptions(sizes);
+        return sizeList;
     }
 
 }

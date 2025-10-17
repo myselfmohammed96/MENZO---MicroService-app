@@ -1,0 +1,259 @@
+/* Contains styling for - admin panel - nav bar, footer menu, view all button */
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+#page-title-container {
+    margin: 0px 10px;
+}
+
+/* Contains styling for - side menu bar options */
+
+.page-container{
+    width: 100%;
+    display: flex;
+}
+
+/* /////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Nav bar ******* */
+
+#nav-bar-container{
+    width: 100%;
+    height: 60px;
+}
+
+#top-nav-bar{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.top-nav-bar-elements{
+    height: 100%;
+}
+
+#nav-bar-logo{
+    flex: 1;
+    overflow: hidden;
+}
+
+#nav-bar-logo img{
+    height: 100%;
+    width: auto;
+    margin-left: 15%;
+}
+
+#nav-bar-search-bar{
+    flex: 3;
+    position: relative;
+    display: inline-block;
+}
+
+#search-bar{
+    width: 75%;
+    height: 30px;
+    margin:14px 10%;
+    padding-left: 30px;
+}
+
+#clear-search {
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: none;
+}
+
+#search-lens-btn {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 30px;
+    display: none;
+}
+
+#nav-bar-icons{
+    flex: 1;
+    display: flex;
+    justify-content: end;
+    padding-top: 5px;
+    overflow: hidden;
+}
+
+#nav-icon-profile{
+    height: 100%;
+    margin-right: 60px;
+    width: fit-content;
+}
+
+#nav-icon-profile a{
+    display: flex;
+}
+
+#profile-icon{
+    width: 37px;
+    margin-top: 7px;
+}
+
+.icon-details-container{
+    padding-top: 9px;
+    padding-left: 5px;
+}
+
+.icon-details-container div{
+    margin-bottom: 2px;
+}
+
+/* Ham burger & search icons */
+
+#hamBurger-searchIcon-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    display: none;
+}
+
+#search-icon, #hamBurger-icon {
+    width: 100%;
+    height: 100%;
+}
+
+#search-icon img {
+    width: 30px;
+    height: 30px;
+    margin-top: 4px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+#hamBurger-icon img {
+    width: 40px;
+    height: 40px;
+    margin-top: -2px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+/* /////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Footer menu ******* */
+
+.footer-menu-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-options-container{
+    width: 100%;
+    padding-bottom: 30px;
+    padding: 40px 0px 20px 0px;
+    margin: auto 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-contact-wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+.footer-contact-wrapper img{
+    width: 80%;
+}
+
+/* End footer - with copyright claims */
+
+.end-footer{
+    width: 90%;
+    margin: 50px 10px 0px 10px;
+    padding: 25px 0px;
+    box-sizing: border-box;
+}
+
+#copy-right-container{
+    display: flex;
+    justify-content: center;
+}
+
+/* /////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Side nav - menu bar ******* */
+
+.side-menu-bar-container{
+    flex: 1;
+    min-height: 88.5vh;
+    height: 85%;
+    overflow-y: auto;
+    position: sticky;
+    top: 60px;
+    flex-shrink: 0;
+    padding: 40px 10px;
+}
+
+.side-menu-bar-container h2{
+    margin: 15px 0px 10px 10px;
+}
+
+#dashboard-option{
+    padding: 6px 10px;
+    margin-top: -13px;
+    margin-left: 0px;
+    cursor: pointer;
+}
+
+.category-menu{
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item{
+    padding: 5.5px 10px;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.menu-item a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* /////////////////////////////////// */

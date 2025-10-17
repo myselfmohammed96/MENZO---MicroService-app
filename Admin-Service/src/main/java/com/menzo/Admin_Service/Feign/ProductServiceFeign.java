@@ -1,5 +1,6 @@
 package com.menzo.Admin_Service.Feign;
 
+import com.menzo.Admin_Service.Dto.NestedVariationDto;
 import com.menzo.Admin_Service.Dto.ProductDetailsDto;
 import com.menzo.Admin_Service.Dto.ProductListingDto;
 import com.menzo.Admin_Service.Dto.ProductMinimalDto;
@@ -23,6 +24,11 @@ public interface ProductServiceFeign {
     @GetMapping("/products/get-details-by-id")
     public ProductDetailsDto getProductDetailsById(@RequestParam("id") Long productId);
 
+    @GetMapping("variations/size")
+    public NestedVariationDto getSizes();
+
+    @GetMapping("/variations/colors")
+    public NestedVariationDto getColors();
 //    @GetMapping("/categories/")
 //    public void getSubCategoryByProductId(@RequestParam("id") Long productId);
 

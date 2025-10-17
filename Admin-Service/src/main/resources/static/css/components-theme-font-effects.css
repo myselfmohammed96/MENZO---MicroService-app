@@ -1,0 +1,149 @@
+/* ***** Buttons ***** */
+
+/* form submit buttons */
+.button-form-1 {
+    border-radius: 5px;
+    border: none;
+    font-size: 1em;
+    color: rgb(226, 226, 226);
+    background-color: #3e3e3e;
+}
+
+.button-form-1:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+
+/* view all button */
+.button-transparent-1 {
+    font-size: 16px;
+    background-color: transparent;
+    color: #787878;
+    border: 1.5px solid #787878;
+    border-radius: 18px;
+}
+
+.button-transparent-1:hover {
+    background-color: #eeeeee;
+    color: #282828;
+    border: 1.8px solid #282828;
+}
+
+/* banner button */
+.button-transparent-2 {
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+    font-size: .8rem;
+    border-radius: 25px;
+}
+
+.button-transparent-2:hover {
+    background-color: rgba(220, 220, 220, 0.4);
+}
+
+/* categories banner button */
+.button-transparent-3 {
+    background-color: rgba(255, 255, 255, 0.201);
+    color: white;
+    border: 1.5px solid white;
+    font-size: 14px;
+    border-radius: 23px;
+}
+
+.button-transparent-3:hover {
+    border: 1.8px solid white;
+    background-color: rgba(255, 255, 255, 0.323);
+}
+
+/* User profile edit button */
+.button-transparent-4 {
+    color: #787878;
+    background-color: transparent;
+    border: 1.5px solid #787878;
+    border-radius: 15px;
+}
+
+/* google button */
+.google-button-link,
+.login-google-button-link {
+    text-decoration: none;
+}
+
+.button-google {
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #fff;
+    color: #444;
+    border: 1.5px solid #dbdbdb;
+    font-weight: 500;
+}
+
+.button-google:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* add-to-cart & buy-now buttons */
+.button-checkout-1,
+.button-checkout-2 {
+    color: #474747;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    font-size: 1em;
+}
+
+.button-checkout-1 {
+    background-color: #ffda20;
+}
+
+.button-checkout-2 {
+    background-color: #fbb400;
+}
+
+.button-checkout-1:hover {
+    background-color: #ffda20c0;
+    border: 1px solid #e5bf00;
+}
+
+.button-checkout-2:hover {
+    background-color: #fbb400cd;
+    border: 1px solid #db9d00;
+}
+
+/* ///////////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* custom rulers ******* */
+
+/* custom hr for footer - auth pages */
+.hr-line-10 {
+    border: none;
+    background-color: #b8b8b8;
+}
+
+.hr-line-11 {
+    background-color: #adadad;
+    border: none;
+}
+
+/* google signin button divider */
+.divider {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+    border-bottom: 1px solid #ddd;
+}
+
+/* //////////////////////////////////////// */
