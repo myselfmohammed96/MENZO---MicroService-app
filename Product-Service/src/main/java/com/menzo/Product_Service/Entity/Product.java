@@ -180,6 +180,14 @@ public class Product {
         this.podAvailable = podAvailable;
     }
 
+    public List<ProductItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ProductItem> items) {
+        this.items = items;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }

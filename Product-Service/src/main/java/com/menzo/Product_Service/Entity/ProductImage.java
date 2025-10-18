@@ -10,9 +10,9 @@ public class ProductImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+//    @ManyToOne
+//    @JoinColumn(name = "product_id")
+//    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "product_item_id")
@@ -23,8 +23,8 @@ public class ProductImage {
 
     public ProductImage() {}
 
-    public ProductImage(Product product, ProductItem productItem, String imageUrl) {
-        this.product = product;
+    public ProductImage(ProductItem productItem, String imageUrl) {
+//        this.product = product;
         this.productItem = productItem;
         this.imageUrl = imageUrl;
     }
@@ -37,13 +37,13 @@ public class ProductImage {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+//    public Product getProduct() {
+//        return product;
+//    }
+//
+//    public void setProduct(Product product) {
+//        this.product = product;
+//    }
 
     public ProductItem getProductItem() {
         return productItem;
@@ -62,7 +62,7 @@ public class ProductImage {
     }
 
     public void display() {
-        System.out.println("ProductImage:\nid: " + id + "\nproduct: " + product +
-                "\nproductItem: " + productItem + "\nimageUrl: " + imageUrl);
+        System.out.println("ProductImage:\nid: " + id + "\nproductItem: " +
+                productItem + "\nimageUrl: " + imageUrl);
     }
 }

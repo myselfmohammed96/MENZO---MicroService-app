@@ -1,10 +1,7 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
 import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
-import com.menzo.Product_Service.Dto.ProductDto.NewProductItemDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductItemDto;
 import com.menzo.Product_Service.Entity.*;
 import com.menzo.Product_Service.Repository.*;
@@ -98,7 +95,7 @@ public class ProductsService {
     *                                    Stock quantity
     *
     *   Every 'sku'  ->  Unique to the PRODUCT ITEM
-    * 
+    *
     */
     public void addNewProductV2(NewProductDto newProduct,
                                 Map<String, String> variationMap,
@@ -118,7 +115,10 @@ public class ProductsService {
         }
 
         //  Saving Product Item
-        saveNewProductItem(newProduct.getSizeStockMap(), variationOptionList,
+        List<ProductItem> savedProductItems = saveNewProductItem(
+                newProduct.getSizeStockMap(),
+                variationOptionList,
+                subCategory,
                 new ProductItemDto(
                         null,
                         savedProduct,
@@ -127,20 +127,9 @@ public class ProductsService {
                         newProduct.getStatus().equals("active")
                 )
         );
+
+        saveImages()
     }
-
-
-    /*
-     *   ******* Add new PRODUCT ITEM *******
-     *
-     *   Every new PRODUCT ITEM saved  ->  will be associated with an existing PRODUCT
-     *   Every new PRODUCT ITEM will have  ->  One 'color variation' unique to the PRODUCT ITEM & Multiple 'Size variations'
-     *
-     *
-     *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
-     *
-     */
-    public void addNewProductItem() {}
 
 
     //  Save new PRODUCT to DB
@@ -167,33 +156,79 @@ public class ProductsService {
     }
 
 
+
+    /*
+     *   ******* Add new PRODUCT ITEM *******
+     *
+     *   Every new PRODUCT ITEM saved  ->  will be associated with an existing PRODUCT
+     *   Every new PRODUCT ITEM will have  ->  One 'color variation' unique to the PRODUCT ITEM & Multiple 'Size variations'
+     *
+     *
+     *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
+     *
+     */
+    public void addNewProductItem(ProductItemDto newProductItemDto,
+                                  Map<Long, Integer> sizeStockMap,
+                                  List<MultipartFile> images) {
+        //  Product object processing
+        Product product = productsRepo.findById(newProductItemDto.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + newProductItemDto.getProductId()));
+        newProductItemDto.setProduct(product);
+
+        //  Sub category of product
+        ProductCategory subCategory = product.getCategory();
+
+        //  Processing Variation Options
+        List<VariationOption> variationOptionList = processVariations(
+                null,
+                product.getItems().stream()
+                        .findFirst()
+                        .orElseThrow(() -> new EntityNotFoundException("No Product items found in product with ID: " + product.getId()))
+                        .getConfigurations()
+        );
+        if (variationOptionList == null) {
+            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
+        }
+
+        List<ProductItem> saveProductItems = saveNewProductItem(
+                sizeStockMap,
+                variationOptionList,
+                new SubCategoryDto(
+                        subCategory.getId(),
+                        subCategory.getParentCategoryId(),
+                        subCategory.getCategoryName(),
+                        subCategory.getIsActive(),
+                        subCategory.getCreatedAt()
+                ),
+                newProductItemDto
+        );
+    }
+
+
     //  Save multiple new PRODUCT ITEMs to DB
     private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
                                                  List<VariationOption> variations,
+                                                 SubCategoryDto subCategory,
                                                  ProductItemDto productItemDto) {
         List<ProductItem> itemsList = new ArrayList<>();
+        VariationOption color = variationsRetrievalService.getOptionById(productItemDto.getColorId());
 
-        //  PRODUCT object processing
-        Product product = null;
-        if (productItemDto.getProductId() != null && productItemDto.getProduct() == null) {
-            product = productsRepo.findById(productItemDto.getProductId())
-                    .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productItemDto.getProductId()));
-        } else if (productItemDto.getProductId() == null && productItemDto.getProduct() != null) {
-            product = productItemDto.getProduct();
-        }
-        if (product == null) {
+        if (productItemDto.getProduct() == null) {
             throw new IllegalArgumentException("Product or productId required.");
         }
 
-        // sku pending
-
-
-
         //  Looping size & stock map  ->  each loop creates one PRODUCT ITEM
         for(Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
+            VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
+
             ProductItem item = new ProductItem(
-                    product,
-                    null,
+                    productItemDto.getProduct(),
+                    generateSku(
+                            subCategory.getCategoryName(),
+                            color.getOptionValue(),
+                            size.getOptionValue(),
+                            null
+                    ),
                     e.getValue(),
                     productItemDto.getPrice(),
                     productItemDto.isActive()
@@ -201,8 +236,8 @@ public class ProductsService {
 
             //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
             List<ProductConfiguration> config = new ArrayList<>();
-            config.add(new ProductConfiguration(item, variationsRetrievalService.getOptionById(productItemDto.getColorId())));   //color
-            config.add(new ProductConfiguration(item, variationsRetrievalService.getOptionById(e.getKey())));   // size
+            config.add(new ProductConfiguration(item, color));   //color
+            config.add(new ProductConfiguration(item, size));   // size
             config = variations.stream().map(opt -> new ProductConfiguration(item, opt))
                     .collect(Collectors.toList());
             item.setConfigurations(config);
@@ -213,6 +248,16 @@ public class ProductsService {
     }
 
 
+
+//    ********* Utility methods *********
+
+    //  Generate SKU
+    private String generateSku(String subCategory, String color, String size, Long itemId) {
+        return subCategory.toUpperCase() + "-" + color.toUpperCase() + size.toUpperCase() + itemId;
+    }
+
+
+    //  Country of origin - management
     private Long addCountryOfOrigin(String countryName) {
         return countryOfOriginRepo.findByCountryNameIgnoreCase(countryName.trim())
                 .map(CountryOfOrigin::getId)
@@ -223,6 +268,7 @@ public class ProductsService {
     }
 
 
+    //  Variations processing
     private List<VariationOption> processVariations(Map<String, String> variationsMap,
                                          List<ProductConfiguration> productConfig) {
         if (variationsMap != null && productConfig == null) {
@@ -265,126 +311,24 @@ public class ProductsService {
     }
 
 
-
-
-
-
-
-    //    ******* dep *******
-    private ProductItem saveNewProductItem(Product product, NewProductItemDto newProductItemDto) {
-
-        boolean isActive = newProductItemDto.getStatus().equals("active");
-//        Float price = priceValue.floatValue();
-
-        ProductItem newProductItem = new ProductItem(
-                product,
-                newProductItemDto.getSku(),
-                newProductItemDto.getStockQty(),
-                newProductItemDto.getPrice(),
-                isActive);
-
-        List<ProductConfiguration> configurationList = new ArrayList<>();
-        for(Map.Entry<String, String> entry: newProductItemDto.getVariations().entrySet()) {
-
-            Long variationOptionId = Long.valueOf(entry.getValue());
-
-            VariationOption variationOption = variationsOptionsRepo.findById(variationOptionId)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid variationOptionId: " + variationOptionId));
-
-            ProductConfiguration configuration = new ProductConfiguration(newProductItem, variationOption);
-            configurationList.add(configuration);
-        }
-
-        newProductItem.setConfigurations(configurationList);
-        return productItemsRepo.save(newProductItem);
-    }
-
-//    public ProductItem addNewProductItem(NewProductItemDto newProductItemDto,
-//                                         Map<String, String> variationsMap,
-//                                         List<MultipartFile> images) throws IOException {
-////       Map<String, String> variations = variationsMap.entrySet().stream()
-////                .filter(e -> !List.of("productId", "sku", "price", "stockQty", "status").contains(e.getKey()))
-////                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-//        newProductItemDto.setVariations(variations);
-//
-//        Product product = productsRepo.findById(newProductItemDto.getProductId())
-//                .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + newProductItemDto.getProductId()));
-//        ProductItem savedProductItem = saveNewProductItem(product, newProductItemDto);
-//
-//        ParentCategoryView parentCategoryView = categoriesRetrievalService.getParentBySubCategoryId(product.getCategory().getId());
-//
-
-
-
-//        List<ProductImage> savedImages = saveImages(
-//                parentCategoryView.getCategoryName(),
-//                product.getCategory().getCategoryName(),
-//                null,
-//                savedProductItem,
-//                images
-//        );
-//
-//        if (savedProductItem == null || savedImages == null) {
-//            throw new IOException("Error saving product item");
-//        }
-//        return savedProductItem;
-//    }
-
-
-//newProduct.setCountryOfOriginId(Long.valueOf(1));
-
-//        newProduct.setItemWeight(Float.valueOf(4.4f));
-
-    //    private ProductItem saveNewProductItem(Product savedProduct, String SKU, Integer stock,
-//                Double priceValue, String activeStatus, Map<String, String> variations) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    private void addManufacturerAndPacker(String manufacturer, String packer) {}
-
+    // save Images
     private List<ProductImage> saveImages(String categoryName,
                                           String subCategoryName,
-                                          Product savedProduct,
                                           ProductItem savedProductItem,
                                           List<MultipartFile> images) throws IOException {
-
-        if ((savedProduct == null && savedProductItem == null) ||
-                (savedProduct != null && savedProductItem != null)) {
-            throw new IllegalArgumentException("Any Product or ProductItem must be provided.");
+        if (savedProductItem == null) {
+            throw new IllegalArgumentException("Product item cannot be null");
         }
-
         if (images == null || images.isEmpty()) {
             throw new IllegalArgumentException("Images are mandatory.");
         }
-
         if (categoryName == null || subCategoryName == null) {
             throw new IllegalArgumentException("Category and Sub-category names cannot be null");
         }
 
         List<String> imagePaths = new ArrayList<>();
 
-        Path uploadDir = (savedProduct != null)
-                ? Paths.get("uploads", categoryName, subCategoryName)
-                : Paths.get("uploads", categoryName, subCategoryName, savedProductItem.getId().toString());
+        Path uploadDir = Paths.get("uploads", categoryName, subCategoryName, savedProductItem.getId().toString());
         Files.createDirectories(uploadDir);
 
         for (MultipartFile image : images) {
@@ -392,7 +336,6 @@ public class ProductsService {
             if (!List.of("image/png", "image/jpeg").contains(contentType)) {
                 throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
             }
-
             if (!image.isEmpty()) {
                 String extension = FilenameUtils.getExtension(image.getOriginalFilename());
                 String filename = UUID.randomUUID() + "." + extension;
@@ -402,23 +345,10 @@ public class ProductsService {
                 imagePaths.add(String.valueOf(filePath));
             }
         }
-//        return imagePaths;
         List<ProductImage> imageEntities = imagePaths.stream()
-                .map(path -> new ProductImage(savedProduct, savedProductItem, path))
+                .map(path -> new ProductImage(savedProductItem, path))
                 .collect(Collectors.toList());
-
         return productImagesRepo.saveAll(imageEntities);
     }
 
-
-
-
-
-    //        ProductItem savedProductItem = saveNewProductItem(savedProduct, newProductDto.getSku(), newProductDto.getStock(),
-//                newProductDto.getPrice(), newProductDto.getStatus(), variations);   //  2. add product item with variations
-
-
 }
-
-
-
