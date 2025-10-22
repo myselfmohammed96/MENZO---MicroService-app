@@ -46,7 +46,9 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
 
     public boolean existsById(Long parentId);
 
-//    Sub categories
+
+
+//    ********* Sub-categories *********
 //    GET methods
 
     @Query("SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(pc.id, pc.parentCategoryId, pc.categoryName, " +

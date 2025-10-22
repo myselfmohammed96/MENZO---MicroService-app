@@ -14,6 +14,12 @@ class UtilityServiceTest {
     private UtilityService utilityService;
 
     @Test
+    public void testGenerateAbbreviation() {
+        String abb = utilityService.generateAbbreviation("sub-category", "Jeans");
+        System.out.println("Abbreviation: " + abb);
+    }
+
+    @Test
     public void testIsAbbreviationExists() throws Exception {
         Method method = UtilityService.class.getDeclaredMethod("isAbbreviationExists", String.class, StringBuilder.class);
         method.setAccessible(true);

@@ -31,18 +31,21 @@ public class VariationsService {
     @Autowired
     private VariationsOptionsRepo optionsRepo;
 
+    @Autowired
+    private UtilityService utilityService;
+
 //    ********* Variation *********
 
     //  Add new variation
-    public Variation addNewVariation(CreateVariationDto newVariation) {
-        if (variationsRepo.existsByVariationName(newVariation.getVariationName())) {
-            log.error("Variation '{}' already exists", newVariation.getVariationName());
-            throw new DuplicateVariationException("Variation already exists.");
-        }
-        Variation newSavedVariation = new Variation(newVariation.getVariationName());
-        log.info("Saving new variation: {}", newVariation.getVariationName());
-        return variationsRepo.save(newSavedVariation);
-    }
+//    public Variation addNewVariation(CreateVariationDto newVariation) {
+//        if (variationsRepo.existsByVariationName(newVariation.getVariationName())) {
+//            log.error("Variation '{}' already exists", newVariation.getVariationName());
+//            throw new DuplicateVariationException("Variation already exists.");
+//        }
+//        Variation newSavedVariation = new Variation(newVariation.getVariationName());
+//        log.info("Saving new variation: {}", newVariation.getVariationName());
+//        return variationsRepo.save(newSavedVariation);
+//    }
 
     //  Update variation by id
     public Variation updateVariation(Long variationId, VariationDto latestVariation) {
@@ -78,17 +81,50 @@ public class VariationsService {
 //    ********* Variation options *********
 
     //  Add new variation option
-//    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
-//        if (optionsRepo.existsByOptionValueAndVariationId(newOption.getOptionValue(), newOption.getVariationId())) {
-//            log.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
-//            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
-//        }
-//        Variation variations = variationsRepo.findVariationById(newOption.getVariationId())
-//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
-//        VariationOption newVariationOption = new VariationOption(newOption.getOptionValue(), variations);
-//        log.info("Saving new variation option under variation {}: {}", variations.getVariationName(), newOption.getOptionValue());
-//        return optionsRepo.save(newVariationOption);
-//    }
+    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
+
+        // input validation
+        if (optionsRepo.existsByOptionValueAndVariationId(
+                newOption.getOptionValue(),
+                newOption.getVariationId()
+        )) {
+            log.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
+            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
+        }
+
+        // fetching variation object by ID
+        Variation variation = variationsRepo.findVariationById(newOption.getVariationId())
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
+
+        // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
+        VariationOption newVariationOption;
+        if (variation.getVariationName().equals("Colors")) {
+            newVariationOption = VariationOption.builder()
+                    .optionValue(newOption.getOptionValue())
+                    .colorCode(null)
+                    .variation(variation)
+                    .build();
+            VariationOption savedOption = optionsRepo.save(newVariationOption);
+
+            String colorAbbreviation = utilityService.generateAbbreviation(
+                    "Colors",
+                    newOption.getOptionValue()
+            );
+
+            ColorCode colorCode = ColorCode.builder()
+                    .colorOption(savedOption)
+                    .colorCode(newOption.getColorCode())
+                    .colorAbbreviation(colorAbbreviation)
+                    .build();
+        } else {
+            newVariationOption = VariationOption.builder()
+                    .optionValue(newOption.getOptionValue())
+                    .variation(variation)
+                    .build();
+        }
+        log.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
+        return optionsRepo.save(newVariationOption);
+    }
 
 //    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
 //        if (optionsRepo.existsByOptionValueAndVariationId(newOption.getOptionValue(), newOption.getVariationId())) {
@@ -116,7 +152,8 @@ public class VariationsService {
 ////                    variation
 ////            );
 //            log.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
-////            return optionsRepo.save(newVariationOption);
+
+    /// /            return optionsRepo.save(newVariationOption);
 //        }
 //    }
 
