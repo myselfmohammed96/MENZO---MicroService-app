@@ -61,26 +61,26 @@ public class VariationsRestController {
 //    ********* Variations *********
 
     //  Add new Variation
-    @PostMapping("/add-variation")
-    public ResponseEntity<?> addVariation(@Valid @RequestBody CreateVariationDto newVariation, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(err ->
-                    errors.put(err.getField(), err.getDefaultMessage()));
-            log.warn("Validation failed for new variation: {}", errors);
-            return ResponseEntity.badRequest().body(errors);
-        }
-        Variation savedVariation = variationsService.addNewVariation(newVariation);
-        if (savedVariation != null) {
-            log.info("Variation created successfully with ID: {}", savedVariation.getId());
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Map.of("message", "Variation created successfully", "variationId", savedVariation.getId()));
-        } else {
-            log.error("Variation creation failed");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "Variation creation failed."));
-        }
-    }
+//    @PostMapping("/add-variation")
+//    public ResponseEntity<?> addVariation(@Valid @RequestBody CreateVariationDto newVariation, BindingResult result) {
+//        if (result.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            result.getFieldErrors().forEach(err ->
+//                    errors.put(err.getField(), err.getDefaultMessage()));
+//            log.warn("Validation failed for new variation: {}", errors);
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+//        Variation savedVariation = variationsService.addNewVariation(newVariation);
+//        if (savedVariation != null) {
+//            log.info("Variation created successfully with ID: {}", savedVariation.getId());
+//            return ResponseEntity.status(HttpStatus.CREATED)
+//                    .body(Map.of("message", "Variation created successfully", "variationId", savedVariation.getId()));
+//        } else {
+//            log.error("Variation creation failed");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Map.of("message", "Variation creation failed."));
+//        }
+//    }
 
     //  Update Variation by id
     @PutMapping("/update-variation")
@@ -120,29 +120,47 @@ public class VariationsRestController {
         }
     }
 
+
+
 //    ********* Variation options *********
 
     //  Add new variation option
-//    @PostMapping("/add-option")
-//    public ResponseEntity<?> addOption(@Valid @RequestBody CreateVariationOptionDto newOption, BindingResult result) {
-//        if (result.hasErrors()) {
-//            Map<String, String> errors = new HashMap<>();
-//            result.getFieldErrors().forEach(err ->
-//                    errors.put(err.getField(), err.getDefaultMessage()));
-//            log.warn("Validation failed for new variation option: {}", errors);
-//            return ResponseEntity.badRequest().body(errors);
-//        }
-//        VariationOption savedOption = variationsService.addNewOption(newOption);
-//        if (savedOption != null) {
-//            log.info("Variation option created successfully with ID: {}", savedOption.getId());
-//            return ResponseEntity.status(HttpStatus.CREATED)
-//                    .body(Map.of("message", "Variation option created successfully.", "optionId", savedOption.getId()));
-//        } else {
-//            log.error("Variation option creation failed");
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(Map.of("message", "Variation option creation failed."));
-//        }
-//    }
+    @PostMapping("/add-option")
+    public ResponseEntity<?> addOption(
+            @Valid @RequestBody CreateVariationOptionDto newOption,
+            BindingResult result) {
+
+        // input validation
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(err ->
+                    errors.put(err.getField(), err.getDefaultMessage()));
+            log.warn("Validation failed for new variation option: {}", errors);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        // saving option
+        VariationOption savedOption = variationsService.addNewOption(newOption);
+
+        // response building
+        if (savedOption != null) {
+            log.info("Variation option created successfully with ID: {}", savedOption.getId());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(
+                            Map.of("message", "Variation option created successfully.",
+                                    "optionId", savedOption.getId())
+                    );
+        } else {
+            log.error("Variation option creation failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(
+                            Map.of("message",
+                                    "Variation option creation failed.")
+                    );
+        }
+    }
+
+
 
     //  Update variation option by id
     @PutMapping("/update-option")

@@ -1,16 +1,15 @@
 package com.menzo.Product_Service.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(exclude = "colorOption")
 @Table(name = "color_code")
 public class ColorCode {
 
@@ -23,6 +22,7 @@ public class ColorCode {
             nullable = false,
             name = "color_option_id"
     )
+    @JsonIgnore
     private VariationOption colorOption;
 
     @Column(

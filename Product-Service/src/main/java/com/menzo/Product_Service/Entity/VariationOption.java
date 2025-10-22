@@ -58,6 +58,12 @@ public class VariationOption {
     @CreationTimestamp
     private Date createdAt;
 
+    @Override
+    public String toString() {
+        return "VariationOption(id:" + id + " optionValue:" + optionValue + " colorCode:" + colorCode +
+                " createdAt:" + createdAt + ")";
+    }
+
 }
 
 

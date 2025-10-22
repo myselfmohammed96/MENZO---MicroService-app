@@ -15,7 +15,7 @@ class UtilityServiceTest {
 
     @Test
     public void testGenerateAbbreviation() {
-        String abb = utilityService.generateAbbreviation("sub-category", "Jeans");
+        String abb = utilityService.generateAbbreviation("Colors", "Dark purple");
         System.out.println("Abbreviation: " + abb);
     }
 

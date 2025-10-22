@@ -99,23 +99,26 @@ public class VariationsService {
         // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
         VariationOption newVariationOption;
         if (variation.getVariationName().equals("Colors")) {
-            newVariationOption = VariationOption.builder()
+            if (newOption.getColorCode() == null || newOption.getColorCode().isEmpty()) {
+                throw new IllegalArgumentException("Color code required.");
+            }
+            VariationOption option = VariationOption.builder()
                     .optionValue(newOption.getOptionValue())
                     .colorCode(null)
                     .variation(variation)
                     .build();
-            VariationOption savedOption = optionsRepo.save(newVariationOption);
+            newVariationOption = optionsRepo.save(option);
 
             String colorAbbreviation = utilityService.generateAbbreviation(
                     "Colors",
                     newOption.getOptionValue()
             );
-
             ColorCode colorCode = ColorCode.builder()
-                    .colorOption(savedOption)
+                    .colorOption(newVariationOption)
                     .colorCode(newOption.getColorCode())
                     .colorAbbreviation(colorAbbreviation)
                     .build();
+            newVariationOption.setColorCode(colorCode);
         } else {
             newVariationOption = VariationOption.builder()
                     .optionValue(newOption.getOptionValue())

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class VariationsOptionsRepoTest {
 
     @Autowired
-    VariationsOptionsRepo optionsRepo;
+    private VariationsOptionsRepo optionsRepo;
 
     @Test
     public void testExistsByOptionValueAndVariationId() {
@@ -28,7 +28,7 @@ class VariationsOptionsRepoTest {
     @Test
     @Transactional
     public void testFindByIdIn() {
-        List<VariationOption> optionsList = optionsRepo.findByIdIn(List.of(7L, 8L, 9L, 4L, 5L));
+        List<VariationOption> optionsList = optionsRepo.findByIdIn(List.of(60L, 61L, 5L));
         System.out.println("Options list: " + optionsList);
     }
 
