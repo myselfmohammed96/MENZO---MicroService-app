@@ -107,7 +107,8 @@ public class VariationsRetrievalService {
     }
 
     public List<VariationOption> getOptionsByIds(List<Long> idList) {
-        return optionsRepo.findAllById(idList);
+//        return optionsRepo.findAllById(idList);
+        return optionsRepo.findByIdIn(idList);
     }
 
     public VariationOption getOptionById(Long id) {

@@ -197,13 +197,13 @@ public class ProductsRetrievalService {
     //  iconImage provider - by productId || productItemId
     private String getIconImage(Long productId, Long productItemId) {
         try {
-            if (productId != null && productItemId == null) {
-                List<ProductImage> productImages = productImagesRepo.findByProductId(productId);
-                return productImages.isEmpty() ? null : productImages.get(0).getImageUrl();
-            } else {
+//            if (productId != null && productItemId == null) {
+//                List<ProductImage> productImages = productImagesRepo.findByProductId(productId);
+//                return productImages.isEmpty() ? null : productImages.get(0).getImageUrl();
+//            } else {
                 List<ProductImage> productItemImages = productImagesRepo.findByProductItemId(productItemId);
                 return productItemImages.isEmpty() ? null : productItemImages.get(0).getImageUrl();
-            }
+//            }
         } catch (Exception e) {
             logger.error("Error fetching image for product ID: {}", productId, e);
             return null;
@@ -215,15 +215,15 @@ public class ProductsRetrievalService {
         try {
             List<String> imageUrl = new ArrayList<>();
 
-            if (productId != null && productItemId == null) {
-                List<ProductImage> productImages = productImagesRepo.findByProductId(productId);
-                for(ProductImage p : productImages) {
-                    if (p.getImageUrl().isEmpty() || p == null) {
-                        continue;
-                    }
-                    imageUrl.add(p.getImageUrl());
-                }
-            } else {
+//            if (productId != null && productItemId == null) {
+//                List<ProductImage> productImages = productImagesRepo.findByProductId(productId);
+//                for(ProductImage p : productImages) {
+//                    if (p.getImageUrl().isEmpty() || p == null) {
+//                        continue;
+//                    }
+//                    imageUrl.add(p.getImageUrl());
+//                }
+//            } else {
                 List<ProductImage> productItemImages = productImagesRepo.findByProductItemId(productItemId);
                 for(ProductImage p : productItemImages) {
                     if (p.getImageUrl().isEmpty() || p == null) {
@@ -231,7 +231,7 @@ public class ProductsRetrievalService {
                     }
                     imageUrl.add(p.getImageUrl());
                 }
-            }
+//            }
             return imageUrl;
         } catch (Exception e) {
             logger.error("Error fetching images");

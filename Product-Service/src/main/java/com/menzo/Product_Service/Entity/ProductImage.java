@@ -14,6 +14,9 @@ public class ProductImage {
 //    @JoinColumn(name = "product_id")
 //    private Product product;
 
+    @Column(name = "super_sku", nullable = false)
+    private String superSku;
+
     @ManyToOne
     @JoinColumn(name = "product_item_id")
     private ProductItem productItem;
@@ -23,8 +26,8 @@ public class ProductImage {
 
     public ProductImage() {}
 
-    public ProductImage(ProductItem productItem, String imageUrl) {
-//        this.product = product;
+    public ProductImage(String superSku, ProductItem productItem, String imageUrl) {
+        this.superSku = superSku;
         this.productItem = productItem;
         this.imageUrl = imageUrl;
     }
@@ -44,6 +47,15 @@ public class ProductImage {
 //    public void setProduct(Product product) {
 //        this.product = product;
 //    }
+
+
+    public String getSuperSku() {
+        return superSku;
+    }
+
+    public void setSuperSku(String superSku) {
+        this.superSku = superSku;
+    }
 
     public ProductItem getProductItem() {
         return productItem;

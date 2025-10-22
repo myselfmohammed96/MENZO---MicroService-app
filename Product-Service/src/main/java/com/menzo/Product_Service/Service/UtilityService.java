@@ -1,0 +1,92 @@
+package com.menzo.Product_Service.Service;
+
+import com.menzo.Product_Service.Entity.ColorCode;
+import com.menzo.Product_Service.Repository.ColorCodeRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+@Component
+public class UtilityService {
+
+    @Autowired
+    private ColorCodeRepo colorCodeRepo;
+
+    /*
+     *
+     * Generate Abbreviation for String
+     * Used to create Abbreviated unique identity code - for SKUs
+     * For Details like - color, sub-category, etc
+     *
+     * Abbreviation built with 1st character of all words - for 'sub-category'
+     *
+     * Abbreviation built with 1st & last character of Last word - for 'Colors',
+     * concated with the first character of all the pre-last words
+     *
+     */
+//    public String generateAbbreviation(String field, String content) {
+//        StringBuilder abbreviation = new StringBuilder();
+//        List<Character> vowels = new ArrayList<>(List.of('A', 'E', 'I', 'O', 'U'));
+//
+//        // Splitting uppercased the words in the given String 'content'
+//        String cont = content.toUpperCase();
+//        String[] contArray = cont.split(" ");
+//        char lastChar = 'a';
+//
+//        // Building abbreviation
+//        if (field.equals("Colors")) {
+//            for (int i = contArray[contArray.length - 1].length() - 1; i >= 0; i--) {
+//                if (vowels.contains(contArray[contArray.length - 1].charAt(i))) continue;
+//                lastChar = contArray[contArray.length - 1].charAt(i);
+//                break;
+//            }
+//            for (String s : contArray) abbreviation.append(s.charAt(0));
+//            abbreviation.append(lastChar);
+//
+//            // Existence check in ColorCode DB
+////            boolean abbreviationExists = colorCodeRepo.existsByColorAbbreviation(abbreviation.toString());
+//
+//        } else if (field.equals("sub-category")) {
+//            for (String s : contArray) abbreviation.append(s.charAt(0));
+//            return abbreviation;
+//        } else {
+//            return null;
+//        }
+//    }
+
+    private String isAbbreviationExists(String field, StringBuilder abbreviation) {
+        boolean abbreviationExists = false;
+
+        if (field.equals("Colors")) {
+            abbreviationExists = colorCodeRepo.existsByColorAbbreviation(abbreviation.toString());
+        }
+        else if (field.equals("sub-category")) {
+            //   abbreviationExists = true;  // sub-category repo check
+        }
+        if (!abbreviationExists) return abbreviation.toString();
+        else {
+            char[] charArray = abbreviation.toString().toCharArray();
+            int digitCount = 0;
+            for (int i = charArray.length - 1; i >= 0; i--) {
+                if (Character.isDigit(charArray[i])) digitCount++;
+                else break;
+            }
+            if (digitCount == 0) {
+                abbreviation.append(1);
+            }
+            else {
+                int suffixInteger = Integer.valueOf(abbreviation.substring(abbreviation.length() - digitCount));
+                abbreviation.replace(
+                        abbreviation.length() - digitCount,
+                        abbreviation.length(),
+                        String.valueOf(++suffixInteger)
+                );
+            }
+            return isAbbreviationExists(field, abbreviation);
+        }
+    }
+
+}

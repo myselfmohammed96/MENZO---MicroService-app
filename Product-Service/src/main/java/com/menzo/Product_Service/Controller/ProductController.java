@@ -42,20 +42,20 @@ public class ProductController {
 //        return "redirect:" + redirectUrl;
 //    }
 
-    @PostMapping("/add-product-v2")
-    public String addProductV2(@ModelAttribute NewProductDto newProduct,
-                               @RequestParam Map<String, String> variationMap,
-                               @RequestParam("images") List<MultipartFile> images) {
-        if(images.size() > 9) {
-            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
-        }
-        System.out.println(newProduct);
-        System.out.println(newProduct.getSizeStockMap());
-
-        productsService.addNewProductV2(newProduct, variationMap, images);
-
-        return "redirect:http://localhost:8080/index";
-    }
+//    @PostMapping("/add-product-v2")
+//    public String addProductV2(@ModelAttribute NewProductDto newProduct,
+//                               @RequestParam Map<String, String> variationMap,
+//                               @RequestParam("images") List<MultipartFile> images) {
+//        if(images.size() > 9) {
+//            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+//        }
+//        System.out.println(newProduct);
+//        System.out.println(newProduct.getSizeStockMap());
+//
+//        productsService.addNewProductV2(newProduct, variationMap, images);
+//
+//        return "redirect:http://localhost:8080/index";
+//    }
 
 
 
