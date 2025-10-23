@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
 
-//    Parent categories
+//    ********* Parent categories *********
 //    GET methods
 
     @Query(nativeQuery = true, value = "SELECT * FROM product_categories WHERE parent_category_id IS NULL")

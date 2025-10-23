@@ -26,7 +26,8 @@ public class CategoriesService {
     VariationsRepo variationsRepo;
 
 
-//    Parent categories
+
+//    ********* Parent categories *********
 
     //    Add new parent category
     public ProductCategory addNewParent(CreateParentCategoryDto newParentCategory) {
@@ -34,9 +35,11 @@ public class CategoriesService {
             log.error("Parent category '{}' already exists", newParentCategory.getCategoryName());
             throw new DuplicateCategoryException("Category already exists.");
         }
-        ProductCategory newProductCategory = new ProductCategory(newParentCategory.getCategoryName());
-        newProductCategory.setParentCategoryId(null);
-        newProductCategory.setIsActive(true);
+        ProductCategory newProductCategory = ProductCategory.builder()
+                .categoryName(newParentCategory.getCategoryName())
+                .parentCategoryId(null)
+                .isActive(true)
+                .build();
         log.info("Saving new parent category: {}", newParentCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
     }
@@ -45,8 +48,17 @@ public class CategoriesService {
     public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
         ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-        parentCategory.setCategoryName(latestParentCategory.getCategoryName() != null && !latestParentCategory.getCategoryName().isEmpty() ? latestParentCategory.getCategoryName() : parentCategory.getCategoryName());
-        parentCategory.setIsActive(latestParentCategory.getIsActive() != null ? latestParentCategory.getIsActive() : parentCategory.getIsActive());
+        parentCategory.setCategoryName(
+                latestParentCategory.getCategoryName() != null
+                        && !latestParentCategory.getCategoryName().isEmpty()
+                        ? latestParentCategory.getCategoryName()
+                        : parentCategory.getCategoryName()
+        );
+        parentCategory.setIsActive(
+                latestParentCategory.getIsActive() != null
+                        ? latestParentCategory.getIsActive()
+                        : parentCategory.getIsActive()
+        );
         log.info("Updated parent category with ID: {}", parentCategoryId);
         return categoriesRepo.save(parentCategory);
     }
@@ -70,7 +82,9 @@ public class CategoriesService {
         }
     }
 
-//    Sub categories
+
+
+//    ********* Sub categories *********
 
     //    Add new sub category
     public ProductCategory addNewSub(CreateSubCategoryDto newSubCategory) {
@@ -80,9 +94,12 @@ public class CategoriesService {
         }
         List<Variation> variationsList = variationsRepo.findAllById(newSubCategory.getVariationIds());
         Set<Variation> variations = new HashSet<>(variationsList);
-        ProductCategory newProductCategory = new ProductCategory(newSubCategory.getParentCategoryId(), newSubCategory.getCategoryName(), variations);
-        newProductCategory.setIsActive(true);
-//        System.out.println("Look at here..... " + newSubCategory.getVariationIds());
+        ProductCategory newProductCategory = ProductCategory.builder()
+                .parentCategoryId(newSubCategory.getParentCategoryId())
+                .categoryName(newSubCategory.getCategoryName())
+                .variations(variations)
+                .isActive(true)
+                .build();
         log.info("Saving new sub-category under parent ID {}: {}", newSubCategory.getParentCategoryId(), newSubCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
     }
@@ -91,9 +108,23 @@ public class CategoriesService {
     public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
         ProductCategory subCategory = categoriesRepo.findSubById(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
-        subCategory.setParentCategoryId(latestSubCategory.getParentCategoryId() != null && latestSubCategory.getParentCategoryId() > 0 ? latestSubCategory.getParentCategoryId() : subCategory.getParentCategoryId());
-        subCategory.setCategoryName(latestSubCategory.getCategoryName() != null && !latestSubCategory.getCategoryName().isEmpty() ? latestSubCategory.getCategoryName() : subCategory.getCategoryName());
-        subCategory.setIsActive(latestSubCategory.getIsActive() != null ? latestSubCategory.getIsActive() : subCategory.getIsActive());
+        subCategory.setParentCategoryId(
+                latestSubCategory.getParentCategoryId() != null
+                        && latestSubCategory.getParentCategoryId() > 0
+                        ? latestSubCategory.getParentCategoryId()
+                        : subCategory.getParentCategoryId()
+        );
+        subCategory.setCategoryName(
+                latestSubCategory.getCategoryName() != null
+                        && !latestSubCategory.getCategoryName().isEmpty()
+                        ? latestSubCategory.getCategoryName()
+                        : subCategory.getCategoryName()
+        );
+        subCategory.setIsActive(
+                latestSubCategory.getIsActive() != null
+                        ? latestSubCategory.getIsActive()
+                        : subCategory.getIsActive()
+        );
         log.info("Updated sub category with ID: {}", subCategoryId);
         return categoriesRepo.save(subCategory);
     }
