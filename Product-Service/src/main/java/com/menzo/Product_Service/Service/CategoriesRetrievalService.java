@@ -32,21 +32,21 @@ public class CategoriesRetrievalService {
 //    ********* Parent categories *********
 
     //    Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
-    public List<ParentCategoryDto> getAllParents() {
-        List<ProductCategory> categoriesList = categoriesRepo.findAllParent();
-        log.info("Fetched {} parent categories", categoriesList.size());
-        List<ParentCategoryDto> parentCategoriesList = new ArrayList<>();
-        for (ProductCategory p : categoriesList) {
-            ParentCategoryDto parentCategory = new ParentCategoryDto(
-                    p.getId(),
-                    p.getCategoryName(),
-                    p.getIsActive(),
-                    p.getCreatedAt()
-            );
-            parentCategoriesList.add(parentCategory);
-        }
-        return parentCategoriesList;
-    }
+//    public List<ParentCategoryDto> getAllParents() {
+//        List<ProductCategory> categoriesList = categoriesRepo.findAllParent();
+//        log.info("Fetched {} parent categories", categoriesList.size());
+//        List<ParentCategoryDto> parentCategoriesList = new ArrayList<>();
+//        for (ProductCategory p : categoriesList) {
+//            ParentCategoryDto parentCategory = new ParentCategoryDto(
+//                    p.getId(),
+//                    p.getCategoryName(),
+//                    p.getIsActive(),
+//                    p.getCreatedAt()
+//            );
+//            parentCategoriesList.add(parentCategory);
+//        }
+//        return parentCategoriesList;
+//    }
 
     //    Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     public List<NestedCategoryDto> getAllParentWithSub(){
@@ -77,17 +77,17 @@ public class CategoriesRetrievalService {
     }
 
     //    Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
-    public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
-        ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-        log.info("Found parent category with ID: {}", parentCategoryId);
-        return new ParentCategoryDto(
-                parentCategory.getId(),
-                parentCategory.getCategoryName(),
-                parentCategory.getIsActive(),
-                parentCategory.getCreatedAt()
-        );
-    }
+//    public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
+//        ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
+//                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
+//        log.info("Found parent category with ID: {}", parentCategoryId);
+//        return new ParentCategoryDto(
+//                parentCategory.getId(),
+//                parentCategory.getCategoryName(),
+//                parentCategory.getIsActive(),
+//                parentCategory.getCreatedAt()
+//        );
+//    }
 
     //    Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))  ---@RequestHeader("roles") String roles,
     public NestedCategoryDto getParentCategoryByIdWithSub(Long parentCategoryId) {
@@ -120,7 +120,7 @@ public class CategoriesRetrievalService {
 
     //    Get parent category by sub category id
     public ParentCategoryView getParentBySubCategoryId(Long subCategoryId) {
-        return categoriesRepo.findCategoryBySubId(subCategoryId);
+        return categoriesRepo.findParentCategoryBySubId(subCategoryId);
     }
 
 
@@ -146,16 +146,16 @@ public class CategoriesRetrievalService {
         return subCategory;
     }
 
-    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
-        List<ParentCategoryDto> allParentCategories = getAllParents();
-        return allParentCategories.stream()
-                .map(parent -> new CategoryMinimalDto(
-                        parent.getId(),
-                        parent.getCategoryName(),
-                        null)
-                )
-                .collect(Collectors.toList());
-    }
+//    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
+//        List<ParentCategoryDto> allParentCategories = getAllParents();
+//        return allParentCategories.stream()
+//                .map(parent -> new CategoryMinimalDto(
+//                        parent.getId(),
+//                        parent.getCategoryName(),
+//                        null)
+//                )
+//                .collect(Collectors.toList());
+//    }
 
     public List<CategoryMinimalDto> getAllSubCategoriesByParentIdWithBanner(Long parentId) {
         List<SubCategoryDto> allSubByParentId = getAllSubOfParentId(parentId);

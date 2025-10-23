@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -18,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(exclude = "variations")
 @Table(name = "product_categories")
 @JsonIgnoreProperties({
         "hibernateLazyInitializer",
@@ -39,6 +37,9 @@ public class ProductCategory {
             length = 100
     )
     private String categoryName;
+
+    @Column(name = "abbreviation", unique = true)
+    private String abbreviation;
 
 //    @JsonManagedReference("category-variation")
     @JsonIgnore

@@ -30,21 +30,21 @@ public class VariationsRetrievalService {
 
     // Variation
 
-    public List<VariationWithOptionsDto> getAllVariationsWithOptions() {
-        List<Variation> allVariations = variationsRepo.findAll();
-        List<VariationWithOptionsDto> variationsList = new ArrayList<>();
-
-        for (Variation variation: allVariations) {
-            Set<OptionWithIdDto> options = new HashSet<>();
-            for (VariationOption option: variation.getOptions()) {
-                OptionWithIdDto optionDto = new OptionWithIdDto(option);
-                options.add(optionDto);
-            }
-            VariationWithOptionsDto variationDto = new VariationWithOptionsDto(variation.getId(), variation.getVariationName(), options);
-            variationsList.add(variationDto);
-        }
-        return variationsList;
-    }
+//    public List<VariationWithOptionsDto> getAllVariationsWithOptions() {
+//        List<Variation> allVariations = variationsRepo.findAll();
+//        List<VariationWithOptionsDto> variationsList = new ArrayList<>();
+//
+//        for (Variation variation: allVariations) {
+//            Set<OptionWithIdDto> options = new HashSet<>();
+//            for (VariationOption option: variation.getOptions()) {
+//                OptionWithIdDto optionDto = new OptionWithIdDto(option);
+//                options.add(optionDto);
+//            }
+//            VariationWithOptionsDto variationDto = new VariationWithOptionsDto(variation.getId(), variation.getVariationName(), options);
+//            variationsList.add(variationDto);
+//        }
+//        return variationsList;
+//    }
 
     public List<?> getAllVariationsWithOptionsBySub(Long subCategoryId) {
         List<Object[]> rows = variationsRepo.findAllByCategoryId(subCategoryId);
@@ -71,10 +71,10 @@ public class VariationsRetrievalService {
         return new ArrayList<>(variationMap.values());
     }
 
-    public List<VariationDto> getAllVariations() {
-        List<VariationDto> allVariations = variationsRepo.findAllVariationIdAndNames();
-        return allVariations;
-    }
+//    public List<VariationDto> getAllVariations() {
+//        List<VariationDto> allVariations = variationsRepo.findAllVariationIdAndNames();
+//        return allVariations;
+//    }
 
     public List<String> getOptionsByVariationName(Long categoryId, String variationName) {
         if (categoryId == null) {
@@ -87,24 +87,24 @@ public class VariationsRetrievalService {
 
 //    Get sizes
 
-    public NestedVariationDto getSizes(String variationName) {
-        Variation size = variationsRepo.findVariationByVariationName(variationName)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
-//        size.get().display();
-        NestedVariationDto sizeList = new NestedVariationDto(size.getId(), size.getVariationName());
-        List<NestedVariationDto> sizes = size.getOptions().stream().map(opt -> new NestedVariationDto(opt.getId(), opt.getOptionValue()))
-                .collect(Collectors.toList());
-        sizeList.setOptions(sizes);
-        return sizeList;
-    }
+//    public NestedVariationDto getSizes(String variationName) {
+//        Variation size = variationsRepo.findVariationByVariationName(variationName)
+//                .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
+////        size.get().display();
+//        NestedVariationDto sizeList = new NestedVariationDto(size.getId(), size.getVariationName());
+//        List<NestedVariationDto> sizes = size.getOptions().stream().map(opt -> new NestedVariationDto(opt.getId(), opt.getOptionValue()))
+//                .collect(Collectors.toList());
+//        sizeList.setOptions(sizes);
+//        return sizeList;
+//    }
 
-    public List<Long> getOptionIdsByVariation(String variationName) {
-
-        return getSizes(variationName).getOptions()
-                .stream()
-                .map(opt -> opt.getId())
-                .collect(Collectors.toList());
-    }
+//    public List<Long> getOptionIdsByVariation(String variationName) {
+//
+//        return getSizes(variationName).getOptions()
+//                .stream()
+//                .map(opt -> opt.getId())
+//                .collect(Collectors.toList());
+//    }
 
     public List<VariationOption> getOptionsByIds(List<Long> idList) {
 //        return optionsRepo.findAllById(idList);

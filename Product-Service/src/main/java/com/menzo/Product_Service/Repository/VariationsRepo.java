@@ -16,8 +16,8 @@ public interface VariationsRepo extends JpaRepository<Variation, Long> {
 
     public Optional<Variation> findVariationByVariationName(String variationName);
 
-    @Query(value = "SELECT new com.menzo.Product_Service.Dto.VariationsDto.VariationDto(v.id, v.variationName) FROM Variation v")
-    public List<VariationDto> findAllVariationIdAndNames();
+//    @Query(value = "SELECT new com.menzo.Product_Service.Dto.VariationsDto.VariationDto(v.id, v.variationName) FROM Variation v")
+//    public List<VariationDto> findAllVariationIdAndNames();
 
     public void deleteVariationById(Long variationId);
 

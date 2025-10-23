@@ -20,10 +20,13 @@ public class CategoriesService {
     private static final Logger log = LoggerFactory.getLogger(CategoriesService.class);
 
     @Autowired
-    CategoriesRepo categoriesRepo;
+    private CategoriesRepo categoriesRepo;
 
     @Autowired
-    VariationsRepo variationsRepo;
+    private VariationsRepo variationsRepo;
+
+    @Autowired
+    private UtilityService utilityService;
 
 
 
@@ -37,6 +40,7 @@ public class CategoriesService {
         }
         ProductCategory newProductCategory = ProductCategory.builder()
                 .categoryName(newParentCategory.getCategoryName())
+                .abbreviation(null)
                 .parentCategoryId(null)
                 .isActive(true)
                 .build();
@@ -45,42 +49,42 @@ public class CategoriesService {
     }
 
     //    Update parent category by id
-    public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
-        ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-        parentCategory.setCategoryName(
-                latestParentCategory.getCategoryName() != null
-                        && !latestParentCategory.getCategoryName().isEmpty()
-                        ? latestParentCategory.getCategoryName()
-                        : parentCategory.getCategoryName()
-        );
-        parentCategory.setIsActive(
-                latestParentCategory.getIsActive() != null
-                        ? latestParentCategory.getIsActive()
-                        : parentCategory.getIsActive()
-        );
-        log.info("Updated parent category with ID: {}", parentCategoryId);
-        return categoriesRepo.save(parentCategory);
-    }
+//    public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
+//        ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
+//                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
+//        parentCategory.setCategoryName(
+//                latestParentCategory.getCategoryName() != null
+//                        && !latestParentCategory.getCategoryName().isEmpty()
+//                        ? latestParentCategory.getCategoryName()
+//                        : parentCategory.getCategoryName()
+//        );
+//        parentCategory.setIsActive(
+//                latestParentCategory.getIsActive() != null
+//                        ? latestParentCategory.getIsActive()
+//                        : parentCategory.getIsActive()
+//        );
+//        log.info("Updated parent category with ID: {}", parentCategoryId);
+//        return categoriesRepo.save(parentCategory);
+//    }
 
     //    Delete parent category by id
-    public boolean deleteParentCategory(Long parentCategoryId) {
-        boolean parentCategoryExists = categoriesRepo.existsById(parentCategoryId);
-        if (!parentCategoryExists) {
-            log.error("Parent category not found with ID {}", parentCategoryId);
-            throw new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId);
-        }
-        log.info("Deleting parent category with ID {}", parentCategoryId);
-        categoriesRepo.deleteParentById(parentCategoryId);
-        boolean exists = categoriesRepo.existsById(parentCategoryId);
-        if (!exists) {
-            log.info("Parent category with ID {} successfully deleted", parentCategoryId);
-            return true;
-        } else {
-            log.error("Parent category with ID {} could not be deleted", parentCategoryId);
-            return false;
-        }
-    }
+//    public boolean deleteParentCategory(Long parentCategoryId) {
+//        boolean parentCategoryExists = categoriesRepo.existsById(parentCategoryId);
+//        if (!parentCategoryExists) {
+//            log.error("Parent category not found with ID {}", parentCategoryId);
+//            throw new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId);
+//        }
+//        log.info("Deleting parent category with ID {}", parentCategoryId);
+//        categoriesRepo.deleteParentById(parentCategoryId);
+//        boolean exists = categoriesRepo.existsById(parentCategoryId);
+//        if (!exists) {
+//            log.info("Parent category with ID {} successfully deleted", parentCategoryId);
+//            return true;
+//        } else {
+//            log.error("Parent category with ID {} could not be deleted", parentCategoryId);
+//            return false;
+//        }
+//    }
 
 
 
@@ -94,9 +98,15 @@ public class CategoriesService {
         }
         List<Variation> variationsList = variationsRepo.findAllById(newSubCategory.getVariationIds());
         Set<Variation> variations = new HashSet<>(variationsList);
+
+        String abb = utilityService.generateAbbreviation(
+                "sub-category",
+                newSubCategory.getCategoryName()
+        );
         ProductCategory newProductCategory = ProductCategory.builder()
                 .parentCategoryId(newSubCategory.getParentCategoryId())
                 .categoryName(newSubCategory.getCategoryName())
+                .abbreviation(abb)
                 .variations(variations)
                 .isActive(true)
                 .build();
@@ -120,6 +130,12 @@ public class CategoriesService {
                         ? latestSubCategory.getCategoryName()
                         : subCategory.getCategoryName()
         );
+        subCategory.setAbbreviation(
+                latestSubCategory.getCategoryName() != null
+                        && !latestSubCategory.getCategoryName().isEmpty()
+                        ? utilityService.generateAbbreviation("sub-category", latestSubCategory.getCategoryName())
+                        : subCategory.getAbbreviation()
+        );
         subCategory.setIsActive(
                 latestSubCategory.getIsActive() != null
                         ? latestSubCategory.getIsActive()
@@ -130,22 +146,22 @@ public class CategoriesService {
     }
 
     //    Delete sub category by id
-    public boolean deleteSubCategory(Long subCategoryId) {
-        boolean subCategoryExists = categoriesRepo.existsById(subCategoryId);
-        if (!subCategoryExists) {
-            log.error("Sub-category not found with ID {}", subCategoryId);
-            throw new EntityNotFoundException("Sub category not found with ID: " + subCategoryId);
-        }
-        log.info("Deleting sub-category with ID {}", subCategoryId);
-        categoriesRepo.deleteSubById(subCategoryId);
-        boolean exists = categoriesRepo.existsById(subCategoryId);
-        if (!exists) {
-            log.info("Sub-category with ID {} successfully deleted", subCategoryId);
-            return true;
-        } else {
-            log.error("Sub-category with ID {} could not be deleted", subCategoryId);
-            return false;
-        }
-    }
+//    public boolean deleteSubCategory(Long subCategoryId) {
+//        boolean subCategoryExists = categoriesRepo.existsById(subCategoryId);
+//        if (!subCategoryExists) {
+//            log.error("Sub-category not found with ID {}", subCategoryId);
+//            throw new EntityNotFoundException("Sub category not found with ID: " + subCategoryId);
+//        }
+//        log.info("Deleting sub-category with ID {}", subCategoryId);
+//        categoriesRepo.deleteSubById(subCategoryId);
+//        boolean exists = categoriesRepo.existsById(subCategoryId);
+//        if (!exists) {
+//            log.info("Sub-category with ID {} successfully deleted", subCategoryId);
+//            return true;
+//        } else {
+//            log.error("Sub-category with ID {} could not be deleted", subCategoryId);
+//            return false;
+//        }
+//    }
 
 }

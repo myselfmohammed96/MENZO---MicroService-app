@@ -34,10 +34,10 @@ public class CategoriesRestController {
 //    ********* Parent-categories *********
 
     //    Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
-    @GetMapping("get-all-parents")
-    public List<ParentCategoryDto> getAllParents() {
-        return categoriesRetrievalService.getAllParents();
-    }
+//    @GetMapping("get-all-parents")
+//    public List<ParentCategoryDto> getAllParents() {
+//        return categoriesRetrievalService.getAllParents();
+//    }
 
     //    Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     @GetMapping("/get-all")
@@ -46,21 +46,21 @@ public class CategoriesRestController {
     }
 
     //    Get all parent categories with Banner images - without sub-categories (id, categoryName, categoryBannerImg)
-    @GetMapping("/get-all-with-banner")
-    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
-        return categoriesRetrievalService.getAllCategoriesWithBanner();
-    }
+//    @GetMapping("/get-all-with-banner")
+//    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
+//        return categoriesRetrievalService.getAllCategoriesWithBanner();
+//    }
 
     //    Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)
-    @GetMapping("/get-parent")
-    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
-        if (parentCategoryId == null || parentCategoryId <= 0) {
-            log.warn("Invalid parent category ID: {}", parentCategoryId);
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
-        }
-        ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
-        return ResponseEntity.ok(parentCategoryDto);
-    }
+//    @GetMapping("/get-parent")
+//    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
+//        if (parentCategoryId == null || parentCategoryId <= 0) {
+//            log.warn("Invalid parent category ID: {}", parentCategoryId);
+//            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
+//        }
+//        ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
+//        return ResponseEntity.ok(parentCategoryDto);
+//    }
 
     //    Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName)) --- @RequestHeader("roles") String roles,
     @GetMapping("get")
@@ -150,57 +150,61 @@ public class CategoriesRestController {
     }
 
     //    Update parent category by id ---
-    @PutMapping("/update-parent")
-    public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long parentCategoryId,
-                                                  @RequestBody ParentCategoryDto latestParentCategory) {
-        if (roles.equals("ADMIN")) {
-            if (parentCategoryId == null || parentCategoryId <= 0) {
-                log.warn("Invalid parent category ID: {}", parentCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
-            }
-            ProductCategory updatedParentCategory = categoriesService.updateParentCategory(parentCategoryId, latestParentCategory);
-            if (updatedParentCategory != null) {
-                log.info("Parent category with ID {} updated successfully", parentCategoryId);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Parent category updated successfully", "categoryId", updatedParentCategory.getId()));
-            } else {
-                log.error("Parent update failed for ID {}", parentCategoryId);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Parent category updation failed"));
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @PutMapping("/update-parent")
+//    public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles,
+//                                                  @RequestParam("id") Long parentCategoryId,
+//                                                  @RequestBody ParentCategoryDto latestParentCategory) {
+//        if (roles.equals("ADMIN")) {
+//            if (parentCategoryId == null || parentCategoryId <= 0) {
+//                log.warn("Invalid parent category ID: {}", parentCategoryId);
+//                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
+//            }
+//            ProductCategory updatedParentCategory = categoriesService.updateParentCategory(parentCategoryId, latestParentCategory);
+//            if (updatedParentCategory != null) {
+//                log.info("Parent category with ID {} updated successfully", parentCategoryId);
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(Map.of("message", "Parent category updated successfully", "categoryId", updatedParentCategory.getId()));
+//            } else {
+//                log.error("Parent update failed for ID {}", parentCategoryId);
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(Map.of("message", "Parent category updation failed"));
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
     //    Delete parent category by id ---
-    @DeleteMapping("/delete-parent")
-    public ResponseEntity<?> deleteParentCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long parentCategoryId) {
-        if (roles.equals("ADMIN")) {
-            if (parentCategoryId == null || parentCategoryId <= 0) {
-                log.warn("Invalid parent category ID: {}", parentCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
-            }
-            boolean deleted = categoriesService.deleteParentCategory(parentCategoryId);
-            if (deleted) {
-                log.info("Parent category with ID {} deleted successfully", parentCategoryId);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Parent category deleted successfully"));
-            } else {
-                log.error("Parent category deletion failed for ID {}", parentCategoryId);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Parent category deletion failed"));
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @DeleteMapping("/delete-parent")
+//    public ResponseEntity<?> deleteParentCategory(@RequestHeader("roles") String roles,
+//                                                  @RequestParam("id") Long parentCategoryId) {
+//        if (roles.equals("ADMIN")) {
+//            if (parentCategoryId == null || parentCategoryId <= 0) {
+//                log.warn("Invalid parent category ID: {}", parentCategoryId);
+//                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
+//            }
+//            boolean deleted = categoriesService.deleteParentCategory(parentCategoryId);
+//            if (deleted) {
+//                log.info("Parent category with ID {} deleted successfully", parentCategoryId);
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(Map.of("message", "Parent category deleted successfully"));
+//            } else {
+//                log.error("Parent category deletion failed for ID {}", parentCategoryId);
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(Map.of("message", "Parent category deletion failed"));
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
 //    ********* Sub-categories *********
 
     //    Add new sub category ---
     @PostMapping("/add-sub")
-    public ResponseEntity<?> addSubCategory(@RequestHeader("roles") String roles, @Valid @RequestBody CreateSubCategoryDto newSubCategory, BindingResult result) {
+    public ResponseEntity<?> addSubCategory(@RequestHeader("roles") String roles,
+                                            @Valid @RequestBody CreateSubCategoryDto newSubCategory,
+                                            BindingResult result) {
         if (roles.equals("ADMIN")) {
             if (result.hasErrors()) {
                 Map<String, String> errors = new HashMap<>();
@@ -248,26 +252,26 @@ public class CategoriesRestController {
     }
 
     //    Delete sub category by id ---
-    @DeleteMapping("/delete-sub")
-    public ResponseEntity<?> deleteSubCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId) {
-        if (roles.equals("ADMIN")) {
-            if (subCategoryId == null || subCategoryId <= 0) {
-                log.warn("Invalid sub-category ID: {}", subCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
-            }
-            boolean deleted = categoriesService.deleteSubCategory(subCategoryId);
-            if (deleted) {
-                log.info("Sub-category with ID {} deleted successfully", subCategoryId);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Sub-category deleted successfully"));
-            } else {
-                log.error("Sub-category deletion failed for ID {}", subCategoryId);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Sub-category deletion failed"));
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @DeleteMapping("/delete-sub")
+//    public ResponseEntity<?> deleteSubCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId) {
+//        if (roles.equals("ADMIN")) {
+//            if (subCategoryId == null || subCategoryId <= 0) {
+//                log.warn("Invalid sub-category ID: {}", subCategoryId);
+//                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
+//            }
+//            boolean deleted = categoriesService.deleteSubCategory(subCategoryId);
+//            if (deleted) {
+//                log.info("Sub-category with ID {} deleted successfully", subCategoryId);
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(Map.of("message", "Sub-category deleted successfully"));
+//            } else {
+//                log.error("Sub-category deletion failed for ID {}", subCategoryId);
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(Map.of("message", "Sub-category deletion failed"));
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
 }

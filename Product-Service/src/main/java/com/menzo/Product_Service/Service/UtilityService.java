@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Entity.ColorCode;
+import com.menzo.Product_Service.Repository.CategoriesRepo;
 import com.menzo.Product_Service.Repository.ColorCodeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,9 @@ public class UtilityService {
 
     @Autowired
     private ColorCodeRepo colorCodeRepo;
+
+    @Autowired
+    private CategoriesRepo categoriesRepo;
 
     /*
      *
@@ -66,7 +70,7 @@ public class UtilityService {
         }
         else if (field.equals("sub-category")) {
             try{
-                abbreviationExists = false;  // sub-category repo check
+                abbreviationExists = categoriesRepo.existsByAbbreviation(abbreviation.toString());
             } catch (RuntimeException e) {
                 throw new RuntimeException("Sub-category - abbreviation exists check error.", e);
             }
