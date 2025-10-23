@@ -122,32 +122,32 @@ public class CategoriesRestController {
 //    ********* Parent-Categories *********
 
     //    Add new parent category ---
-    @PostMapping("/add-parent")
-    public ResponseEntity<?> addParentCategory(@RequestHeader("roles") String roles,
-                                               @Valid @RequestBody CreateParentCategoryDto newParentCategory,
-                                               BindingResult result) {
-        if (roles.equals("ADMIN")) {
-            if (result.hasErrors()) {
-                Map<String, String> errors = new HashMap<>();
-                result.getFieldErrors().forEach(err ->
-                        errors.put(err.getField(), err.getDefaultMessage()));
-                log.warn("Validation failed for new parent category: {}", errors);
-                return ResponseEntity.badRequest().body(errors);
-            }
-            ProductCategory savedCategory = categoriesService.addNewParent(newParentCategory);
-            if (savedCategory != null) {
-                log.info("Parent category created successfully with ID: {}", savedCategory.getId());
-                return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Map.of("message", "Parent category created successfully", "categoryId", savedCategory.getId()));
-            } else {
-                log.error("Parent category creation failed");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Parent category creation failed."));
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @PostMapping("/add-parent")
+//    public ResponseEntity<?> addParentCategory(@RequestHeader("roles") String roles,
+//                                               @Valid @RequestBody CreateParentCategoryDto newParentCategory,
+//                                               BindingResult result) {
+//        if (roles.equals("ADMIN")) {
+//            if (result.hasErrors()) {
+//                Map<String, String> errors = new HashMap<>();
+//                result.getFieldErrors().forEach(err ->
+//                        errors.put(err.getField(), err.getDefaultMessage()));
+//                log.warn("Validation failed for new parent category: {}", errors);
+//                return ResponseEntity.badRequest().body(errors);
+//            }
+//            ProductCategory savedCategory = categoriesService.addNewParent(newParentCategory);
+//            if (savedCategory != null) {
+//                log.info("Parent category created successfully with ID: {}", savedCategory.getId());
+//                return ResponseEntity.status(HttpStatus.CREATED)
+//                        .body(Map.of("message", "Parent category created successfully", "categoryId", savedCategory.getId()));
+//            } else {
+//                log.error("Parent category creation failed");
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(Map.of("message", "Parent category creation failed."));
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
     //    Update parent category by id ---
 //    @PutMapping("/update-parent")
