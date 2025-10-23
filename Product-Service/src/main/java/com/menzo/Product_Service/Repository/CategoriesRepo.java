@@ -25,11 +25,9 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
     public boolean existsByCategoryNameAndParentCategoryId(String categoryName, Long parentCategoryId);     //  TESTED
 
 
-
     /*
-    * ********* find methods *********
-    *
-    * ***** Parent categories *****
+    *  ********* find methods *********
+    *  ********* Parent categories *********
     */
 
     //  find all parent categories
@@ -86,24 +84,49 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
 
 
     /*
-    *   ***** Sub-categories *****
+    *   ********* Sub-categories *********
     */
 
-    @Query("SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(pc.id, pc.parentCategoryId, pc.categoryName, " +
-            "pc.isActive, pc.createdAt) FROM ProductCategory pc WHERE pc.parentCategoryId = :parentId")
-    public List<SubCategoryDto> findAllSubByParentId(@Param("parentId") Long parentId);
+    //  find sub-category by ID
+    public Optional<ProductCategory> findByIdAndParentCategoryIdIsNotNull(Long id);         // TESTED
 
-    @Query("SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(pc.id, pc.parentCategoryId, pc.categoryName, " +
-            "pc.isActive, pc.createdAt) FROM ProductCategory pc WHERE pc.parentCategoryId IS NOT NULL AND pc.id = :subCategoryId")
-    public SubCategoryDto findSubByIdWithoutVariation(@Param("subCategoryId") Long subCategoryId);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM product_categories pc WHERE pc.parent_category_id IS NOT NULL AND pc.id = :subCategoryId")
-    public Optional<ProductCategory> findSubById(@Param("subCategoryId") Long subCategoryId);
+    //  find all sub-categories by parent category ID
+    public List<ProductCategory> findAllByParentCategoryId(Long parentCategoryId);          // TESTED
 
 
 
+    /*
+    *
+    * probably unnecessary
+    * can be done with findByIdAndParentCategoryIdIsNotNull() - and transferring to dto in the business
+    * try with post man
+    *
+     */
+//    @Query(
+//            "SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(" +
+//                    "pc.id, pc.parentCategoryId, pc.categoryName, pc.isActive, pc.createdAt) " +
+//                    "FROM ProductCategory pc " +
+//                    "WHERE pc.parentCategoryId IS NOT NULL " +
+//                    "AND pc.id = :subCategoryId"
+//    )
+//    public SubCategoryDto findSubByIdWithoutVariation(@Param("subCategoryId") Long subCategoryId);
 
 }
+
+
+
+
+
+
+
+
+//    @Query("SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(pc.id, pc.parentCategoryId, pc.categoryName, " +
+//            "pc.isActive, pc.createdAt) FROM ProductCategory pc WHERE pc.parentCategoryId = :parentId")
+//    public List<SubCategoryDto> findAllSubByParentId(@Param("parentId") Long parentId);
+
+
+
+
 
 
 
@@ -128,6 +151,8 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
 //                    "AND id = :subCategoryId"
 //    )
 //    public void deleteSubById(@Param("subCategoryId") Long subCategoryId);
+
+
 
 
 

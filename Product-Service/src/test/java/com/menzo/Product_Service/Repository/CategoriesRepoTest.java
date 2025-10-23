@@ -1,11 +1,13 @@
 package com.menzo.Product_Service.Repository;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
+import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import com.menzo.Product_Service.Entity.ProductCategory;
 import com.menzo.Product_Service.Service.UtilityService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -107,7 +109,7 @@ class CategoriesRepoTest {
     }
 
     @Test
-    public void testfindParentByIdWithSub() {
+    public void testFindParentByIdWithSub() {
         List<Object[]> parentByIdWithSub = categoriesRepo.findParentByIdWithSub(1L);
         for (Object[] obj : parentByIdWithSub) {
             System.out.println(Arrays.toString(obj));
@@ -123,6 +125,28 @@ class CategoriesRepoTest {
         );
     }
 
+
+
+//    ********* Sub-categories *********
+
+    @Test
+    public void testFindByIdAndParentCategoryIdIsNotNull() {
+        Optional<ProductCategory> sub = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(121L);
+        System.out.println(sub);
+    }
+
+    @Test
+    public void testFindAllByParentCategoryId() {
+        List<ProductCategory> subList = categoriesRepo.findAllByParentCategoryId(1L);
+        System.out.println(subList);
+    }
+
+//    @Test
+//    public void testFindByIdAndParentCategoryIdIsNotNullWithoutVariation() {
+//        Optional<ProductCategory> sub = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(121L);
+//        System.out.println(sub);
+//        System.out.println(sub.get().getVariations());
+//    }
 }
 
 

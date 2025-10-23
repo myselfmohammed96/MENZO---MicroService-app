@@ -115,35 +115,35 @@ public class CategoriesService {
     }
 
     //    Update sub category by id
-    public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
-        ProductCategory subCategory = categoriesRepo.findSubById(subCategoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
-        subCategory.setParentCategoryId(
-                latestSubCategory.getParentCategoryId() != null
-                        && latestSubCategory.getParentCategoryId() > 0
-                        ? latestSubCategory.getParentCategoryId()
-                        : subCategory.getParentCategoryId()
-        );
-        subCategory.setCategoryName(
-                latestSubCategory.getCategoryName() != null
-                        && !latestSubCategory.getCategoryName().isEmpty()
-                        ? latestSubCategory.getCategoryName()
-                        : subCategory.getCategoryName()
-        );
-        subCategory.setAbbreviation(
-                latestSubCategory.getCategoryName() != null
-                        && !latestSubCategory.getCategoryName().isEmpty()
-                        ? utilityService.generateAbbreviation("sub-category", latestSubCategory.getCategoryName())
-                        : subCategory.getAbbreviation()
-        );
-        subCategory.setIsActive(
-                latestSubCategory.getIsActive() != null
-                        ? latestSubCategory.getIsActive()
-                        : subCategory.getIsActive()
-        );
-        log.info("Updated sub category with ID: {}", subCategoryId);
-        return categoriesRepo.save(subCategory);
-    }
+//    public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
+//        ProductCategory subCategory = categoriesRepo.findSubById(subCategoryId)
+//                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
+//        subCategory.setParentCategoryId(
+//                latestSubCategory.getParentCategoryId() != null
+//                        && latestSubCategory.getParentCategoryId() > 0
+//                        ? latestSubCategory.getParentCategoryId()
+//                        : subCategory.getParentCategoryId()
+//        );
+//        subCategory.setCategoryName(
+//                latestSubCategory.getCategoryName() != null
+//                        && !latestSubCategory.getCategoryName().isEmpty()
+//                        ? latestSubCategory.getCategoryName()
+//                        : subCategory.getCategoryName()
+//        );
+//        subCategory.setAbbreviation(
+//                latestSubCategory.getCategoryName() != null
+//                        && !latestSubCategory.getCategoryName().isEmpty()
+//                        ? utilityService.generateAbbreviation("sub-category", latestSubCategory.getCategoryName())
+//                        : subCategory.getAbbreviation()
+//        );
+//        subCategory.setIsActive(
+//                latestSubCategory.getIsActive() != null
+//                        ? latestSubCategory.getIsActive()
+//                        : subCategory.getIsActive()
+//        );
+//        log.info("Updated sub category with ID: {}", subCategoryId);
+//        return categoriesRepo.save(subCategory);
+//    }
 
     //    Delete sub category by id
 //    public boolean deleteSubCategory(Long subCategoryId) {

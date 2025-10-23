@@ -76,26 +76,26 @@ public class CategoriesRestController {
 //    ********* Sub-categories *********
 
     //    Get all sub category by parent id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-    @GetMapping("get-all-sub")
-    public ResponseEntity<?> getAllSubCategoriesByParentId(@RequestHeader("roles") String roles, @RequestParam("id") Long parentId) {
-        if (roles.equals("ADMIN")) {
-            if (parentId == null || parentId <= 0) {
-                log.warn("Invalid parent ID: {}", parentId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
-            }
-            List<SubCategoryDto> allSubOfParentId = categoriesRetrievalService.getAllSubOfParentId(parentId);
-            return ResponseEntity.ok(allSubOfParentId);
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @GetMapping("get-all-sub")
+//    public ResponseEntity<?> getAllSubCategoriesByParentId(@RequestHeader("roles") String roles, @RequestParam("id") Long parentId) {
+//        if (roles.equals("ADMIN")) {
+//            if (parentId == null || parentId <= 0) {
+//                log.warn("Invalid parent ID: {}", parentId);
+//                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
+//            }
+//            List<SubCategoryDto> allSubOfParentId = categoriesRetrievalService.getAllSubOfParentId(parentId);
+//            return ResponseEntity.ok(allSubOfParentId);
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
     //    Get all sub-categories by parent id with Banner images - (id, categoryName, categoryBannerImg)
-    @GetMapping("/get-sub-with-banner")
-    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
-        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService.getAllSubCategoriesByParentIdWithBanner(parentId);
-        return ResponseEntity.ok(subCategoriesList);
-    }
+//    @GetMapping("/get-sub-with-banner")
+//    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
+//        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService.getAllSubCategoriesByParentIdWithBanner(parentId);
+//        return ResponseEntity.ok(subCategoriesList);
+//    }
 
     //    Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
     @GetMapping("/get-sub")
@@ -229,27 +229,27 @@ public class CategoriesRestController {
     }
 
     //    Update sub category by id ---
-    @PutMapping("/update-sub")
-    public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId, @RequestBody SubCategoryDto latestSubCategory) {
-        if (roles.equals("ADMIN")) {
-            if (subCategoryId == null || subCategoryId <= 0) {
-                log.warn("Invalid sub-category ID: {}", subCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
-            }
-            ProductCategory updatedSubCategory = categoriesService.updateSubCategory(subCategoryId, latestSubCategory);
-            if (updatedSubCategory != null) {
-                log.info("Sub-category with ID {} updated successfully", subCategoryId);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Sub-category updated successfully", "categoryId", updatedSubCategory.getId()));
-            } else {
-                log.error("Sub-category update failed for ID {}", subCategoryId);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Sub-category updation failed"));
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @PutMapping("/update-sub")
+//    public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId, @RequestBody SubCategoryDto latestSubCategory) {
+//        if (roles.equals("ADMIN")) {
+//            if (subCategoryId == null || subCategoryId <= 0) {
+//                log.warn("Invalid sub-category ID: {}", subCategoryId);
+//                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
+//            }
+//            ProductCategory updatedSubCategory = categoriesService.updateSubCategory(subCategoryId, latestSubCategory);
+//            if (updatedSubCategory != null) {
+//                log.info("Sub-category with ID {} updated successfully", subCategoryId);
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(Map.of("message", "Sub-category updated successfully", "categoryId", updatedSubCategory.getId()));
+//            } else {
+//                log.error("Sub-category update failed for ID {}", subCategoryId);
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(Map.of("message", "Sub-category updation failed"));
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
     //    Delete sub category by id ---
 //    @DeleteMapping("/delete-sub")
