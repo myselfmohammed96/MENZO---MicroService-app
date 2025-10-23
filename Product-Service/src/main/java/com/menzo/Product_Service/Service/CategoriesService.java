@@ -34,10 +34,14 @@ public class CategoriesService {
 
     //    Add new parent category
     public ProductCategory addNewParent(CreateParentCategoryDto newParentCategory) {
+
+        //  duplicate - existence validation
         if (categoriesRepo.existsByCategoryName(newParentCategory.getCategoryName())) {
             log.error("Parent category '{}' already exists", newParentCategory.getCategoryName());
             throw new DuplicateCategoryException("Category already exists.");
         }
+
+        // saving new Parent category
         ProductCategory newProductCategory = ProductCategory.builder()
                 .categoryName(newParentCategory.getCategoryName())
                 .abbreviation(null)
@@ -48,42 +52,69 @@ public class CategoriesService {
         return categoriesRepo.save(newProductCategory);
     }
 
-    //    Update parent category by id
-//    public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
-//        ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
-//                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-//        parentCategory.setCategoryName(
-//                latestParentCategory.getCategoryName() != null
-//                        && !latestParentCategory.getCategoryName().isEmpty()
-//                        ? latestParentCategory.getCategoryName()
-//                        : parentCategory.getCategoryName()
-//        );
-//        parentCategory.setIsActive(
-//                latestParentCategory.getIsActive() != null
-//                        ? latestParentCategory.getIsActive()
-//                        : parentCategory.getIsActive()
-//        );
-//        log.info("Updated parent category with ID: {}", parentCategoryId);
-//        return categoriesRepo.save(parentCategory);
-//    }
 
-    //    Delete parent category by id
+
+    //    Update parent category by ID
+    public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
+
+        //  fetching parent category by ID
+        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
+
+        //  updating newly available fields
+        parentCategory.setCategoryName(
+                latestParentCategory.getCategoryName() != null
+                        && !latestParentCategory.getCategoryName().isEmpty()
+                        ? latestParentCategory.getCategoryName()
+                        : parentCategory.getCategoryName()
+        );
+        parentCategory.setIsActive(
+                latestParentCategory.getIsActive() != null
+                        ? latestParentCategory.getIsActive()
+                        : parentCategory.getIsActive()
+        );
+        log.info("Updated parent category with ID: {}", parentCategoryId);
+        return categoriesRepo.save(parentCategory);
+    }
+
+
+
+    //  Delete parent category by ID - Soft Delete
+    public boolean deleteParentCategory(Long parentCategoryId) {
+
+        //  fetching parent category by ID
+        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
+
+        parentCategory.setIsDeleted(true);
+        ProductCategory isDeleteUpdatedParent = categoriesRepo.save(parentCategory);
+        return isDeleteUpdatedParent.getIsDeleted();
+    }
+
+
+
+    //    Delete parent category by ID
 //    public boolean deleteParentCategory(Long parentCategoryId) {
+//
+//        //  duplicate - existence validation
 //        boolean parentCategoryExists = categoriesRepo.existsById(parentCategoryId);
 //        if (!parentCategoryExists) {
 //            log.error("Parent category not found with ID {}", parentCategoryId);
 //            throw new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId);
 //        }
+//
+//        //  deleting parent category by ID - Soft delete
 //        log.info("Deleting parent category with ID {}", parentCategoryId);
-//        categoriesRepo.deleteParentById(parentCategoryId);
-//        boolean exists = categoriesRepo.existsById(parentCategoryId);
-//        if (!exists) {
-//            log.info("Parent category with ID {} successfully deleted", parentCategoryId);
-//            return true;
-//        } else {
-//            log.error("Parent category with ID {} could not be deleted", parentCategoryId);
-//            return false;
-//        }
+//
+////        categoriesRepo.deleteParentById(parentCategoryId);
+////        boolean exists = categoriesRepo.existsById(parentCategoryId);
+////        if (!exists) {
+////            log.info("Parent category with ID {} successfully deleted", parentCategoryId);
+////            return true;
+////        } else {
+////            log.error("Parent category with ID {} could not be deleted", parentCategoryId);
+////            return false;
+////        }
 //    }
 
 

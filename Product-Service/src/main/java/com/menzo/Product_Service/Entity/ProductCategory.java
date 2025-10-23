@@ -58,6 +58,12 @@ public class ProductCategory {
     private Boolean isActive;
 
     @Column(
+            name = "is_deleted",
+            nullable = false
+    )
+    private Boolean isDeleted;
+
+    @Column(
             name = "created_at",
             nullable = false,
             updatable = false
