@@ -139,12 +139,12 @@ public class CategoriesRetrievalService {
 //    }
 
     //    Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-    public SubCategoryDto getSubCategoryById(Long subCategoryId) {
-        SubCategoryDto subCategory = categoriesRepo.findSubByIdWithoutVariation(subCategoryId);
-//                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
-        log.info("Found sub-category with ID: {}", subCategoryId);
-        return subCategory;
-    }
+//    public SubCategoryDto getSubCategoryById(Long subCategoryId) {
+//        SubCategoryDto subCategory = categoriesRepo.findSubByIdWithoutVariation(subCategoryId);
+////                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
+//        log.info("Found sub-category with ID: {}", subCategoryId);
+//        return subCategory;
+//    }
 
 //    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
 //        List<ParentCategoryDto> allParentCategories = getAllParents();

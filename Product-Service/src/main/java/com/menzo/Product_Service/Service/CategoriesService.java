@@ -32,7 +32,7 @@ public class CategoriesService {
 
 //    ********* Parent categories *********
 
-    //    Add new parent category
+    //    Add new parent category - TESTED
     public ProductCategory addNewParent(CreateParentCategoryDto newParentCategory) {
 
         //  duplicate - existence validation
@@ -47,6 +47,7 @@ public class CategoriesService {
                 .abbreviation(null)
                 .parentCategoryId(null)
                 .isActive(true)
+                .isDeleted(false)
                 .build();
         log.info("Saving new parent category: {}", newParentCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
@@ -54,7 +55,7 @@ public class CategoriesService {
 
 
 
-    //    Update parent category by ID
+    //    Update parent category by ID - TESTED
     public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
 
         //  fetching parent category by ID

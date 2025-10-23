@@ -98,19 +98,19 @@ public class CategoriesRestController {
 //    }
 
     //    Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-    @GetMapping("/get-sub")
-    public ResponseEntity<?> getSubCategoryById(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId) {
-        if (roles.equals("ADMIN")) {
-            if (subCategoryId == null || subCategoryId <= 0) {
-                log.warn("Invalid sub-category ID: {}", subCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
-            }
-            SubCategoryDto subCategoryDto = categoriesRetrievalService.getSubCategoryById(subCategoryId);
-            return ResponseEntity.ok(subCategoryDto);
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @GetMapping("/get-sub")
+//    public ResponseEntity<?> getSubCategoryById(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId) {
+//        if (roles.equals("ADMIN")) {
+//            if (subCategoryId == null || subCategoryId <= 0) {
+//                log.warn("Invalid sub-category ID: {}", subCategoryId);
+//                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
+//            }
+//            SubCategoryDto subCategoryDto = categoriesRetrievalService.getSubCategoryById(subCategoryId);
+//            return ResponseEntity.ok(subCategoryDto);
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
 //    @GetMapping("/get-sub-by-product-id")
 //    public ResponseEntity<ProductCategory> getSubCategoryByProductId(@RequestParam("id") Long productId) {
