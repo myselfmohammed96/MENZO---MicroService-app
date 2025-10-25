@@ -23,7 +23,7 @@ import java.util.Map;
 @Service
 public class VariationsService {
 
-    private static final Logger log = LoggerFactory.getLogger(VariationsService.class);
+    private static final Logger logger = LoggerFactory.getLogger(VariationsService.class);
 
     @Autowired
     private VariationsRepo variationsRepo;
@@ -36,16 +36,22 @@ public class VariationsService {
 
 //    ********* Variation *********
 
-    //  Add new variation
-//    public Variation addNewVariation(CreateVariationDto newVariation) {
-//        if (variationsRepo.existsByVariationName(newVariation.getVariationName())) {
-//            log.error("Variation '{}' already exists", newVariation.getVariationName());
-//            throw new DuplicateVariationException("Variation already exists.");
-//        }
-//        Variation newSavedVariation = new Variation(newVariation.getVariationName());
-//        log.info("Saving new variation: {}", newVariation.getVariationName());
-//        return variationsRepo.save(newSavedVariation);
-//    }
+    //  Add new variation - TESTED
+    public Variation addNewVariation(CreateVariationDto newVariation) {
+
+        //  duplicate - existence validation
+        if (variationsRepo.existsByVariationName(newVariation.getVariationName())) {
+            logger.error("Variation '{}' already exists", newVariation.getVariationName());
+            throw new DuplicateVariationException("Variation already exists.");
+        }
+
+        //  saving new Variation
+        Variation variation = Variation.builder()
+                .variationName(newVariation.getVariationName())
+                .build();
+        logger.info("Saving new variation: {}", newVariation.getVariationName());
+        return variationsRepo.save(variation);
+    }
 
     //  Update variation by id
 //    public Variation updateVariation(Long variationId, VariationDto latestVariation) {
@@ -165,7 +171,7 @@ public class VariationsService {
         VariationOption option = optionsRepo.findById(optionId)
                 .orElseThrow(() -> new EntityNotFoundException("Variation option not found with ID: " + optionId));
         option.setOptionValue(latestVariationOption.getOptionValue() != null && !latestVariationOption.getOptionValue().isEmpty() ? latestVariationOption.getOptionValue() : option.getOptionValue());
-        log.info("Updated variation option with ID: {}", optionId);
+        logger.info("Updated variation option with ID: {}", optionId);
         VariationOption updatedOption = optionsRepo.save(option);
 
         return updatedOption;
@@ -175,17 +181,17 @@ public class VariationsService {
     public boolean deleteOption(Long optionId) {
         boolean optionExists = optionsRepo.existsById(optionId);
         if (!optionExists) {
-            log.error("Variation option not found with ID {}", optionId);
+            logger.error("Variation option not found with ID {}", optionId);
             throw new EntityNotFoundException("Variation option not found with ID: " + optionId);
         }
-        log.info("Deleting variation option with ID {}", optionId);
+        logger.info("Deleting variation option with ID {}", optionId);
         optionsRepo.deleteById(optionId);
         boolean exists = optionsRepo.existsById(optionId);
         if (!exists) {
-            log.info("Variation option with ID {} successfully deleted", optionId);
+            logger.info("Variation option with ID {} successfully deleted", optionId);
             return true;
         } else {
-            log.error("Variation option with ID {} could not be deleted", optionId);
+            logger.error("Variation option with ID {} could not be deleted", optionId);
             return false;
         }
     }
