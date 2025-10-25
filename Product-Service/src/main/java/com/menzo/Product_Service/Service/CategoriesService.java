@@ -11,14 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
 public class CategoriesService {
 
-    private static final Logger log = LoggerFactory.getLogger(CategoriesService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoriesService.class);
 
     @Autowired
     private CategoriesRepo categoriesRepo;
@@ -38,7 +37,7 @@ public class CategoriesService {
 
         //  duplicate - existence validation
         if (categoriesRepo.existsByCategoryName(newParentCategory.getCategoryName())) {
-            log.error("Parent category '{}' already exists", newParentCategory.getCategoryName());
+            logger.error("Parent category '{}' already exists", newParentCategory.getCategoryName());
             throw new DuplicateCategoryException("Category already exists.");
         }
 
@@ -50,7 +49,7 @@ public class CategoriesService {
                 .isActive(true)
                 .isDeleted(false)
                 .build();
-        log.info("Saving new parent category: {}", newParentCategory.getCategoryName());
+        logger.info("Saving new parent category: {}", newParentCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
     }
 
@@ -73,7 +72,7 @@ public class CategoriesService {
                         ? latestParentCategory.getIsActive()
                         : parentCategory.getIsActive()
         );
-        log.info("Updated parent category with ID: {}", parentCategoryId);
+        logger.info("Updated parent category with ID: {}", parentCategoryId);
         return categoriesRepo.save(parentCategory);
     }
 
@@ -93,10 +92,11 @@ public class CategoriesService {
             throw new RuntimeException("Parent category with ID (" + parentCategoryId + ") already deleted");
         }
 
-        // Soft deleting parent category by ID
-        parentCategory.setIsDeleted(!parentCategory.getIsDeleted() ? true : parentCategory.getIsDeleted());
-        ProductCategory isDeleteUpdatedParent = categoriesRepo.save(parentCategory);
-        return isDeleteUpdatedParent.getIsDeleted();
+        // soft delete: set isDelete to true if not already
+        logger.info("Deleting parent category with ID: {}", parentCategoryId);
+        parentCategory.setIsDeleted(true);
+        ProductCategory softDeletedParent = categoriesRepo.save(parentCategory);
+        return softDeletedParent.getIsDeleted();
     }
 
 
@@ -105,7 +105,6 @@ public class CategoriesService {
 
     //    Add new sub category - TESTED
     //  ## Pending: Color & size variations - as default for all
-    @Transactional
     public ProductCategory addNewSub(CreateSubCategoryDto newSubCategory) {
 
         //  duplicate - existence validation
@@ -113,7 +112,7 @@ public class CategoriesService {
                 newSubCategory.getCategoryName(),
                 newSubCategory.getParentCategoryId()
         )) {
-            log.error("Sub-category '{}' already exists under parent Id {}", newSubCategory.getCategoryName(), newSubCategory.getParentCategoryId());
+            logger.error("Sub-category '{}' already exists under parent Id {}", newSubCategory.getCategoryName(), newSubCategory.getParentCategoryId());
             throw new DuplicateCategoryException("Category already exists under this parent.");
         }
 
@@ -137,18 +136,19 @@ public class CategoriesService {
                 .isActive(true)
                 .isDeleted(false)
                 .build();
-        log.info("Saving new sub-category under parent ID {}: {}", newSubCategory.getParentCategoryId(), newSubCategory.getCategoryName());
+        logger.info("Saving new sub-category under parent ID {}: {}", newSubCategory.getParentCategoryId(), newSubCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
     }
 
     //    Update sub category by id - TESTED
     public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
 
-        //  fetching the sub-category by ID
+        //  fetching sub-category by ID
         ProductCategory subCategory = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
 
         // updating the available fields in latestSubCategory
+        logger.info("Updating sub-category with ID {}", subCategoryId);
         subCategory.setParentCategoryId(
                 latestSubCategory.getParentCategoryId() != null
                         && latestSubCategory.getParentCategoryId() > 0
@@ -172,27 +172,27 @@ public class CategoriesService {
                         ? latestSubCategory.getIsActive()
                         : subCategory.getIsActive()
         );
-        log.info("Updated sub category with ID: {}", subCategoryId);
+        logger.info("Updated sub category with ID: {}", subCategoryId);
         return categoriesRepo.save(subCategory);
     }
 
-    //    Delete sub category by id
-//    public boolean deleteSubCategory(Long subCategoryId) {
-//        boolean subCategoryExists = categoriesRepo.existsById(subCategoryId);
-//        if (!subCategoryExists) {
-//            log.error("Sub-category not found with ID {}", subCategoryId);
-//            throw new EntityNotFoundException("Sub category not found with ID: " + subCategoryId);
-//        }
-//        log.info("Deleting sub-category with ID {}", subCategoryId);
-//        categoriesRepo.deleteSubById(subCategoryId);
-//        boolean exists = categoriesRepo.existsById(subCategoryId);
-//        if (!exists) {
-//            log.info("Sub-category with ID {} successfully deleted", subCategoryId);
-//            return true;
-//        } else {
-//            log.error("Sub-category with ID {} could not be deleted", subCategoryId);
-//            return false;
-//        }
-//    }
+    //    Delete sub category by id - TESTED
+    public boolean deleteSubCategory(Long subCategoryId) {
+
+        //  fetching sub-Category by ID
+        ProductCategory subCategory = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(subCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
+
+        //  delete check validation
+        if (subCategory.getIsDeleted()) {
+            throw new RuntimeException("Sub-category with ID (" + subCategoryId + ") already deleted");
+        }
+
+        //  soft delete: set isDelete to true if not already
+        logger.info("Deleting sub-category with ID {}", subCategoryId);
+        subCategory.setIsDeleted(true);
+        ProductCategory softDeletedSub = categoriesRepo.save(subCategory);
+        return softDeletedSub.getIsDeleted();
+    }
 
 }

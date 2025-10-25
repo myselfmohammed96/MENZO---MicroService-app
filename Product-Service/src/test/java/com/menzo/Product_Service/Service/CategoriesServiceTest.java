@@ -8,12 +8,9 @@ import com.menzo.Product_Service.Entity.ProductCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.HashSet;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CategoriesServiceTest {
@@ -21,10 +18,13 @@ class CategoriesServiceTest {
     @Autowired
     private CategoriesService categoriesService;
 
+
+
+    //    ******* Parent categories methods *******
     @Test
     public void testAddNewParentCategory() {
         CreateParentCategoryDto newParent = CreateParentCategoryDto.builder()
-                .categoryName("Two More")
+                .categoryName("Three More")
                 .isActive(true)
                 .build();
         ProductCategory parent = categoriesService.addNewParentCategory(newParent);
@@ -42,15 +42,19 @@ class CategoriesServiceTest {
 
     @Test
     public void testDeleteParentCategory() {
-        boolean deleted = categoriesService.deleteParentCategory(159L);
+        boolean deleted = categoriesService.deleteParentCategory(165L);
         System.out.println("Deleted: " + deleted);
     }
+
+
+
+//    ******* Sub-categories methods *******
 
     @Test
     public void testAddNewSub() {
         CreateSubCategoryDto newSub = CreateSubCategoryDto.builder()
                 .parentCategoryId(159L)
-                .categoryName("Test Sub")
+                .categoryName("Test Sub 22")
                 .variationIds(new HashSet<>(Arrays.asList(3L, 4L, 9L)))
                 .build();
         ProductCategory savedSub = categoriesService.addNewSub(newSub);
@@ -68,5 +72,11 @@ class CategoriesServiceTest {
                 latestData
         );
         System.out.println("Updated: " + updated);
+    }
+
+    @Test
+    public void testDeleteSubCategory() {
+        boolean deleted = categoriesService.deleteSubCategory(163L);
+        System.out.println("Deleted: " + deleted);
     }
 }
