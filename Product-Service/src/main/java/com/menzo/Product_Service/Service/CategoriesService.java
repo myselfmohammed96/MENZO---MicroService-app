@@ -77,7 +77,7 @@ public class CategoriesService {
     }
 
     /*
-     *  Delete parent category by ID - Soft Delete
+     *  Soft delete parent category by ID
      *
      *  With 'cascade Delete' option - Deleting all the sub-categories with Soft delete
      */
@@ -88,9 +88,7 @@ public class CategoriesService {
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
 
         //  delete check validation
-        if (parentCategory.getIsDeleted()) {
-            throw new RuntimeException("Parent category with ID (" + parentCategoryId + ") already deleted");
-        }
+        if (parentCategory.getIsDeleted()) throw new RuntimeException("Parent category with ID (" + parentCategoryId + ") already deleted");
 
         // soft delete: set isDelete to true if not already
         logger.info("Deleting parent category with ID: {}", parentCategoryId);
@@ -140,7 +138,7 @@ public class CategoriesService {
         return categoriesRepo.save(newProductCategory);
     }
 
-    //    Update sub category by id - TESTED
+    //    Update sub category by ID - TESTED
     public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
 
         //  fetching sub-category by ID
@@ -176,7 +174,7 @@ public class CategoriesService {
         return categoriesRepo.save(subCategory);
     }
 
-    //    Delete sub category by id - TESTED
+    //    Soft delete sub category by ID - TESTED
     public boolean deleteSubCategory(Long subCategoryId) {
 
         //  fetching sub-Category by ID
@@ -184,9 +182,7 @@ public class CategoriesService {
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
 
         //  delete check validation
-        if (subCategory.getIsDeleted()) {
-            throw new RuntimeException("Sub-category with ID (" + subCategoryId + ") already deleted");
-        }
+        if (subCategory.getIsDeleted()) throw new RuntimeException("Sub-category with ID (" + subCategoryId + ") already deleted");
 
         //  soft delete: set isDelete to true if not already
         logger.info("Deleting sub-category with ID {}", subCategoryId);

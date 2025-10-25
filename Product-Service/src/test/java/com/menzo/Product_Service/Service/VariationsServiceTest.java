@@ -42,6 +42,12 @@ class VariationsServiceTest {
         System.out.println(variation);
     }
 
+    @Test
+    public void testDeleteVariation() {
+        boolean deleted = variationsService.deleteVariation(25L);
+        System.out.println("Deleted: " + deleted);
+    }
+
 //    ********* Variation options *********
 
 //    @Test

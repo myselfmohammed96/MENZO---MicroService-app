@@ -48,6 +48,7 @@ public class VariationsService {
         //  saving new Variation
         Variation variation = Variation.builder()
                 .variationName(newVariation.getVariationName())
+                .isDeleted(false)
                 .build();
         logger.info("Saving new variation: {}", newVariation.getVariationName());
         return variationsRepo.save(variation);
@@ -71,25 +72,22 @@ public class VariationsService {
         return variationsRepo.save(variation);
     }
 
-    //  Delete variation by id
-//    @Transactional
-//    public boolean deleteVariation(Long variationId) {
-//        boolean variationExists = variationsRepo.existsById(variationId);
-//        if (!variationExists) {
-//            log.error("Variation not found with ID {}", variationId);
-//            throw new EntityNotFoundException("Variation not found with ID: " + variationId);
-//        }
-//        log.info("Deleting variation with ID {}", variationId);
-//        variationsRepo.deleteVariationById(variationId);
-//        boolean exists = variationsRepo.existsById(variationId);
-//        if (!exists) {
-//            log.info("Variation with ID {} successfully deleted", variationId);
-//            return true;
-//        } else {
-//            log.error("Variation with ID {} could not be deleted", variationId);
-//            return false;
-//        }
-//    }
+    //  Delete variation by id - TESTED
+    public boolean deleteVariation(Long variationId) {
+
+        //  fetching variation by ID
+        Variation variation = variationsRepo.findById(variationId)
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
+
+        //  delete check validation
+        if (variation.getIsDeleted()) throw new RuntimeException("Variation with ID (" + variationId + ") already deleted.");
+
+        //  soft delete: set isDelete to true if not already
+        logger.info("Deleting variation with ID {}", variationId);
+        variation.setIsDeleted(true);
+        Variation softDeletedVariation = variationsRepo.save(variation);
+        return softDeletedVariation.getIsDeleted();
+    }
 
 
 

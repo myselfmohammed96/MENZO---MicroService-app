@@ -44,7 +44,7 @@ class VariationsRepoTest {
 
     @Test
     public void testFindById() {
-        Optional<Variation> variation = variationsRepo.findById(9L);
+        Optional<Variation> variation = variationsRepo.findById(25L);
         System.out.println("Variation: " + variation.get());
     }
 
