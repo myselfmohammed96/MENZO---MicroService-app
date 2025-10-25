@@ -73,6 +73,7 @@ public class VariationsService {
     }
 
     //  Delete variation by id - TESTED
+    //  ## on delete cascade required for variation - variation option
     public boolean deleteVariation(Long variationId) {
 
         //  fetching variation by ID
@@ -94,84 +95,55 @@ public class VariationsService {
 //    ********* Variation options *********
 
     //  Add new variation option
-//    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
-//
-//        // input validation
-//        if (optionsRepo.existsByOptionValueAndVariationId(
-//                newOption.getOptionValue(),
-//                newOption.getVariationId()
-//        )) {
-//            log.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
-//            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
-//        }
-//
-//        // fetching variation object by ID
-//        Variation variation = variationsRepo.findVariationById(newOption.getVariationId())
-//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
-//
-//        // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
-//        VariationOption newVariationOption;
-//        if (variation.getVariationName().equals("Colors")) {
-//            if (newOption.getColorCode() == null || newOption.getColorCode().isEmpty()) {
-//                throw new IllegalArgumentException("Color code required.");
-//            }
-//            VariationOption option = VariationOption.builder()
-//                    .optionValue(newOption.getOptionValue())
-//                    .colorCode(null)
-//                    .variation(variation)
-//                    .build();
-//            newVariationOption = optionsRepo.save(option);
-//
-//            String colorAbbreviation = utilityService.generateAbbreviation(
-//                    "Colors",
-//                    newOption.getOptionValue()
-//            );
-//            ColorCode colorCode = ColorCode.builder()
-//                    .colorOption(newVariationOption)
-//                    .colorCode(newOption.getColorCode())
-//                    .colorAbbreviation(colorAbbreviation)
-//                    .build();
-//            newVariationOption.setColorCode(colorCode);
-//        } else {
-//            newVariationOption = VariationOption.builder()
-//                    .optionValue(newOption.getOptionValue())
-//                    .variation(variation)
-//                    .build();
-//        }
-//        log.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
-//        return optionsRepo.save(newVariationOption);
-//    }
+    @Transactional
+    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
 
-//    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
-//        if (optionsRepo.existsByOptionValueAndVariationId(newOption.getOptionValue(), newOption.getVariationId())) {
-//            log.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
-//            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
-//        }
-//        Variation variation = variationsRepo.findVariationById(newOption.getVariationId())
-//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
-//
-//        if(variation.getVariationName().equals("Colors")) {
-//            VariationOption newVariationOption = new VariationOption(
-//                    newOption.getOptionValue(),
-//                    variation
-//            );
-//            VariationOption savedOption = optionsRepo.save(newVariationOption);
-////            savedOption.setColorCode(new ColorCode(
-////                    savedOption,
-////                    "#fff",
-////                    "ABC")
-////            );
-//            return optionsRepo.save(savedOption);
-//        } else {
-////            VariationOption newVariationOption = new VariationOption(
-////                    newOption.getOptionValue(),
-////                    variation
-////            );
-//            log.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
+        // duplicate existence validation
+        if (optionsRepo.existsByOptionValueAndVariationId(
+                newOption.getOptionValue(),
+                newOption.getVariationId()
+        )) {
+            logger.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
+            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
+        }
 
-    /// /            return optionsRepo.save(newVariationOption);
-//        }
-//    }
+        // fetching variation object by ID
+        Variation variation = variationsRepo.findById(newOption.getVariationId())
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
+
+        // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
+        VariationOption newVariationOption;
+        if (variation.getVariationName().equals("Colors")) {
+            if (newOption.getColorCode() == null || newOption.getColorCode().isEmpty()) {
+                throw new IllegalArgumentException("Color code required.");
+            }
+            VariationOption option = VariationOption.builder()
+                    .optionValue(newOption.getOptionValue())
+                    .colorCode(null)
+                    .variation(variation)
+                    .build();
+            newVariationOption = optionsRepo.save(option);
+
+            //  generating abbreviation
+            String colorAbbreviation = utilityService.generateAbbreviation(
+                    "Colors",
+                    newOption.getOptionValue()
+            );
+            ColorCode colorCode = ColorCode.builder()
+                    .colorOption(newVariationOption)
+                    .colorCode(newOption.getColorCode())
+                    .colorAbbreviation(colorAbbreviation)
+                    .build();
+            newVariationOption.setColorCode(colorCode);
+        } else {
+            newVariationOption = VariationOption.builder()
+                    .optionValue(newOption.getOptionValue())
+                    .variation(variation)
+                    .build();
+        }
+        logger.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
+        return optionsRepo.save(newVariationOption);
+    }
 
     //  Update variation option by id
     public VariationOption updateOption(Long optionId, OptionDto latestVariationOption) {
