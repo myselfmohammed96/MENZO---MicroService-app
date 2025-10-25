@@ -18,7 +18,9 @@ public class OptionDto {
 
     private String optionValue;
 
-    private Variation variation;
+    private String colorCode;
+
+//    private Variation variation;
 
     private Date createdAt;
 

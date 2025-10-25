@@ -54,7 +54,7 @@ public class VariationsService {
         return variationsRepo.save(variation);
     }
 
-    //  Update variation by id - TESTED
+    //  Update variation by ID - TESTED
     public Variation updateVariation(Long variationId, VariationDto latestVariation) {
 
         //  fetching variation by ID
@@ -72,7 +72,7 @@ public class VariationsService {
         return variationsRepo.save(variation);
     }
 
-    //  Delete variation by id - TESTED
+    //  Delete variation by ID - TESTED
     //  ## on delete cascade required for variation - variation option
     public boolean deleteVariation(Long variationId) {
 
@@ -94,7 +94,7 @@ public class VariationsService {
 
 //    ********* Variation options *********
 
-    //  Add new variation option
+    //  Add new variation option - TESTED
     @Transactional
     public VariationOption addNewOption(CreateVariationOptionDto newOption) {
 
@@ -145,34 +145,56 @@ public class VariationsService {
         return optionsRepo.save(newVariationOption);
     }
 
-    //  Update variation option by id
-    public VariationOption updateOption(Long optionId, OptionDto latestVariationOption) {
+    //  Update variation option by ID - TESTED
+    @Transactional
+    public VariationOption updateOption(Long optionId, OptionDto latestOption) {
+
+        //  fetching variation option by ID
         VariationOption option = optionsRepo.findById(optionId)
                 .orElseThrow(() -> new EntityNotFoundException("Variation option not found with ID: " + optionId));
-        option.setOptionValue(latestVariationOption.getOptionValue() != null && !latestVariationOption.getOptionValue().isEmpty() ? latestVariationOption.getOptionValue() : option.getOptionValue());
-        logger.info("Updated variation option with ID: {}", optionId);
-        VariationOption updatedOption = optionsRepo.save(option);
 
-        return updatedOption;
+        //  updating variation option
+        if (option.getVariation().getVariationName().equals("Colors")) {
+            ColorCode color = option.getColorCode();
+            color.setColorCode(
+                    latestOption.getColorCode() != null
+                            && !latestOption.getColorCode().isEmpty()
+                            ? latestOption.getColorCode()
+                            : color.getColorCode()
+            );
+            color.setColorAbbreviation(
+                    latestOption.getOptionValue() != null
+                            && !latestOption.getOptionValue().isEmpty()
+                            ? utilityService.generateAbbreviation("Colors", latestOption.getOptionValue())
+                            : color.getColorAbbreviation()
+            );
+            option.setColorCode(color);
+        }
+        option.setOptionValue(
+                latestOption.getOptionValue() != null
+                        && !latestOption.getOptionValue().isEmpty()
+                        ? latestOption.getOptionValue()
+                        : option.getOptionValue()
+        );
+        logger.info("Updating variation option with ID: {}", optionId);
+        return optionsRepo.save(option);
     }
 
-    //  Delete variation option by id
+    //  Delete variation option by ID
     public boolean deleteOption(Long optionId) {
-        boolean optionExists = optionsRepo.existsById(optionId);
-        if (!optionExists) {
-            logger.error("Variation option not found with ID {}", optionId);
-            throw new EntityNotFoundException("Variation option not found with ID: " + optionId);
-        }
+
+        //  fetching variation option by ID
+        VariationOption option = optionsRepo.findById(optionId)
+                        .orElseThrow(() -> new EntityNotFoundException("Variation option not found with ID: " + optionId));
+
+        //  delete check validation
+        if (option.getIsDeleted()) throw new RuntimeException("Variation option with ID (" + optionId + ") already deleted.");
+
+        //  soft delete: set isDelete to true if not already
         logger.info("Deleting variation option with ID {}", optionId);
-        optionsRepo.deleteById(optionId);
-        boolean exists = optionsRepo.existsById(optionId);
-        if (!exists) {
-            logger.info("Variation option with ID {} successfully deleted", optionId);
-            return true;
-        } else {
-            logger.error("Variation option with ID {} could not be deleted", optionId);
-            return false;
-        }
+        option.setIsDeleted(true);
+        VariationOption softDeletedOption = optionsRepo.save(option);
+        return softDeletedOption.getIsDeleted();
     }
 
 }

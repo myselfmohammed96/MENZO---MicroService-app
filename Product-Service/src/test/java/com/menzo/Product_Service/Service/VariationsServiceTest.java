@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.VariationsDto.CreateVariationDto;
 import com.menzo.Product_Service.Dto.VariationsDto.CreateVariationOptionDto;
+import com.menzo.Product_Service.Dto.VariationsDto.OptionDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
@@ -53,12 +54,33 @@ class VariationsServiceTest {
 //    ********* Variation options *********
 
     @Test
-    public void testAddNewOptionForColor() {
+    public void testAddNewOption() {
         CreateVariationOptionDto newOption = CreateVariationOptionDto.builder()
-                .optionValue("XXXL")
-                .variationId(9L)
+                .optionValue("Peach")
+                .colorCode("#FFE5B4")
+                .variationId(3L)
                 .build();
         VariationOption addedOption = variationsService.addNewOption(newOption);
         System.out.println(addedOption);
     }
+
+    @Test
+    public void testUpdateOption() {
+        OptionDto option = OptionDto.builder()
+                .optionValue("Space grey")
+                .colorCode("#343d46")
+                .build();
+        VariationOption updatedOption = variationsService.updateOption(
+                63L,
+                option
+        );
+        System.out.println("Updated: " + updatedOption);
+    }
+
+    @Test
+    public void testDeleteOption() {
+        boolean deleted = variationsService.deleteOption(64L);
+        System.out.println("Deleted: " + deleted);
+    }
+
 }

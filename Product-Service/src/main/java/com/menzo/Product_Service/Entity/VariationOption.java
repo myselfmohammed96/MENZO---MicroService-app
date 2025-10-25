@@ -55,6 +55,12 @@ public class VariationOption {
     private ColorCode colorCode;
 
     @Column(
+            name = "is_deleted",
+            nullable = false
+    )
+    private Boolean isDeleted;
+
+    @Column(
             nullable = false,
             name = "created_at",
             updatable = false
