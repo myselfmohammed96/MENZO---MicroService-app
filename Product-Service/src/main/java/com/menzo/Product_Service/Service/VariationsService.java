@@ -48,86 +48,86 @@ public class VariationsService {
 //    }
 
     //  Update variation by id
-    public Variation updateVariation(Long variationId, VariationDto latestVariation) {
-        Variation variation = variationsRepo.findVariationById(variationId)
-                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
-        variation.setVariationName(latestVariation.getVariationName() != null && !latestVariation.getVariationName().isEmpty() ? latestVariation.getVariationName() : variation.getVariationName());
-        log.info("Updated variation with ID: {}", variationId);
-        return variationsRepo.save(variation);
-    }
+//    public Variation updateVariation(Long variationId, VariationDto latestVariation) {
+//        Variation variation = variationsRepo.findVariationById(variationId)
+//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
+//        variation.setVariationName(latestVariation.getVariationName() != null && !latestVariation.getVariationName().isEmpty() ? latestVariation.getVariationName() : variation.getVariationName());
+//        log.info("Updated variation with ID: {}", variationId);
+//        return variationsRepo.save(variation);
+//    }
 
     //  Delete variation by id
-    @Transactional
-    public boolean deleteVariation(Long variationId) {
-        boolean variationExists = variationsRepo.existsById(variationId);
-        if (!variationExists) {
-            log.error("Variation not found with ID {}", variationId);
-            throw new EntityNotFoundException("Variation not found with ID: " + variationId);
-        }
-        log.info("Deleting variation with ID {}", variationId);
-        variationsRepo.deleteVariationById(variationId);
-        boolean exists = variationsRepo.existsById(variationId);
-        if (!exists) {
-            log.info("Variation with ID {} successfully deleted", variationId);
-            return true;
-        } else {
-            log.error("Variation with ID {} could not be deleted", variationId);
-            return false;
-        }
-    }
+//    @Transactional
+//    public boolean deleteVariation(Long variationId) {
+//        boolean variationExists = variationsRepo.existsById(variationId);
+//        if (!variationExists) {
+//            log.error("Variation not found with ID {}", variationId);
+//            throw new EntityNotFoundException("Variation not found with ID: " + variationId);
+//        }
+//        log.info("Deleting variation with ID {}", variationId);
+//        variationsRepo.deleteVariationById(variationId);
+//        boolean exists = variationsRepo.existsById(variationId);
+//        if (!exists) {
+//            log.info("Variation with ID {} successfully deleted", variationId);
+//            return true;
+//        } else {
+//            log.error("Variation with ID {} could not be deleted", variationId);
+//            return false;
+//        }
+//    }
 
 
 
 //    ********* Variation options *********
 
     //  Add new variation option
-    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
-
-        // input validation
-        if (optionsRepo.existsByOptionValueAndVariationId(
-                newOption.getOptionValue(),
-                newOption.getVariationId()
-        )) {
-            log.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
-            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
-        }
-
-        // fetching variation object by ID
-        Variation variation = variationsRepo.findVariationById(newOption.getVariationId())
-                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
-
-        // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
-        VariationOption newVariationOption;
-        if (variation.getVariationName().equals("Colors")) {
-            if (newOption.getColorCode() == null || newOption.getColorCode().isEmpty()) {
-                throw new IllegalArgumentException("Color code required.");
-            }
-            VariationOption option = VariationOption.builder()
-                    .optionValue(newOption.getOptionValue())
-                    .colorCode(null)
-                    .variation(variation)
-                    .build();
-            newVariationOption = optionsRepo.save(option);
-
-            String colorAbbreviation = utilityService.generateAbbreviation(
-                    "Colors",
-                    newOption.getOptionValue()
-            );
-            ColorCode colorCode = ColorCode.builder()
-                    .colorOption(newVariationOption)
-                    .colorCode(newOption.getColorCode())
-                    .colorAbbreviation(colorAbbreviation)
-                    .build();
-            newVariationOption.setColorCode(colorCode);
-        } else {
-            newVariationOption = VariationOption.builder()
-                    .optionValue(newOption.getOptionValue())
-                    .variation(variation)
-                    .build();
-        }
-        log.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
-        return optionsRepo.save(newVariationOption);
-    }
+//    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
+//
+//        // input validation
+//        if (optionsRepo.existsByOptionValueAndVariationId(
+//                newOption.getOptionValue(),
+//                newOption.getVariationId()
+//        )) {
+//            log.error("Option '{}' already exists under Variation ID {}", newOption.getOptionValue(), newOption.getVariationId());
+//            throw new DuplicateVariationOptionException("Variation option already exists under this variation.");
+//        }
+//
+//        // fetching variation object by ID
+//        Variation variation = variationsRepo.findVariationById(newOption.getVariationId())
+//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + newOption.getVariationId()));
+//
+//        // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
+//        VariationOption newVariationOption;
+//        if (variation.getVariationName().equals("Colors")) {
+//            if (newOption.getColorCode() == null || newOption.getColorCode().isEmpty()) {
+//                throw new IllegalArgumentException("Color code required.");
+//            }
+//            VariationOption option = VariationOption.builder()
+//                    .optionValue(newOption.getOptionValue())
+//                    .colorCode(null)
+//                    .variation(variation)
+//                    .build();
+//            newVariationOption = optionsRepo.save(option);
+//
+//            String colorAbbreviation = utilityService.generateAbbreviation(
+//                    "Colors",
+//                    newOption.getOptionValue()
+//            );
+//            ColorCode colorCode = ColorCode.builder()
+//                    .colorOption(newVariationOption)
+//                    .colorCode(newOption.getColorCode())
+//                    .colorAbbreviation(colorAbbreviation)
+//                    .build();
+//            newVariationOption.setColorCode(colorCode);
+//        } else {
+//            newVariationOption = VariationOption.builder()
+//                    .optionValue(newOption.getOptionValue())
+//                    .variation(variation)
+//                    .build();
+//        }
+//        log.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());
+//        return optionsRepo.save(newVariationOption);
+//    }
 
 //    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
 //        if (optionsRepo.existsByOptionValueAndVariationId(newOption.getOptionValue(), newOption.getVariationId())) {

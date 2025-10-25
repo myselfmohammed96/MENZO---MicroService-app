@@ -1,13 +1,11 @@
 package com.menzo.Product_Service.Repository;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
-import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import com.menzo.Product_Service.Entity.ProductCategory;
 import com.menzo.Product_Service.Service.UtilityService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,9 +59,10 @@ class CategoriesRepoTest {
     public void testSaveParent() {
         ProductCategory parent = ProductCategory.builder()
                 .parentCategoryId(null)
-                .categoryName("Sample parent")
+                .categoryName("Sample parent1")
                 .abbreviation(null)
                 .isActive(true)
+                .isDeleted(false)
                 .build();
         ProductCategory savedParent = categoriesRepo.save(parent);
         System.out.println(savedParent);
@@ -73,11 +72,12 @@ class CategoriesRepoTest {
     public void testSaveSub() {
         ProductCategory sub = ProductCategory.builder()
                 .parentCategoryId(156L)
-                .categoryName("Sample sub")
+                .categoryName("Sample sub1")
                 .abbreviation(utilityService.generateAbbreviation(
                         "sub-category",
-                        "Sample sub"
+                        "Sample sub1"
                 ))
+                .isDeleted(false)
                 .isActive(true)
                 .build();
         ProductCategory savedSub = categoriesRepo.save(sub);

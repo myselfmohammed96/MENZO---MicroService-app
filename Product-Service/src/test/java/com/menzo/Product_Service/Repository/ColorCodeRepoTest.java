@@ -21,7 +21,7 @@ public class ColorCodeRepoTest {
 
     @Test
     public void TestExistsByColorAbbreviation() {
-        boolean exists = colorCodeRepo.existsByColorAbbreviation("RD");
+        boolean exists = colorCodeRepo.existsByColorAbbreviation("DPL");
         System.out.println("colorCode exists: " + exists);
     }
 }

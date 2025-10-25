@@ -9,9 +9,10 @@ import java.util.List;
 @Repository
 public interface VariationsOptionsRepo extends JpaRepository<VariationOption, Long> {
 
-    public boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);
+    public boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);     // TESTED
 
-    public List<VariationOption> findByIdIn(List<Long> idList);
+    public List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
+
 }
 
 

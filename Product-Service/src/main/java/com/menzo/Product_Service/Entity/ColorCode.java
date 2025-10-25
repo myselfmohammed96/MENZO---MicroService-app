@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,7 +22,8 @@ public class ColorCode {
     @OneToOne
     @JoinColumn(
             nullable = false,
-            name = "color_option_id"
+            name = "color_option_id",
+            referencedColumnName = "id"
     )
     @JsonIgnore
     private VariationOption colorOption;

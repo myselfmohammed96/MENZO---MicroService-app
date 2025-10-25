@@ -28,8 +28,15 @@ class VariationsOptionsRepoTest {
     @Test
     @Transactional
     public void testFindByIdIn() {
-        List<VariationOption> optionsList = optionsRepo.findByIdIn(List.of(60L, 61L, 5L));
+        List<VariationOption> optionsList = optionsRepo.findByIdIn(List.of(
+                60L,
+                61L,
+                5L
+        ));
         System.out.println("Options list: " + optionsList);
+        for (VariationOption o : optionsList) {
+            System.out.println(o.getColorCode());
+        }
     }
 
 }

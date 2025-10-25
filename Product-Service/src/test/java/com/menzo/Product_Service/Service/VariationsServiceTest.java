@@ -14,14 +14,14 @@ class VariationsServiceTest {
     @Autowired
     private VariationsService variationsService;
 
-    @Test
-    public void testAddNewOptionForColor() {
-        CreateVariationOptionDto newOption = CreateVariationOptionDto.builder()
-                .optionValue("Dark purple")
-                .variationId(3L)
-                .colorCode("#301934")
-                .build();
-        VariationOption addedOption = variationsService.addNewOption(newOption);
-        System.out.println(addedOption);
-    }
+//    @Test
+//    public void testAddNewOptionForColor() {
+//        CreateVariationOptionDto newOption = CreateVariationOptionDto.builder()
+//                .optionValue("Dark purple")
+//                .variationId(3L)
+//                .colorCode("#301934")
+//                .build();
+//        VariationOption addedOption = variationsService.addNewOption(newOption);
+//        System.out.println(addedOption);
+//    }
 }
