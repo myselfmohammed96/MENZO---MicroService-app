@@ -15,13 +15,14 @@ class UtilityServiceTest {
 
     @Test
     public void testGenerateAbbreviation() {
-        String abb = utilityService.generateAbbreviation("Colors", "Dark purple");
+//        String abb = utilityService.generateAbbreviation("Colors", "Dark purple");
+        String abb = utilityService.generateAbbreviation("sub-category", "Some category");
         System.out.println("Abbreviation: " + abb);
     }
 
     @Test
-    public void testIsAbbreviationExists() throws Exception {
-        Method method = UtilityService.class.getDeclaredMethod("isAbbreviationExists", String.class, StringBuilder.class);
+    public void testEnsureUniqueAbbreviation() throws Exception {
+        Method method = UtilityService.class.getDeclaredMethod("ensureUniqueAbbreviation", String.class, StringBuilder.class);
         method.setAccessible(true);
         String abbreviation = (String) method.invoke(utilityService,
                 "sub-category",

@@ -3,6 +3,8 @@ package com.menzo.Product_Service.Service;
 import com.menzo.Product_Service.Entity.ColorCode;
 import com.menzo.Product_Service.Repository.CategoriesRepo;
 import com.menzo.Product_Service.Repository.ColorCodeRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Component
 public class UtilityService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UtilityService.class);
 
     @Autowired
     private ColorCodeRepo colorCodeRepo;
@@ -30,6 +34,7 @@ public class UtilityService {
      * Abbreviation built with 1st & last character of Last word - for 'Colors',
      * concated with the first character of all the pre-last words
      *
+     * TESTED
      */
     public String generateAbbreviation(String field, String content) {
         StringBuilder abbreviation = new StringBuilder();
@@ -42,6 +47,7 @@ public class UtilityService {
 
         // Building abbreviation
         if (field.equals("Colors")) {
+            logger.info("Abbreviating the new color: " + content);
             for (int i = contArray[contArray.length - 1].length() - 1; i >= 0; i--) {
                 if (vowels.contains(contArray[contArray.length - 1].charAt(i))) continue;
                 lastChar = contArray[contArray.length - 1].charAt(i);
@@ -50,16 +56,18 @@ public class UtilityService {
             for (String s : contArray) abbreviation.append(s.charAt(0));
             abbreviation.append(lastChar);
 
-            return isAbbreviationExists("Colors", abbreviation);
+            return ensureUniqueAbbreviation("Colors", abbreviation);
         } else if (field.equals("sub-category")) {
+            logger.info("Abbreviating the new sub-category: " + content);
             for (String s : contArray) abbreviation.append(s.charAt(0));
-            return isAbbreviationExists("sub-category", abbreviation);
+            return ensureUniqueAbbreviation("sub-category", abbreviation);
         } else {
             return null;
         }
     }
 
-    private String isAbbreviationExists(String field, StringBuilder abbreviation) {
+    // ensure the abbreviation is unique - TESTED
+    private String ensureUniqueAbbreviation(String field, StringBuilder abbreviation) {
         boolean abbreviationExists = false;
         if (field.equals("Colors")) {
             try{
@@ -92,7 +100,7 @@ public class UtilityService {
                         String.valueOf(++suffixInteger)
                 );
             }
-            return isAbbreviationExists(field, abbreviation);
+            return ensureUniqueAbbreviation(field, abbreviation);
         }
     }
 

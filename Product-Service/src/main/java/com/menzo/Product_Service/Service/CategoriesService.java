@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -103,6 +104,7 @@ public class CategoriesService {
 //    ********* Sub categories *********
 
     //    Add new sub category
+    @Transactional
     public ProductCategory addNewSub(CreateSubCategoryDto newSubCategory) {
 
         //  duplicate - existence validation

@@ -16,8 +16,15 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "variation_options", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"variation_id", "option_value"})
+@Table(
+        name = "variation_options",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {
+                                "variation_id",
+                                "option_value"
+                        }
+                )
 })
 public class VariationOption {
 
@@ -31,12 +38,13 @@ public class VariationOption {
     )
     private String optionValue;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "variation_id",
+            referencedColumnName = "id",
             nullable = false
     )
-    @JsonIgnore
     private Variation variation;
 
     @OneToOne(
@@ -57,12 +65,6 @@ public class VariationOption {
     )
     @CreationTimestamp
     private Date createdAt;
-
-    @Override
-    public String toString() {
-        return "VariationOption(id:" + id + " optionValue:" + optionValue + " colorCode:" + colorCode +
-                " createdAt:" + createdAt + ")";
-    }
 
 }
 

@@ -38,16 +38,24 @@ public class ProductCategory {
     )
     private String categoryName;
 
-    @Column(name = "abbreviation", unique = true)
+    @Column(
+            name = "abbreviation",
+            unique = true
+    )
     private String abbreviation;
 
-//    @JsonManagedReference("category-variation")
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "category_variation_configuration",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns =  @JoinColumn(name = "variation_id")
+            joinColumns = @JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns =  @JoinColumn(
+                    name = "variation_id",
+                    referencedColumnName = "id"
+            )
     )
     private Set<Variation> variations = new HashSet<>();
 

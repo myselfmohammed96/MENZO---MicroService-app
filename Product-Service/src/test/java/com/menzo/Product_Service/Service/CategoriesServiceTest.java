@@ -46,15 +46,13 @@ class CategoriesServiceTest {
     }
 
     @Test
-    @Transactional
+//    @Transactional
     public void testAddNewSub() {
         CreateSubCategoryDto newSub = CreateSubCategoryDto.builder()
                 .parentCategoryId(159L)
                 .categoryName("Test Sub")
                 .variationIds(new HashSet<>(Arrays.asList(3L, 4L, 9L)))
                 .build();
-        Object s = "he";
-        s.equals()
         ProductCategory savedSub = categoriesService.addNewSub(newSub);
         System.out.println("Sub: " + savedSub);
     }
