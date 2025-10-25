@@ -16,8 +16,6 @@ public interface VariationsRepo extends JpaRepository<Variation, Long> {
      * ********* existence check *********
      */
 
-    public boolean existsById(Long variationId);            // TESTED
-
     public boolean existsByVariationName(String variationName);     // TESTED
 
 
@@ -25,9 +23,6 @@ public interface VariationsRepo extends JpaRepository<Variation, Long> {
     /*
      *  ********* find methods *********
      */
-
-    //  find variation by given ID
-    public Optional<Variation> findById(Long variationId);      // TESTED
 
     //  find variation by given variation name
     public Optional<Variation> findByVariationName(String variationName);   // TESTED
@@ -59,26 +54,3 @@ public interface VariationsRepo extends JpaRepository<Variation, Long> {
     """)
     public List<OptionWithIdDto> findOptionsByVariationName(@Param("variationName") String variationName);      // TESTED
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Query(value = "SELECT new com.menzo.Product_Service.Dto.VariationsDto.VariationDto(v.id, v.variationName) FROM Variation v")
-//    public List<VariationDto> findAllVariationIdAndNames();
-
-
-
-
-//public void deleteVariationById(Long variationId);

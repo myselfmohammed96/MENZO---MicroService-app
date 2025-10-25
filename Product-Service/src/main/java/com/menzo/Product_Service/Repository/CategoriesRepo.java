@@ -17,8 +17,6 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
     * ********* existence check *********
     */
 
-    public boolean existsById(Long id);     //  TESTED
-
     public boolean existsByCategoryName(String categoryName);       //  TESTED
 
     public boolean existsByAbbreviation(String abbreviation);       //  TESTED

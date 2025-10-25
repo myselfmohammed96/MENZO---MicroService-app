@@ -42,4 +42,12 @@ public class ColorCode {
     )
     private String colorAbbreviation;
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                colorCode
+        );
+    }
+
 }
