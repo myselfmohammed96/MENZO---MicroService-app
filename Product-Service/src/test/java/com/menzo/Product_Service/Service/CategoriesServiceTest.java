@@ -3,6 +3,7 @@ package com.menzo.Product_Service.Service;
 import com.menzo.Product_Service.Dto.CategoriesDto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Dto.CategoriesDto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
+import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import com.menzo.Product_Service.Entity.ProductCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,6 @@ class CategoriesServiceTest {
     }
 
     @Test
-//    @Transactional
     public void testAddNewSub() {
         CreateSubCategoryDto newSub = CreateSubCategoryDto.builder()
                 .parentCategoryId(159L)
@@ -55,5 +55,18 @@ class CategoriesServiceTest {
                 .build();
         ProductCategory savedSub = categoriesService.addNewSub(newSub);
         System.out.println("Sub: " + savedSub);
+    }
+
+    @Test
+    public void testUpdateSubCategory() {
+        SubCategoryDto latestData = SubCategoryDto.builder()
+                .categoryName("Test sub category")
+                .isActive(false)
+                .build();
+        ProductCategory updated = categoriesService.updateSubCategory(
+                160L,
+                latestData
+        );
+        System.out.println("Updated: " + updated);
     }
 }
