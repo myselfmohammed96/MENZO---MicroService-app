@@ -21,4 +21,14 @@ public interface VariationsOptionsRepo extends JpaRepository<VariationOption, Lo
 
 
 
+
+
+
+
+
+
+
+
+
+
 //    public List<VariationOption> findAllById(List<Long> idList);
