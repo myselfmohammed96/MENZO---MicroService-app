@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.VariationsDto.CreateVariationDto;
 import com.menzo.Product_Service.Dto.VariationsDto.CreateVariationOptionDto;
+import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
 import org.checkerframework.checker.units.qual.C;
@@ -17,6 +18,9 @@ class VariationsServiceTest {
     @Autowired
     private VariationsService variationsService;
 
+
+
+//    ********* Variations *********
     @Test
     public void testAddNewVariation() {
         CreateVariationDto newVariation = CreateVariationDto.builder()
@@ -25,6 +29,20 @@ class VariationsServiceTest {
         Variation variation = variationsService.addNewVariation(newVariation);
         System.out.println(variation);
     }
+
+    @Test
+    public void testUpdateVariation() {
+        VariationDto variationDto = VariationDto.builder()
+                .variationName("Variation new")
+                .build();
+        Variation variation = variationsService.updateVariation(
+                25L,
+                variationDto
+        );
+        System.out.println(variation);
+    }
+
+//    ********* Variation options *********
 
 //    @Test
 //    public void testAddNewOptionForColor() {

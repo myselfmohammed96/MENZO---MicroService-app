@@ -53,14 +53,23 @@ public class VariationsService {
         return variationsRepo.save(variation);
     }
 
-    //  Update variation by id
-//    public Variation updateVariation(Long variationId, VariationDto latestVariation) {
-//        Variation variation = variationsRepo.findVariationById(variationId)
-//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
-//        variation.setVariationName(latestVariation.getVariationName() != null && !latestVariation.getVariationName().isEmpty() ? latestVariation.getVariationName() : variation.getVariationName());
-//        log.info("Updated variation with ID: {}", variationId);
-//        return variationsRepo.save(variation);
-//    }
+    //  Update variation by id - TESTED
+    public Variation updateVariation(Long variationId, VariationDto latestVariation) {
+
+        //  fetching variation by ID
+        Variation variation = variationsRepo.findById(variationId)
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
+
+        //  updating variation
+        variation.setVariationName(
+                latestVariation.getVariationName() != null
+                        && !latestVariation.getVariationName().isEmpty()
+                        ? latestVariation.getVariationName()
+                        : variation.getVariationName()
+        );
+        logger.info("Updating variation with ID: {}", variationId);
+        return variationsRepo.save(variation);
+    }
 
     //  Delete variation by id
 //    @Transactional
