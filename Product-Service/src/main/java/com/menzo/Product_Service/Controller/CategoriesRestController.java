@@ -34,10 +34,10 @@ public class CategoriesRestController {
 //    ********* Parent-categories *********
 
     //    Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
-//    @GetMapping("get-all-parents")
-//    public List<ParentCategoryDto> getAllParents() {
-//        return categoriesRetrievalService.getAllParents();
-//    }
+    @GetMapping("get-all-parents")
+    public List<ParentCategoryDto> getAllParents() {
+        return categoriesRetrievalService.getAllParents();
+    }
 
     //    Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     @GetMapping("/get-all")
@@ -55,7 +55,7 @@ public class CategoriesRestController {
 //    @GetMapping("/get-parent")
 //    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
 //        if (parentCategoryId == null || parentCategoryId <= 0) {
-//            log.warn("Invalid parent category ID: {}", parentCategoryId);
+//            logger.warn("Invalid parent category ID: {}", parentCategoryId);
 //            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
 //        }
 //        ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
@@ -186,7 +186,7 @@ public class CategoriesRestController {
         }
     }
 
-    //    Delete parent category by id ---
+    //    Delete parent category by id
     @DeleteMapping("/delete-parent")
     public ResponseEntity<?> deleteParentCategory(@RequestHeader("roles") String roles,
                                                   @RequestParam("id") Long parentCategoryId) {
