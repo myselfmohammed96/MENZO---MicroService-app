@@ -145,7 +145,6 @@ public class VariationsRetrievalService {
     }
 
     //  get options by list of IDs - TESTED
-//    @Transactional
     public List<VariationOption> getOptionsByIds(List<Long> idList) {
         return optionsRepo.findByIdIn(idList);
     }
@@ -154,6 +153,15 @@ public class VariationsRetrievalService {
     public VariationOption getOptionById(Long id) {
         return optionsRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No variation option found for Option ID: " + id));
+    }
+
+    //  get list of option IDs by variation name - TESTED
+    @Transactional
+    public List<Long> getOptionIdsByVariation(String variationName) {
+        return getSizes(variationName).getOptions()
+                .stream()
+                .map(opt -> opt.getId())
+                .collect(Collectors.toList());
     }
 
 }
@@ -168,10 +176,4 @@ public class VariationsRetrievalService {
 
 
 
-//    public List<Long> getOptionIdsByVariation(String variationName) {
-//
-//        return getSizes(variationName).getOptions()
-//                .stream()
-//                .map(opt -> opt.getId())
-//                .collect(Collectors.toList());
-//    }
+

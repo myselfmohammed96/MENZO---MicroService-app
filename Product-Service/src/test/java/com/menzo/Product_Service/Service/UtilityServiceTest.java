@@ -22,9 +22,14 @@ class UtilityServiceTest {
 
     @Test
     public void testEnsureUniqueAbbreviation() throws Exception {
-        Method method = UtilityService.class.getDeclaredMethod("ensureUniqueAbbreviation", String.class, StringBuilder.class);
+        Method method = UtilityService.class.getDeclaredMethod(
+                "ensureUniqueAbbreviation",
+                String.class,
+                StringBuilder.class
+        );
         method.setAccessible(true);
-        String abbreviation = (String) method.invoke(utilityService,
+        String abbreviation = (String) method.invoke(
+                utilityService,
                 "sub-category",
                 new StringBuilder("S")
         );

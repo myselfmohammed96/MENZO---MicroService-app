@@ -70,4 +70,10 @@ class VariationsRetrievalServiceTest {
         System.out.println(option);
     }
 
+    @Test
+    public void testGetOptionIdsByVariation() {
+        List<Long> options = variationsRetrievalService.getOptionIdsByVariation("Colors");
+        System.out.println(options);
+    }
+
 }
