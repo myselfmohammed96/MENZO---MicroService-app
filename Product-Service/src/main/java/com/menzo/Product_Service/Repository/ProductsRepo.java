@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     public boolean existsByProductName(String productName);
+
 }
 
 

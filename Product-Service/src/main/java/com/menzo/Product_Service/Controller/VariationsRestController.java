@@ -30,22 +30,27 @@ public class VariationsRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(VariationsRestController.class);
 
+
+
 //    ********* GET - Controllers *********
 //    ********* Variation *********
 
-    //  Get all Variation with their options - TESTED
+    //  Get all Variation with their options
+    //  TESTED - with Postman
     @GetMapping("/get-all")
     public List<?> getAllVariations() {
         return variationsRetrievalService.getAllVariationsWithOptions();
     }
 
-    //  Get all variations and options by sub-category id - TESTED
+    //  Get all variations and options by sub-category id
+    //  TESTED - with Postman
     @GetMapping("get-variations")
     public List<VariationWithOptionsDto> getAllVariationsBySub(@RequestParam("id") Long subCategoryId) {
         return variationsRetrievalService.getAllVariationsWithOptionsBySub(subCategoryId);
     }
 
-    //  Get all variations with ids - TESTED
+    //  Get all variations with ids
+    //  TESTED - with Postman
     @GetMapping("get-all-variations")
     public List<?> getVariationById(){
         return variationsRetrievalService.getAllVariations();
@@ -242,12 +247,12 @@ public class VariationsRestController {
 
 
 
-    @GetMapping("size")
+    @GetMapping("/size")
     public NestedVariationDto getSizes() {
         return variationsRetrievalService.getSizes("Size");
     }
 
-    @GetMapping("colors")
+    @GetMapping("/colors")
     public NestedVariationDto getColors() {
         return variationsRetrievalService.getSizes("Colors");
     }

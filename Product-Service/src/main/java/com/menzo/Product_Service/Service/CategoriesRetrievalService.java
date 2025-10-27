@@ -9,7 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,6 +27,8 @@ public class CategoriesRetrievalService {
 
     @Autowired
     private ProductsRepo productsRepo;
+
+
 
 //    ********* Parent categories *********
 
@@ -48,7 +49,8 @@ public class CategoriesRetrievalService {
                 }).collect(Collectors.toList());
     }
 
-    //    Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
+    //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
+    //  TESTED
     public List<NestedCategoryDto> getAllParentWithSub() {
         List<Object[]> results = categoriesRepo.findAllParentWithSub();
         Map<Long, NestedCategoryDto> parentMap = new HashMap<>();
@@ -76,24 +78,27 @@ public class CategoriesRetrievalService {
         return new ArrayList<>(parentMap.values());
     }
 
-    //    Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
-//    public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
-//        ProductCategory parentCategory = categoriesRepo.findParentById(parentCategoryId)
-//                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-//        log.info("Found parent category with ID: {}", parentCategoryId);
-//        return new ParentCategoryDto(
-//                parentCategory.getId(),
-//                parentCategory.getCategoryName(),
-//                parentCategory.getIsActive(),
-//                parentCategory.getCreatedAt()
-//        );
-//    }
+    //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
+    //  TESTED
+    public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
+        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
+        logger.info("Found parent category with ID: {}", parentCategoryId);
+        return new ParentCategoryDto(
+                parentCategory.getId(),
+                parentCategory.getCategoryName(),
+                parentCategory.getIsActive(),
+                parentCategory.getCreatedAt()
+        );
+    }
 
-    //    Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))  ---@RequestHeader("roles") String roles,
+    //  Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))  ---@RequestHeader("roles") String roles,
+    //  TESTED
     public NestedCategoryDto getParentCategoryByIdWithSub(Long parentCategoryId) {
         List<Object[]> results = categoriesRepo.findParentByIdWithSub(parentCategoryId);
         Map<Long, NestedCategoryDto> parentMap = new HashMap<>();
         for (Object[] result : results) {
+            System.out.println(Arrays.toString(result));
             Long parentId = (Long) result[0];
             String parentName = (String) result[1];
             Long subId = (Long) result[2];
@@ -103,6 +108,7 @@ public class CategoriesRetrievalService {
                 return NestedCategoryDto.builder()
                         .id(id)
                         .categoryName(parentName)
+                        .subCategories(new ArrayList<NestedCategoryDto>())
                         .build();
             });
             if (subId != null) {
@@ -118,32 +124,51 @@ public class CategoriesRetrievalService {
         return parentMap.values().iterator().next();
     }
 
-    //    Get parent category by sub category id
+    //  Get parent category by sub category id
+    //  TESTED
     public ParentCategoryView getParentBySubCategoryId(Long subCategoryId) {
         return categoriesRepo.findParentCategoryBySubId(subCategoryId);
     }
 
 
+
 //    ********* Sub categories *********
 
-    //    Get all sub category by parent id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-//    public List<SubCategoryDto> getAllSubOfParentId(Long parentId) {
-//        if (!categoriesRepo.existsById(parentId)) {
-//            log.error("Parent category not found with ID: {}", parentId);
-//            throw new EntityNotFoundException("Parent category not found with ID: " + parentId);
-//        }
-//        List<SubCategoryDto> subCategoriesList = categoriesRepo.findAllSubByParentId(parentId);
-//        log.info("Fetched {} sub-categories with parent ID {}", subCategoriesList.size(), parentId);
-//        return subCategoriesList;
-//    }
+    //  Get all sub category by parent id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
+    //  TESTED
+    public List<SubCategoryDto> getAllSubOfParentId(Long parentId) {
+        if (!categoriesRepo.existsById(parentId)) {
+            logger.error("Parent category not found with ID: {}", parentId);
+            throw new EntityNotFoundException("Parent category not found with ID: " + parentId);
+        }
+        List<ProductCategory> subCategories = categoriesRepo.findAllByParentCategoryId(parentId);
+        logger.info("Fetching {} sub-categories with parent ID {}", subCategories.size(), parentId);
 
-    //    Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-//    public SubCategoryDto getSubCategoryById(Long subCategoryId) {
-//        SubCategoryDto subCategory = categoriesRepo.findSubByIdWithoutVariation(subCategoryId);
-////                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
-//        log.info("Found sub-category with ID: {}", subCategoryId);
-//        return subCategory;
-//    }
+        return subCategories.stream()
+                .map(s -> new SubCategoryDto(
+                        s.getId(),
+                        s.getParentCategoryId(),
+                        s.getCategoryName(),
+                        s.getIsActive(),
+                        s.getCreatedAt()
+                )).collect(Collectors.toList());
+    }
+
+    //  Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
+    //  TESTED
+    public SubCategoryDto getSubCategoryById(Long subCategoryId) {
+        logger.info("Fetching sub-category with ID: {}", subCategoryId);
+        ProductCategory subCategory = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(subCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
+
+        return new SubCategoryDto(
+                subCategory.getId(),
+                subCategory.getParentCategoryId(),
+                subCategory.getCategoryName(),
+                subCategory.getIsActive(),
+                subCategory.getCreatedAt()
+        );
+    }
 
 //    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
 //        List<ParentCategoryDto> allParentCategories = getAllParents();
@@ -185,6 +210,6 @@ public class CategoriesRetrievalService {
 //                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
 //        log.info("Found subcategory with ID: {}", subCategoryId);
 //        subCategory.display();
-/// /        return new SubCategoryDto(subCategory.getId(), subCategory.getParentCategoryId(), subCategory.getCategoryName(), subCategory.getIsActive(), subCategory.getCreatedAt());
+//                  return new SubCategoryDto(subCategory.getId(), subCategory.getParentCategoryId(), subCategory.getCategoryName(), subCategory.getIsActive(), subCategory.getCreatedAt());
 //        return subCategory;
 //    }
