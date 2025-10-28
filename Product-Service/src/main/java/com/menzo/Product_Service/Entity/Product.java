@@ -37,7 +37,7 @@ public class Product {
             name = "category_id",
             nullable = false
     )
-    private ProductCategory category;   //  sub-category
+    private ProductCategory category;   //  sub-category - ## name change to sub-category
 
     @Lob
     @Column(

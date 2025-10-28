@@ -16,7 +16,7 @@ class UtilityServiceTest {
     @Test
     public void testGenerateAbbreviation() {
 //        String abb = utilityService.generateAbbreviation("Colors", "Dark purple");
-        String abb = utilityService.generateAbbreviation("sub-category", "Some category");
+        String abb = utilityService.generateAbbreviation("sub-category", "Joggers");
         System.out.println("Abbreviation: " + abb);
     }
 
@@ -31,7 +31,7 @@ class UtilityServiceTest {
         String abbreviation = (String) method.invoke(
                 utilityService,
                 "sub-category",
-                new StringBuilder("S")
+                new StringBuilder("J")
         );
         System.out.println(abbreviation);
     }

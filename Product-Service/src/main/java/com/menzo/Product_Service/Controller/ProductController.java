@@ -27,9 +27,9 @@
 //    private ProductsRetrievalService productsRetrievalService;
 //
 ////    @PostMapping("/add-product")
-////    public String addProduct(@ModelAttribute NewProductDto newProduct,
-////                           @RequestParam("images") List<MultipartFile> images) throws IOException {
-////        System.out.println("Vanthurchi... new product");
+//    public String addProduct(@ModelAttribute NewProductDto newProduct,
+//                           @RequestParam("images") List<MultipartFile> images) throws IOException {
+//        System.out.println("Vanthurchi... new product");
 ////        if (images.size() > 3) {
 ////            throw new IllegalArgumentException("You can upload a maximum of 3 images.");
 ////        }

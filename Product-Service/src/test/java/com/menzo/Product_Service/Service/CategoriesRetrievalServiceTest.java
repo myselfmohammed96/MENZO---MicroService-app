@@ -4,6 +4,7 @@ import com.menzo.Product_Service.Dto.CategoriesDto.NestedCategoryDto;
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
 import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
+import com.menzo.Product_Service.Entity.ProductCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,7 +64,7 @@ class CategoriesRetrievalServiceTest {
 
     @Test
     public void testGetSubCategoryById() {
-        SubCategoryDto sub = categoriesRetrievalService.getSubCategoryById(121L);
+        ProductCategory sub = categoriesRetrievalService.getSubCategoryById(121L);
         System.out.println(sub);
     }
 

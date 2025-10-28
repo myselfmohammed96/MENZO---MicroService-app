@@ -38,7 +38,7 @@ class CategoriesRepoTest {
 
     @Test
     public void testExistsByAbbreviation() {
-        boolean exists = categoriesRepo.existsByAbbreviation("S");
+        boolean exists = categoriesRepo.existsByAbbreviation("J1");
         System.out.println("Abbreviation exists: " + exists);
     }
 

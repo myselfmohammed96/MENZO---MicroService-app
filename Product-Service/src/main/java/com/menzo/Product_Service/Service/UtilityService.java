@@ -83,6 +83,7 @@ public class UtilityService {
                 throw new RuntimeException("Sub-category - abbreviation exists check error.", e);
             }
         }
+//        System.out.println("Exists: " + abbreviationExists + " : " + abbreviation.toString());
         if (!abbreviationExists) return abbreviation.toString();
         else {
             char[] charArray = abbreviation.toString().toCharArray();
@@ -100,6 +101,7 @@ public class UtilityService {
                         String.valueOf(++suffixInteger)
                 );
             }
+//            System.out.println("RECURSION WHILE ABB CHECK");
             return ensureUniqueAbbreviation(field, abbreviation);
         }
     }

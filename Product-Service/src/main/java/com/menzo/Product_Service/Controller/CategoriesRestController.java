@@ -102,7 +102,14 @@ public class CategoriesRestController {
                 logger.warn("Invalid sub-category ID: {}", subCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
             }
-            SubCategoryDto subCategoryDto = categoriesRetrievalService.getSubCategoryById(subCategoryId);
+            ProductCategory subCategory = categoriesRetrievalService.getSubCategoryById(subCategoryId);
+            SubCategoryDto subCategoryDto = new SubCategoryDto(
+                    subCategory.getId(),
+                    subCategory.getParentCategoryId(),
+                    subCategory.getCategoryName(),
+                    subCategory.getIsActive(),
+                    subCategory.getCreatedAt()
+            );
             return ResponseEntity.ok(subCategoryDto);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
