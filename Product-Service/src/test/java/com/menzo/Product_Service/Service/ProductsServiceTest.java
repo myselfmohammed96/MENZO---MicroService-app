@@ -82,6 +82,28 @@ class ProductsServiceTest {
         System.out.println(invokedResult);
     }
 
+    @Test
+    public void testGenerateSKU() throws Exception {
+        Method method = ProductsService.class.getDeclaredMethod(
+                "generateSKU",
+                String.class,
+                Long.class,
+                String.class,
+                String.class,
+                Long.class
+        );
+        method.setAccessible(true);
+        String sku = (String) method.invoke(
+                productsService,
+                "J1",
+                23L,
+                "SG",
+                "L",
+                44L
+        );
+        System.out.println(sku);
+    }
+
     //  add new product
     @Test
     public void testSaveNewProduct() throws Exception {
