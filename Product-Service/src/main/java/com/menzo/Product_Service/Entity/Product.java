@@ -15,7 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "items")
+@ToString(exclude = {
+        "items",
+        "category"
+})
 @Table(name = "products")
 public class Product {
 

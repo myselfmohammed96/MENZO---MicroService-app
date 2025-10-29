@@ -208,37 +208,38 @@ public class ProductsService {
 
     //  Save multiple new PRODUCT ITEMs to DB - TESTED
 //    @Transactional
-//    private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
-//                                                 List<VariationOption> variations,
-//                                                 ProductCategory subCategory,
-//                                                 Product product,
-//                                                 Long colorId,
-//                                                 Float price,
-//                                                 Boolean isActive) {
-//        List<ProductItem> itemsList = new ArrayList<>();
-//
-//        //  fetching color option by color ID
-//        VariationOption color = variationsRetrievalService.getOptionById(colorId);
-//
-//        //  product validation
-//        if (product == null || product.getId() == null || product.getId() <= 0)
-//            throw new IllegalArgumentException("Product or productId required.");
-//
-//        //  generating super sku
-//        String superSku = generateSKU(
-//                subCategory.getAbbreviation(),
-//                product.getId(),
-//                color.getColorCode().getColorAbbreviation(),
-//                null,
-//                null
-//        );
-//
-//        //  Looping size & stock map  ->  each loop creates one new PRODUCT ITEM with an individual size
-//        for (Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
-//            VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
-//
-//            // generating sku - with next sequenced item ID
-//            Long nextId = productItemsRepo.getNextItemId();
+    private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
+                                                 List<VariationOption> variations,
+                                                 ProductCategory subCategory,
+                                                 Product product,
+                                                 Long colorId,
+                                                 Float price,
+                                                 Boolean isActive) {
+        List<ProductItem> itemsList = new ArrayList<>();
+
+        //  fetching color option by color ID
+        VariationOption color = variationsRetrievalService.getOptionById(colorId);
+
+        //  product validation
+        if (product == null || product.getId() == null || product.getId() <= 0)
+            throw new IllegalArgumentException("Product or productId required.");
+
+        //  generating super sku
+        String superSku = generateSKU(
+                null,
+                subCategory.getAbbreviation(),
+                product.getId(),
+                color.getColorCode().getColorAbbreviation(),
+                null,
+                null
+        );
+
+        //  Looping size & stock map  ->  each loop creates one new PRODUCT ITEM with an individual size
+        for (Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
+            VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
+
+            // generating sku - with next sequenced item ID
+            Long nextId = productItemsRepo.getNextItemId();
 //            String sku = generateSKU(
 //                    subCategory.getAbbreviation(),
 //                    product.getId(),
@@ -246,46 +247,55 @@ public class ProductsService {
 //                    size.getOptionValue(),
 //                    nextId
 //            );
-//
-//            //  creating new product item object
-//            ProductItem item = ProductItem.builder()
-//                    .id(nextId)
-//                    .product(product)
-//                    .price(price)
-//                    .qtyInStock(e.getValue())
-//                    .SKU(sku)
-//                    .isActive(isActive)
-//                    .build();
-//
-//            //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
-//            List<ProductConfiguration> config = variations.stream()
-//                    .map(opt -> {
-//                        return ProductConfiguration.builder()
-//                                .productItem(item)
-//                                .variationOption(opt)
-//                                .build();
-//                    })
-//                    .collect(Collectors.toList());
-//
-//            //  adding 'color' variation to 'config' list
-//            config.add(ProductConfiguration.builder()
-//                    .productItem(item)
-//                    .variationOption(color)
-//                    .build()
-//            );
-//
-//            //  adding 'size' variation to 'config' list
-//            config.add(ProductConfiguration.builder()
-//                    .productItem(item)
-//                    .variationOption(size)
-//                    .build()
-//            );
-//            item.setConfigurations(config);
-//            ProductItem savedItem = productItemsRepo.save(item);
-//            itemsList.add(savedItem);
-//        }
-//        return itemsList;
-//    }
+            String sku = generateSKU(
+                    superSku,
+                    null,
+                    null,
+                    null,
+                    size.getOptionValue(),
+                    nextId
+            );
+
+            //  creating new product item object
+            ProductItem item = ProductItem.builder()
+                    .id(nextId)
+                    .product(product)
+                    .superSKU(superSku)
+                    .SKU(sku)
+                    .price(price)
+                    .qtyInStock(e.getValue())
+                    .isActive(isActive)
+                    .build();
+
+            //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
+            List<ProductConfiguration> config = variations.stream()
+                    .map(opt -> {
+                        return ProductConfiguration.builder()
+                                .productItem(item)
+                                .variationOption(opt)
+                                .build();
+                    })
+                    .collect(Collectors.toList());
+
+            //  adding 'color' variation to 'config' list
+            config.add(ProductConfiguration.builder()
+                    .productItem(item)
+                    .variationOption(color)
+                    .build()
+            );
+
+            //  adding 'size' variation to 'config' list
+            config.add(ProductConfiguration.builder()
+                    .productItem(item)
+                    .variationOption(size)
+                    .build()
+            );
+            item.setConfigurations(config);
+            ProductItem savedItem = productItemsRepo.save(item);
+            itemsList.add(savedItem);
+        }
+        return itemsList;
+    }
 
 
     /// /    ********* Utility methods *********

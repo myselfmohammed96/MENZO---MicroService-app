@@ -155,7 +155,7 @@ class ProductsServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback(value = false)
     public void testSaveNewProductItem() throws Exception {
         Method method = ProductsService.class.getDeclaredMethod(
                 "saveNewProductItem",
@@ -209,6 +209,5 @@ class ProductsServiceTest {
                         " - " + a.getSKU()
         ));
     }
-
 
 }
