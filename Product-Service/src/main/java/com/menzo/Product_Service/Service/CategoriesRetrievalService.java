@@ -51,6 +51,7 @@ public class CategoriesRetrievalService {
 
     //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     //  TESTED
+//    ##    exclude the soft deleted parent categories
     public List<NestedCategoryDto> getAllParentWithSub() {
         List<Object[]> results = categoriesRepo.findAllParentWithSub();
         Map<Long, NestedCategoryDto> parentMap = new HashMap<>();

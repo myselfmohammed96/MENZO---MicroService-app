@@ -47,25 +47,25 @@ public class ProductController {
     }
 
 
-    @PostMapping("/add-product-item")
-    public String addProductItem(@ModelAttribute NewProductItemDto newProductItem,
-                                 @RequestParam Map<String, String> variationMap,
-                                 @RequestParam("images") List<MultipartFile> images) throws IOException {
-        if (images.size() > 9) {
-            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
-        }
-//        newProductItem.display();
-        ProductItem savedItem = productsService.addNewProductItem(
-                newProductItem,
-                variationMap,
-                images
-        );
-
-        String redirectUrl = UriComponentsBuilder
-                .fromUriString("http://localhost:8080")
-                .pathSegment("admin", "all-products")
-                .toUriString();
-        return "redirect:" + redirectUrl;
-    }
+//    @PostMapping("/add-product-item")
+//    public String addProductItem(@ModelAttribute NewProductItemDto newProductItem,
+//                                 @RequestParam Map<String, String> variationMap,
+//                                 @RequestParam("images") List<MultipartFile> images) throws IOException {
+//        if (images.size() > 9) {
+//            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+//        }
+////        newProductItem.display();
+//        ProductItem savedItem = productsService.addNewProductItem(
+//                newProductItem,
+//                variationMap,
+//                images
+//        );
+//
+//        String redirectUrl = UriComponentsBuilder
+//                .fromUriString("http://localhost:8080")
+//                .pathSegment("admin", "all-products")
+//                .toUriString();
+//        return "redirect:" + redirectUrl;
+//    }
 
 }

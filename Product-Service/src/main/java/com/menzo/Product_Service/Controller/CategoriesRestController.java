@@ -42,6 +42,7 @@ public class CategoriesRestController {
 
     //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     //  TESTED - with Postman
+    //  used - Admin-service
     @GetMapping("/get-all")
     public List<NestedCategoryDto> getAllParentCategories() {
         return categoriesRetrievalService.getAllParentWithSub();

@@ -29,15 +29,19 @@ public class ProductController {
     //  ********* Categories & Variations *********
     //  Categories - accordion page
     @GetMapping("/categories")
-    public String adminCategoriesManagement(@RequestHeader("roles") String roles, Model model) {
+    public String adminCategoriesManagement(@RequestHeader("roles") String roles,
+                                            Model model) {
         return "CategoriesAndVariations/categories-management";
     }
 
     //  Variations - accordion page
     @GetMapping("/variations")
-    public String adminVariationsManagement(@RequestHeader("roles") String roles, Model model) {
+    public String adminVariationsManagement(@RequestHeader("roles") String roles,
+                                            Model model) {
         return "CategoriesAndVariations/variations-management";
     }
+
+
 
     //  ********* Add forms *********
     //  Product - add form
@@ -48,17 +52,17 @@ public class ProductController {
         return "Products/add-product-form";
     }
 
-    @GetMapping("/add-product-v2")
-    public String addProductFormV2(@RequestHeader("roles") String roles,
-                                   Model model) {
-        NestedVariationDto sizesDto = productRetrievalService.getSizes();
-        NestedVariationDto colorsDto = productRetrievalService.getColors();
-
-        model.addAttribute("sizesList", sizesDto.getOptions());
-        model.addAttribute("colorsList", colorsDto.getOptions());
-        model.addAttribute("newProduct", new NewProductDto("active", "available"));
-        return "Products/add-product-formV2";
-    }
+//    @GetMapping("/add-product-v2")
+//    public String addProductFormV2(@RequestHeader("roles") String roles,
+//                                   Model model) {
+//        NestedVariationDto sizesDto = productRetrievalService.getSizes();
+//        NestedVariationDto colorsDto = productRetrievalService.getColors();
+//
+//        model.addAttribute("sizesList", sizesDto.getOptions());
+//        model.addAttribute("colorsList", colorsDto.getOptions());
+//        model.addAttribute("newProduct", new NewProductDto("active", "available"));
+//        return "Products/add-product-formV2";
+//    }
 
     //  Product item - add form
 //    @GetMapping("/add-item")
@@ -72,6 +76,8 @@ public class ProductController {
 //        model.addAttribute("newProductItem", new NewProductItemDto(productDto.getProductId()));
 //        return "Products/add-product-item-form";
 //    }
+
+
 
     //  ********* Listing pages *********
     //  Products listing
@@ -88,6 +94,8 @@ public class ProductController {
         model.addAttribute("productDetails", productDetails);
         return "Products/all-product-items";
     }
+
+
 
     //  ********* Details page *********
     //  Product item details - by product item ID

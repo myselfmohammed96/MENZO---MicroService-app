@@ -16,20 +16,9 @@ const urls = {
 
 //window.addEventListener("DOMContentLoaded", () => {
 
-    // Load categories from backend on page load
-    async function loadCategories() {
-        try{
-            const response = await fetch(urls.getAll, { credentials: "include" });
-            if (!response.ok) throw new Error("Failed to load categories");
-            const categories = await response.json();
-            categories.forEach(c => addCategory(c.id, c.categoryName, c.subCategories));
-        } catch (error) {
-            console.error("Load Error: ", error);
-            alert("Unable to load categories.");
-        }
-    }
 
-    // Save new parent category
+
+    //  ******* Save new PARENT CATEGORY *******
     async function saveCategories(name) {
         try{
             const response = await fetch(urls.addParent, {
@@ -50,7 +39,9 @@ const urls = {
         }
     }
 
-    // Update parent category by categoryId
+
+
+    //  ******* Update parent category by categoryId *******
     async function updateCategory(name, categoryId) {
         try{
             const response = await fetch(`${urls.updateParent}?id=${categoryId}`, {
@@ -75,7 +66,9 @@ const urls = {
         }
     }
 
-    // Delete parent category by id
+
+
+    //  ******* Delete parent category by id *******
     async function deleteParentCategory(parentCategoryId, element) {
         try{
             const response = await fetch(`${urls.deleteParent}?id=${parentCategoryId}`, {
@@ -93,7 +86,9 @@ const urls = {
         }
     }
 
-    // Save new sub-option
+
+
+    //  ******* Save new sub-option *******
     async function saveSubCategory(name, categoryId, selectedVariations) {
         try {
             const response = await fetch(urls.addSub, {
@@ -115,7 +110,9 @@ const urls = {
         }
     }
 
-    // Update Sub category by subCategoryId
+
+
+    //  ******* Update Sub category by subCategoryId *******
     async function updateSubCategory(name, subCategoryId) {
         try{
             const response = await fetch(`${urls.updateSub}?id=${subCategoryId}`, {
@@ -140,7 +137,9 @@ const urls = {
         }
     }
 
-    // Delete sub category
+
+
+    //  ******* Delete sub category *******
     async function deleteSubCategory(subCategoryId, subCategoryDiv) {
         try{
             const response = await fetch(`${urls.deleteSub}?id=${subCategoryId}`, {
@@ -158,7 +157,24 @@ const urls = {
         }
     }
 
-    // Add new category - UI functions
+
+
+    //  ******* Load categories from backend on page load *******
+    async function loadCategories() {
+        try{
+            const response = await fetch(urls.getAll, { credentials: "include" });
+            if (!response.ok) throw new Error("Failed to load categories");
+            const categories = await response.json();
+            categories.forEach(c => addCategory(c.id, c.categoryName, c.subCategories));
+        } catch (error) {
+            console.error("Load Error: ", error);
+            alert("Unable to load categories.");
+        }
+    }
+
+
+
+    //  ******* Add new category - UI functions *******
     function addCategory(categoryId = null, categoryName = "", subCategories = []) {
         let container = document.getElementById("accordion-container");
 
@@ -237,7 +253,9 @@ const urls = {
         };
     }
 
-    // Add new sub category - UI functions
+
+
+    //  ******* Add new sub category - UI functions *******
     function addSubCategory(subCategoryId = null, subCategoryName = "") {
         let subCategoryDiv = document.createElement("div");
         subCategoryDiv.classList.add("option");
@@ -272,12 +290,16 @@ const urls = {
         return subCategoryDiv;
     }
 
+
+
     // *************** Add/Edit Modal handling ***************
 
     let editingCategoryId = null;
     let editingParaEl = null;
 
-    // Open modal for parent category add/edit
+
+
+    //  ******* Open modal for parent category add/edit *******
     function openCategoryModal(paraEl = null, categoryId = null) {
         const modal = document.getElementById("category-modal");
         const input = document.getElementById("modal-category-input");
@@ -291,6 +313,8 @@ const urls = {
 
         input.focus();
     }
+
+
 
     function getSelectedVariationIds() {
         return new Promise((resolve, reject) => {
@@ -308,7 +332,9 @@ const urls = {
         });
     }
 
-    // Open Add Sub-category modal
+
+
+    //  ******* Open Add Sub-category modal *******
     function openAddSubCategoryModal(categoryId = null) {
         const modal = document.getElementById("sub-category-modal");
         const input = document.getElementById("sub-modal-category-input");
@@ -332,7 +358,9 @@ const urls = {
         };
     }
 
-    // Open Edit Sub-category modal
+
+
+    //  ******* Open Edit Sub-category modal *******
     function openEditSubCategoryModal(paraEl = null, subCategoryId = null) {
         const modal = document.getElementById("sub-category-modal");
         const input = document.getElementById("sub-modal-category-input");
@@ -352,7 +380,9 @@ const urls = {
         }
     }
 
-    // Save from parent modal
+
+
+    //  ******* Save from parent modal *******
     document.getElementById("save-category-btn").onclick = async function () {
         const name = document.getElementById("modal-category-input").value.trim();
         if (!name) return;
@@ -374,7 +404,9 @@ const urls = {
         }
     };
 
-    // Save from Add sub category modal
+
+
+    //  ******* Save from Add sub category modal *******
     async function saveAddSubCategoryModal(categoryId = null, selectedVariations = []) {
         const name = document.getElementById("sub-modal-category-input").value.trim();
         if (!name) return;
@@ -396,7 +428,9 @@ const urls = {
         }
     }
 
-    // Save from Edit sub category modal
+
+
+    //  ******* Save from Edit sub category modal *******
     async function saveEditSubCategoryModal(editingSubParaEl = null, name = null, subCategoryId = null) {
         try {
             if (subCategoryId) {
@@ -411,7 +445,9 @@ const urls = {
         }
     }
 
-    // 'Enter' key listener for modal save buttons
+
+
+    //  ******* 'Enter' key listener for modal save buttons *******
     document.addEventListener("keydown", function (e) {
         if(e.key === "Enter") {
             const categoryModal = document.getElementById("category-modal");
@@ -425,19 +461,25 @@ const urls = {
         }
     });
 
-    // Close modal
+
+
+    //  ******* Close modal *******
     function closeCategoryModal() {
         document.getElementById("category-modal").style.display = "none";
         editingCategoryId = null;
         editingParaEl = null;
     }
 
-    // Close Sub-category modal
+
+
+    //  ******* Close Sub-category modal *******
     function closeSubCategoryModal() {
         document.getElementById("sub-category-modal").style.display = "none";
     }
 
-    // 'Escape' key listener for closing modals
+
+
+    //  ******* 'Escape' key listener for closing modals *******
     document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
             const categoryModal = document.getElementById("category-modal");
@@ -451,6 +493,19 @@ const urls = {
         }
     });
 
-    // Load existing categories on page load
+
+
+    //  Load existing categories on page load
     window.onload = loadCategories;
+
+
+
+
+
+
+
+
+
+
+
 //});

@@ -3,9 +3,13 @@ package com.menzo.Product_Service.Repository;
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
 import com.menzo.Product_Service.Entity.ProductCategory;
 import com.menzo.Product_Service.Service.UtilityService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +24,8 @@ class CategoriesRepoTest {
     @Autowired
     private UtilityService utilityService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
 //    ********* existence check *********
@@ -87,6 +93,16 @@ class CategoriesRepoTest {
 
 
     //  ********* find methods *********
+
+    @Test
+    @Transactional
+    public void testFindAll() {
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("activeFilter").setParameter("isDeleted", false);
+        List<ProductCategory> allCategories = categoriesRepo.findAll();
+        System.out.println(allCategories);
+        System.out.println(allCategories.size());
+    }
 
     @Test
     public void testFindByParentCategoryIdIsNull() {

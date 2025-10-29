@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -15,12 +18,27 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "variations")
-@Table(name = "product_categories")
+@ToString(
+        exclude = "variations"
+)
+@Table(
+        name = "product_categories"
+)
 @JsonIgnoreProperties({
         "hibernateLazyInitializer",
         "handler"
 })
+@FilterDef(
+        name = "activeFilter",
+        parameters = @ParamDef(
+                name = "isDeleted",
+                type = Boolean.class
+        )
+)
+@Filter(
+        name = "activeFilter",
+        condition = "is_deleted = :isDeleted"
+)
 public class ProductCategory {
 
     @Id
