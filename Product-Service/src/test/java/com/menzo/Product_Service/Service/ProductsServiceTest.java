@@ -41,6 +41,99 @@ class ProductsServiceTest {
     private ProductItemsRepo itemsRepo;
 
 
+
+    //  add new product
+    @Test
+    public void testSaveNewProduct() throws Exception {
+        Method method = ProductsService.class.getDeclaredMethod(
+                "saveNewProduct",
+                NewProductDto.class,
+                ProductCategory.class
+        );
+        method.setAccessible(true);
+
+        NewProductDto newProductDto = NewProductDto.builder()
+                .productName("Some product name 1")
+                .description("Some product description")
+                .pod("available")
+                .itemWeight(23.3F)
+                .genericName("Some generic name")
+                .countryOfOrigin("India")
+                .subCategoryId(121L)
+                .build();
+
+        ProductCategory sub = categoriesRetrievalService
+                .getSubCategoryById(newProductDto.getSubCategoryId());
+        Object invokedResult = method.invoke(
+                productsService,
+                newProductDto,
+                sub
+        );
+        System.out.println(invokedResult);
+    }
+
+    //  add new product item
+    @Test
+    @Transactional
+    @Rollback(value = true)
+    public void testSaveNewProductItem() throws Exception {
+        Method method = ProductsService.class.getDeclaredMethod(
+                "saveNewProductItem",
+                Map.class,
+                List.class,
+                ProductCategory.class,
+                Product.class,
+                Long.class,
+                Float.class,
+                Boolean.class
+        );
+        method.setAccessible(true);
+        System.out.println("method is now accessible - test");
+
+        Map<Long, Integer> sizeStockMap = new HashMap<>();
+        sizeStockMap.put(7L, 98);
+        sizeStockMap.put(8L, 53);
+        sizeStockMap.put(18L, 45);
+        List<VariationOption> variations = optionsRepo
+                .findByIdIn(Arrays.asList(
+                        16L,
+                        21L,
+                        24L
+                ));
+        System.out.println("Getting sub-category - test");
+        ProductCategory subCategory = categoriesRetrievalService
+                .getSubCategoryById(121L);
+        Product product = productsRepo.findById(73L)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: 73"));
+
+        System.out.println("Invoking the method - Test");
+        Object invoked = method.invoke(
+                productsService,
+                sizeStockMap,
+                variations,
+                subCategory,
+                product,
+                5L,
+                335.50F,
+                true
+        );
+        System.out.println(invoked);
+    }
+
+    @Test
+    public void anotherFindTest() {
+        List<ProductItem> all = itemsRepo.findAll();
+        all.stream().forEach(a -> System.out.println(
+                "[" + a.getId() + " - " +
+                        a.getProduct().getId() +
+                        " - " + a.getSKU()
+        ));
+    }
+
+
+
+//    ********* utility methods *********
+
     @Test
     public void testAddCountryOfOrigin() throws Exception {
         Method method = ProductsService.class.getDeclaredMethod(
@@ -119,95 +212,6 @@ class ProductsServiceTest {
         );
 
         System.out.println(sku);
-    }
-
-
-
-    //  add new product
-    @Test
-    public void testSaveNewProduct() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
-                "saveNewProduct",
-                NewProductDto.class,
-                ProductCategory.class
-        );
-        method.setAccessible(true);
-
-        NewProductDto newProductDto = NewProductDto.builder()
-                .productName("Some product name 1")
-                .description("Some product description")
-                .pod("available")
-                .itemWeight(23.3F)
-                .genericName("Some generic name")
-                .countryOfOrigin("India")
-                .subCategoryId(121L)
-                .build();
-
-        ProductCategory sub = categoriesRetrievalService
-                .getSubCategoryById(newProductDto.getSubCategoryId());
-        Object invokedResult = method.invoke(
-                productsService,
-                newProductDto,
-                sub
-        );
-        System.out.println(invokedResult);
-    }
-
-    @Test
-    @Transactional
-    @Rollback(value = false)
-    public void testSaveNewProductItem() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
-                "saveNewProductItem",
-                Map.class,
-                List.class,
-                ProductCategory.class,
-                Product.class,
-                Long.class,
-                Float.class,
-                Boolean.class
-        );
-        method.setAccessible(true);
-        System.out.println("method is now accessible - test");
-
-        Map<Long, Integer> sizeStockMap = new HashMap<>();
-        sizeStockMap.put(7L, 98);
-        sizeStockMap.put(8L, 53);
-        sizeStockMap.put(18L, 45);
-        List<VariationOption> variations = optionsRepo
-                .findByIdIn(Arrays.asList(
-                        16L,
-                        21L,
-                        24L
-                ));
-        System.out.println("Getting sub-category - test");
-        ProductCategory subCategory = categoriesRetrievalService
-                .getSubCategoryById(121L);
-        Product product = productsRepo.findById(73L)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: 73"));
-
-        System.out.println("Invoking the method - Test");
-        Object invoked = method.invoke(
-                productsService,
-                sizeStockMap,
-                variations,
-                subCategory,
-                product,
-                5L,
-                335.50F,
-                true
-        );
-        System.out.println(invoked);
-    }
-
-    @Test
-    public void anotherFindTest() {
-        List<ProductItem> all = itemsRepo.findAll();
-        all.stream().forEach(a -> System.out.println(
-                "[" + a.getId() + " - " +
-                        a.getProduct().getId() +
-                        " - " + a.getSKU()
-        ));
     }
 
 }
