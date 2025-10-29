@@ -50,20 +50,6 @@ public class ProductsService {
     private UtilityService utilityService;
 
 
-//
-
-    /// /    public Product addNewProduct(NewProductDto newProductDto,
-    /// /                              List<MultipartFile> images) throws IOException {
-    /// /
-    /// /        ParentCategoryDto category = categoriesRetrievalService.getParentCategoryById(newProductDto.getCategoryId());   //  fetching category details by categoryId
-    /// /        SubCategoryDto subCategory = categoriesRetrievalService.getSubCategoryById(newProductDto.getSubCategoryId());
-    /// /        if (subCategory == null || subCategory.getParentCategoryId() == null) {
-    /// /            throw new IllegalArgumentException("Invalid sub-category: must have a parent category");
-    /// /        }
-    /// /
-    /// /        //  Add product
-    /// /        Product savedProduct = saveNewProduct(newProductDto, subCategory);
-    /// /
     /// /        // Add photos
     /// /        List<ProductImage> savedImages = saveImages(
     /// /                category.getCategoryName(),
@@ -104,6 +90,7 @@ public class ProductsService {
      *   Every 'sku'  ->  Unique to the PRODUCT ITEM
      *
      */
+    @Transactional
     public void addNewProductV2(NewProductDto newProduct,
                                 Map<String, String> variationMap,
                                 List<MultipartFile> image) {
@@ -220,8 +207,8 @@ public class ProductsService {
 
 
 
-    //  Save multiple new PRODUCT ITEMs to DB
-//    @Transactional
+    //  Save multiple new PRODUCT ITEMs to DB - TESTED
+    @Transactional
     private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
                                                  List<VariationOption> variations,
                                                  ProductCategory subCategory,
@@ -233,7 +220,6 @@ public class ProductsService {
 
         //  fetching color option by color ID
         VariationOption color = variationsRetrievalService.getOptionById(colorId);
-        System.out.printf("Got the color with the ID: %d", colorId);
 
         //  product validation
         if (product == null || product.getId() == null || product.getId() <= 0)
@@ -245,7 +231,6 @@ public class ProductsService {
 
             // generating sku - with next sequenced item ID
             Long nextId = productItemsRepo.getNextItemId();
-            System.out.println("Got the nextId: " + nextId);
             String sku = generateSKU(
                     subCategory.getAbbreviation(),
                     product.getId(),
@@ -288,7 +273,6 @@ public class ProductsService {
                     .build()
             );
             item.setConfigurations(config);
-//            System.out.println("about to save the item - " + sku);
             ProductItem savedItem = productItemsRepo.save(item);
             itemsList.add(savedItem);
         }
@@ -379,50 +363,64 @@ public class ProductsService {
     }
 
 ////    // save Images
-//    private List<ProductImage> saveImages(String categoryName,              //  ### superSku pending
-//                                          String subCategoryName,
-//                                          String superSku,
-//                                          ProductItem savedProductItem,
-//                                          List<MultipartFile> images) throws IOException {
-//        if (categoryName == null || subCategoryName == null) {
-//            throw new IllegalArgumentException("Category and Sub-category names cannot be null");
-//        }
-//        if (superSku == null || superSku.isEmpty()) {
-//            throw new IllegalArgumentException("superSKU missing");
-//        }
-//        if (savedProductItem == null) {
-//            throw new IllegalArgumentException("Product item cannot be null");
-//        }
-//        if (images == null || images.isEmpty()) {
-//            throw new IllegalArgumentException("Images are mandatory.");
-//        }
-//
-//        List<String> imagePaths = new ArrayList<>();
-//
-//        Path uploadDir = Paths.get("uploads", categoryName, subCategoryName, superSku, savedProductItem.getId().toString());
-//        Files.createDirectories(uploadDir);
-//
-//        for (MultipartFile image : images) {
-//            String contentType = image.getContentType();
-//            if (!List.of("image/png", "image/jpeg").contains(contentType)) {
-//                throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
-//            }
-//            if (!image.isEmpty()) {
-//                String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-//                String filename = UUID.randomUUID() + "." + extension;
-//
-//                Path filePath = Paths.get(String.valueOf(uploadDir), filename);
-//                image.transferTo(filePath);
-//                imagePaths.add(String.valueOf(filePath));
-//            }
-//        }
+    private List<ProductImage> saveImages(String categoryName,              //  ### superSku pending
+                                          String subCategoryName,
+                                          String superSku,
+                                          ProductItem savedProductItem,
+                                          List<MultipartFile> images) throws IOException {
+
+        //  input validation
+        if (categoryName == null || subCategoryName == null) {
+            throw new IllegalArgumentException("Category and Sub-category names cannot be null");
+        }
+        if (superSku == null || superSku.isEmpty()) {
+            throw new IllegalArgumentException("superSKU missing");
+        }
+        if (savedProductItem == null) {
+            throw new IllegalArgumentException("Product item cannot be null");
+        }
+        if (images == null || images.isEmpty()) {
+            throw new IllegalArgumentException("Images are mandatory.");
+        }
+
+        List<String> imagePaths = new ArrayList<>();
+
+        //  creating - Directory with custom path
+        Path uploadDir = Paths.get("uploads", categoryName, subCategoryName, productId, superSku);
+        Files.createDirectories(uploadDir);
+
+        //  image processing
+        for (MultipartFile image : images) {
+            String contentType = image.getContentType();
+
+            //  image file - sanitizing with white listed formats
+            if (!List.of("image/png", "image/jpeg").contains(contentType)) {
+                throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
+            }
+            if (!image.isEmpty()) {
+
+                //  creating - image filename
+                String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+                String filename = UUID.randomUUID() + "." + extension;
+
+                //  image file path & storing
+                Path filePath = Paths.get(String.valueOf(uploadDir), filename);
+                image.transferTo(filePath);
+                imagePaths.add(String.valueOf(filePath));
+            }
+        }
 //        List<ProductImage> imageEntities = imagePaths.stream()
 //                .map(path -> new ProductImage(
 //                        superSku,
 //                        savedProductItem,
 //                        path
 //                )).collect(Collectors.toList());
-//        return productImagesRepo.saveAll(imageEntities);
-//    }
+        List<ProductImage> imageEntities = imagePaths.stream()
+                .map(path -> {return ProductImage.builder()
+                        .
+                        .build();
+                }).collect(Collectors.toList());
+        return productImagesRepo.saveAll(imageEntities);
+    }
 
 }

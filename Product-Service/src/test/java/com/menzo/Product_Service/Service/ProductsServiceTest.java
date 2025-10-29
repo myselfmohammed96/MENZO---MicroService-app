@@ -156,7 +156,7 @@ class ProductsServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void testSaveNewProductItem() throws Exception {
         Method method = ProductsService.class.getDeclaredMethod(
                 "saveNewProductItem",
@@ -204,8 +204,11 @@ class ProductsServiceTest {
     @Test
     public void anotherFindTest() {
         List<ProductItem> all = itemsRepo.findAll();
-        all.stream().forEach(a -> System.out.println("[" + a.getId() + " - " +
-                a.getProduct().getId() + " - " + a.getSKU()));
+        all.stream().forEach(a -> System.out.println(
+                "[" + a.getId() + " - " +
+                a.getProduct().getId() +
+                        " - " + a.getSKU()
+        ));
     }
 
 

@@ -46,6 +46,17 @@ public class ProductItem {
 
 
 
+    @ManyToMany(
+            mappedBy = "productItems",
+            cascade = CascadeType.ALL
+    )
+    private List<ProductImage> images = new ArrayList<>();
+
+    @Column(
+            nullable = false,
+            name = "super_sku"
+    )
+    private String superSKU;
 
     @Column(
             nullable = false,
