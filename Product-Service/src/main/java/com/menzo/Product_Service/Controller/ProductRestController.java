@@ -6,7 +6,7 @@ import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductMinimalDto;
 import com.menzo.Product_Service.Dto.SpecificationsDto.RequestDto;
 import com.menzo.Product_Service.Entity.ProductItem;
-import com.menzo.Product_Service.Service.ProductsRetrievalService;
+//import com.menzo.Product_Service.Service.ProductsRetrievalService;
 //import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,8 +23,8 @@ public class ProductRestController {
 //    @Autowired
 //    private ProductsService productsService;
 
-    @Autowired
-    private ProductsRetrievalService productsRetrievalService;
+//    @Autowired
+//    private ProductsRetrievalService productsRetrievalService;
 
     //  Get all products with pagination for listing - for Admin-Service (/admin/all-products)
 //    @GetMapping("/all-products-listing")
@@ -34,15 +34,15 @@ public class ProductRestController {
 //        return ResponseEntity.ok(productListingDtos);
 //    }
 
-    @PostMapping("/all-products-listing")
-    public ResponseEntity<Page<ProductListingDto>> getAllProductListingWithPagination(@RequestBody(required = false) RequestDto requestDto,
-                                                                                      @RequestParam(required = false) Long categoryId,
-                                                                                      @RequestParam(defaultValue = "0") Integer page,
-                                                                                      @RequestParam(defaultValue = "10") Integer size) {
-
-        Page<ProductListingDto> productListingDtos = productsRetrievalService.getAllProductListing(requestDto, categoryId, page, size);
-        return ResponseEntity.ok(productListingDtos);
-    }
+//    @PostMapping("/all-products-listing")
+//    public ResponseEntity<Page<ProductListingDto>> getAllProductListingWithPagination(@RequestBody(required = false) RequestDto requestDto,
+//                                                                                      @RequestParam(required = false) Long categoryId,
+//                                                                                      @RequestParam(defaultValue = "0") Integer page,
+//                                                                                      @RequestParam(defaultValue = "10") Integer size) {
+//
+//        Page<ProductListingDto> productListingDtos = productsRetrievalService.getAllProductListing(requestDto, categoryId, page, size);
+//        return ResponseEntity.ok(productListingDtos);
+//    }
 
 //    @PostMapping("/hi")
 //    public List<?> getAllProductWithFilters(@RequestBody(required = false) RequestDto requestDto) {
@@ -60,27 +60,27 @@ public class ProductRestController {
 
 
     //  Get all productItems by product id, with pagination for listing - for Admin-Service
-    @GetMapping("/product-items")
-    public ResponseEntity<Page<ProductItemListingDto>> getAllProductItemsByProductIdWithPagination(@RequestParam("id") Long productId,
-                                                                                   @RequestParam(defaultValue = "0") Integer page,
-                                                                                   @RequestParam(defaultValue = "10") Integer size) {
-        Page<ProductItemListingDto> productItemsListingDtos = productsRetrievalService.getAllProductItemsByProductIdWithPagination(productId, page, size);
-        return ResponseEntity.ok(productItemsListingDtos);
-    }
-
-    //  Get product by ID - for ADMIN-SERVICE
-    @GetMapping("/get-by-id")
-    public ResponseEntity<ProductMinimalDto> getProductById(@RequestParam("id") Long productId){
-        ProductMinimalDto productDto = productsRetrievalService.getProductByIdForAddItemForm(productId);
-        return ResponseEntity.ok(productDto);
-    }
-
-    //  Get product details by ID - for ADMIN-SERVICE
-    @GetMapping("/get-details-by-id")
-    public ResponseEntity<ProductDetailsDto> getProductDetailsById(@RequestParam("id") Long productId) {
-        ProductDetailsDto productDetails = productsRetrievalService.getProductDetailsById(productId);
-        return ResponseEntity.ok(productDetails);
-    }
+//    @GetMapping("/product-items")
+//    public ResponseEntity<Page<ProductItemListingDto>> getAllProductItemsByProductIdWithPagination(@RequestParam("id") Long productId,
+//                                                                                   @RequestParam(defaultValue = "0") Integer page,
+//                                                                                   @RequestParam(defaultValue = "10") Integer size) {
+//        Page<ProductItemListingDto> productItemsListingDtos = productsRetrievalService.getAllProductItemsByProductIdWithPagination(productId, page, size);
+//        return ResponseEntity.ok(productItemsListingDtos);
+//    }
+//
+//    //  Get product by ID - for ADMIN-SERVICE
+//    @GetMapping("/get-by-id")
+//    public ResponseEntity<ProductMinimalDto> getProductById(@RequestParam("id") Long productId){
+//        ProductMinimalDto productDto = productsRetrievalService.getProductByIdForAddItemForm(productId);
+//        return ResponseEntity.ok(productDto);
+//    }
+//
+//    //  Get product details by ID - for ADMIN-SERVICE
+//    @GetMapping("/get-details-by-id")
+//    public ResponseEntity<ProductDetailsDto> getProductDetailsById(@RequestParam("id") Long productId) {
+//        ProductDetailsDto productDetails = productsRetrievalService.getProductDetailsById(productId);
+//        return ResponseEntity.ok(productDetails);
+//    }
 
 //    @GetMapping("/hello")
 //    public ResponseEntity<?> getProductItemDetailsById(@RequestParam("id") Long itemId) {

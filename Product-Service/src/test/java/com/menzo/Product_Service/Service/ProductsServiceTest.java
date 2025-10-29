@@ -41,7 +41,6 @@ class ProductsServiceTest {
     private ProductItemsRepo itemsRepo;
 
 
-
     @Test
     public void testAddCountryOfOrigin() throws Exception {
         Method method = ProductsService.class.getDeclaredMethod(
@@ -102,6 +101,7 @@ class ProductsServiceTest {
         Method method = ProductsService.class.getDeclaredMethod(
                 "generateSKU",
                 String.class,
+                String.class,
                 Long.class,
                 String.class,
                 String.class,
@@ -110,17 +110,16 @@ class ProductsServiceTest {
         method.setAccessible(true);
         String sku = (String) method.invoke(
                 productsService,
-                "J1",
-                23L,
-                "SG",
+                "J-23-SG",
+                null,
+                null,
+                null,
                 "L",
                 44L
         );
+
         System.out.println(sku);
     }
-
-
-
 
 
 
@@ -206,7 +205,7 @@ class ProductsServiceTest {
         List<ProductItem> all = itemsRepo.findAll();
         all.stream().forEach(a -> System.out.println(
                 "[" + a.getId() + " - " +
-                a.getProduct().getId() +
+                        a.getProduct().getId() +
                         " - " + a.getSKU()
         ));
     }

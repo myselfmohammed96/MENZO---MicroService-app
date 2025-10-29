@@ -90,41 +90,41 @@ public class ProductsService {
      *   Every 'sku'  ->  Unique to the PRODUCT ITEM
      *
      */
-    @Transactional
-    public void addNewProductV2(NewProductDto newProduct,
-                                Map<String, String> variationMap,
-                                List<MultipartFile> image) {
-
-        //  Fetching sub-category
-        ProductCategory subCategory = categoriesRetrievalService.getSubCategoryById(newProduct.getSubCategoryId());
-        if (subCategory == null || subCategory.getParentCategoryId() == null) {
-            throw new IllegalArgumentException("Invalid sub-category with ID: " + newProduct.getSubCategoryId() + " - must have a parent category");
-        }
-        //  Saving Product
-        Product savedProduct = saveNewProduct(
-                newProduct,
-                subCategory
-        );
-
-        // Processing Variation Options
-        List<VariationOption> variationOptionList = processVariations(variationMap, null);
-        if (variationOptionList == null) {
-            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
-        }
-
-        //  Saving Product Item
-        List<ProductItem> savedProductItems = saveNewProductItem(
-                newProduct.getSizeStockMap(),
-                variationOptionList,
-                subCategory,
-                savedProduct,
-                newProduct.getColor(),
-                newProduct.getPrice(),
-                newProduct.getStatus().equals("active")
-        );
-
-//        saveImages()
-    }
+//    @Transactional
+//    public void addNewProductV2(NewProductDto newProduct,
+//                                Map<String, String> variationMap,
+//                                List<MultipartFile> image) {
+//
+//        //  Fetching sub-category
+//        ProductCategory subCategory = categoriesRetrievalService.getSubCategoryById(newProduct.getSubCategoryId());
+//        if (subCategory == null || subCategory.getParentCategoryId() == null) {
+//            throw new IllegalArgumentException("Invalid sub-category with ID: " + newProduct.getSubCategoryId() + " - must have a parent category");
+//        }
+//        //  Saving Product
+//        Product savedProduct = saveNewProduct(
+//                newProduct,
+//                subCategory
+//        );
+//
+//        // Processing Variation Options
+//        List<VariationOption> variationOptionList = processVariations(variationMap, null);
+//        if (variationOptionList == null) {
+//            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
+//        }
+//
+//        //  Saving Product Item
+//        List<ProductItem> savedProductItems = saveNewProductItem(
+//                newProduct.getSizeStockMap(),
+//                variationOptionList,
+//                subCategory,
+//                savedProduct,
+//                newProduct.getColor(),
+//                newProduct.getPrice(),
+//                newProduct.getStatus().equals("active")
+//        );
+//
+////        saveImages()
+//    }
 
 
     //  Save new PRODUCT to DB - TESTED
@@ -206,79 +206,86 @@ public class ProductsService {
 //
 
 
-
     //  Save multiple new PRODUCT ITEMs to DB - TESTED
-    @Transactional
-    private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
-                                                 List<VariationOption> variations,
-                                                 ProductCategory subCategory,
-                                                 Product product,
-                                                 Long colorId,
-                                                 Float price,
-                                                 Boolean isActive) {
-        List<ProductItem> itemsList = new ArrayList<>();
-
-        //  fetching color option by color ID
-        VariationOption color = variationsRetrievalService.getOptionById(colorId);
-
-        //  product validation
-        if (product == null || product.getId() == null || product.getId() <= 0)
-            throw new IllegalArgumentException("Product or productId required.");
-
-        //  Looping size & stock map  ->  each loop creates one new PRODUCT ITEM with an individual size
-        for (Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
-            VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
-
-            // generating sku - with next sequenced item ID
-            Long nextId = productItemsRepo.getNextItemId();
-            String sku = generateSKU(
-                    subCategory.getAbbreviation(),
-                    product.getId(),
-                    color.getColorCode().getColorAbbreviation(),
-                    size.getOptionValue(),
-                    nextId
-            );
-
-            //  creating new product item object
-            ProductItem item = ProductItem.builder()
-                    .id(nextId)
-                    .product(product)
-                    .price(price)
-                    .qtyInStock(e.getValue())
-                    .SKU(sku)
-                    .isActive(isActive)
-                    .build();
-
-            //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
-            List<ProductConfiguration> config = variations.stream()
-                    .map(opt -> {
-                        return ProductConfiguration.builder()
-                                .productItem(item)
-                                .variationOption(opt)
-                                .build();
-                    })
-                    .collect(Collectors.toList());
-
-            //  adding 'color' variation to 'config' list
-            config.add(ProductConfiguration.builder()
-                    .productItem(item)
-                    .variationOption(color)
-                    .build()
-            );
-
-            //  adding 'size' variation to 'config' list
-            config.add(ProductConfiguration.builder()
-                    .productItem(item)
-                    .variationOption(size)
-                    .build()
-            );
-            item.setConfigurations(config);
-            ProductItem savedItem = productItemsRepo.save(item);
-            itemsList.add(savedItem);
-        }
-        return itemsList;
-    }
-
+//    @Transactional
+//    private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
+//                                                 List<VariationOption> variations,
+//                                                 ProductCategory subCategory,
+//                                                 Product product,
+//                                                 Long colorId,
+//                                                 Float price,
+//                                                 Boolean isActive) {
+//        List<ProductItem> itemsList = new ArrayList<>();
+//
+//        //  fetching color option by color ID
+//        VariationOption color = variationsRetrievalService.getOptionById(colorId);
+//
+//        //  product validation
+//        if (product == null || product.getId() == null || product.getId() <= 0)
+//            throw new IllegalArgumentException("Product or productId required.");
+//
+//        //  generating super sku
+//        String superSku = generateSKU(
+//                subCategory.getAbbreviation(),
+//                product.getId(),
+//                color.getColorCode().getColorAbbreviation(),
+//                null,
+//                null
+//        );
+//
+//        //  Looping size & stock map  ->  each loop creates one new PRODUCT ITEM with an individual size
+//        for (Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
+//            VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
+//
+//            // generating sku - with next sequenced item ID
+//            Long nextId = productItemsRepo.getNextItemId();
+//            String sku = generateSKU(
+//                    subCategory.getAbbreviation(),
+//                    product.getId(),
+//                    color.getColorCode().getColorAbbreviation(),
+//                    size.getOptionValue(),
+//                    nextId
+//            );
+//
+//            //  creating new product item object
+//            ProductItem item = ProductItem.builder()
+//                    .id(nextId)
+//                    .product(product)
+//                    .price(price)
+//                    .qtyInStock(e.getValue())
+//                    .SKU(sku)
+//                    .isActive(isActive)
+//                    .build();
+//
+//            //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
+//            List<ProductConfiguration> config = variations.stream()
+//                    .map(opt -> {
+//                        return ProductConfiguration.builder()
+//                                .productItem(item)
+//                                .variationOption(opt)
+//                                .build();
+//                    })
+//                    .collect(Collectors.toList());
+//
+//            //  adding 'color' variation to 'config' list
+//            config.add(ProductConfiguration.builder()
+//                    .productItem(item)
+//                    .variationOption(color)
+//                    .build()
+//            );
+//
+//            //  adding 'size' variation to 'config' list
+//            config.add(ProductConfiguration.builder()
+//                    .productItem(item)
+//                    .variationOption(size)
+//                    .build()
+//            );
+//            item.setConfigurations(config);
+//            ProductItem savedItem = productItemsRepo.save(item);
+//            itemsList.add(savedItem);
+//        }
+//        return itemsList;
+//    }
 
 
     /// /    ********* Utility methods *********
@@ -344,83 +351,83 @@ public class ProductsService {
     }
 
     //  generate sku - TESTED
-    private String generateSKU(String subCategoryAbbreviation,
+    private String generateSKU(String superSku,
+                               String subCategoryAbbreviation,
                                Long productId,
                                String colorAbbreviation,
                                String size,
                                Long productItemId) {
-        if (size == null && productItemId == null) {
+        if (superSku == null && size == null && productItemId == null) {
             return subCategoryAbbreviation + "-" +
                     productId.toString() + "-" +
                     colorAbbreviation;
-        }else {
-            return subCategoryAbbreviation + "-" +
-                    productId.toString() + "-" +
-                    colorAbbreviation + "-" +
+        } else if (subCategoryAbbreviation == null && productId == null && colorAbbreviation == null){
+            return superSku + "-" +
                     size + "-" +
                     productItemId.toString();
-        }
+        } else return null;
     }
 
-////    // save Images
-    private List<ProductImage> saveImages(String categoryName,              //  ### superSku pending
-                                          String subCategoryName,
-                                          String superSku,
-                                          ProductItem savedProductItem,
-                                          List<MultipartFile> images) throws IOException {
-
-        //  input validation
-        if (categoryName == null || subCategoryName == null) {
-            throw new IllegalArgumentException("Category and Sub-category names cannot be null");
-        }
-        if (superSku == null || superSku.isEmpty()) {
-            throw new IllegalArgumentException("superSKU missing");
-        }
-        if (savedProductItem == null) {
-            throw new IllegalArgumentException("Product item cannot be null");
-        }
-        if (images == null || images.isEmpty()) {
-            throw new IllegalArgumentException("Images are mandatory.");
-        }
-
-        List<String> imagePaths = new ArrayList<>();
-
-        //  creating - Directory with custom path
-        Path uploadDir = Paths.get("uploads", categoryName, subCategoryName, productId, superSku);
-        Files.createDirectories(uploadDir);
-
-        //  image processing
-        for (MultipartFile image : images) {
-            String contentType = image.getContentType();
-
-            //  image file - sanitizing with white listed formats
-            if (!List.of("image/png", "image/jpeg").contains(contentType)) {
-                throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
-            }
-            if (!image.isEmpty()) {
-
-                //  creating - image filename
-                String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-                String filename = UUID.randomUUID() + "." + extension;
-
-                //  image file path & storing
-                Path filePath = Paths.get(String.valueOf(uploadDir), filename);
-                image.transferTo(filePath);
-                imagePaths.add(String.valueOf(filePath));
-            }
-        }
+    /// /    // save Images
+//    private List<ProductImage> saveImages(String categoryName,              //  ### superSku pending
+//                                          String subCategoryName,
+//                                          String superSku,
+//                                          ProductItem savedProductItem,
+//                                          List<MultipartFile> images) throws IOException {
+//
+//        //  input validation
+//        if (categoryName == null || subCategoryName == null) {
+//            throw new IllegalArgumentException("Category and Sub-category names cannot be null");
+//        }
+//        if (superSku == null || superSku.isEmpty()) {
+//            throw new IllegalArgumentException("superSKU missing");
+//        }
+//        if (savedProductItem == null) {
+//            throw new IllegalArgumentException("Product item cannot be null");
+//        }
+//        if (images == null || images.isEmpty()) {
+//            throw new IllegalArgumentException("Images are mandatory.");
+//        }
+//
+//        List<String> imagePaths = new ArrayList<>();
+//
+//        //  creating - Directory with custom path
+//        Path uploadDir = Paths.get("uploads", categoryName, subCategoryName, productId, superSku);
+//        Files.createDirectories(uploadDir);
+//
+//        //  image processing
+//        for (MultipartFile image : images) {
+//            String contentType = image.getContentType();
+//
+//            //  image file - sanitizing with white listed formats
+//            if (!List.of("image/png", "image/jpeg").contains(contentType)) {
+//                throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
+//            }
+//            if (!image.isEmpty()) {
+//
+//                //  creating - image filename
+//                String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+//                String filename = UUID.randomUUID() + "." + extension;
+//
+//                //  image file path & storing
+//                Path filePath = Paths.get(String.valueOf(uploadDir), filename);
+//                image.transferTo(filePath);
+//                imagePaths.add(String.valueOf(filePath));
+//            }
+//        }
+////        List<ProductImage> imageEntities = imagePaths.stream()
+////                .map(path -> new ProductImage(
+////                        superSku,
+////                        savedProductItem,
+////                        path
+////                )).collect(Collectors.toList());
 //        List<ProductImage> imageEntities = imagePaths.stream()
-//                .map(path -> new ProductImage(
-//                        superSku,
-//                        savedProductItem,
-//                        path
-//                )).collect(Collectors.toList());
-        List<ProductImage> imageEntities = imagePaths.stream()
-                .map(path -> {return ProductImage.builder()
-                        .
-                        .build();
-                }).collect(Collectors.toList());
-        return productImagesRepo.saveAll(imageEntities);
-    }
+//                .map(path -> {
+//                    return ProductImage.builder()
+//                            .
+//                        .build();
+//                }).collect(Collectors.toList());
+//        return productImagesRepo.saveAll(imageEntities);
+//    }
 
 }
