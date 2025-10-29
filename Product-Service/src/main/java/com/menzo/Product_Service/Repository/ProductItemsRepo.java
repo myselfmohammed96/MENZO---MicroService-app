@@ -15,6 +15,8 @@ public interface ProductItemsRepo extends JpaRepository<ProductItem, Long>, JpaS
 
     public Page<ProductItem> findAllByProductId(Long productId, Pageable pageable);
 
+
+
 //    ********* Fetching sequence *********
 
     @Query(

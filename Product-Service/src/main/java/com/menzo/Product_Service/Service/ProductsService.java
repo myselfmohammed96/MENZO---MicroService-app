@@ -1,7 +1,6 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
-import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
 import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductItemDto;
 import com.menzo.Product_Service.Entity.*;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,7 +51,6 @@ public class ProductsService {
     private UtilityService utilityService;
 
 
-
     /*
      *   ******* Add new PRODUCT *******
      *
@@ -80,8 +77,8 @@ public class ProductsService {
      */
     @Transactional
     public Product addNewProduct(NewProductDto newProduct,
-                                Map<String, String> variationMap,
-                                List<MultipartFile> images) throws IOException {
+                                 Map<String, String> variationMap,
+                                 List<MultipartFile> images) throws IOException {
 
         //  Fetching sub-category
         ParentCategoryDto parentCategory = categoriesRetrievalService
@@ -136,6 +133,54 @@ public class ProductsService {
     }
 
 
+    /*
+     *   ******* Add new PRODUCT ITEM *******
+     *
+     *   Every new PRODUCT ITEM saved  ->  will be associated with an existing PRODUCT
+     *   Every new PRODUCT ITEM will have  ->  One 'color variation' unique to the PRODUCT ITEM & Multiple 'Size variations'
+     *
+     *
+     *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
+     *
+     */
+    public void addNewProductItem(ProductItemDto newProductItemDto,
+                                  Map<Long, Integer> sizeStockMap,
+                                  List<MultipartFile> images) {
+
+        //  Product object processing
+        Product product = productsRepo.findById(newProductItemDto.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + newProductItemDto.getProductId()));
+        newProductItemDto.setProduct(product);
+
+        //  Sub category of product
+        ProductCategory subCategory = product.getCategory();
+
+        //  Processing Variation Options
+        List<VariationOption> variationOptionList = processVariations(
+                null,
+                product.getItems().stream()
+                        .findFirst()
+                        .orElseThrow(() -> new EntityNotFoundException("No Product items found in product with ID: " + product.getId()))
+                        .getConfigurations()
+        );
+        if (variationOptionList == null) {
+            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
+        }
+
+        //  saving ProductItems
+        List<ProductItem> saveProductItems = saveNewProductItem(
+                sizeStockMap,
+                variationOptionList,
+                subCategory,
+                product,
+                newProductItemDto.getColorId(),
+                newProductItemDto.getPrice(),
+                newProductItemDto.isActive()
+        );
+
+    }
+
+
     //  Save new PRODUCT to DB - TESTED
     private Product saveNewProduct(
             NewProductDto newProductDto,
@@ -161,56 +206,6 @@ public class ProductsService {
                 .podAvailable(podAvailable)
                 .build();
         return productsRepo.save(newProduct);
-    }
-
-
-    /*
-     *   ******* Add new PRODUCT ITEM *******
-     *
-     *   Every new PRODUCT ITEM saved  ->  will be associated with an existing PRODUCT
-     *   Every new PRODUCT ITEM will have  ->  One 'color variation' unique to the PRODUCT ITEM & Multiple 'Size variations'
-     *
-     *
-     *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
-     *
-     */
-    public void addNewProductItem(ProductItemDto newProductItemDto,
-                                  Map<Long, Integer> sizeStockMap,
-                                  List<MultipartFile> images) {
-        
-        //  Product object processing
-        Product product = productsRepo.findById(newProductItemDto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + newProductItemDto.getProductId()));
-        newProductItemDto.setProduct(product);
-
-        //  Sub category of product
-        ProductCategory subCategory = product.getCategory();
-
-        //  Processing Variation Options
-        List<VariationOption> variationOptionList = processVariations(
-                null,
-                product.getItems().stream()
-                        .findFirst()
-                        .orElseThrow(() -> new EntityNotFoundException("No Product items found in product with ID: " + product.getId()))
-                        .getConfigurations()
-        );
-        if (variationOptionList == null) {
-            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
-        }
-
-        List<ProductItem> saveProductItems = saveNewProductItem(
-                sizeStockMap,
-                variationOptionList,
-                new SubCategoryDto(
-                        subCategory.getId(),
-                        subCategory.getParentCategoryId(),
-                        subCategory.getCategoryName(),
-                        subCategory.getIsActive(),
-                        subCategory.getCreatedAt()
-                ),
-                newProductItemDto
-        );
-
     }
 
 
