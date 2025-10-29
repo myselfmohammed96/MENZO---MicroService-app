@@ -1,10 +1,7 @@
 package com.menzo.Product_Service.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +11,41 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(exclude = "configurations")
 @Table(name = "product_items")
 public class ProductItem {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "item_sequence",
+            sequenceName = "item_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "item_sequence"
+    )
     private Long id;
+
+
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "product_id",
+            referencedColumnName = "id",
             nullable = false
     )
     private Product product;
+
+
+
+
 
     @Column(
             nullable = false,

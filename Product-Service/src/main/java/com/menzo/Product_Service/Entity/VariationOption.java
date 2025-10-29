@@ -47,7 +47,8 @@ public class VariationOption {
 
     @OneToOne(
             mappedBy = "colorOption",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
     )
     @JsonIgnore
     private ColorCode colorCode;

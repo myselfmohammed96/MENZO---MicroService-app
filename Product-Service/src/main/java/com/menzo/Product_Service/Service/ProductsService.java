@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -213,13 +214,14 @@ public class ProductsService {
 //                newProductItemDto
 //        );
 
-    /// /    }
+    //    }
 //
 //
 
 
 
     //  Save multiple new PRODUCT ITEMs to DB
+//    @Transactional
     private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
                                                  List<VariationOption> variations,
                                                  ProductCategory subCategory,
@@ -231,6 +233,7 @@ public class ProductsService {
 
         //  fetching color option by color ID
         VariationOption color = variationsRetrievalService.getOptionById(colorId);
+        System.out.printf("Got the color with the ID: %d", colorId);
 
         //  product validation
         if (product == null || product.getId() == null || product.getId() <= 0)
@@ -240,15 +243,29 @@ public class ProductsService {
         for (Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
             VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
 
+            // generating sku - with next sequenced item ID
+            Long nextId = productItemsRepo.getNextItemId();
+            System.out.println("Got the nextId: " + nextId);
+            String sku = generateSKU(
+                    subCategory.getAbbreviation(),
+                    product.getId(),
+                    color.getColorCode().getColorAbbreviation(),
+                    size.getOptionValue(),
+                    nextId
+            );
+
+            //  creating new product item object
             ProductItem item = ProductItem.builder()
+                    .id(nextId)
                     .product(product)
                     .price(price)
                     .qtyInStock(e.getValue())
+                    .SKU(sku)
                     .isActive(isActive)
                     .build();
 
             //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
-            List<ProductConfiguration> config = variations.stream()     //  variations
+            List<ProductConfiguration> config = variations.stream()
                     .map(opt -> {
                         return ProductConfiguration.builder()
                                 .productItem(item)
@@ -256,32 +273,25 @@ public class ProductsService {
                                 .build();
                     })
                     .collect(Collectors.toList());
-            config.add(ProductConfiguration.builder()       //  color variation
+
+            //  adding 'color' variation to 'config' list
+            config.add(ProductConfiguration.builder()
                     .productItem(item)
                     .variationOption(color)
                     .build()
             );
-            config.add(ProductConfiguration.builder()       //  size variation
+
+            //  adding 'size' variation to 'config' list
+            config.add(ProductConfiguration.builder()
                     .productItem(item)
                     .variationOption(size)
                     .build()
             );
             item.setConfigurations(config);
+//            System.out.println("about to save the item - " + sku);
             ProductItem savedItem = productItemsRepo.save(item);
-
-            //  generating sku
-            String sku = generateSKU(
-                    subCategory.getAbbreviation(),
-                    product.getId(),
-                    color.getColorCode().getColorAbbreviation(),
-                    size.getOptionValue(),
-                    savedItem.getId()
-            );
-            savedItem.setSKU(sku);
-            itemsList.add(productItemsRepo.save(savedItem));
+            itemsList.add(savedItem);
         }
-//        List<ProductItem> savedItems = productItemsRepo.saveAll(itemsList);
-//        return savedItems;
         return itemsList;
     }
 
@@ -349,8 +359,7 @@ public class ProductsService {
         }
     }
 
-
-
+    //  generate sku - TESTED
     private String generateSKU(String subCategoryAbbreviation,
                                Long productId,
                                String colorAbbreviation,

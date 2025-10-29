@@ -3,10 +3,7 @@ package com.menzo.Product_Service.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
@@ -18,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(exclude = "items")
 @Table(name = "products")
 public class Product {
 
@@ -32,6 +30,7 @@ public class Product {
     )
     private String productName;
 
+    //  uni-directional mapping
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "category_id",
@@ -70,6 +69,10 @@ public class Product {
     )
     private Boolean podAvailable;
 
+
+
+
+
     @JsonIgnore
     @OneToMany(
             mappedBy = "product",
@@ -78,6 +81,10 @@ public class Product {
             orphanRemoval = true
     )
     private List<ProductItem> items = new ArrayList<>();
+
+
+
+
 
     @Column(
             nullable = false,
