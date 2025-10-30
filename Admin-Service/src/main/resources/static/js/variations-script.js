@@ -5,7 +5,7 @@ const apiBase = "http://localhost:8080/variations";
 const urls = {
 //    getAll: `${apiBase}/get-all`,
     getVariations: `${apiBase}/get-all-variations`,
-    getOptions: `${apiBase}/`,
+    getOptions: `${apiBase}/get-options`,
     addNewVariation: `${apiBase}/add-variation`,
     updateVariation: `${apiBase}/update-variation`,
     deleteVariation: `${apiBase}/delete-variation`,
@@ -161,7 +161,7 @@ const urls = {
     //  ******* Load variations from backend on page load *******
     async function loadVariations() {
         try{
-            const response = await fetch(urls.getAll, {
+            const response = await fetch(urls.getVariations, {
                 method: "GET",
                 credentials: "include"
             });
@@ -270,7 +270,7 @@ const urls = {
     async function addOptions(variationId, content) {
         console.log("Option-execution for ID: ", variationId);
         try {
-            const response = await fetch("/url", {
+            const response = await fetch(`${urls.getOptions}?id=${variationId}`, {
                 method: "GET",
                 credentials: "include"
             });
