@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
 import java.util.Date;
 
@@ -24,6 +27,17 @@ import java.util.Date;
                         }
                 )
 })
+@FilterDef(
+        name = "optionActiveFilter",
+        parameters = @ParamDef(
+                name = "isDeleted",
+                type = Boolean.class
+        )
+)
+@Filter(
+        name = "optionActiveFilter",
+        condition = "is_deleted = :isDeleted"
+)
 public class VariationOption {
 
     @Id

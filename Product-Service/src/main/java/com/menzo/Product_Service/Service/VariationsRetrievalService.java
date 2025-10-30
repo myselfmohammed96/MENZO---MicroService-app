@@ -5,7 +5,10 @@ import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
 import com.menzo.Product_Service.Repository.VariationsOptionsRepo;
 import com.menzo.Product_Service.Repository.VariationsRepo;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,11 @@ public class VariationsRetrievalService {
 
     @Autowired
     private VariationsOptionsRepo optionsRepo;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
 
     // Variation
 
@@ -90,6 +98,9 @@ public class VariationsRetrievalService {
 
     //  get all variations without options - TESTED
     public List<VariationDto> getAllVariations() {
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("variationActiveFilter")
+                .setParameter("isDeleted", false);
         List<Variation> variations = variationsRepo.findAll();
         List<VariationDto> variationsList = variations.stream()
                 .map(v -> new VariationDto(
@@ -156,6 +167,9 @@ public class VariationsRetrievalService {
     public List<OptionDto> getOptionsByVariationId(Long variationId) {
         Variation variation = variationsRepo.findById(variationId)
                 .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("optionActiveFilter")
+                .setParameter("isDeleted", false);
         List<VariationOption> options = optionsRepo.findByVariationId(variationId);
         if (variation.getVariationName().equals("Colors")) {
             return options.stream().map(opt -> {

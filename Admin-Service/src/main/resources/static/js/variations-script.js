@@ -254,7 +254,9 @@ const urls = {
             });
             if(accordion.dataset.loaded === "false") {
                 let added = addOptions(variationId, content);
-                console.log(added) {
+                console.log(added);
+
+                if(added) {
                     accordion.dataset.loaded = "true";
                     content.style.display = "block";
                 } else {

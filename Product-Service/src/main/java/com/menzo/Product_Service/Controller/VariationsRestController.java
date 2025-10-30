@@ -50,11 +50,11 @@ public class VariationsRestController {
         return variationsRetrievalService.getAllVariationsWithOptionsBySub(subCategoryId);
     }
 
-    //  Get all variations with ids
+    //  get all variations without options
     //  TESTED - with Postman
     //  used - admin-service
     @GetMapping("get-all-variations")
-    public List<?> getVariationById(){
+    public List<?> getAllVariation(){
         return variationsRetrievalService.getAllVariations();
     }
 

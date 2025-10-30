@@ -121,6 +121,7 @@ public class VariationsService {
                     .optionValue(newOption.getOptionValue())
                     .colorCode(null)
                     .variation(variation)
+                    .isDeleted(false)
                     .build();
             newVariationOption = optionsRepo.save(option);
 
@@ -139,6 +140,7 @@ public class VariationsService {
             newVariationOption = VariationOption.builder()
                     .optionValue(newOption.getOptionValue())
                     .variation(variation)
+                    .isDeleted(false)
                     .build();
         }
         logger.info("Saving new variation option under variation {}: {}", variation.getVariationName(), newOption.getOptionValue());

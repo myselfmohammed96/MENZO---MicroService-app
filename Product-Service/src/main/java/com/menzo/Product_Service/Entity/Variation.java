@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -16,8 +19,23 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "options")
-@Table(name = "variations")
+@ToString(
+        exclude = "options"
+)
+@Table(
+        name = "variations"
+)
+@FilterDef(
+        name = "variationActiveFilter",
+        parameters = @ParamDef(
+                name = "isDeleted",
+                type = Boolean.class
+        )
+)
+@Filter(
+        name = "variationActiveFilter",
+        condition = "is_deleted = :isDeleted"
+)
 public class Variation {
 
     @Id
