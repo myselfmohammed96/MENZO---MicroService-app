@@ -35,7 +35,7 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
     //  find parent category by ID
     public Optional<ProductCategory> findByIdAndParentCategoryIdIsNull(Long id);        //  TESTED
 
-    //  find all parent categories with their sub-categories list
+    //  find all parent categories with their sub-categories list - excluding the SOFT DELETED entries
     @Query(
             nativeQuery = true,
             value =
@@ -45,6 +45,8 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
                             "LEFT JOIN product_categories child " +
                             "ON child.parent_category_id = parent.id " +
                             "WHERE parent.parent_category_id IS NULL " +
+                            "AND parent.is_deleted = 0 " +
+                            "AND (child.is_deleted = 0 OR child.is_deleted IS NULL) " +
                             "ORDER BY parent.id, child.id"
     )
     public List<Object[]> findAllParentWithSub();                                   // TESTED

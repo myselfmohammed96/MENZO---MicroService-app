@@ -35,6 +35,7 @@ public class CategoriesRestController {
 
     //  Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
     //  TESTED - with Postman
+    //  usage - admin-service
     @GetMapping("get-all-parents")
     public List<ParentCategoryDto> getAllParents() {
         return categoriesRetrievalService.getAllParents();
@@ -42,11 +43,11 @@ public class CategoriesRestController {
 
     //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     //  TESTED - with Postman
-    //  used - Admin-service
-    @GetMapping("/get-all")
-    public List<NestedCategoryDto> getAllParentCategories() {
-        return categoriesRetrievalService.getAllParentWithSub();
-    }
+//    //  used - Admin-service
+//    @GetMapping("/get-all")
+//    public List<NestedCategoryDto> getAllParentCategories() {
+//        return categoriesRetrievalService.getAllParentWithSub();
+//    }
 
     //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)
     //  TESTED - with Postman
@@ -78,6 +79,7 @@ public class CategoriesRestController {
 
     //  Get all sub category by parent id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
     //  TESTED - with Postman
+    //  usage - admin-service
     @GetMapping("get-all-sub")
     public ResponseEntity<?> getAllSubCategoriesByParentId(@RequestHeader("roles") String roles,
                                                            @RequestParam("id") Long parentId) {

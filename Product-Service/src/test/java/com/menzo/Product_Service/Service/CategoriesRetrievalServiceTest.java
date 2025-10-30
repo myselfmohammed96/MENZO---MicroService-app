@@ -32,7 +32,13 @@ class CategoriesRetrievalServiceTest {
         List<NestedCategoryDto> parents = categoriesRetrievalService
                 .getAllParentWithSub();
         System.out.println(parents);
+        System.out.println(parents.size());
     }
+
+//    @Test
+//    public void testGetAllParentWithSub() {
+//        categoriesRetrievalService.getAllParentWithSub();
+//    }
 
     @Test
     public void testGetParentCategoryById() {

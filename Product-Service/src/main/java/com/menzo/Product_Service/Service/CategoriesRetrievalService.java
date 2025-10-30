@@ -5,11 +5,16 @@ import com.menzo.Product_Service.Entity.ProductCategory;
 import com.menzo.Product_Service.Repository.CategoriesRepo;
 import com.menzo.Product_Service.Repository.ProductsRepo;
 import com.menzo.Product_Service.Repository.VariationsRepo;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.Nested;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +33,8 @@ public class CategoriesRetrievalService {
     @Autowired
     private ProductsRepo productsRepo;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
 //    ********* Parent categories *********
@@ -35,6 +42,9 @@ public class CategoriesRetrievalService {
     //  Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
     //  TESTED
     public List<ParentCategoryDto> getAllParents() {
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("activeFilter")
+                .setParameter("isDeleted", false);
         List<ProductCategory> categoriesList = categoriesRepo.findByParentCategoryIdIsNull();
         logger.info("Fetched {} parent categories", categoriesList.size());
 
@@ -53,6 +63,7 @@ public class CategoriesRetrievalService {
     //  TESTED
 //    ##    exclude the soft deleted parent categories
     public List<NestedCategoryDto> getAllParentWithSub() {
+
         List<Object[]> results = categoriesRepo.findAllParentWithSub();
         Map<Long, NestedCategoryDto> parentMap = new HashMap<>();
         for (Object[] result : results) {
@@ -78,6 +89,27 @@ public class CategoriesRetrievalService {
         }
         return new ArrayList<>(parentMap.values());
     }
+//    @Transactional
+//    public void getAllParentWithSub() {
+//        Session session = entityManager.unwrap(Session.class);
+//        session.enableFilter("activeFilter")
+//                .setParameter("isDeleted", false);
+//        List<ProductCategory> all = categoriesRepo.findAll();
+////        for (ProductCategory c : all) {
+////            System.out.println(c);
+////        }
+////        System.out.println(all.size());
+//        List<NestedCategoryDto> list = all.stream().filter(a -> a.getParentCategoryId() == null)
+//                .map(a -> {
+//                    return NestedCategoryDto.builder()
+//                            .id(a.getId())
+//                            .categoryName(a.getCategoryName())
+//                            .build();
+//                }).collect(Collectors.toList());
+//        for (NestedCategoryDto n : list) {
+//            System.out.println(n);
+//        }
+//    }
 
     //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
     //  TESTED
@@ -132,7 +164,6 @@ public class CategoriesRetrievalService {
     }
 
 
-
 //    ********* Sub categories *********
 
     //  Get all sub category by parent id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
@@ -142,6 +173,9 @@ public class CategoriesRetrievalService {
             logger.error("Parent category not found with ID: {}", parentId);
             throw new EntityNotFoundException("Parent category not found with ID: " + parentId);
         }
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("activeFilter")
+                .setParameter("isDeleted", false);
         List<ProductCategory> subCategories = categoriesRepo.findAllByParentCategoryId(parentId);
         logger.info("Fetching {} sub-categories with parent ID {}", subCategories.size(), parentId);
 
