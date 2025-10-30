@@ -1,9 +1,6 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.VariationsDto.NestedVariationDto;
-import com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto;
-import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
-import com.menzo.Product_Service.Dto.VariationsDto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Dto.VariationsDto.*;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
 import com.menzo.Product_Service.Repository.VariationsOptionsRepo;
@@ -37,9 +34,9 @@ public class VariationsRetrievalService {
         List<Variation> allVariations = variationsRepo.findAll();
         List<VariationWithOptionsDto> variationsList = new ArrayList<>();
 
-        for (Variation variation: allVariations) {
+        for (Variation variation : allVariations) {
             Set<OptionWithIdDto> options = new HashSet<>();
-            for (VariationOption option: variation.getOptions()) {
+            for (VariationOption option : variation.getOptions()) {
                 OptionWithIdDto optionDto = OptionWithIdDto.builder()
                         .id(option.getId())
                         .optionValue(option.getOptionValue())
@@ -65,7 +62,7 @@ public class VariationsRetrievalService {
         Map<Long, VariationWithOptionsDto> variationMap = new HashMap<>();
 
         //  organizing data in dto
-        for(Object[] row: rows) {
+        for (Object[] row : rows) {
             Long variationId = ((Number) row[0]).longValue();
             String variationName = (String) row[1];
             Long optionId = ((Number) row[2]).longValue();
@@ -153,6 +150,29 @@ public class VariationsRetrievalService {
     public VariationOption getOptionById(Long id) {
         return optionsRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No variation option found for Option ID: " + id));
+    }
+
+    //  get options by variation ID - TESTED
+    public List<OptionDto> getOptionsByVariationId(Long variationId) {
+        Variation variation = variationsRepo.findById(variationId)
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
+        List<VariationOption> options = optionsRepo.findByVariationId(variationId);
+        if (variation.getVariationName().equals("Colors")) {
+            return options.stream().map(opt -> {
+                return OptionDto.builder()
+                        .id(opt.getId())
+                        .optionValue(opt.getOptionValue())
+                        .colorCode(opt.getColorCode().getColorCode())
+                        .build();
+            }).collect(Collectors.toList());
+        } else {
+            return options.stream().map(opt -> {
+                return OptionDto.builder()
+                        .id(opt.getId())
+                        .optionValue(opt.getOptionValue())
+                        .build();
+            }).collect(Collectors.toList());
+        }
     }
 
     //  get list of option IDs by variation name - TESTED

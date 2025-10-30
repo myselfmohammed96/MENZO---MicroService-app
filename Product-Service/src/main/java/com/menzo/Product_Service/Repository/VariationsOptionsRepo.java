@@ -13,6 +13,7 @@ public interface VariationsOptionsRepo extends JpaRepository<VariationOption, Lo
 
     public List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
 
+    public List<VariationOption> findByVariationId(Long variationId);   // TESTED
 }
 
 

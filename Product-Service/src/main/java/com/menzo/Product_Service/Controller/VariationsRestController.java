@@ -33,17 +33,18 @@ public class VariationsRestController {
 
 
 //    ********* GET - Controllers *********
-//    ********* Variation *********
+///    ********* Variation *********
 
     //  Get all Variation with their options
     //  TESTED - with Postman
-    @GetMapping("/get-all")
-    public List<?> getAllVariations() {
-        return variationsRetrievalService.getAllVariationsWithOptions();
-    }
+//    @GetMapping("/get-all")
+//    public List<?> getAllVariations() {
+//        return variationsRetrievalService.getAllVariationsWithOptions();
+//    }
 
     //  Get all variations and options by sub-category id
     //  TESTED - with Postman
+
     @GetMapping("get-variations")
     public List<VariationWithOptionsDto> getAllVariationsBySub(@RequestParam("id") Long subCategoryId) {
         return variationsRetrievalService.getAllVariationsWithOptionsBySub(subCategoryId);
@@ -51,6 +52,7 @@ public class VariationsRestController {
 
     //  Get all variations with ids
     //  TESTED - with Postman
+    //  used - admin-service
     @GetMapping("get-all-variations")
     public List<?> getVariationById(){
         return variationsRetrievalService.getAllVariations();
@@ -58,10 +60,20 @@ public class VariationsRestController {
 
 
 
+//    ********* Options *********
+
+    //  get options by variation id - admin-service
+    @GetMapping("get-options")
+    public List<OptionDto> getOptionsByVariationId(@RequestParam("id") Long variationId) {
+        return variationsRetrievalService.getOptionsByVariationId(variationId);
+    }
+
+
+
 //    ********* POST, PUT, DELETE - Controllers *********
 //    ********* Variations *********
 
-    //  Add new Variation
+    //  Add new Variation - admin-service
     @PostMapping("/add-variation")
     public ResponseEntity<?> addVariation(
             @Valid @RequestBody CreateVariationDto newVariation,
@@ -92,7 +104,7 @@ public class VariationsRestController {
     }
 
 
-    //  Update Variation by id
+    //  Update Variation by id - admin-service
     @PutMapping("/update-variation")
     public ResponseEntity<?> updateVariation(
             @RequestParam("id") Long variationId,
@@ -120,7 +132,7 @@ public class VariationsRestController {
     }
 
 
-    //  Delete Variation by id
+    //  Delete Variation by id - admin-service
     @DeleteMapping("/delete-variation")
     public ResponseEntity<?> deleteVariation(@RequestParam("id") Long variationId) {
 
@@ -149,7 +161,7 @@ public class VariationsRestController {
 
 //    ********* Variation options *********
 
-    //  Add new variation option
+    //  Add new variation option - admin-service
     @PostMapping("/add-option")
     public ResponseEntity<?> addOption(
             @Valid @RequestBody CreateVariationOptionDto newOption,
@@ -186,7 +198,7 @@ public class VariationsRestController {
     }
 
 
-    //  Update variation option by id
+    //  Update variation option by id - admin-service
     @PutMapping("/update-option")
     public ResponseEntity<?> updateOption(
             @RequestParam("id") Long optionId,
@@ -214,7 +226,7 @@ public class VariationsRestController {
     }
 
 
-    //  Delete variation option by id
+    //  Delete variation option by id - admin-service
     @DeleteMapping("/delete-option")
     public ResponseEntity<?> deleteOption(@RequestParam("id") Long optionId){
 

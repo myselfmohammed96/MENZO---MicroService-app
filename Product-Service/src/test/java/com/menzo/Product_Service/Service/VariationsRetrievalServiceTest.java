@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.VariationsDto.NestedVariationDto;
+import com.menzo.Product_Service.Dto.VariationsDto.OptionDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationWithOptionsDto;
 import com.menzo.Product_Service.Entity.VariationOption;
@@ -68,6 +69,22 @@ class VariationsRetrievalServiceTest {
     public void testGetOptionById() {
         VariationOption option = variationsRetrievalService.getOptionById(3L);
         System.out.println(option);
+    }
+
+    @Test
+    public void testGetOptionsByVariationId() {
+        List<OptionDto> options = variationsRetrievalService
+                .getOptionsByVariationId(9L);
+        System.out.println(options);
+        System.out.println(options.size());
+    }
+
+    @Test
+    public void testGetColorOptionsByVariationId() {
+        List<OptionDto> options = variationsRetrievalService
+                .getOptionsByVariationId(3L);
+        System.out.println(options);
+        System.out.println(options.size());
     }
 
     @Test

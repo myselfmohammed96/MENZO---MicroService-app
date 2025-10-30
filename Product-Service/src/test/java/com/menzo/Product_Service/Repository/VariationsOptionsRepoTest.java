@@ -39,4 +39,11 @@ class VariationsOptionsRepoTest {
         }
     }
 
+    @Test
+    public void testFindByVariationId() {
+        List<VariationOption> options = optionsRepo.findByVariationId(3L);
+        System.out.println(options);
+        System.out.println(options.size());
+    }
+
 }

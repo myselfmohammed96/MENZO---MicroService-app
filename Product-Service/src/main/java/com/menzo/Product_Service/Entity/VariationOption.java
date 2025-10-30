@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "variation")
+@ToString(exclude = {"variation", "colorCode"})
 @Table(
         name = "variation_options",
         uniqueConstraints = {

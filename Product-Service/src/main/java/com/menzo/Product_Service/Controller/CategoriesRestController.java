@@ -30,6 +30,10 @@ public class CategoriesRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(CategoriesRestController.class);
 
+
+
+
+
 //    ********* GET - Controllers *********
 //    ********* Parent-categories *********
 
@@ -41,6 +45,8 @@ public class CategoriesRestController {
         return categoriesRetrievalService.getAllParents();
     }
 
+
+
     //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     //  TESTED - with Postman
 //    //  used - Admin-service
@@ -48,6 +54,8 @@ public class CategoriesRestController {
 //    public List<NestedCategoryDto> getAllParentCategories() {
 //        return categoriesRetrievalService.getAllParentWithSub();
 //    }
+
+
 
     //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)
     //  TESTED - with Postman
@@ -61,6 +69,8 @@ public class CategoriesRestController {
         return ResponseEntity.ok(parentCategoryDto);
     }
 
+
+
     //  Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName)) --- @RequestHeader("roles") String roles,
     //  TESTED - with Postman
     @GetMapping("get")
@@ -72,6 +82,8 @@ public class CategoriesRestController {
         NestedCategoryDto parentCategoryWithSub = categoriesRetrievalService.getParentCategoryByIdWithSub(parentCategoryId);
         return ResponseEntity.ok(parentCategoryWithSub);
     }
+
+
 
 
 
@@ -94,6 +106,8 @@ public class CategoriesRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+
+
 
     //  Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
     //  TESTED - with Postman
@@ -127,10 +141,12 @@ public class CategoriesRestController {
 
 
 
+
+
 ///    ********* POST, PUT, DELETE - Controllers *********
 //    ********* Parent-Categories *********
 
-    //    Add new parent category
+    //    Add new parent category - admin-service
     @PostMapping("/add-parent")
     public ResponseEntity<?> addParentCategory(@RequestHeader("roles") String roles,
                                                @Valid @RequestBody CreateParentCategoryDto newParentCategory,
@@ -164,7 +180,9 @@ public class CategoriesRestController {
         }
     }
 
-    //    Update parent category by id
+
+
+    //    Update parent category by id - admin-service
     @PutMapping("/update-parent")
     public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles,
                                                   @RequestParam("id") Long parentCategoryId,
@@ -195,7 +213,9 @@ public class CategoriesRestController {
         }
     }
 
-    //    Delete parent category by id
+
+
+    //    Delete parent category by id - admin-service
     @DeleteMapping("/delete-parent")
     public ResponseEntity<?> deleteParentCategory(@RequestHeader("roles") String roles,
                                                   @RequestParam("id") Long parentCategoryId) {
@@ -227,9 +247,11 @@ public class CategoriesRestController {
 
 
 
+
+
 //    ********* Sub-categories *********
 
-    //    Add new sub category
+    //    Add new sub category - admin-service
     @PostMapping("/add-sub")
     public ResponseEntity<?> addSubCategory(@RequestHeader("roles") String roles,
                                             @Valid @RequestBody CreateSubCategoryDto newSubCategory,
@@ -263,9 +285,13 @@ public class CategoriesRestController {
         }
     }
 
-    //    Update sub category by ID
+
+
+    //    Update sub category by ID - admin-service
     @PutMapping("/update-sub")
-    public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles, @RequestParam("id") Long subCategoryId, @RequestBody SubCategoryDto latestSubCategory) {
+    public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles,
+                                               @RequestParam("id") Long subCategoryId,
+                                               @RequestBody SubCategoryDto latestSubCategory) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
@@ -292,7 +318,9 @@ public class CategoriesRestController {
         }
     }
 
-    //    Delete sub category by ID
+
+
+    //    Delete sub category by ID - admin-service
     @DeleteMapping("/delete-sub")
     public ResponseEntity<?> deleteSubCategory(@RequestHeader("roles") String roles,
                                                @RequestParam("id") Long subCategoryId) {
