@@ -8,13 +8,14 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
 
-    <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css" />
-    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" />
+    <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
+    <link rel="stylesheet"
+          href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
 
-    <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css" />
-    <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css" />
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css"/>
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css"/>
 
     <link rel="stylesheet" href="/css/forms-styling.css">
     <link rel="stylesheet" href="/css/forms-theme-font-effects.css">
@@ -22,9 +23,9 @@
     <link rel="stylesheet" href="/css/components-styling.css">
     <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
-    <link rel="stylesheet" href="/css/admin-side-menu.css" />
+    <link rel="stylesheet" href="/css/admin-side-menu.css"/>
 
-    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-style.css"/>
 
     <title>MENZO | Admin-Add product</title>
 </head>
@@ -78,7 +79,8 @@
         <ul class="category-menu">
             <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
             <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>
-            <li class="menu-item" id="current-option"><a href="http://localhost:8080/admin/all-products">Products</a></li>
+            <li class="menu-item" id="current-option"><a href="http://localhost:8080/admin/all-products">Products</a>
+            </li>
             <li class="menu-item"><a href="">Discount & offers</a></li>
             <li class="menu-item"><a href="">Coupons</a></li>
             <li class="menu-item"><a href="">Order management</a></li>
@@ -108,7 +110,7 @@
             <h1 id="page-title">Add product</h1>
             <button id="add-button">Save Draft</button>
         </div>
-        <hr class="custom-line-1" />
+        <hr class="custom-line-1"/>
 
         <form id="addProductForm" enctype="multipart/form-data" th:action="@{/products/add-product-v2}"
               th:object="${newProduct}" method="POST">
@@ -123,8 +125,9 @@
                         <!-- Product image input -->
                         <label class="general-info-label">Product Name:
                             <div style="position: relative;">
-                                <input type="text" class="text-input-1" th:field="*{productName}" name="productName" id="product-name"
-                                       placeholder="Product Name" required />
+                                <input type="text" class="text-input-1" th:field="*{productName}" name="productName"
+                                       id="product-name"
+                                       placeholder="Product Name" required/>
                                 <ul class="suggestion-box" id="suggestions"></ul>
                             </div>
                         </label>
@@ -136,10 +139,8 @@
                         </label>
 
                         <!-- Product size & color options -->
-<!--                        <div id="general-info-options">-->
                         <div id="info-options-container">
                             <div id="info-opt-container-col1">
-
                                 <!-- Size options -->
                                 <div id="sizes">
                                     <label class="general-info-label">Size</label>
@@ -147,11 +148,12 @@
                                     <div id="size-options-container">
                                         <div th:each="size : ${sizesList}" class="size-wrapper">
                                             <label class="size-option">
-                                                <input th:value="${size.id}" type="checkbox" class="size-checkbox" name="size">
+                                                <input th:value="${size.id}" type="checkbox" class="size-checkbox"
+                                                       name="size">
                                                 <span th:text="${size.variationName}"></span>
                                             </label>
-                                            <input th:name="${'sizeStockMap[' + size.id + ']'}" class="text-input-2" type="number" placeholder="Enter stock" disabled required/>
-<!--                                            <input th:name="sizeStockMap[${size.id}]" class="text-input-2" type="number" placeholder="Enter stock" disabled required/>-->
+                                            <input th:name="${'sizeStockMap[' + size.id + ']'}" class="text-input-2"
+                                                   type="number" placeholder="Enter stock" disabled required/>
                                         </div>
                                     </div>
                                 </div>
@@ -165,10 +167,10 @@
                                     <p class="option-description">Pick Available Colors</p>
                                     <div class="custom-select-wrapper">
                                         <select id="colors"
-                                            class="custom-select"
-                                            name="colors"
-                                            th:field="*{color}"
-                                            required>
+                                                class="custom-select"
+                                                name="colors"
+                                                th:field="*{color}"
+                                                required>
                                             <option value="" hidden selected>Colors</option>
                                             <option th:each="color : ${colorsList}"
                                                     th:value="${color.id}"
@@ -209,59 +211,75 @@
                     </fieldset>
 
 
-
                     <!-- Price & Stock fieldset -->
                     <fieldset id="price-stock-fieldset">
                         <legend>Pricing and Stock</legend>
                         <label class="general-info-label">Base Price:
                             <input th:field="*{price}" type="number" name="price" class="text-input-1" id="price"
-                                   placeholder="Base Price" required />
+                                   placeholder="Base Price" required/>
                         </label>
-<!--                        <label class="general-info-label">Stock:-->
-<!--                            <input th:field="*{stockQty}" type="number" name="stock" class="text-input-1" id="stock"-->
-<!--                                   placeholder="Stock qty" required />-->
-<!--                        </label>-->
                         <label class="general-info-label">Discount (in %):
                             <input type="text" name="discount" class="text-input-1" id="discount"
-                                   placeholder="Discount" required />
+                                   placeholder="Discount" required/>
                         </label>
                         <label class="general-info-label">Discount Type:
                             <input type="text" name="discount-type" class="text-input-1" id="discount-type"
-                                   placeholder="Discount Type" required />
+                                   placeholder="Discount Type" required/>
                         </label>
                     </fieldset>
-
 
 
                     <!-- Additional information -->
                     <fieldset id="additional-info-fieldset">
                         <legend>Additional Information</legend>
                         <label class="general-info-label">Item Weight:
-                            <input type="number" th:field="*{itemWeight}" name="itemWeight" class="text-input-1" id="item-weight"
-                                   placeholder="Item Weight" required />
+                            <input type="number" th:field="*{itemWeight}" name="itemWeight" class="text-input-1"
+                                   id="item-weight"
+                                   placeholder="Item Weight" required/>
                         </label>
                         <label class="general-info-label">Generic Name:
-                            <input type="text" th:field="*{genericName}" name="genericName" class="text-input-1" id="generic-name"
-                                   placeholder="Generic Name" required />
+                            <input type="text" th:field="*{genericName}" name="genericName" class="text-input-1"
+                                   id="generic-name"
+                                   placeholder="Generic Name" required/>
                         </label>
                         <label class="general-info-label">Country of Origin:
                             <input type="text" th:field="*{countryOfOrigin}" name="countryOfOrigin" class="text-input-1"
-                                   id="country-of-origin" placeholder="Country of Origin" required />
+                                   id="country-of-origin" placeholder="Country of Origin" required/>
                         </label>
                         <label class="general-info-label">Manufacturer:
-                            <input type="text" th:field="*{manufacturer}" name="manufacturer" class="text-input-1" id="manufacturer"
-                                   placeholder="Manufacturer" required />
+                            <input type="text" th:field="*{manufacturer}" name="manufacturer" class="text-input-1"
+                                   id="manufacturer"
+                                   placeholder="Manufacturer" required/>
                         </label>
                         <label class="general-info-label">Packer:
-                            <input type="text" th:field="*{packer}" name="packer" class="text-input-1" id="packer" placeholder="Packer"
-                                   required />
+                            <input type="text" th:field="*{packer}" name="packer" class="text-input-1" id="packer"
+                                   placeholder="Packer"
+                                   required/>
                         </label>
                     </fieldset>
                 </div>
 
 
-
                 <div id="product-info-col-2">
+
+                    <fieldset>
+                        <legend>Category</legend>
+                        <label class="general-info-label">Category:
+                            <div class="custom-select-wrapper">
+                                <select th:field="*{categoryId}" id="category-select" class="custom-select"
+                                        name="categoryId" required></select>
+                            </div>
+                        </label>
+                        <label class="general-info-label">Sub Category:
+                            <div class="custom-select-wrapper">
+                                <select th:field="*{subCategoryId}" id="sub-category-select" name="subCategoryId"
+                                        required>
+                                    <option value="">Sub-category</option>
+                                </select>
+                            </div>
+                        </label>
+                    </fieldset>
+                    <div id="variations-space"></div>
 
                     <!-- Image upload field -->
                     <fieldset>
@@ -280,58 +298,14 @@
                         </div>
                     </fieldset>
 
-                    <fieldset>
-                        <legend>Category</legend>
-                        <label class="general-info-label">Category:
-                            <div class="custom-select-wrapper">
-                                <select th:field="*{categoryId}" id="category-select" class="custom-select"
-                                        name="categoryId" required></select>
-                            </div>
-                        </label>
 
-                        <label class="general-info-label">Sub Category:
-                            <div class="custom-select-wrapper">
-                                <select th:field="*{subCategoryId}" id="sub-category-select" name="subCategoryId"
-                                        required>
-                                    <option value="">Sub-category</option>
-                                </select>
-                            </div>
-                        </label>
-                    </fieldset>
-
-                    <fieldset id="variations-fieldset">
-                        <legend>Variation</legend>
-                        <label class="general-info-label">Sleeve Type:
-                            <div class="custom-select-wrapper">
-                                <select id="sleeve-type" class="custom-select"
-                                        name="sleeveType" required>
-                                    <option value="hi">hi</option>
-                                </select>
-                            </div>
-                        </label>
-
-                        <label class="general-info-label">Collar:
-                            <div class="custom-select-wrapper">
-                                <select id="collar" name="collar" required>
-                                    <option value="collar">Collar</option>
-                                </select>
-                            </div>
-                        </label>
-                        <label class="general-info-label">Fit Type:
-                            <div class="custom-select-wrapper">
-                                <select id="fit-type" name="fitType" required>
-                                    <option value="fit">Fit Type</option>
-                                </select>
-                            </div>
-                        </label>
-                    </fieldset>
                 </div>
             </div>
 
             <!-- Image Upload -->
             <fieldset>
                 <legend>Upload Images (max 3)</legend>
-                <input type="file" name="images" id="product-images" multiple />
+                <input type="file" name="images" id="product-images" multiple/>
                 <div id="image-stats"></div>
             </fieldset>
 
@@ -341,135 +315,6 @@
             </div>
 
         </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--        <form id="addProductForm" enctype="multipart/form-data" th:action="@{/products/add-product}" th:object="${newProduct}" method="POST">-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- General Information -->
-<!--            <fieldset id="general-info">-->
-<!--                <legend>General Information</legend>-->
-
-<!--                <label class="general-info-label">Product Name:-->
-<!--                    <div style="position: relative;">-->
-<!--                        <input type="text" th:field="*{productName}" name="productName" id="product-name" placeholder="Product Name" required />-->
-<!--                        <ul class="suggestion-box" id="suggestions"></ul>-->
-<!--                    </div>-->
-<!--                </label>-->
-
-<!--                <label class="general-info-label">Category:-->
-<!--                    <div class="custom-select-wrapper">-->
-<!--                        <select th:field="*{categoryId}" id="category-select" class="custom-select" name="categoryId" required></select>-->
-<!--                    </div>-->
-<!--                </label>-->
-
-<!--                <label class="general-info-label">Sub Category:-->
-<!--                    <div class="custom-select-wrapper">-->
-<!--                        <select th:field="*{subCategoryId}" id="sub-category-select" name="subCategoryId" required>-->
-<!--                            <option value="">Sub-category</option>-->
-<!--                        </select>-->
-<!--                    </div>-->
-<!--                </label>-->
-
-<!--                <label class="general-info-label">Description:-->
-<!--                    <textarea th:field="*{description}" name="description" placeholder="Description" required></textarea>-->
-<!--                </label>-->
-
-<!--                <label class="general-info-label">Pay on Delivery:-->
-<!--                    <input type="radio" th:field="*{cod}" name="cod" value="available" checked /> Available-->
-<!--                    <input type="radio" th:field="*{cod}" name="cod" value="not_available" /> Not Available-->
-<!--                </label>-->
-<!--            </fieldset>-->
-
-            <!-- Product Details -->
-<!--            <fieldset id="product-details">-->
-<!--                <legend>Product Details</legend>-->
-
-<!--                <label class="product-details-label">Item Weight (g):-->
-<!--                    <input type="number" th:field="*{itemWeight}" name="weight">-->
-<!--                </label>-->
-
-<!--                <label class="product-details-label">Generic Name:-->
-<!--                    <input type="text" th:field="*{genericName}" name="genericName">-->
-<!--                </label>-->
-
-<!--                <label class="product-details-label">Country of Origin:-->
-<!--                    <input type="text" th:field="*{countryOfOrigin}" name="countryOfOrigin">-->
-<!--                </label>-->
-
-                <!--          <label class="product-details-label">Manufacturer:-->
-                <!--            <input type="text" th:field="*{manufacturer}" name="manufacturer">-->
-                <!--          </label>-->
-
-                <!--          <label class="product-details-label">Packer:-->
-                <!--            <input type="text" th:field="*{packer}" name="packer">-->
-                <!--          </label>-->
-<!--            </fieldset>-->
-
-            <!-- Image Upload -->
-<!--            <fieldset>-->
-<!--                <legend>Upload Images (max 3)</legend>-->
-<!--                <input type="file" name="images" id="product-images" multiple />-->
-<!--                <div id="image-stats"></div>-->
-<!--            </fieldset>-->
-
-            <!-- Submit Button -->
-<!--            <button type="submit">Add Product</button>-->
-<!--        </form>-->
-
     </div>
 </div>
 
@@ -491,6 +336,8 @@
 </div>
 
 <script src="/js/nav-bar-script.js"></script>
+<script src="/js/product-form-config.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
 <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
@@ -498,8 +345,6 @@
 <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
 <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
-<!--<script src="/js/add-product-form-fields.js"></script>-->
-<script src="/js/product-form-config.js"></script>
 </body>
 
 
@@ -517,7 +362,6 @@
 <!--        </label>-->
 
 
-
 <!--        <label class="general-info-label">Status:-->
 <!--          <input type="radio" th:field="*{status}" name="status" value="active" checked /> Active-->
 <!--          <input type="radio" th:field="*{status}" name="status" value="inactive" /> Inactive-->
@@ -530,7 +374,6 @@
 <!--      </fieldSet>-->
 
 
-
 <!--          <label>Material Composition: <input type="text" name="materialComposition"></label>accept="image/*"-->
 <!--          <label>Pattern: <input type="text" name="pattern"></label>-->
 <!--          <label>Fit Type: <input type="text" name="fitType"></label>-->
@@ -541,7 +384,6 @@
 <!--          <label>About this Item:-->
 <!--            <textarea name="aboutItem" placeholder="Use bullet points or separate lines"></textarea>-->
 <!--          </label>-->
-
 
 
 <!-- Additional Information -->

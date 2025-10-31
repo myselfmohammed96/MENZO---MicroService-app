@@ -28,7 +28,7 @@ public class ProductController {
 
 
 
-    @PostMapping("/add-product")
+    @PostMapping("/add-product-v2")
     public String addProductV2(@ModelAttribute NewProductDto newProduct,
                                @RequestParam Map<String, String> variationMap,
                                @RequestParam("images") List<MultipartFile> images) throws IOException {
@@ -36,7 +36,7 @@ public class ProductController {
         System.out.println(newProduct);
         System.out.println(newProduct.getSizeStockMap());
 
-        productsService.addNewProduct(newProduct, variationMap, images);
+//        productsService.addNewProduct(newProduct, variationMap, images);
 
 //        String redirectUrl = UriComponentsBuilder
 //                .fromUriString("http://localhost:8080")

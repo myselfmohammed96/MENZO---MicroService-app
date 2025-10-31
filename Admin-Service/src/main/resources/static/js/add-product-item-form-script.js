@@ -11,13 +11,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: "GET",
                 credentials: "include"
             });
-            if(!response.ok) {
-                throw new Error(`HTTP error ${response.status}`);
-            }
+            if(!response.ok) throw new Error(`HTTP error ${response.status}`);
+
             const variations = await response.json();
-            if (!Array.isArray(variations)) {
-                throw new Error("Invalid variation format");
-            }
+            if (!Array.isArray(variations)) throw new Error("Invalid variation format");
 
             populateVariations(variations);
         } catch (error) {

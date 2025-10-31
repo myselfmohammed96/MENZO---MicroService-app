@@ -1,48 +1,56 @@
-const getAllCategories = "http://localhost:8080/categories/get-all-parents";
-const getAllSub = "http://localhost:8080/categories/get-all-sub";
+const getCategories = "http://localhost:8080/categories/get-all-parents";
+const getSubCategories = "http://localhost:8080/categories/get-all-sub";
+const getVariations = "http://localhost:8080/variations/get-variations";
 
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+console.log("Hello");
+
     const categorySelect = document.getElementById('category-select');
     const subCategorySelect = document.getElementById('sub-category-select');
-//    const variationsFieldSet = document.querySelector('#variations-fieldset');
+    const secondColumn = document.getElementById('product-info-col-2');
+    const variationsSpace = document.getElementById('variations-space');
+    let variationsFieldSet;
     let subCategoryChoices;
 
 
 
-    // ******* Choice.js - select config *******
+    //    ********* load categories *********
 
-    //  Parent Categories - select
-    async function loadCategoriesInOptions() {
+    //  fetch & load categories
+    async function loadCategories() {
         try{
-            const response = await fetch(getAllCategories, {
+            const response = await fetch(getCategories, {
                 method: "GET",
                 credentials: "include"
             });
+            console.log("Categories loaded");
             if(!response.ok) {
                 throw new Error(`HTTP error ${response.status}`);
             }
             const categories = await response.json();
-            if (!Array.isArray(categories)) {
-                throw new Error("Invalid data format: categories should be array");
-            }
+            if (!Array.isArray(categories)) throw new Error("Invalid data format: categories should be array");
             categories.forEach(cat => {
                 if (cat && cat.id !== undefined && cat.categoryName) {
-                    addCategorySelectOptions(cat.id, cat.categoryName);
+                    addCategorySelect(cat.id, cat.categoryName);
                 } else {
                     console.warn("Skipping invalid categories: ", cat);
                 }
             });
 
             initializeCategoriesChoices();
+
         } catch (error) {
             console.error("Load Error: ",error);
 //            alert("Unable to load categories. Please try again.");
         }
     }
 
-    function addCategorySelectOptions(id, categoryName) {
+
+    //  populate category select
+    function addCategorySelect(id, categoryName) {
         try {
             const categoryOption = document.createElement('option');
             categoryOption.value = id;
@@ -53,6 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+
+    //  initialize category select
     function initializeCategoriesChoices() {
         try {
             new Choices('#category-select', {
@@ -69,11 +79,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
 
+    //  eventListener on category select - to trigger load sub-categories
+    categorySelect.addEventListener('change',async () => {
+        const categoryId = categorySelect.value;
 
-    // Sub-categories - select
-    async function loadSubCategoriesInOptions(categoryId) {
+        subCategorySelect.innerHTML = '';
+        variationsSpace.innerHTML = '';
+        if(subCategoryChoices) {
+            subCategoryChoices.removeActiveItems();
+            subCategoryChoices.clearChoices();
+            subCategoryChoices.disable();
+        }
+        if (!categoryId) return;
+
+        await loadSubCategories(categoryId);
+        subCategoryChoices.enable();
+        console.log("Categories changed");
+    });
+
+
+
+    //    ********* load sub-categories *********
+
+    //  fetch & load sub-categories by category ID
+    async function loadSubCategories(categoryId) {
         try {
-            const response = await fetch(`${getAllSub}?id=${categoryId}`, {
+            const response = await fetch(`${getSubCategories}?id=${categoryId}`, {
                 method: "GET",
                 credentials: "include"
             });
@@ -87,20 +118,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             subCategories.forEach(sub => {
                 if(sub && sub.id !== undefined && sub.categoryName) {
-                    addSubCategorySelectOptions(sub.id, sub.categoryName);
+                    addSubCategorySelect(sub.id, sub.categoryName);
                 } else {
                     console.warn("Skipping invalid sub categories: ", sub)
                 }
             });
             subCategoryChoices.setChoices([...subCategorySelect.options], 'value', 'text', true);
 //            subCategoryChoices.enable();
+            console.log("Sub-categories loaded");
         } catch (error) {
             console.error("Sub-category Load Error: ", error);
 //            alert("Unable to load sub-categories. Please try again.");
         }
     }
 
-    function addSubCategorySelectOptions(id, subCategoryName) {
+
+    //  populate sub-category select
+    function addSubCategorySelect(id, subCategoryName) {
         try {
             const subOption = document.createElement('option');
             subOption.value = id;
@@ -111,6 +145,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+
+    //  initialize sub-category select
     function initializeSubCategoriesChoices() {
         try {
             subCategorySelect.removeAttribute('disabled');
@@ -130,27 +166,112 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    //  Category & Sub-category - Event listener
-    categorySelect.addEventListener('change',async () => {
-        const categoryId = categorySelect.value;
 
-        subCategorySelect.innerHTML = '';
-//        variationsFieldSet.innerHTML = '';
-        if(subCategoryChoices) {
-            subCategoryChoices.removeActiveItems();
-            subCategoryChoices.clearChoices();
-            subCategoryChoices.disable();
-        }
-        if (!categoryId) return;
+    //  eventListener on sub-category select - to trigger load variations
+    subCategorySelect.addEventListener('change', async () => {
+            const subCategoryId = subCategorySelect.value;
 
-        await loadSubCategoriesInOptions(categoryId);
+            variationsSpace.innerHTML = '';
+            variationsFieldSet = document.createElement('fieldset');
+            variationsFieldSet.id = "variations-fieldset";
+            const legend = document.createElement('legend');
+            legend.textContent = "Variations";
 
-        subCategoryChoices.enable();    //
-    });
+            variationsFieldSet.appendChild(legend);
+            variationsSpace.appendChild(variationsFieldSet);
+
+//            variationsFieldSet.innerHTML = '';
+            if(!subCategoryId) return;
+
+            loadVariations(subCategoryId);
+            console.log("Sub-categories changed");
+        });
 
     initializeSubCategoriesChoices();
     subCategoryChoices.disable();
-    await loadCategoriesInOptions();
+    await loadCategories();
+
+
+
+    //    ********* load variations *********
+
+    //  fetch and load variations by sub-category ID
+    async function loadVariations(subCategoryId) {
+        try {
+            const response = await fetch(`${getVariations}?id=${subCategoryId}`, {
+                method: "GET",
+                credentials: "include"
+            });
+            if(!response.ok) throw new Error("Error fetching variations: ", response.status);
+
+            const variations = await response.json();
+            if(!Array.isArray(variations)) throw new Error("Invalid variation format");
+
+            populateVariations(variations);
+            console.log("variations loaded");
+        } catch (error) {
+            console.error("Variation Load Error", error);
+            alert("Unable to load variations. Please try again");
+        }
+    }
+
+
+    //  populate variations & options in fieldset
+    function populateVariations(variations) {
+//        const legend = document.createElement('legend');
+//        legend.textContent = "Variations";
+//        variationsFieldSet.appendChild(legend);
+
+        variations.forEach(variation => {
+            if(variation && variation.variationName && Array.isArray(variation.options)) {
+                const label = document.createElement('label');
+                label.classList.add("general-info-label");
+                label.textContent = variation.variationName + ':';
+
+                //  create select for variation
+                const select = document.createElement('select');
+                select.name = variation.variationName;
+                select.required = true;
+
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.textContent = `Select ${variation.variationName}`;
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                select.appendChild(placeholderOption);
+
+                //  populating options
+                variation.options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.id;
+                    optionElement.textContent = option.optionValue;
+                    select.appendChild(optionElement);
+                });
+                label.appendChild(select);
+                variationsFieldSet.appendChild(label);
+
+                //  initialize Choice.js for variation select
+                new Choices(select, {
+                    placeholder: true,
+                    searchEnabled: true,
+                    searchPlaceholderValue: 'Search...',
+                    itemSelectText: '',
+                    shouldSort: true
+                });
+            } else {
+                console.warn("Skipping invalid variation: ", variation);
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -195,7 +316,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         allowMultiple: true,
         minFiles: 1,
         maxFiles: 3,
-        acceptedFileTypes: ['image/*'],
+        acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
         imageValidateSizeMinWidth: 300,
         imageValidateSizeMinHeight: 300,
         imagePreviewHeight: 150,

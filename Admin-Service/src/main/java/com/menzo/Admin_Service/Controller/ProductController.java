@@ -52,17 +52,21 @@ public class ProductController {
         return "Products/add-product-form";
     }
 
-//    @GetMapping("/add-product-v2")
-//    public String addProductFormV2(@RequestHeader("roles") String roles,
-//                                   Model model) {
-//        NestedVariationDto sizesDto = productRetrievalService.getSizes();
-//        NestedVariationDto colorsDto = productRetrievalService.getColors();
-//
-//        model.addAttribute("sizesList", sizesDto.getOptions());
-//        model.addAttribute("colorsList", colorsDto.getOptions());
-//        model.addAttribute("newProduct", new NewProductDto("active", "available"));
-//        return "Products/add-product-formV2";
-//    }
+    @GetMapping("/add-product-v2")
+    public String addProductFormV2(@RequestHeader("roles") String roles,
+                                   Model model) {
+        NestedVariationDto sizesDto = productRetrievalService.getSizes();
+        NestedVariationDto colorsDto = productRetrievalService.getColors();
+
+        NewProductDto productDto = NewProductDto.builder()
+                .status("active")
+                .pod("available")
+                .build();
+        model.addAttribute("sizesList", sizesDto.getOptions());
+        model.addAttribute("colorsList", colorsDto.getOptions());
+        model.addAttribute("newProduct", productDto);
+        return "Products/add-product-formV2";
+    }
 
     //  Product item - add form
 //    @GetMapping("/add-item")

@@ -14,10 +14,10 @@ public class AdminRestController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/health-check")
-    public String healthCheck(){
-        return "Hello from Admin.!";
-    }
+//    @GetMapping("/health-check")
+//    public String healthCheck(){
+//        return "Hello from Admin.!";
+//    }
 
 //    @GetMapping("/all-products-v2")
 //    public Page<ProductListingDto> getAllProductsListingWithPagination(@RequestParam(defaultValue = "0") Integer page,
