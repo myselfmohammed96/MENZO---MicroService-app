@@ -117,13 +117,19 @@
 }
 
 .sub-category-name-para, .option-name-para {
-    /* flex: 8; */
+    flex: 1;
     margin: 0;
     max-width: 80%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 16px;
+}
+
+.option-elements {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
 }
 
 .color-group {
@@ -138,8 +144,8 @@
 }
 
 .color-icon {
+    border: 1px solid #ddd;
     width: 18px;
     height: 18px;
     border-radius: 15px;
-    background-color: #81be65;
 }

@@ -311,13 +311,14 @@ const urls = {
         optionPara.classList.add("option-name-para");
         optionPara.textContent = optionValue;
 
-        optionDiv.appendChild(optionPara);
+        let optionElements = document.createElement('div');
+        optionElements.classList.add('option-elements');
+
+        let colorGroup = document.createElement('div');
+        colorGroup.classList.add('color-group');
 
         try {
             if(variationName === "Colors") {
-                let colorGroup = document.createElement("div");
-                colorGroup.classList.add("color-group");
-
                 let colorIcon = document.createElement("div");
                 colorIcon.classList.add("color-icon");
                 colorIcon.style.backgroundColor = colorCode;
@@ -326,7 +327,6 @@ const urls = {
                 colorHex.textContent = colorCode;
 
                 colorGroup.append(colorIcon, colorHex);
-                optionDiv.appendChild(colorGroup);
             }
         } catch(error) {
             console.error("Color loading error: ", error);
@@ -352,6 +352,8 @@ const urls = {
         }
 
         optionBtnGroup.append(optionEditBtn, optionDeleteBtn);
+        optionElements.append(colorGroup, optionBtnGroup);
+        optionDiv.append(optionPara, optionElements);
         optionDiv.appendChild(optionBtnGroup);
 
         return optionDiv;
