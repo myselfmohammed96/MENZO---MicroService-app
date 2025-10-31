@@ -167,6 +167,15 @@ const urls = {
             });
             if (!response.ok) throw new Error("Failed to load variations");
             const variations = await response.json();
+
+            const prioritiesList = ["Colors", "Size"];
+            const priorities = [];
+            for(let priority of prioritiesList) {
+                const index = variations.findIndex(v => v.variationName === priority);
+                if(index >= 0) priorities.push(variations.splice(index, 1)[0]);
+            }
+            //  add prioritised variations first then add the rest
+            priorities.forEach(v => addVariation(v.id, v.variationName));
             variations.forEach(v => addVariation(v.id, v.variationName));
         } catch (error) {
             console.error("Load Error: ", error);
@@ -280,7 +289,7 @@ const urls = {
             const options = await response.json();
 
             options.forEach(opt => {
-                const optionDiv = addOption(opt.id, opt.optionValue);
+                const optionDiv = addOption(opt.id, opt.optionValue, opt.colorCode, opt.variationName);
                 content.appendChild(optionDiv);
             });
             return content;
@@ -293,7 +302,7 @@ const urls = {
 
 
     // Add new option - UI functions
-    function addOption(optionId, optionValue) {
+    function addOption(optionId, optionValue, colorCode, variationName) {
         let optionDiv = document.createElement("div");
         optionDiv.classList.add("option");
         optionDiv.dataset.id = optionId;
@@ -301,6 +310,27 @@ const urls = {
         let optionPara = document.createElement("p");
         optionPara.classList.add("option-name-para");
         optionPara.textContent = optionValue;
+
+        optionDiv.appendChild(optionPara);
+
+        try {
+            if(variationName === "Colors") {
+                let colorGroup = document.createElement("div");
+                colorGroup.classList.add("color-group");
+
+                let colorIcon = document.createElement("div");
+                colorIcon.classList.add("color-icon");
+                colorIcon.style.backgroundColor = colorCode;
+
+                let colorHex = document.createElement("p");
+                colorHex.textContent = colorCode;
+
+                colorGroup.append(colorIcon, colorHex);
+                optionDiv.appendChild(colorGroup);
+            }
+        } catch(error) {
+            console.error("Color loading error: ", error);
+        }
 
         let optionBtnGroup = document.createElement("div");
         optionBtnGroup.classList.add("button-group");
@@ -322,7 +352,7 @@ const urls = {
         }
 
         optionBtnGroup.append(optionEditBtn, optionDeleteBtn);
-        optionDiv.append(optionPara, optionBtnGroup);
+        optionDiv.appendChild(optionBtnGroup);
 
         return optionDiv;
     }

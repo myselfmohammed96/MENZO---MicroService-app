@@ -177,6 +177,7 @@ public class VariationsRetrievalService {
                         .id(opt.getId())
                         .optionValue(opt.getOptionValue())
                         .colorCode(opt.getColorCode().getColorCode())
+                        .variationName(variation.getVariationName())
                         .build();
             }).collect(Collectors.toList());
         } else {
@@ -184,6 +185,7 @@ public class VariationsRetrievalService {
                 return OptionDto.builder()
                         .id(opt.getId())
                         .optionValue(opt.getOptionValue())
+                        .variationName(variation.getVariationName())
                         .build();
             }).collect(Collectors.toList());
         }

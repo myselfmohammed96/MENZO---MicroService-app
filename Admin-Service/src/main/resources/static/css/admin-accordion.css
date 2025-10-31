@@ -39,7 +39,7 @@
 }
 
 .button-group {
-    flex: 2;
+    /* flex: 2; */
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -103,7 +103,7 @@
     background: linear-gradient(to right, white, rgba(240, 240, 240, 0.282) 20%, rgba(240, 240, 240, 0.282) 80%, white);
     border-left: 3px solid #b56e6e46;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -117,11 +117,29 @@
 }
 
 .sub-category-name-para, .option-name-para {
-    flex: 8;
+    /* flex: 8; */
     margin: 0;
     max-width: 80%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 16px;
+}
+
+.color-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.color-group p {
+    color: #504F4F;
+    font-size: 0.8em;
+}
+
+.color-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 15px;
+    background-color: #81be65;
 }

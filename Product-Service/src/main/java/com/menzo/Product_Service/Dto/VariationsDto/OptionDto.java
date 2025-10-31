@@ -20,7 +20,7 @@ public class OptionDto {
 
     private String colorCode;
 
-//    private Variation variation;
+    private String variationName;
 
     private Date createdAt;
 
