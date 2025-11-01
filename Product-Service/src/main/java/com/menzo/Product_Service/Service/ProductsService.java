@@ -115,12 +115,16 @@ public class ProductsService {
         if (savedProductItems.size() != newProduct.getSizeStockMap().size())
             throw new RuntimeException("Number of (product items input) doesn't match (saved product items)");
 
+        String superSku = savedProductItems.stream().findFirst()
+                .map(item -> item.getSuperSKU())
+                .orElseThrow(() -> new RuntimeException("Saved item doesn't have superSKU"));
+
         //  saving images
         List<ProductImage> savedImages = saveImages(
                 parentCategory.getCategoryName(),
                 subCategory.getCategoryName(),
                 savedProduct.getId(),
-                null,
+                superSku,
                 savedProductItems,
                 images
         );
@@ -297,7 +301,7 @@ public class ProductsService {
     /// /    ********* Utility methods *********
 
     //  Country of origin - management - TESTED
-    private Long addCountryOfOrigin(String countryName) {
+    public Long addCountryOfOrigin(String countryName) {
         return countryOfOriginRepo.findByCountryNameIgnoreCase(countryName.trim())
                 .map(CountryOfOrigin::getId)
                 .orElseGet(() -> {
@@ -314,7 +318,7 @@ public class ProductsService {
     //  Variations processing - TESTED
     //  provides the variation details of the product other than 'size' & 'color' variations
     //  ## no validation for if the optionIds in value is bound with the key data or not
-    private List<VariationOption> processVariations(Map<String, String> variationsMap,
+    public List<VariationOption> processVariations(Map<String, String> variationsMap,
                                                     List<ProductConfiguration> productConfig) {
         if (variationsMap != null && productConfig == null) {
             Map<String, String> variations = variationsMap.entrySet().stream()
@@ -332,10 +336,16 @@ public class ProductsService {
                             "manufacturer",
                             "packer",
                             "categoryId",
-                            "subCategoryId"
-                    ).contains(e.getKey()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));     //  ## can simplify this operation by doing both filtering the map and extracting ids together
+                            "subCategoryId",
 
+                            "size",
+                            "discount",
+                            "discount-type"
+                    ).contains(e.getKey()))
+                    .filter(e -> !e.getKey().startsWith("sizeStockMap["))
+                    .collect(Collectors.toMap(e -> e.getKey().split("\\.")[1], Map.Entry::getValue));       //  ## can simplify this operation by doing both filtering the map and extracting ids together
+
+//            variations.entrySet().stream().forEach(v -> System.out.println(v));
             List<Long> idList = variations.entrySet().stream()
                     .map(e -> Long.valueOf(e.getValue()))
                     .collect(Collectors.toList());

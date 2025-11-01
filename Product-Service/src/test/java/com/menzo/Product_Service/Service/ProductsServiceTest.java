@@ -135,16 +135,20 @@ class ProductsServiceTest {
 //    ********* utility methods *********
 
     @Test
+    @Transactional
+    @Rollback(value = false)
     public void testAddCountryOfOrigin() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
-                "addCountryOfOrigin",
-                String.class
-        );
-        method.setAccessible(true);
-        Long countryId = (Long) method.invoke(
-                productsService,
-                "Sudan"
-        );
+//        Method method = ProductsService.class.getDeclaredMethod(
+//                "addCountryOfOrigin",
+//                String.class
+//        );
+//        method.setAccessible(true);
+//        Long countryId = (Long) method.invoke(
+//                productsService,
+//                "Sudan"
+//        );
+        Long countryId = productsService.addCountryOfOrigin("Sudan");
+
         System.out.println("Country ID: " + countryId);
     }
 

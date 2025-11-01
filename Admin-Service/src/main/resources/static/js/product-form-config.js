@@ -230,7 +230,8 @@ console.log("Hello");
 
                 //  create select for variation
                 const select = document.createElement('select');
-                select.name = variation.variationName;
+//                select.name = variation.variationName;
+                select.name = `variation.${variation.variationName}`
                 select.required = true;
 
                 const placeholderOption = document.createElement('option');

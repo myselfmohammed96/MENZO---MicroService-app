@@ -4,6 +4,7 @@ import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
 import com.menzo.Product_Service.Dto.ProductDto.NewProductItemDto;
 import com.menzo.Product_Service.Entity.Product;
 import com.menzo.Product_Service.Entity.ProductItem;
+import com.menzo.Product_Service.Entity.VariationOption;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,16 @@ public class ProductController {
         System.out.println(newProduct);
         System.out.println(newProduct.getSizeStockMap());
 
-//        productsService.addNewProduct(newProduct, variationMap, images);
 
+        System.out.println(variationMap);
+
+        Product product = productsService.addNewProduct(newProduct, variationMap, images);
+        if (product == null) {
+            throw new RuntimeException("Product adding failed");
+        }
+
+//        List<VariationOption> list = productsService.processVariations(variationMap, null);
+//        System.out.println(list);
 //        String redirectUrl = UriComponentsBuilder
 //                .fromUriString("http://localhost:8080")
 //                .pathSegment("admin", "all-products")

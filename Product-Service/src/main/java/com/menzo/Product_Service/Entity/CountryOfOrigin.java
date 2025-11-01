@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "county_of_origin")
+@Table(name = "country_of_origin")
 public class CountryOfOrigin {
 
     @Id
