@@ -237,7 +237,6 @@ public class ProductsService {
                 subCategory.getAbbreviation(),
                 product.getId(),
                 color.getColorCode().getColorAbbreviation(),
-                null,
                 null
         );
 
@@ -246,19 +245,16 @@ public class ProductsService {
             VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
 
             // generating sku - concatenating super sku with size & next sequenced item ID
-            Long nextId = productItemsRepo.getNextItemId();
             String sku = generateSKU(
                     superSku,
                     null,
                     null,
                     null,
-                    size.getOptionValue(),
-                    nextId
+                    size.getOptionValue()
             );
 
             //  creating new product item object
             ProductItem item = ProductItem.builder()
-                    .id(nextId)
                     .product(product)
                     .superSKU(superSku)
                     .SKU(sku)
@@ -372,16 +368,14 @@ public class ProductsService {
                                String subCategoryAbbreviation,
                                Long productId,
                                String colorAbbreviation,
-                               String size,
-                               Long productItemId) {
-        if (superSku == null && size == null && productItemId == null) {
+                               String size) {
+        if (superSku == null && size == null) {
             return subCategoryAbbreviation + "-" +
                     productId.toString() + "-" +
                     colorAbbreviation;
         } else if (subCategoryAbbreviation == null && productId == null && colorAbbreviation == null) {
             return superSku + "-" +
-                    size + "-" +
-                    productItemId.toString();
+                    size;
         } else return null;
     }
 

@@ -19,10 +19,10 @@ public interface ProductItemsRepo extends JpaRepository<ProductItem, Long>, JpaS
 
 //    ********* Fetching sequence *********
 
-    @Query(
-            nativeQuery = true,
-            value = "SELECT NEXT VALUE FOR item_sequence"
-    )
-    public Long getNextItemId();
+//    @Query(
+//            nativeQuery = true,
+//            value = "SELECT NEXT VALUE FOR item_sequence"
+//    )
+//    public Long getNextItemId();
 
 }

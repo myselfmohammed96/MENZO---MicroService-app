@@ -201,8 +201,7 @@ class ProductsServiceTest {
                 String.class,
                 Long.class,
                 String.class,
-                String.class,
-                Long.class
+                String.class
         );
         method.setAccessible(true);
         String sku = (String) method.invoke(
@@ -211,8 +210,7 @@ class ProductsServiceTest {
                 null,
                 null,
                 null,
-                "L",
-                44L
+                "L"
         );
 
         System.out.println(sku);
