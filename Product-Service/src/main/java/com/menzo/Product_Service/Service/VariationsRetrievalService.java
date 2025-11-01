@@ -70,29 +70,34 @@ public class VariationsRetrievalService {
         Map<Long, VariationWithOptionsDto> variationMap = new HashMap<>();
 
         //  organizing data in dto
-        for (Object[] row : rows) {
-            Long variationId = ((Number) row[0]).longValue();
-            String variationName = (String) row[1];
-            Long optionId = ((Number) row[2]).longValue();
-            String optionValue = (String) row[3];
+        rows.stream()
+                .filter(row -> {
+                    String variationName = (String) row[1];
+                    return (!variationName.equals("Colors") && !variationName.equals("Size"));
+                })
+                .forEach(row -> {
+                    Long variationId = ((Number) row[0]).longValue();
+                    String variationName = (String) row[1];
+                    Long optionId = ((Number) row[2]).longValue();
+                    String optionValue = (String) row[3];
 
-            VariationWithOptionsDto variation = variationMap.computeIfAbsent(variationId, id -> {
-                VariationWithOptionsDto v = VariationWithOptionsDto.builder()
-                        .id(id)
-                        .variationName(variationName)
-                        .build();
-                return v;
-            });
-            OptionWithIdDto option = OptionWithIdDto.builder()
-                    .id(optionId)
-                    .optionValue(optionValue)
-                    .build();
-            Set<OptionWithIdDto> opt = variation.getOptions() != null
-                    ? variation.getOptions()
-                    : new HashSet<OptionWithIdDto>();
-            opt.add(option);
-            variation.setOptions(opt);
-        }
+                    VariationWithOptionsDto variation = variationMap.computeIfAbsent(variationId, id -> {
+                        VariationWithOptionsDto v = VariationWithOptionsDto.builder()
+                                .id(id)
+                                .variationName(variationName)
+                                .build();
+                        return v;
+                    });
+                    OptionWithIdDto option = OptionWithIdDto.builder()
+                            .id(optionId)
+                            .optionValue(optionValue)
+                            .build();
+                    Set<OptionWithIdDto> opt = variation.getOptions() != null
+                            ? variation.getOptions()
+                            : new HashSet<OptionWithIdDto>();
+                    opt.add(option);
+                    variation.setOptions(opt);
+                });
         return new ArrayList<>(variationMap.values());
     }
 

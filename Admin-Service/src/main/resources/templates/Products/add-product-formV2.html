@@ -112,7 +112,7 @@
         </div>
         <hr class="custom-line-1"/>
 
-        <form id="addProductForm" enctype="multipart/form-data" th:action="@{/products/add-product-v2}"
+        <form id="add-product-form" enctype="multipart/form-data" th:action="@{/products/add-product-v2}"
               th:object="${newProduct}" method="POST">
 
             <div id="form-container">
@@ -339,6 +339,7 @@
 
 <script src="/js/nav-bar-script.js"></script>
 <script src="/js/product-form-config.js"></script>
+<script src="/js/product-form-submit.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 

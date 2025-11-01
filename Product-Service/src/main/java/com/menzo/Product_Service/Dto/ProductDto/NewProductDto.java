@@ -26,7 +26,9 @@ public class NewProductDto {
     private String pod;
 
     private Float price;
+
     private String discount;
+
     private String discountType;
 
     private Float itemWeight;

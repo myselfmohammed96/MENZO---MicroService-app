@@ -46,7 +46,8 @@ public class AuthRestController {
 
     //  Form login endpoint
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginCredentials loginCred, HttpServletResponse response) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginCredentials loginCred,
+                                       HttpServletResponse response) {
         Cookie cookie = authService.loginUser(loginCred);
         response.addCookie(cookie);
         return ResponseEntity.ok("Authentication successful");
