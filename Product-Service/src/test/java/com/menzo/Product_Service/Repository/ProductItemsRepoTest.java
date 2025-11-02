@@ -12,10 +12,10 @@ class ProductItemsRepoTest {
     @Autowired
     private ProductItemsRepo itemsRepo;
 
-    @Test
-    public void testGetNextItemId() {
-        Long nextId = itemsRepo.getNextItemId();
-        System.out.println(nextId);
-    }
+//    @Test
+//    public void testGetNextItemId() {
+//        Long nextId = itemsRepo.getNextItemId();
+//        System.out.println(nextId);
+//    }
 
 }

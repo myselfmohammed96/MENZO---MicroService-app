@@ -133,3 +133,93 @@
 
 
 /* ///////////////////////////////////// */
+
+
+
+
+
+/* ******* Toast notification ******* */
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    min-width: 300px;
+    padding: 10px 10px 10px 20px;
+    display: flex;
+    z-index: 9999;
+    transform: translateX(-100%);
+    opacity: 0;
+    border: 1px solid #3e3e3e;
+}
+
+.toast-icon {
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    margin-right: 20px;
+}
+
+.toast-message-container {
+    flex: 1;
+}
+
+.toast-message-container p {
+    max-width: 300px;
+}
+
+.toast-close-container {
+    min-height: 100%;
+    max-width: 20px;
+    width: 20px;
+}
+
+.toast-close-container span {
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.0.7s ease;
+    user-select: none;
+}
+
+.toast-close-container span:active {
+    transform: scale(0.92);
+}
+
+.toast.show {
+    animation: slideInBounce 0.6s ease-out forwards;
+}
+.toast.hide {
+    animation: slideOut 0.6s ease-in forwards;
+}
+
+
+@keyframes slideInBounce {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    60% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+    80% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* ///////////////////////////////////// */

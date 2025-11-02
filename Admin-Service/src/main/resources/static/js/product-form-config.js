@@ -234,12 +234,12 @@ console.log("Hello");
                 select.name = `variation.${variation.variationName}`
                 select.required = true;
 
-                const placeholderOption = document.createElement('option');
-                placeholderOption.value = '';
-                placeholderOption.textContent = `Select ${variation.variationName}`;
-                placeholderOption.disabled = true;
-                placeholderOption.selected = true;
-                select.appendChild(placeholderOption);
+//                const placeholderOption = document.createElement('option');
+//                placeholderOption.value = '';
+//                placeholderOption.textContent = `Select ${variation.variationName}`;
+//                placeholderOption.disabled = true;
+//                placeholderOption.selected = true;
+//                select.appendChild(placeholderOption);
 
                 //  populating options
                 variation.options.forEach(option => {
@@ -254,6 +254,7 @@ console.log("Hello");
                 //  initialize Choice.js for variation select
                 new Choices(select, {
                     placeholder: true,
+                    placeholderValue: variation.variationName,
                     searchEnabled: true,
                     searchPlaceholderValue: 'Search...',
                     itemSelectText: '',
@@ -315,8 +316,8 @@ console.log("Hello");
 
     const pond = FilePond.create(document.querySelector('#product-images'), {
         allowMultiple: true,
-        minFiles: 1,
-        maxFiles: 3,
+        minFiles: 3,
+        maxFiles: 9,
         acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
         imageValidateSizeMinWidth: 300,
         imageValidateSizeMinHeight: 300,

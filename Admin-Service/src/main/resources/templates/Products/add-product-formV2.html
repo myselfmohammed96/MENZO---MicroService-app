@@ -171,7 +171,7 @@
                                                 name="colors"
                                                 th:field="*{color}"
                                                 required>
-                                            <option value="" hidden selected>Colors</option>
+<!--                                            <option value="" hidden disabled selected>Colors</option>-->
                                             <option th:each="color : ${colorsList}"
                                                     th:value="${color.id}"
                                                     th:text="${color.variationName}"></option>
@@ -306,7 +306,7 @@
 
             <!-- Image Upload -->
             <fieldset>
-                <legend>Upload Images (max 3)</legend>
+                <legend>Upload Images (max 9)</legend>
                 <input type="file" name="images" id="product-images" multiple/>
                 <div id="image-stats"></div>
             </fieldset>
@@ -317,6 +317,19 @@
             </div>
 
         </form>
+    </div>
+</div>
+
+<!-- Toast notification -->
+
+<div class="toast show" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
     </div>
 </div>
 
@@ -340,6 +353,7 @@
 <script src="/js/nav-bar-script.js"></script>
 <script src="/js/product-form-config.js"></script>
 <script src="/js/product-form-submit.js"></script>
+<script src="/js/toaster-script.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 

@@ -136,6 +136,9 @@ public class VariationsRetrievalService {
     public NestedVariationDto getSizes(String variationName) {
 
         //  fetching variation by variation name
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("variationActiveFilter").setParameter("isDeleted", false);
+        session.enableFilter("optionActiveFilter").setParameter("isDeleted", false);
         Variation variation = variationsRepo.findByVariationName(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
 
@@ -147,6 +150,7 @@ public class VariationsRetrievalService {
 
         //  extracting sizes from variation options
         List<NestedVariationDto> sizes = variation.getOptions().stream()
+                .filter(opt -> !opt.getIsDeleted())
                 .map(opt -> {
                     return NestedVariationDto.builder()
                             .id(opt.getId())

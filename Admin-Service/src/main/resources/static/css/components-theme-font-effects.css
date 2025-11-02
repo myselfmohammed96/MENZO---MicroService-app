@@ -147,3 +147,46 @@
 }
 
 /* //////////////////////////////////////// */
+
+
+
+
+/* ******* Toast notification ******* */
+
+.toast {
+    border-radius: 5px;
+    color:#fff;
+    box-shadow: -1px 4px 4px rgba(0, 0, 0, 0.2);
+    background-color: #000;
+}
+
+.toast-icon {
+    border-radius: 50px;
+}
+
+.toast-success-icon {
+    background-image: url('/home-media/utility-media/check-mark.png');
+}
+
+.toast-fail-icon {
+    background-image: url('/home-media/utility-media/red-cross.png');
+}
+
+.toast-message-container h3 {
+    font-size: 21px;
+}
+
+.toast-message-container p {
+    font-size: 15px;
+    word-wrap: break-word;
+    color: #e4e4e4;
+}
+
+
+
+.toast-close-container span {
+    font-size: 15px;
+}
+
+/* ///////////////////////////////////// */
+
