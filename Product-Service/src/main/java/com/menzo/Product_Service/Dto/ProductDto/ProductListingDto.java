@@ -18,7 +18,7 @@ public class ProductListingDto {
 
     private String subCategoryName;
 
-    private Float startingPrice;
+    private Float basePrice;
 
     private Integer totalItems;
 

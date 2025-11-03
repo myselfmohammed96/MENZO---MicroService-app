@@ -13,12 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
+@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class ProductsRetrievalService {
 
     @Autowired
@@ -51,8 +54,94 @@ public class ProductsRetrievalService {
     private static final Logger logger = LoggerFactory.getLogger(ProductsRetrievalService.class);
 
 
-
     //  ********* Get all products listing with pagination & filtering *********
+
+    public Page<ProductListingDto> getAllProductListing(Integer page,
+                                                        Integer size,
+                                                        String sort) {
+
+        Pageable sortedPageable;
+        if (sort != null) {
+            String[] parts = sort.split(",");
+            System.out.println(Arrays.toString(parts));
+            String property = parts[0];
+            Sort.Direction direction = (parts.length > 1 && parts[1].equalsIgnoreCase("desc"))
+                    ? Sort.Direction.DESC
+                    : Sort.Direction.ASC;
+            Sort.Order order = new Sort.Order(direction, property);
+
+            sortedPageable = PageRequest.of(
+                    page,
+                    size,
+                    Sort.by(order)
+            );
+        } else {
+            sortedPageable = PageRequest.of(
+                    page,
+                    size
+            );
+        }
+        System.out.println(sortedPageable);
+
+        Page<Product> products = productsRepo.findAll(sortedPageable);
+        return convertToDto(products);
+
+//        return products;
+    }
+
+    //  Product page - Dto converter
+    private Page<ProductListingDto> convertToDto(Page<Product> products) {
+        return products.map(product -> {
+            return ProductListingDto.builder()
+                    .id(product.getId())
+                    .productName(product.getProductName())
+                    .subCategoryName(product.getCategory().getCategoryName())
+                    .basePrice(35F)
+                    .totalItems(03)
+                    .activeStatus(ProductActiveStatus.ACTIVE)
+                    .iconImage("abc")
+                    .build();
+        });
+    }
+
+    //  converter - Product -> ProductListingDto
+//    private ProductListingDto convertProductToProductListing(Product product) {
+//        try {
+//            List<ProductItem> productItemsList = productItemsRepo.findAllByProductId(product.getId());
+//            int totalItems = 0;
+//            float startingPrice = Float.MAX_VALUE;
+//            boolean hasActive = false;
+//            boolean hasInactive = false;
+//
+//            if (productItemsList == null) productItemsList = Collections.emptyList();
+//            for (ProductItem item : productItemsList) {
+//                if (item.getPrice() < startingPrice) {
+//                    startingPrice = item.getPrice();
+//                }
+//                if (Boolean.TRUE.equals(item.getIsActive())) hasActive = true;
+//                else hasInactive = true;
+//
+//                totalItems++;
+//            }
+//            ProductActiveStatus activeStatus = hasActive && !hasInactive ? ProductActiveStatus.ACTIVE
+//                    : !hasActive && hasInactive ? ProductActiveStatus.INACTIVE
+//                    : ProductActiveStatus.PARTIALLY_ACTIVE;
+//            if (startingPrice == Float.MAX_VALUE) startingPrice = 0f;
+//
+//            return new ProductListingDto(
+//                    product.getId(),
+//                    product.getProductName(),
+//                    product.getCategory().getCategoryName(),
+//                    startingPrice,
+//                    totalItems,
+//                    activeStatus,
+//                    this.getIconImage(product.getId(), null)
+//            );
+//        } catch (Exception e) {
+//            logger.error("Error converting product to productListingDto. Product ID: {}", product.getId(), e);
+//            return null;
+//        }
+//    }
 
 //    public Page<ProductListingDto> getAllProductListing(RequestDto requestDto,
 //                                                        Long categoryId,
@@ -73,7 +162,8 @@ public class ProductsRetrievalService {
 //        List<ProductListingDto> productListingDtos = products.stream()
 //                .map(this::convertProductToProductListing)
 //                .collect(Collectors.toList());
-////        System.out.println(productListingDtos);
+
+    /// /        System.out.println(productListingDtos);
 //
 //        return new PageImpl<>(productListingDtos, sortedPageable, products.getTotalElements());
 //    }
@@ -92,8 +182,6 @@ public class ProductsRetrievalService {
 //                .collect(Collectors.toList());
 //        return new PageImpl<>(productItemListingDtos, pageable, productItemsPageByProductId.getTotalElements());
 //    }
-
-
     public ProductMinimalDto getProductByIdForAddItemForm(Long productId) {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
@@ -157,48 +245,10 @@ public class ProductsRetrievalService {
     }
 
 
-
 //    *********** Helper methods ***********
 
-    //  converter - Product -> ProductListingDto
-//    private ProductListingDto convertProductToProductListing(Product product) {
-//        try {
-//            List<ProductItem> productItemsList = productItemsRepo.findAllByProductId(product.getId());
-//            int totalItems = 0;
-//            float startingPrice = Float.MAX_VALUE;
-//            boolean hasActive = false;
-//            boolean hasInactive = false;
-//
-//            if (productItemsList == null) productItemsList = Collections.emptyList();
-//            for (ProductItem item : productItemsList) {
-//                if (item.getPrice() < startingPrice) {
-//                    startingPrice = item.getPrice();
-//                }
-//                if (Boolean.TRUE.equals(item.getIsActive())) hasActive = true;
-//                else hasInactive = true;
-//
-//                totalItems++;
-//            }
-//            ProductActiveStatus activeStatus = hasActive && !hasInactive ? ProductActiveStatus.ACTIVE
-//                    : !hasActive && hasInactive ? ProductActiveStatus.INACTIVE
-//                    : ProductActiveStatus.PARTIALLY_ACTIVE;
-//            if (startingPrice == Float.MAX_VALUE) startingPrice = 0f;
-//
-//            return new ProductListingDto(
-//                    product.getId(),
-//                    product.getProductName(),
-//                    product.getCategory().getCategoryName(),
-//                    startingPrice,
-//                    totalItems,
-//                    activeStatus,
-//                    this.getIconImage(product.getId(), null)
-//            );
-//        } catch (Exception e) {
-//            logger.error("Error converting product to productListingDto. Product ID: {}", product.getId(), e);
-//            return null;
-//        }
-//    }
-}
+
+//}
 
     //  iconImage provider - by productId || productItemId
 //    private String getIconImage(Long productId, Long productItemId) {
@@ -290,14 +340,6 @@ public class ProductsRetrievalService {
 //    }
 
 
-
-
-
-
-
-
-
-
 //    public Page<Product> getAllProductsWithPagination(Integer page, Integer size) {
 //        Pageable pageable = PageRequest.of(page, size);
 //        Page<Product> products = productsRepo.findAll(pageable);
@@ -327,10 +369,9 @@ public class ProductsRetrievalService {
 //    }
 
 
-
 //    public List<?> getAllProductListingWithSpec(RequestDto requestDto) {
 //        Specification<Product> productSpecifications = productSpecService.getFilterSpecification(requestDto.getFilterRequestDtos());
 //        return productsRepo.findAll(productSpecifications);
 //    }
 
-//}
+}

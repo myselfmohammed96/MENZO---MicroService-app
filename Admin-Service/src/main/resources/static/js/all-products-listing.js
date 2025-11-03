@@ -1,4 +1,4 @@
-const getAllProductsListing = "http://localhost:8080/products/all-products-listing";
+const getProductsListing = "http://localhost:8080/products/all-products";
 const getProductItemsByProductId = "http://localhost:8080/admin/product-items"
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const fetchProducts = async (page = 1, dto) => {
         try {
-            const response = await fetch(`${getAllProductsListing}?page=${page - 1}&size=${pageSize}`, {
+            const response = await fetch(`${getProductsListing}?page=${page - 1}&size=${pageSize}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: dto ? JSON.stringify(dto) : null

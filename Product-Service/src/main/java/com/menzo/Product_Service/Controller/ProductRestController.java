@@ -5,11 +5,13 @@ import com.menzo.Product_Service.Dto.ProductDto.ProductItemListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductMinimalDto;
 import com.menzo.Product_Service.Dto.SpecificationsDto.RequestDto;
+import com.menzo.Product_Service.Entity.Product;
 import com.menzo.Product_Service.Entity.ProductItem;
-//import com.menzo.Product_Service.Service.ProductsRetrievalService;
-//import com.menzo.Product_Service.Service.ProductsService;
+import com.menzo.Product_Service.Service.ProductsRetrievalService;
+import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +22,11 @@ import java.util.Optional;
 @RequestMapping("/products")
 public class ProductRestController {
 
-//    @Autowired
-//    private ProductsService productsService;
+    @Autowired
+    private ProductsService productsService;
 
-//    @Autowired
-//    private ProductsRetrievalService productsRetrievalService;
+    @Autowired
+    private ProductsRetrievalService productsRetrievalService;
 
     //  Get all products with pagination for listing - for Admin-Service (/admin/all-products)
 //    @GetMapping("/all-products-listing")
@@ -33,6 +35,16 @@ public class ProductRestController {
 //        Page<ProductListingDto> productListingDtos = productsRetrievalService.getAllProductListing(page, size);
 //        return ResponseEntity.ok(productListingDtos);
 //    }
+
+    @PostMapping("/all-products")
+    public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") Integer page,
+                                            @RequestParam(defaultValue = "10") Integer size,
+                                            @RequestParam(required = false) String sort,
+                                            @RequestBody(required = false) ProductDetailsDto p) {
+        System.out.println(sort);
+        Page<ProductListingDto> pages =  productsRetrievalService.getAllProductListing(page, size, sort);
+        return ResponseEntity.ok(pages);
+    }
 
 //    @PostMapping("/all-products-listing")
 //    public ResponseEntity<Page<ProductListingDto>> getAllProductListingWithPagination(@RequestBody(required = false) RequestDto requestDto,

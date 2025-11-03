@@ -1,12 +1,19 @@
 package com.menzo.Product_Service.Repository;
 
 import com.menzo.Product_Service.Entity.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     public boolean existsByProductName(String productName);
+
+    @Query(value = "SELECT DISTINCT p FROM Product p JOIN p.items i")
+    public List<Product> findAllWithItems();
 
 }
 
