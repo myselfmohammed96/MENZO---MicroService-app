@@ -1,144 +1,161 @@
-    const getAllGlobalFilterOptions = "http://localhost:8080/search-filter/all-products";
+const getAllGlobalFilterOptions = "http://localhost:8080/search-filter/all-products";
 
-    const fetchFilterOptions = async () => {
-        try {
-            const response = await fetch(getAllGlobalFilterOptions);
-            if(!response.ok) throw new Error("Failed to fetch filter options");
-            return response.json();
-        } catch(err) {
-            console.error("Error", err);
-            return null;
-        }
-    };
 
-    document.addEventListener("DOMContentLoaded", async () => {
-        const filterButton = document.getElementById("filter-button");
-        const filterPanel = document.getElementById("filter-panel");
-        const filterContainer = document.getElementById("filter-container");
-        const sortButton = document.getElementById("sort-button");
-        const sortPanel = document.getElementById("sort-panel");
 
-        filterButton.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if(!sortPanel.classList.contains("hidden")) {
-                sortPanel.classList.add("hidden");
-            }
-            filterPanel.classList.toggle("hidden");
-        });
+//  ******* fetch filter options *******
 
-        sortButton.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if(!filterPanel.classList.contains("hidden")) {
-                filterPanel.classList.add("hidden");
-            }
-            sortPanel.classList.toggle("hidden");
-        });
+//const fetchFilterOptions = async function() {
+//    try {
+//        const response = await fetch(getAllGlobalFilterOptions);
+//        if(!response.ok) throw new Error("Failed to fetch filter options");
+//        return response.json();
+//    } catch(err) {
+//        console.error("Error", err);
+//        return null;
+//    }
+//};
 
-        document.addEventListener("click", (e) => {
-            if(!filterPanel.contains(e.target) && !filterButton.contains(e.target)) {
-                filterPanel.classList.add("hidden");
-            }
-            if(!sortPanel.contains(e.target) && !sortButton.contains(e.target)) {
-                sortPanel.classList.add("hidden");
-            }
-        });
 
-        const fetchFilterOptions = async () => {
-            try {
-                const response = await fetch(getAllGlobalFilterOptions);
-                if(!response.ok) throw new Error("Failed to fetch filter options");
-                return response.json();
-            } catch(err) {
-                console.error("Error", err);
-                return null;
-            }
-        };
+//  ******* render filter options *******
 
-        const renderFilterOptions = (options) => {
-            filterContainer.innerHTML = '';
-            filterContainer.innerHTML = `
-                <h3 id="filter-heading">Filters</h3>
-                <hr class="filter-hr">
-            `;
-
-            Object.entries(options).forEach(([filterName, values], index, arr) => {
-                const section = document.createElement("div");
-                section.classList.add("filter-section");
-
-                const title = document.createElement("p");
-                title.classList.add("filter-title");
-                title.textContent = filterName.replace(/_/g, " ");
-                section.appendChild(title);
-
-                values.forEach(val => {
-                    const label = document.createElement("label");
-
-                    const input = document.createElement("input");
-                    input.type = "checkbox";
-                    input.name = filterName.toLowerCase();
-                    input.value = val;
-
-                    const span = document.createElement("span");
-                    span.classList.add("checkmark");
-
-                    label.appendChild(input);
-                    label.appendChild(span);
-                    label.append(` ${val}`);
-
-                    section.appendChild(label);
-                });
-
-                filterContainer.appendChild(section);
-
-                if(index < arr.length - 1) {
-                    const hr = document.createElement("hr");
-                    hr.classList.add("filter-hr");
-                    filterContainer.appendChild(hr);
-                }
-    //            filterContainer.appendChild(document.createElement("hr")).classList.add("filter-hr");
-            });
-
-            const applyBtn = document.createElement("button");
-            applyBtn.type = "submit";
-            applyBtn.classList.add("apply-filter-btn");
-            applyBtn.textContent = "Apply Filters";
-            filterContainer.appendChild(applyBtn);
-        };
-
-//        const options = await fetchFilterOptions();
-//        if(options) {
-//            renderFilterOptions(options);
+//const renderFilterOptions = function(options) {
+//    filterContainer.innerHTML = '';
+//    filterContainer.innerHTML = `
+//        <h3 id="filter-heading">Filters</h3>
+//        <hr class="filter-hr">
+//    `;
+//
+//    Object.entries(options).forEach(([filterName, values], index, arr) => {
+//        const section = document.createElement("div");
+//        section.classList.add("filter-section");
+//        const title = document.createElement("p");
+//        title.classList.add("filter-title");
+//        title.textContent = filterName.replace(/_/g, " ");
+//        section.appendChild(title);
+//        values.forEach(val => {
+//            const label = document.createElement("label");
+//
+//            const input = document.createElement("input");
+//            input.type = "checkbox";
+//            input.name = filterName.toLowerCase();
+//            input.value = val;
+//
+//            const span = document.createElement("span");
+//            span.classList.add("checkmark");
+//
+//            label.appendChild(input);
+//            label.appendChild(span);
+//            label.append(` ${val}`);
+//
+//            section.appendChild(label);
+//        });
+//
+//        filterContainer.appendChild(section);
+//
+//        if(index < arr.length - 1) {
+//            const hr = document.createElement("hr");
+//            hr.classList.add("filter-hr");
+//            filterContainer.appendChild(hr);
 //        }
+//        //            filterContainer.appendChild(document.createElement("hr")).classList.add("filter-hr");
+//    });
+//
+//}
 
-        document.querySelector(".apply-filter-btn").addEventListener("click", function () {
-            let filterRequestDtos = [];
+document.addEventListener("DOMContentLoaded", async () => {
+    const filterButton = document.getElementById("filter-button");
+    const filterPanel = document.getElementById("filter-panel");
+//    const filterContainer = document.getElementById("filter-container");
+    const sortButton = document.getElementById("sort-button");
+    const sortPanel = document.getElementById("sort-panel");
 
-            document.querySelectorAll(".filter-section").forEach(section => {
-                let h3 = section.querySelector("p");
-                let filterType = h3 ? h3.innerText.trim() : null;
+    //  ******* eventListener on 'filter' & 'sort buttons *******
+    filterButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if(!sortPanel.classList.contains("hidden")) {
+            sortPanel.classList.add("hidden");
+        }
+        filterPanel.classList.toggle("hidden");
+    });
 
-                let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
-                    .map(cb => cb.value.trim());
+    sortButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if(!filterPanel.classList.contains("hidden")) {
+            filterPanel.classList.add("hidden");
+        }
+        sortPanel.classList.toggle("hidden");
+    });
 
-                if(selectedValues.length > 0) {
-                    filterRequestDtos.push({
-                        filterType: filterType,
-                        values: selectedValues.join(", ")
-                    });
+    document.addEventListener("click", (e) => {
+        if(!filterPanel.contains(e.target) && !filterButton.contains(e.target)) {
+            filterPanel.classList.add("hidden");
+        }
+        if(!sortPanel.contains(e.target) && !sortButton.contains(e.target)) {
+            sortPanel.classList.add("hidden");
+        }
+    });
+
+    const sortOptions = document.querySelectorAll('.sort-option');
+    sortOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+            console.log(opt.textContent + " - selected");
+            window.loadProducts(opt.dataset.value);
+            sortOptions.forEach(o => {
+                if(o.classList.contains('applied-sort')) {
+                    o.classList.remove('applied-sort');
                 }
             });
-
-            let requestDto = { filterRequestDtos };
-            console.log(requestDto);
-
-            window.setRequestDto(requestDto);
-
-            if(window.loadProducts && filterRequestDtos) {
-                window.loadProducts();
-            }
-
+            opt.classList.add("applied-sort");
+            sortPanel.classList.add('hidden');
         });
     });
+
+
+
+
+//    const applyBtn = document.createElement("button");
+//    applyBtn.type = "submit";
+//    applyBtn.classList.add("apply-filter-btn");
+//    applyBtn.textContent = "Apply Filters";
+//    filterContainer.appendChild(applyBtn);
+//
+//
+//    const options = await fetchFilterOptions();
+//    if(options) {
+//        renderFilterOptions(options);
+//    }
+});
+
+
+
+//document.querySelector(".apply-filter-btn").addEventListener("click", function () {
+//    let filterRequestDtos = [];
+//
+//    document.querySelectorAll(".filter-section").forEach(section => {
+//        let h3 = section.querySelector("p");
+//        let filterType = h3 ? h3.innerText.trim() : null;
+//        let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
+//            .map(cb => cb.value.trim());
+//
+//        if(selectedValues.length > 0) {
+//            filterRequestDtos.push({
+//                filterType: filterType,
+//                values: selectedValues.join(", ")
+//            });
+//        }
+//    });
+//
+//    let requestDto = { filterRequestDtos };
+//    console.log(requestDto);
+//
+//    window.setRequestDto(requestDto);
+//
+//    if(window.loadProducts && filterRequestDtos) {
+//        window.loadProducts();
+//    }
+//
+//});
+//    });
 
 
 
