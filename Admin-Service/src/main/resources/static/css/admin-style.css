@@ -1,4 +1,4 @@
-/* Contains styling for - admin panel - nav bar, footer menu, view all button */
+ /* Contains styling for - admin panel - nav bar, footer menu, view all button */
 
 *{
     margin: 0px;
@@ -447,7 +447,7 @@
     padding-top: 0px !important;
 }
 
-.title-option-button, #add-button, #filter-button{
+.title-option-button, #add-button, #filter-button, #sort-button {
     padding: 5px 20px;
     margin-top: 10px;
     margin-right: 20px;
@@ -475,24 +475,28 @@
     transform: scale(0.95);
 }
 
-#filter-button {
+#filter-button,
+#sort-button {
     background-color: transparent;
     color: #a7a7a7;
     text-decoration: none;
 }
 
-.filter-icon {
+.filter-icon,
+.sort-icon {
     font-size: 1.3em;
     line-height: 0.8;
     margin-right: 4px;
 }
 
-#filter-button:hover {
+#filter-button:hover,
+#sort-button:hover {
     background-color: rgba(189, 189, 189, 0.5);
     color: #696969;
 }
 
-#filter-button:active {
+#filter-button:active,
+#sort-button:active {
     transform: scale(0.95);
 }
 
