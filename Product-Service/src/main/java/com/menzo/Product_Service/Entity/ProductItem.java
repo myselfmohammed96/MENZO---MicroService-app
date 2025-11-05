@@ -1,9 +1,12 @@
 package com.menzo.Product_Service.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -89,5 +92,16 @@ public class ProductItem {
             name = "is_active"
     )
     private Boolean isActive;
+
+    @Column(
+            nullable = false,
+            name = "created_at"
+    )
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd-MM-yyyy"
+    )
+    @CreationTimestamp
+    private Date createdAt;
 
 }

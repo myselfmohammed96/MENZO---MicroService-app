@@ -95,10 +95,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+
+
+    const blackList = ["Featured", "Avg. Customer Review", "Best Sellers"];
     const sortOptions = document.querySelectorAll('.sort-option');
     sortOptions.forEach(opt => {
         opt.addEventListener('click', () => {
             console.log(opt.textContent + " - selected");
+            if(blackList.includes(opt.textContent)) {
+                console.log("*Returning...");
+                return;
+            }
             window.loadProducts(opt.dataset.value);
             sortOptions.forEach(o => {
                 if(o.classList.contains('applied-sort')) {

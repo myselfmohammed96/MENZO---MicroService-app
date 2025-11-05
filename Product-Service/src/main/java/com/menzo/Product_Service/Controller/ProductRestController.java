@@ -37,11 +37,12 @@ public class ProductRestController {
 //    }
 
     @PostMapping("/all-products")
-    public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") Integer page,
+    public ResponseEntity<?> getAdminAllProducts(@RequestParam(defaultValue = "0") Integer page,
                                             @RequestParam(defaultValue = "10") Integer size,
                                             @RequestParam(required = false) String sort,
                                             @RequestBody(required = false) ProductDetailsDto p) {
         System.out.println(sort);
+        if (sort == null) sort = "";
         Page<ProductListingDto> pages =  productsRetrievalService.getAllProductListing(page, size, sort);
         return ResponseEntity.ok(pages);
     }

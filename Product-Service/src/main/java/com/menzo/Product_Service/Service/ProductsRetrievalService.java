@@ -7,6 +7,7 @@ import com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto;
 import com.menzo.Product_Service.Entity.*;
 import com.menzo.Product_Service.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Repository.*;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,40 +55,73 @@ public class ProductsRetrievalService {
     private static final Logger logger = LoggerFactory.getLogger(ProductsRetrievalService.class);
 
 
+
     //  ********* Get all products listing with pagination & filtering *********
 
     public Page<ProductListingDto> getAllProductListing(Integer page,
                                                         Integer size,
-                                                        String sort) {
-
+                                                        @Nullable String sortRequest) {
         Pageable sortedPageable;
-        if (sort != null) {
-            String[] parts = sort.split(",");
-            System.out.println(Arrays.toString(parts));
-            String property = parts[0];
-            Sort.Direction direction = (parts.length > 1 && parts[1].equalsIgnoreCase("desc"))
-                    ? Sort.Direction.DESC
-                    : Sort.Direction.ASC;
-            Sort.Order order = new Sort.Order(direction, property);
 
-            sortedPageable = PageRequest.of(
-                    page,
-                    size,
-                    Sort.by(order)
-            );
-        } else {
-            sortedPageable = PageRequest.of(
-                    page,
-                    size
-            );
-        }
+        Sort.Order order = generateSortOrder(sortRequest);
+        sortedPageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(order)
+        );
         System.out.println(sortedPageable);
 
         Page<Product> products = productsRepo.findAll(sortedPageable);
         return convertToDto(products);
-
-//        return products;
     }
+
+
+
+    //  sort generator order
+    private Sort.Order generateSortOrder(String sortRequest) {
+
+        System.out.println("near switch - " + sortRequest);
+        String sort = "";
+        switch (sortRequest) {
+            case "latest":
+                sort = "createdAt,desc";
+                break;
+            case "name,asc":
+                sort = "name,asc";
+                break;
+            case "name,desc":
+                sort = "name,desc";
+                break;
+            case "price,asc":
+                sort = "price,asc";
+                break;
+            case "price,desc":
+                sort = "price,desc";
+                break;
+            case "featured":
+                sort = "";
+                break;
+            case "reviews":
+                sort = "";
+                break;
+            case "bestSelling":
+                sort = "";
+                break;
+            default:
+                sort = "createdAt,desc";
+        }
+        if (sort == null || sort.isEmpty()) {
+            throw new RuntimeException("Invalid sort request");
+        }
+        String[] parts = sort.split(",");
+        String property = parts[0];
+        Sort.Direction direction = (parts.length > 1 && parts[1].equalsIgnoreCase("desc"))
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        return new Sort.Order(direction, property);
+    }
+
+
 
     //  Product page - Dto converter
     private Page<ProductListingDto> convertToDto(Page<Product> products) {
@@ -103,6 +137,8 @@ public class ProductsRetrievalService {
                     .build();
         });
     }
+
+
 
     //  converter - Product -> ProductListingDto
 //    private ProductListingDto convertProductToProductListing(Product product) {

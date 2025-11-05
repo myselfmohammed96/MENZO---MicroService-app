@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Repository;
 
+import com.menzo.Product_Service.Dto.ProductDto.ProductListingView;
 import com.menzo.Product_Service.Entity.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,25 @@ class ProductsRepoTest {
     public void testFindAllWithItems() {
         List<Product> allItems = productsRepo.findAllWithItems();
         System.out.println(allItems);
+    }
+
+    @Test
+    public void testFindAllProductsWithSorting() {
+        List<ProductListingView> allProducts = productsRepo.findAdminProductsListing();
+        allProducts.stream().forEach(product -> {
+            System.out.println("Product: id-" + product.getProductId() +
+                    ", \nname-" + product.getProductName() +
+                    ", \nsubCategoryName-" + product.getSubCategoryName() +
+                    ", \ncategoryName-" + product.getCategoryName() +
+                    ", \nminPrice-" + product.getMinPrice() +
+                    ", \nmaxPrice-" + product.getMaxPrice() +
+                    ", \nminStockQty-" + product.getMinStockQty() +
+                    ", \nmaxStockQty-" + product.getMaxStockQty() +
+                    ", \nlatestCreatedAt-" + product.getLatestCreatedAt() +
+                    ", \noldestCreatedAt-" + product.getOldestCreatedAt() +
+                    ", \nactiveStatus-" + product.getActiveStatus() + "\n");
+        });
+        System.out.println(allProducts.size());
     }
 
 }
