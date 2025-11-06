@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     addFilterMenuButton(filterContainer);
 
-    
+
     //  filter options - submit event
     document.querySelector(".apply-filter-btn").addEventListener("click", function () {
         let filterRequestDtos = [];

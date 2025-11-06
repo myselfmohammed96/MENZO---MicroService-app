@@ -1,7 +1,12 @@
 const getProductList = "http://localhost:8080/products/all-products";
 let tBody;
+let paginationContainer;
 let currentSortParam;
 let currentRequestDto;
+let currentPage = 1;
+//  ##  apply server side default pageSize control -
+//  (with admin preference & user preference on client side)
+let pageSize = 10;
 
 /*
 *   ********* product page loading *********
@@ -12,13 +17,13 @@ let currentRequestDto;
 */
 
 //  fetch products
-const fetchProducts = async function(sortParam = null, requestDto) {
+const fetchProducts = async function(sortParam = null, requestDto = null, page) {
     console.log("sortParam: ", sortParam);
     console.log("requestDto: ", requestDto);
     try {
         const url = sortParam
-                        ? `${getProductList}?sort=${sortParam}`
-                        : getProductList;
+                        ? `${getProductList}?page=${page - 1}&size=${pageSize}&sort=${sortParam}`
+                        : `${getProductList}?page=${page - 1}&size=${pageSize}`;
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -68,14 +73,43 @@ const renderProducts = (products) => {
     });
 };
 
+//  render pagination
+const renderPagination = (totalPages) => {
+    paginationContainer.innerHTML = '';
+    if (currentPage > 1) {
+        paginationContainer.innerHTML += `<a href="#" data-page="${currentPage - 1}">&laquo;</a>`;
+    }
+    for (let i=1; i<=totalPages; i++) {
+        paginationContainer.innerHTML += `<a href="#" data-page="${i}" class="${i === currentPage ? 'active-page' : ''}">${i}</a>`;
+    }
+    if (currentPage < totalPages) {
+        paginationContainer.innerHTML += `<a href="#" data-page="${currentPage + 1}">&raquo;</a>`;
+    }
+
+    //  adding pagination event listeners
+    document.querySelectorAll('.pagination a').forEach(a => {
+        a.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const page = parseInt(e.target.dataset.page);
+            if (page !== currentPage) {
+                currentPage = page;
+                await loadProducts();
+            }
+        });
+    });
+};
+
 //  load products
 const loadProducts = async () => {
     console.log("currentSortParam: ", currentSortParam);
     console.log("currentRequestDto: ", currentRequestDto);
+    console.log("currentPage: ", currentPage);
+    console.log("pageSize: ", pageSize);
     try {
-        const result = await fetchProducts(currentSortParam, currentRequestDto);
+        const result = await fetchProducts(currentSortParam, currentRequestDto, currentPage);
         if (!result) return;
         renderProducts(result.content);
+        renderPagination(result.totalPages);
     } catch(error) {
         console.error("Failed to load products: ", error);
     }
@@ -93,7 +127,7 @@ const loadProducts = async () => {
 window.updateNewSort = (newSortParam = null) => {
     if(newSortParam && newSortParam !== currentSortParam) {
         currentSortParam = newSortParam;
-        loadProducts();
+        await loadProducts();
     }
 }
 
@@ -101,7 +135,7 @@ window.updateNewSort = (newSortParam = null) => {
 window.updateNewFilter = (newRequestDto) => {
     if(newRequestDto && newRequestDto !== currentRequestDto) {
         currentRequestDto = newRequestDto;
-        loadProducts();
+        await loadProducts();
     }
 }
 
@@ -111,5 +145,6 @@ window.updateNewFilter = (newRequestDto) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     tBody = document.getElementById('product-table-body');
+    paginationContainer = document.querySelector('.pagination');
     loadProducts();
 });

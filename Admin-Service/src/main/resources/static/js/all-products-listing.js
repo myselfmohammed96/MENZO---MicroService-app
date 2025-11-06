@@ -3,11 +3,11 @@ const getProductItemsByProductId = "http://localhost:8080/admin/product-items"
 
 document.addEventListener("DOMContentLoaded", async () => {
     const tBody = document.getElementById('product-table-body');
-//    const paginationContainer = document.querySelector('.pagination');
+    const paginationContainer = document.querySelector('.pagination');
 //    let requestDto = null;
 //
-//    let currentPage = 1;
-//    const pageSize = 10;
+    let currentPage = 1;
+    const pageSize = 10;
 
     const fetchProducts = async (page = 1, dto) => {
         try {
@@ -57,33 +57,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     };
 
-//    const renderPagination = (totalPages) => {
-//        paginationContainer.innerHTML = '';
-//        if (currentPage > 1) {
-//            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage - 1}">&laquo;</a>`;
-//        }
-//        for (let i = 1; i <= totalPages; i++) {
-//            paginationContainer.innerHTML +=`<a href="#" data-page="${i}" class="${i === currentPage ? 'active-page' : ''}">${i}</a>`;
-//        }
-//        if (currentPage < totalPages) {
-//            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage + 1}">&raquo;</a>`;
-//        }
-//
-//        attachPaginationEvents();
-//    };
+    const renderPagination = (totalPages) => {
+        paginationContainer.innerHTML = '';
+        if (currentPage > 1) {
+            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage - 1}">&laquo;</a>`;
+        }
+        for (let i = 1; i <= totalPages; i++) {
+            paginationContainer.innerHTML +=`<a href="#" data-page="${i}" class="${i === currentPage ? 'active-page' : ''}">${i}</a>`;
+        }
+        if (currentPage < totalPages) {
+            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage + 1}">&raquo;</a>`;
+        }
+        attachPaginationEvents();
+    };
 
-//    const attachPaginationEvents = () => {
-//        document.querySelectorAll('.pagination a').forEach(a => {
-//            a.addEventListener('click', async (e) => {
-//                e.preventDefault();
-//                const page = parseInt(e.target.dataset.page);
-//                if (page !== currentPage) {
-//                    currentPage = page;
-//                    await loadProducts();
-//                }
-//            });
-//        });
-//    };
+    const attachPaginationEvents = () => {
+        document.querySelectorAll('.pagination a').forEach(a => {
+            a.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const page = parseInt(e.target.dataset.page);
+                if (page !== currentPage) {
+                    currentPage = page;
+                    await loadProducts();
+                }
+            });
+        });
+    };
 
     document.querySelector(".apply-filter-btn").addEventListener("click", function () {
             let filterRequestDtos = [];
