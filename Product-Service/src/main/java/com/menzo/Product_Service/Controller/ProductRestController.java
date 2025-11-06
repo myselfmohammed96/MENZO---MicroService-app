@@ -28,6 +28,17 @@ public class ProductRestController {
     @Autowired
     private ProductsRetrievalService productsRetrievalService;
 
+    @PostMapping("all-products")
+    public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") Integer page,
+                                            @RequestParam(defaultValue = "10") Integer size,
+                                            @RequestParam(required = false) String sort,
+                                            @RequestBody(required = false) RequestDto requestDto) {
+        System.out.println("page: " + page + "\tsize: " + size);
+        System.out.println("sort: " + sort);
+        System.out.println("requestDto: " + requestDto);
+        return ResponseEntity.ok("Success");
+    }
+
     //  Get all products with pagination for listing - for Admin-Service (/admin/all-products)
 //    @GetMapping("/all-products-listing")
 //    public ResponseEntity<Page<ProductListingDto>> getAllProductListingWithPagination(@RequestParam(defaultValue = "0") Integer page,
@@ -36,16 +47,16 @@ public class ProductRestController {
 //        return ResponseEntity.ok(productListingDtos);
 //    }
 
-    @PostMapping("/all-products")
-    public ResponseEntity<?> getAdminAllProducts(@RequestParam(defaultValue = "0") Integer page,
-                                            @RequestParam(defaultValue = "10") Integer size,
-                                            @RequestParam(required = false) String sort,
-                                            @RequestBody(required = false) ProductDetailsDto p) {
-        System.out.println(sort);
-        if (sort == null) sort = "";
-        Page<ProductListingDto> pages =  productsRetrievalService.getAllProductListing(page, size, sort);
-        return ResponseEntity.ok(pages);
-    }
+//    @PostMapping("/all-products")
+//    public ResponseEntity<?> getAdminAllProducts(@RequestParam(defaultValue = "0") Integer page,
+//                                            @RequestParam(defaultValue = "10") Integer size,
+//                                            @RequestParam(required = false) String sort,
+//                                            @RequestBody(required = false) ProductDetailsDto p) {
+//        System.out.println(sort);
+//        if (sort == null) sort = "";
+//        Page<ProductListingDto> pages =  productsRetrievalService.getAllProductListing(page, size, sort);
+//        return ResponseEntity.ok(pages);
+//    }
 
 //    @PostMapping("/all-products-listing")
 //    public ResponseEntity<Page<ProductListingDto>> getAllProductListingWithPagination(@RequestBody(required = false) RequestDto requestDto,

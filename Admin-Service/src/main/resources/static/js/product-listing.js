@@ -1,14 +1,30 @@
 const getProductList = "http://localhost:8080/products/all-products";
 let tBody;
+let currentSortParam;
+let currentRequestDto;
 
-//  ******* fetch products *******
-const fetchProducts = async function(sortParam = null) {
+/*
+*   ********* product page loading *********
+*
+*   fetch & populate products - with server-side pagination
+*   update page with change in 'sort' & 'filters'
+*
+*/
+
+//  fetch products
+const fetchProducts = async function(sortParam = null, requestDto) {
+    console.log("sortParam: ", sortParam);
+    console.log("requestDto: ", requestDto);
     try {
-        const url = sortParam ? `${getProductList}?sort=${sortParam}` : getProductList;
+        const url = sortParam
+                        ? `${getProductList}?sort=${sortParam}`
+                        : getProductList;
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: null
+            body: requestDto
+                        ? JSON.stringify(requestDto)
+                        : null
         });
         if(!response.ok) throw new Error("Failed to fetch products");
         return response.json();
@@ -18,9 +34,7 @@ const fetchProducts = async function(sortParam = null) {
     }
 };
 
-
-
-//  ******* render products *******
+//  populate products
 const renderProducts = (products) => {
     tBody.innerHTML = '';
     products.forEach(product => {
@@ -54,13 +68,12 @@ const renderProducts = (products) => {
     });
 };
 
-
-
-//  ******* load products *******
-window.loadProducts = async (sortParam = null) => {
+//  load products
+const loadProducts = async () => {
+    console.log("currentSortParam: ", currentSortParam);
+    console.log("currentRequestDto: ", currentRequestDto);
     try {
-        console.log(sortParam + " ... <-");
-        const result = await fetchProducts(sortParam);
+        const result = await fetchProducts(currentSortParam, currentRequestDto);
         if (!result) return;
         renderProducts(result.content);
     } catch(error) {
@@ -70,7 +83,32 @@ window.loadProducts = async (sortParam = null) => {
 
 
 
+/*
+*   ******* update new 'sort' & 'filter' *******
+*   get updated 'sort' & 'filter' options
+*   And initiate page content update
+*/
+
+//  update new sort
+window.updateNewSort = (newSortParam = null) => {
+    if(newSortParam && newSortParam !== currentSortParam) {
+        currentSortParam = newSortParam;
+        loadProducts();
+    }
+}
+
+//  update new filter
+window.updateNewFilter = (newRequestDto) => {
+    if(newRequestDto && newRequestDto !== currentRequestDto) {
+        currentRequestDto = newRequestDto;
+        loadProducts();
+    }
+}
+
+
+
 //  ******* DOM loading event *******
+
 document.addEventListener("DOMContentLoaded", () => {
     tBody = document.getElementById('product-table-body');
     loadProducts();

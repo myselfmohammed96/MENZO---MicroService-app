@@ -1,75 +1,94 @@
+/*
+*
+*   sorting menu is populated in the template
+*   filtering menu is populated in this .js file
+*
+*/
 const getAllGlobalFilterOptions = "http://localhost:8080/search-filter/all-products";
 
 
+/*
+*   ********* filter menu options *********
+*   This section contains functions for loading filter menu
+*/
 
-//  ******* fetch filter options *******
+//  fetch filter options
+const fetchFilterOptions = async function() {
+    try {
+        console.log("Fetching the filter options");
+        const response = await fetch(getAllGlobalFilterOptions);
+        if(!response.ok) throw new Error("Failed to fetch filter options");
+        return response.json();
+    } catch(err) {
+        console.error("Error", err);
+        return null;
+    }
+};
 
-//const fetchFilterOptions = async function() {
-//    try {
-//        const response = await fetch(getAllGlobalFilterOptions);
-//        if(!response.ok) throw new Error("Failed to fetch filter options");
-//        return response.json();
-//    } catch(err) {
-//        console.error("Error", err);
-//        return null;
-//    }
-//};
+//  render filter options
+const renderFilterOptions = function(filterContainer, options) {
+    filterContainer.innerHTML = '';
+    filterContainer.innerHTML = `
+        <h3 id="filter-heading">Filters</h3>
+        <hr class="filter-hr">
+    `;
+    Object.entries(options).forEach(([filterName, values], index, arr) => {
+        const section = document.createElement("div");
+        section.classList.add("filter-section");
+        const title = document.createElement("p");
+        title.classList.add("filter-title");
+        title.textContent = filterName.replace(/_/g, " ");
+        section.appendChild(title);
+        values.forEach(val => {
+            const label = document.createElement("label");
+
+            const input = document.createElement("input");
+            input.type = "checkbox";
+            input.name = filterName.toLowerCase();
+            input.value = val;
+
+            const span = document.createElement("span");
+            span.classList.add("checkmark");
+
+            label.appendChild(input);
+            label.appendChild(span);
+            label.append(` ${val}`);
+
+            section.appendChild(label);
+        });
+        filterContainer.appendChild(section);
+
+        if(index < arr.length - 1) {
+            const hr = document.createElement("hr");
+            hr.classList.add("filter-hr");
+            filterContainer.appendChild(hr);
+        }
+        filterContainer.appendChild(document.createElement("hr")).classList.add("filter-hr");
+    });
+}
+
+//  add submit button for filter menu
+const addFilterMenuButton = function(filterContainer) {
+    const applyBtn = document.createElement("button");
+    applyBtn.type = "submit";
+    applyBtn.classList.add("apply-filter-btn");
+    applyBtn.textContent = "Apply Filters";
+    filterContainer.appendChild(applyBtn);
+}
 
 
-//  ******* render filter options *******
 
-//const renderFilterOptions = function(options) {
-//    filterContainer.innerHTML = '';
-//    filterContainer.innerHTML = `
-//        <h3 id="filter-heading">Filters</h3>
-//        <hr class="filter-hr">
-//    `;
-//
-//    Object.entries(options).forEach(([filterName, values], index, arr) => {
-//        const section = document.createElement("div");
-//        section.classList.add("filter-section");
-//        const title = document.createElement("p");
-//        title.classList.add("filter-title");
-//        title.textContent = filterName.replace(/_/g, " ");
-//        section.appendChild(title);
-//        values.forEach(val => {
-//            const label = document.createElement("label");
-//
-//            const input = document.createElement("input");
-//            input.type = "checkbox";
-//            input.name = filterName.toLowerCase();
-//            input.value = val;
-//
-//            const span = document.createElement("span");
-//            span.classList.add("checkmark");
-//
-//            label.appendChild(input);
-//            label.appendChild(span);
-//            label.append(` ${val}`);
-//
-//            section.appendChild(label);
-//        });
-//
-//        filterContainer.appendChild(section);
-//
-//        if(index < arr.length - 1) {
-//            const hr = document.createElement("hr");
-//            hr.classList.add("filter-hr");
-//            filterContainer.appendChild(hr);
-//        }
-//        //            filterContainer.appendChild(document.createElement("hr")).classList.add("filter-hr");
-//    });
-//
-//}
+//  ********* DOM-Content loading event *********
 
 document.addEventListener("DOMContentLoaded", async () => {
+    const filterContainer = document.getElementById("filter-container");
     const filterButton = document.getElementById("filter-button");
     const filterPanel = document.getElementById("filter-panel");
-//    const filterContainer = document.getElementById("filter-container");
     const sortButton = document.getElementById("sort-button");
     const sortPanel = document.getElementById("sort-panel");
 
-    //  ******* eventListener on 'filter' & 'sort buttons *******
+
+    //  'filter' & 'sort' buttons - eventListeners
     filterButton.addEventListener("click", (e) => {
         e.stopPropagation();
         if(!sortPanel.classList.contains("hidden")) {
@@ -96,7 +115,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 
-
+    /*
+    *   ***** sorting menu - submit *****
+    *   adding event listener to every option in sort menu
+    */
     const blackList = ["Featured", "Avg. Customer Review", "Best Sellers"];
     const sortOptions = document.querySelectorAll('.sort-option');
     sortOptions.forEach(opt => {
@@ -106,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.log("*Returning...");
                 return;
             }
-            window.loadProducts(opt.dataset.value);
+            window.updateNewSort(opt.dataset.value);
             sortOptions.forEach(o => {
                 if(o.classList.contains('applied-sort')) {
                     o.classList.remove('applied-sort');
@@ -118,51 +140,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 
+    //  initializing filter option loading
+    const options = await fetchFilterOptions();
+    if(options) {
+        renderFilterOptions(filterContainer, options);
+    }
+    addFilterMenuButton(filterContainer);
 
+    
+    //  filter options - submit event
+    document.querySelector(".apply-filter-btn").addEventListener("click", function () {
+        let filterRequestDtos = [];
 
-//    const applyBtn = document.createElement("button");
-//    applyBtn.type = "submit";
-//    applyBtn.classList.add("apply-filter-btn");
-//    applyBtn.textContent = "Apply Filters";
-//    filterContainer.appendChild(applyBtn);
-//
-//
-//    const options = await fetchFilterOptions();
-//    if(options) {
-//        renderFilterOptions(options);
-//    }
+        document.querySelectorAll(".filter-section").forEach(section => {
+            let h3 = section.querySelector("p");
+            let filterType = h3 ? h3.innerText.trim() : null;
+
+            let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
+                .map(cb => cb.value.trim());
+
+            if(selectedValues.length > 0) {
+                filterRequestDtos.push({
+                    filterType: filterType,
+                    values: selectedValues.join(", ")
+                });
+            }
+        });
+        let requestDto = { filterRequestDtos };
+        console.log(requestDto);
+
+        window.updateNewFilter(requestDto);
+    });
 });
 
 
 
-//document.querySelector(".apply-filter-btn").addEventListener("click", function () {
-//    let filterRequestDtos = [];
-//
-//    document.querySelectorAll(".filter-section").forEach(section => {
-//        let h3 = section.querySelector("p");
-//        let filterType = h3 ? h3.innerText.trim() : null;
-//        let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
-//            .map(cb => cb.value.trim());
-//
-//        if(selectedValues.length > 0) {
-//            filterRequestDtos.push({
-//                filterType: filterType,
-//                values: selectedValues.join(", ")
-//            });
-//        }
-//    });
-//
-//    let requestDto = { filterRequestDtos };
-//    console.log(requestDto);
-//
-//    window.setRequestDto(requestDto);
-//
-//    if(window.loadProducts && filterRequestDtos) {
-//        window.loadProducts();
-//    }
-//
-//});
-//    });
+
+
+
+
 
 
 

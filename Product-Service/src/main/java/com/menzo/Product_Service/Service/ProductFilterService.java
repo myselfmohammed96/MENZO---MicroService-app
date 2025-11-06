@@ -18,7 +18,7 @@ public class ProductFilterService {
         PRICE,
         COLORS,
         SIZE,
-        FIT_TYPE;
+        STATUS;         //  activeStatus
     }
 
     private static final List<String> PRICE_RANGES = List.of(
@@ -36,7 +36,7 @@ public class ProductFilterService {
         filters.put(ProductFilterType.PRICE, PRICE_RANGES);
         filters.put(ProductFilterType.COLORS, variationsRetrievalService.getOptionsByVariationName(null, "Colors"));
         filters.put(ProductFilterType.SIZE, variationsRetrievalService.getOptionsByVariationName(null, "Size"));
-        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(null, "Fit type"));
+//        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(null, "Fit type"));
 
         return filters;
     }
@@ -47,7 +47,7 @@ public class ProductFilterService {
         filters.put(ProductFilterType.PRICE, PRICE_RANGES);
         filters.put(ProductFilterType.COLORS, variationsRetrievalService.getOptionsByVariationName(categoryId, "Colors"));
         filters.put(ProductFilterType.SIZE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Size"));
-        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Fit type"));
+//        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Fit type"));
 
         return filters;
     }

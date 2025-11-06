@@ -3,11 +3,11 @@ const getProductItemsByProductId = "http://localhost:8080/admin/product-items"
 
 document.addEventListener("DOMContentLoaded", async () => {
     const tBody = document.getElementById('product-table-body');
-    const paginationContainer = document.querySelector('.pagination');
-    let requestDto = null;
-
-    let currentPage = 1;
-    const pageSize = 10;
+//    const paginationContainer = document.querySelector('.pagination');
+//    let requestDto = null;
+//
+//    let currentPage = 1;
+//    const pageSize = 10;
 
     const fetchProducts = async (page = 1, dto) => {
         try {
@@ -57,55 +57,57 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     };
 
-    const renderPagination = (totalPages) => {
-        paginationContainer.innerHTML = '';
-        if (currentPage > 1) {
-            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage - 1}">&laquo;</a>`;
-        }
-        for (let i = 1; i <= totalPages; i++) {
-            paginationContainer.innerHTML +=`<a href="#" data-page="${i}" class="${i === currentPage ? 'active-page' : ''}">${i}</a>`;
-        }
-        if (currentPage < totalPages) {
-            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage + 1}">&raquo;</a>`;
-        }
-
-        attachPaginationEvents();
-    };
-
-    const attachPaginationEvents = () => {
-        document.querySelectorAll('.pagination a').forEach(a => {
-            a.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const page = parseInt(e.target.dataset.page);
-                if (page !== currentPage) {
-                    currentPage = page;
-                    await loadProducts();
-                }
-            });
-        });
-    };
-
-//    document.querySelector(".apply-filter-btn").addEventListener("click", function () {
-//            let filterRequestDtos = [];
+//    const renderPagination = (totalPages) => {
+//        paginationContainer.innerHTML = '';
+//        if (currentPage > 1) {
+//            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage - 1}">&laquo;</a>`;
+//        }
+//        for (let i = 1; i <= totalPages; i++) {
+//            paginationContainer.innerHTML +=`<a href="#" data-page="${i}" class="${i === currentPage ? 'active-page' : ''}">${i}</a>`;
+//        }
+//        if (currentPage < totalPages) {
+//            paginationContainer.innerHTML += `<a href="#" data-page="${currentPage + 1}">&raquo;</a>`;
+//        }
 //
-//            document.querySelectorAll(".filter-section").forEach(section => {
-//                let h3 = section.querySelector("p");
-//                let filterType = h3 ? h3.innerText.trim() : null;
-//
-//                let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
-//                    .map(cb => cb.value.trim());
-//
-//                if(selectedValues.length > 0) {
-//                    filterRequestDtos.push({
-//                        filterType: filterType,
-//                        values: selectedValues.join(", ")
-//                    });
+//        attachPaginationEvents();
+//    };
+
+//    const attachPaginationEvents = () => {
+//        document.querySelectorAll('.pagination a').forEach(a => {
+//            a.addEventListener('click', async (e) => {
+//                e.preventDefault();
+//                const page = parseInt(e.target.dataset.page);
+//                if (page !== currentPage) {
+//                    currentPage = page;
+//                    await loadProducts();
 //                }
 //            });
-//
-//            let requestDto = { filterRequestDtos };
-//            console.log(requestDto);
-//    });
+//        });
+//    };
+
+    document.querySelector(".apply-filter-btn").addEventListener("click", function () {
+            let filterRequestDtos = [];
+
+            document.querySelectorAll(".filter-section").forEach(section => {
+                let h3 = section.querySelector("p");
+                let filterType = h3 ? h3.innerText.trim() : null;
+
+                let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
+                    .map(cb => cb.value.trim());
+
+                if(selectedValues.length > 0) {
+                    filterRequestDtos.push({
+                        filterType: filterType,
+                        values: selectedValues.join(", ")
+                    });
+                }
+            });
+
+            let requestDto = { filterRequestDtos };
+            console.log(requestDto);
+    });
+
+
 
     const loadProducts = async () => {
         const result = await fetchProducts(currentPage, requestDto);

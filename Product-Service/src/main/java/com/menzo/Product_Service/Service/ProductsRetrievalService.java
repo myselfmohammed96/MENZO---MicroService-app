@@ -46,8 +46,8 @@ public class ProductsRetrievalService {
     @Autowired
     private ProductCountryOfOriginRepo countryOfOriginRepo;
 
-    @Autowired
-    private ProductSpecificationService<Product> productSpecService;
+//    @Autowired
+//    private ProductSpecificationService<Product> productSpecService;
 
     @Autowired
     private VariationsOptionsRepo variationsOptionsRepo;
@@ -58,22 +58,22 @@ public class ProductsRetrievalService {
 
     //  ********* Get all products listing with pagination & filtering *********
 
-    public Page<ProductListingDto> getAllProductListing(Integer page,
-                                                        Integer size,
-                                                        @Nullable String sortRequest) {
-        Pageable sortedPageable;
-
-        Sort.Order order = generateSortOrder(sortRequest);
-        sortedPageable = PageRequest.of(
-                page,
-                size,
-                Sort.by(order)
-        );
-        System.out.println(sortedPageable);
-
-        Page<Product> products = productsRepo.findAll(sortedPageable);
-        return convertToDto(products);
-    }
+//    public Page<ProductListingDto> getAllProductListing(Integer page,
+//                                                        Integer size,
+//                                                        @Nullable String sortRequest) {
+//        Pageable sortedPageable;
+//
+//        Sort.Order order = generateSortOrder(sortRequest);
+//        sortedPageable = PageRequest.of(
+//                page,
+//                size,
+//                Sort.by(order)
+//        );
+//        System.out.println(sortedPageable);
+//
+//        Page<Product> products = productsRepo.findAll(sortedPageable);
+//        return convertToDto(products);
+//    }
 
 
 
@@ -124,19 +124,19 @@ public class ProductsRetrievalService {
 
 
     //  Product page - Dto converter
-    private Page<ProductListingDto> convertToDto(Page<Product> products) {
-        return products.map(product -> {
-            return ProductListingDto.builder()
-                    .id(product.getId())
-                    .productName(product.getProductName())
-                    .subCategoryName(product.getCategory().getCategoryName())
-                    .basePrice(35F)
-                    .totalItems(03)
-                    .activeStatus(ProductActiveStatus.ACTIVE)
-                    .iconImage("abc")
-                    .build();
-        });
-    }
+//    private Page<ProductListingDto> convertToDto(Page<Product> products) {
+//        return products.map(product -> {
+//            return ProductListingDto.builder()
+//                    .productId(product.getId())
+//                    .productName(product.getProductName())
+//                    .subCategoryName(product.getCategory().getCategoryName())
+//                    .basePrice(35F)
+//                    .totalItems(03)
+//                    .activeStatus(ProductActiveStatus.ACTIVE)
+//                    .iconImage("abc")
+//                    .build();
+//        });
+//    }
 
 
 
