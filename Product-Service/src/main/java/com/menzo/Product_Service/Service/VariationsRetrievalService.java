@@ -3,6 +3,7 @@ package com.menzo.Product_Service.Service;
 import com.menzo.Product_Service.Dto.VariationsDto.*;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
+import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.Repository.VariationsOptionsRepo;
 import com.menzo.Product_Service.Repository.VariationsRepo;
 import jakarta.persistence.EntityManager;
@@ -12,6 +13,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,11 +65,19 @@ public class VariationsRetrievalService {
 
 
     //  get all variations associated with sub-category with options - by sub-category ID - TESTED
-    public List<VariationWithOptionsDto> getAllVariationsWithOptionsBySub(Long subCategoryId) {
+    public List<VariationWithOptionsDto> getAllVariationsWithOptionsByCategory(Components componentType,
+                                                                          Long componentId) {
+        Map<Long, VariationWithOptionsDto> variationMap = new HashMap<>();
 
         //  fetching data with sub-category ID
-        List<Object[]> rows = variationsRepo.findAllByCategoryId(subCategoryId);
-        Map<Long, VariationWithOptionsDto> variationMap = new HashMap<>();
+        List<Object[]> rows;
+        if (componentType.equals(Components.CATEGORY)) {
+            rows = variationsRepo.findAllByCategoryId(componentId, true);
+        } else if(componentType.equals(Components.SUB_CATEGORY)) {
+            rows = variationsRepo.findAllByCategoryId(componentId, false);
+        } else {
+            throw new IllegalArgumentException("Invalid componentType. must be 'CATEGORY' or 'SUB-CATEGORY': " + componentType);
+        }
 
         //  organizing data in dto
         rows.stream()

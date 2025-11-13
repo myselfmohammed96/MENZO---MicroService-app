@@ -1,25 +1,22 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
+import com.menzo.Product_Service.Dto.FilterDtos.FilterRequestDto;
+import com.menzo.Product_Service.Dto.FilterDtos.QueryDetailsDto;
 import com.menzo.Product_Service.Dto.ProductDto.*;
-import com.menzo.Product_Service.Dto.SpecificationsDto.RequestDto;
-import com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto;
+import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
 import com.menzo.Product_Service.Entity.*;
-import com.menzo.Product_Service.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Repository.*;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
@@ -55,75 +52,124 @@ public class ProductsRetrievalService {
     private static final Logger logger = LoggerFactory.getLogger(ProductsRetrievalService.class);
 
 
-
     //  ********* Get all products listing with pagination & filtering *********
 
-//    public Page<ProductListingDto> getAllProductListing(Integer page,
-//                                                        Integer size,
-//                                                        @Nullable String sortRequest) {
-//        Pageable sortedPageable;
-//
+    public Page<ProductListingDto> getAdminAllProductListing(Integer page,
+                                                             Integer size,
+                                                             String sortRequest,
+                                                             RequestDto filterRequest) {
+        String sortParam = getSortValue(sortRequest);
+//        Map<String, List<?>> filterValues = getFilterValues(filterRequest.getFilterRequestDtos());
+
+        Map<String, Integer> statusFlags = new HashMap<>();
+        statusFlags.put("isSubCategoryDeleted", 0);
+        statusFlags.put("isCategoryDeleted", 0);
+        statusFlags.put("isSubCategoryActive", 1);
+        statusFlags.put("isCategoryActive", 1);
+
+        QueryDetailsDto queryDetails = QueryDetailsDto.builder()
+                .page(page)
+                .size(size)
+                .sortRequest(sortParam)
+                .filterValues(filterRequest.getFilterRequestDtos())
+                .statusFlags(statusFlags)
+                .build();
+
+        productsRepo.findAdminProductListing(queryDetails);
+
+        //  creating 'pageable' object with sorting
 //        Sort.Order order = generateSortOrder(sortRequest);
-//        sortedPageable = PageRequest.of(
+//        Pageable sortedPageable = PageRequest.of(
 //                page,
 //                size,
 //                Sort.by(order)
 //        );
 //        System.out.println(sortedPageable);
-//
+
+        //  creating 'specification' object
+
 //        Page<Product> products = productsRepo.findAll(sortedPageable);
 //        return convertToDto(products);
-//    }
-
-
-
-    //  sort generator order
-    private Sort.Order generateSortOrder(String sortRequest) {
-
-        System.out.println("near switch - " + sortRequest);
-        String sort = "";
-        switch (sortRequest) {
-            case "latest":
-                sort = "createdAt,desc";
-                break;
-            case "name,asc":
-                sort = "name,asc";
-                break;
-            case "name,desc":
-                sort = "name,desc";
-                break;
-            case "price,asc":
-                sort = "price,asc";
-                break;
-            case "price,desc":
-                sort = "price,desc";
-                break;
-            case "featured":
-                sort = "";
-                break;
-            case "reviews":
-                sort = "";
-                break;
-            case "bestSelling":
-                sort = "";
-                break;
-            default:
-                sort = "createdAt,desc";
-        }
-        if (sort == null || sort.isEmpty()) {
-            throw new RuntimeException("Invalid sort request");
-        }
-        String[] parts = sort.split(",");
-        String property = parts[0];
-        Sort.Direction direction = (parts.length > 1 && parts[1].equalsIgnoreCase("desc"))
-                ? Sort.Direction.DESC
-                : Sort.Direction.ASC;
-        return new Sort.Order(direction, property);
+        return null;
     }
 
 
+    private String getSortValue(String sortRequest) {
+        return switch (sortRequest) {
+            case "latest" -> {
+                yield "latestCreatedAt,desc";
+            }
+            case "name,asc" -> {
+                yield "productName,asc";
+            }
+            case "name,desc" -> {
+                yield "productName,desc";
+            }
+            case "price,asc" -> {
+                yield "minPrice,asc";
+            }
+            case "price,desc" -> {
+                yield "maxPrice,desc";
+            }
+            default -> throw new IllegalArgumentException("Invalid sortRequest: " + sortRequest);
+        };
+    }
 
-    //  Product page - Dto converter
+//    private Map<String, List<?>> getFilterValues(List<FilterRequestDto> filterRequests) {
+//        return filterRequests.stream()
+//                .collect(Collectors.toMap(
+//                        FilterRequestDto::getFilterType,
+//                        filter -> List.of(filter.getValues().split(","))
+//                ));
+//    }
+
+
+//  sort generator order
+//    private Sort.Order generateSortOrder(String sortRequest) {
+//
+//        System.out.println("near switch - " + sortRequest);
+//        String sort = "createdAt,desc";
+//        switch (sortRequest) {
+//            case "latest":
+//                sort = "createdAt,desc";
+//                break;
+//            case "name,asc":
+//                sort = "name,asc";
+//                break;
+//            case "name,desc":
+//                sort = "name,desc";
+//                break;
+//            case "price,asc":
+//                sort = "price,asc";
+//                break;
+//            case "price,desc":
+//                sort = "price,desc";
+//                break;
+////            case "featured":
+////                sort = "";
+////                break;
+////            case "reviews":
+////                sort = "";
+////                break;
+////            case "bestSelling":
+////                sort = "";
+////                break;
+//            default:
+//                sort = "createdAt,desc";
+//        }
+//        if (sort == null || sort.isEmpty()) {
+//            throw new RuntimeException("Invalid sort request");
+//        }
+//        String[] parts = sort.split(",");
+//        String property = parts[0];
+//        Sort.Direction direction = (parts.length > 1 && parts[1].equalsIgnoreCase("desc"))
+//                ? Sort.Direction.DESC
+//                : Sort.Direction.ASC;
+//        return new Sort.Order(direction, property);
+//    }
+
+
+    ////  Product page - Dto converter
 //    private Page<ProductListingDto> convertToDto(Page<Product> products) {
 //        return products.map(product -> {
 //            return ProductListingDto.builder()
@@ -137,7 +183,6 @@ public class ProductsRetrievalService {
 //                    .build();
 //        });
 //    }
-
 
 
     //  converter - Product -> ProductListingDto

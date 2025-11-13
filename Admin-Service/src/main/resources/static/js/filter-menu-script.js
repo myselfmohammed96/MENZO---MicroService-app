@@ -4,7 +4,7 @@
 *   filtering menu is populated in this .js file
 *
 */
-const getAllGlobalFilterOptions = "http://localhost:8080/search-filter/all-products";
+const getAdminFilterOptions = "http://localhost:8080/search-filter/admin-filters";
 
 
 /*
@@ -16,7 +16,7 @@ const getAllGlobalFilterOptions = "http://localhost:8080/search-filter/all-produ
 const fetchFilterOptions = async function() {
     try {
         console.log("Fetching the filter options");
-        const response = await fetch(getAllGlobalFilterOptions);
+        const response = await fetch(getAdminFilterOptions);
         if(!response.ok) throw new Error("Failed to fetch filter options");
         return response.json();
     } catch(err) {
@@ -26,43 +26,42 @@ const fetchFilterOptions = async function() {
 };
 
 //  render filter options
-const renderFilterOptions = function(filterContainer, options) {
+const renderFilterOptions = function(filterContainer, filters) {
     filterContainer.innerHTML = '';
     filterContainer.innerHTML = `
         <h3 id="filter-heading">Filters</h3>
         <hr class="filter-hr">
     `;
-    Object.entries(options).forEach(([filterName, values], index, arr) => {
+
+    filters.forEach(filter => {
         const section = document.createElement("div");
         section.classList.add("filter-section");
+
         const title = document.createElement("p");
         title.classList.add("filter-title");
-        title.textContent = filterName.replace(/_/g, " ");
+        title.textContent = filter.filterType.replace(/_/g, " ");
+        title.dataset.value = filter.typeValue;
+
         section.appendChild(title);
-        values.forEach(val => {
+
+        filter.filterOptions.forEach(option => {
             const label = document.createElement("label");
 
             const input = document.createElement("input");
             input.type = "checkbox";
-            input.name = filterName.toLowerCase();
-            input.value = val;
+            input.name = filter.typeValue.toLowerCase();
+            input.value = option;
 
             const span = document.createElement("span");
             span.classList.add("checkmark");
 
             label.appendChild(input);
             label.appendChild(span);
-            label.append(` ${val}`);
+            label.append(` ${option}`);
 
             section.appendChild(label);
         });
         filterContainer.appendChild(section);
-
-        if(index < arr.length - 1) {
-            const hr = document.createElement("hr");
-            hr.classList.add("filter-hr");
-            filterContainer.appendChild(hr);
-        }
         filterContainer.appendChild(document.createElement("hr")).classList.add("filter-hr");
     });
 }
@@ -119,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     *   ***** sorting menu - submit *****
     *   adding event listener to every option in sort menu
     */
-    const blackList = ["Featured", "Avg. Customer Review", "Best Sellers"];
+    const blackList = ["Featured", "Avg. Customer Review", "Best Sellers"];         //  ##
     const sortOptions = document.querySelectorAll('.sort-option');
     sortOptions.forEach(opt => {
         opt.addEventListener('click', () => {
@@ -154,7 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         document.querySelectorAll(".filter-section").forEach(section => {
             let h3 = section.querySelector("p");
-            let filterType = h3 ? h3.innerText.trim() : null;
+            let filterType = h3 ? h3.dataset.value.trim() : null;
 
             let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
                 .map(cb => cb.value.trim());
@@ -170,6 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log(requestDto);
 
         window.updateNewFilter(requestDto);
+        filterPanel.classList.add("hidden");
     });
 });
 

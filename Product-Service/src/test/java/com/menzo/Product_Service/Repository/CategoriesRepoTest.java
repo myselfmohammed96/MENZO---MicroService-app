@@ -157,6 +157,20 @@ class CategoriesRepoTest {
         System.out.println(subList);
     }
 
+
+
+
+
+
+//    @Test
+//    public void testFindIt() {
+//        List<ProductCategory> it = categoriesRepo.findIt(true);
+//        for (ProductCategory c : it) {
+//            System.out.println(c.getId() + " - " + c.getParentCategoryId() + " - " + c.getCategoryName());
+//        }
+//        System.out.println(it.size());
+//    }
+
 //    @Test
 //    public void testFindByIdAndParentCategoryIdIsNotNullWithoutVariation() {
 //        Optional<ProductCategory> sub = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(121L);

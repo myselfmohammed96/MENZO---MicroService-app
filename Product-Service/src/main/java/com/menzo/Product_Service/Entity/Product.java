@@ -2,10 +2,14 @@ package com.menzo.Product_Service.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.ProductListingView;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +23,25 @@ import java.util.List;
         "items",
         "category"
 })
+@SqlResultSetMapping(
+        name = "ProductListingDtoMapping",
+        classes = @ConstructorResult(
+                targetClass = ProductListingDto.class,
+                columns = {
+                        @ColumnResult(name = "productId", type = Long.class),
+                        @ColumnResult(name = "productName", type = String.class),
+                        @ColumnResult(name = "subCategoryName", type = String.class),
+                        @ColumnResult(name = "categoryName", type = String.class),
+                        @ColumnResult(name = "minPrice", type = Float.class),
+                        @ColumnResult(name = "maxPrice", type = Float.class),
+                        @ColumnResult(name = "minStockQty", type = Integer.class),
+                        @ColumnResult(name = "maxStockQty", type = Integer.class),
+                        @ColumnResult(name = "latestCreatedAt", type = Timestamp.class),
+                        @ColumnResult(name = "oldestCreatedAt", type = Timestamp.class),
+                        @ColumnResult(name = "activeStatus", type = String.class),
+                }
+        )
+)
 @Table(name = "products")
 public class Product {
 
@@ -72,10 +95,6 @@ public class Product {
     )
     private Boolean podAvailable;
 
-
-
-
-
     @JsonIgnore
     @OneToMany(
             mappedBy = "product",
@@ -84,10 +103,6 @@ public class Product {
             orphanRemoval = true
     )
     private List<ProductItem> items = new ArrayList<>();
-
-
-
-
 
     @Column(
             nullable = false,

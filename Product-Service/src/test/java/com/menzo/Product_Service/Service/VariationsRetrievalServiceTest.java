@@ -5,6 +5,7 @@ import com.menzo.Product_Service.Dto.VariationsDto.OptionDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationWithOptionsDto;
 import com.menzo.Product_Service.Entity.VariationOption;
+import com.menzo.Product_Service.Enum.Components;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +28,12 @@ class VariationsRetrievalServiceTest {
 
     @Test
     public void testGetAllVariationsWithOptionsBySub() {
-        List<VariationWithOptionsDto> data = variationsRetrievalService.getAllVariationsWithOptionsBySub(121L);
-        System.out.println(data);
+        List<VariationWithOptionsDto> data = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+                Components.CATEGORY,
+                2L
+        );
+        data.stream().forEach(d -> System.out.println(d));
+        System.out.println(data.size());
     }
 
     @Test

@@ -1,6 +1,6 @@
 //package com.menzo.Product_Service.Service;
 //
-//import com.menzo.Product_Service.Dto.SpecificationsDto.FilterRequestDto;
+//import com.menzo.Product_Service.Dto.FilterDtos.FilterRequestDto;
 //import com.menzo.Product_Service.Entity.*;
 //import jakarta.persistence.criteria.*;
 //import org.springframework.data.jpa.domain.Specification;
@@ -52,11 +52,14 @@
 //
 //
 //    //  Admin products listing (with 'filter' & 'search') - specification
-//    public Specification<T> adminFilterSearchSpecification() {
-//        return (root, cq, cb) ->{
-//
-//        };
-//    }
+////    public Specification<T> adminFilterSearchSpecification(List<FilterRequestDto> filterRequests) {
+////        return (root, cq, cb) ->{
+////            //  joins building
+////
+////            //  predicates building
+////
+////        };
+////    }
 //
 //
 //
@@ -116,9 +119,43 @@
 //
 //                yield joinMap;
 //            }
-//
 //            default -> throw new IllegalArgumentException("Unsupported entity type: " + entityType);
 //        };
 //    }
+//
+////    private void generateSubQuery(CriteriaBuilder cb, CriteriaQuery cq, String purpose) {
+////        switch (purpose) {
+////            case "adminProductListingCategoryDetails" -> {
+////                Subquery<QueryDetailsDto> sub = cq.subquery(QueryDetailsDto.class);
+////                Root<ProductCategory> subRoot = sub.from(ProductCategory.class);
+////                Join<ProductCategory, ProductCategory> selfJoin = subRoot
+////                        .join("parentCategoryId", JoinType.INNER);
+////
+////                List<Predicate> predicates = new ArrayList<>();
+////
+////                Predicate subCategoryActive = cb.equal(subRoot.get("isActive"), 1);
+////                Predicate categoryActive = cb.equal(selfJoin.get("isActive"), 1);
+////                Predicate subCategoryDeleted = cb.equal(subRoot.get("isDeleted"), 0);
+////                Predicate categoryDeleted = cb.equal(selfJoin.get("isDeleted"), 0);
+////                predicates.addAll(List.of(
+////                        subCategoryActive,
+////                        categoryActive,
+////                        subCategoryDeleted,
+////                        categoryDeleted
+////                ));
+////
+////                sub.select(cb.construct(
+////                        QueryDetailsDto.class,
+////                        subRoot.get("id"),
+////                        subRoot.get("categoryName"),
+////                        selfJoin.get("id"),
+////                        selfJoin.get("categoryName")
+////                        ))
+////                .where(cb.and(predicates.toArray(new Predicate[0])));
+////            }
+////            case "adminProductListingProductItemDetails" -> {}
+////            default -> throw new IllegalArgumentException("Invalid sub-query request. request: " + purpose);
+////        }
+////    }
 //
 //}

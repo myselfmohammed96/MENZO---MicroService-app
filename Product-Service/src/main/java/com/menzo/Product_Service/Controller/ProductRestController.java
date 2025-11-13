@@ -1,22 +1,11 @@
 package com.menzo.Product_Service.Controller;
 
-import com.menzo.Product_Service.Dto.ProductDto.ProductDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductItemListingDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductMinimalDto;
-import com.menzo.Product_Service.Dto.SpecificationsDto.RequestDto;
-import com.menzo.Product_Service.Entity.Product;
-import com.menzo.Product_Service.Entity.ProductItem;
+import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -31,11 +20,17 @@ public class ProductRestController {
     @PostMapping("all-products")
     public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") Integer page,
                                             @RequestParam(defaultValue = "10") Integer size,
-                                            @RequestParam(required = false) String sort,
+                                            @RequestParam(required = false) String sortRequest,
                                             @RequestBody(required = false) RequestDto requestDto) {
         System.out.println("page: " + page + "\tsize: " + size);
-        System.out.println("sort: " + sort);
+        System.out.println("sort: " + sortRequest);
         System.out.println("requestDto: " + requestDto);
+        productsRetrievalService.getAdminAllProductListing(
+                page,
+                size,
+                sortRequest,
+                requestDto
+        );
         return ResponseEntity.ok("Success");
     }
 

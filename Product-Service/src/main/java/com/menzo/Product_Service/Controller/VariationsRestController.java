@@ -3,6 +3,7 @@ package com.menzo.Product_Service.Controller;
 import com.menzo.Product_Service.Dto.VariationsDto.*;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
+import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.Service.VariationsRetrievalService;
 import com.menzo.Product_Service.Service.VariationsService;
 import jakarta.validation.Valid;
@@ -47,7 +48,10 @@ public class VariationsRestController {
 
     @GetMapping("get-variations")
     public List<VariationWithOptionsDto> getAllVariationsBySub(@RequestParam("id") Long subCategoryId) {
-        return variationsRetrievalService.getAllVariationsWithOptionsBySub(subCategoryId);
+        return variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+                Components.SUB_CATEGORY,
+                subCategoryId
+        );
     }
 
     //  get all variations without options

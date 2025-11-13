@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Controller;
 
+import com.menzo.Product_Service.Dto.FilterDtos.FilterTypeDto;
 import com.menzo.Product_Service.Service.ProductFilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,10 @@ public class SearchAndFilterRestController {
     @Autowired
     private ProductFilterService productFilterService;
 
-    @GetMapping("/all-products")
-    public Map<ProductFilterService.ProductFilterType, List<String>> getGlobalFilterOptions(){
-        return productFilterService.getGlobalFilters();
+    @GetMapping("/admin-filters")
+    public List<FilterTypeDto> getAdminFilterOptions(@RequestParam(value = "type", required = false) String filterType) {
+//        return productFilterService.getGlobalFilters();
+        return productFilterService.getAdminFilters(filterType);
     }
 
     @GetMapping("/category")

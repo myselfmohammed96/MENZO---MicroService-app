@@ -18,11 +18,11 @@ class ProductSpecificationServiceV2Test {
     @Autowired
     private ProductsRepo productsRepo;
 
-    @Test
-    public void testGetByIds() {
-        Specification<Product> byIds = ProductSpecificationServiceV2.getByIds(Arrays.asList(80L, 81L));
-        List<Product> all = productsRepo.findAll(byIds);
-        System.out.println(all);
-    }
+//    @Test
+//    public void testGetByIds() {
+//        Specification<Product> byIds = ProductSpecificationServiceV2.getByIds(Arrays.asList(80L, 81L));
+//        List<Product> all = productsRepo.findAll(byIds);
+//        System.out.println(all);
+//    }
 
 }

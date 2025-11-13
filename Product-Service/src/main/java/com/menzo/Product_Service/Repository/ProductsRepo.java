@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>, ProductsRepoCustom {
 
     public boolean existsByProductName(String productName);
 
@@ -39,7 +39,7 @@ public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecifica
             value = """
                     SELECT\s
                     	p.id AS productId,\s
-                    	p.product_name AS productName,\s 
+                    	p.product_name AS productName,\s
                     	c.subCategoryName,\s
                      	c.categoryName,\s
                      	it.minPrice,\s

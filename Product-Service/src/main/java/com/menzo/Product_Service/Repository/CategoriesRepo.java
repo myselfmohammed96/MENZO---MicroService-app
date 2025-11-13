@@ -82,6 +82,16 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
     )
     public ParentCategoryView findParentCategoryBySubId(Long subCategoryId);        //  TESTED
 
+//    @Query(
+//            value = """
+//                    SELECT * FROM product_categories c
+//                    WHERE
+//                        (:checkNull = TRUE AND c.parent_category_id IS NULL
+//                        OR :checkNull = FALSE AND c.parent_category_id IS NOT NULL)
+//                    """,
+//            nativeQuery = true
+//    )
+//    public List<ProductCategory> findIt(@Param("checkNull") boolean checkNull);
 
 
     /*

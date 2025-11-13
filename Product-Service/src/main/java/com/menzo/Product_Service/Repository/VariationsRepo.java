@@ -28,29 +28,58 @@ public interface VariationsRepo extends JpaRepository<Variation, Long> {
     public Optional<Variation> findByVariationName(String variationName);   // TESTED
 
     //  find List of variations with variation-options - associated with given subCategoryId
-    //  ## rename to findAllBySubCategoryId
+//    @Query(
+//            value =
+//                    """
+//                                SELECT
+//                                        v.id AS variation_id,
+//                                        v.variation_name,
+//                                        o.id AS option_id,
+//                                        o.option_value
+//                                    FROM product_categories p
+//                                    JOIN category_variation_configuration c
+//                                        ON p.id = c.category_id
+//                                    JOIN variations v
+//                                        ON v.id = c.variation_id
+//                                    JOIN variation_options o
+//                                        ON v.id = o.variation_id
+//                                    WHERE p.id = :subCategoryId
+//                            """,
+//            nativeQuery = true
+//    )
+//    public List<Object[]> findAllBySubCategoryId(@Param("subCategoryId") Long subCategoryId);          // TESTED
+
     @Query(
-            value =
-                    "SELECT v.id AS variation_id, v.variation_name, " +
-                            "o.id AS option_id, o.option_value " +
-                            "FROM product_categories p " +
-                            "JOIN category_variation_configuration c " +
-                            "ON p.id = c.category_id " +
-                            "JOIN variations v " +
-                            "ON v.id = c.variation_id " +
-                            "JOIN variation_options o " +
-                            "ON v.id = o.variation_id " +
-                            "WHERE p.id = :subCategoryId",
+            value = """
+                    SELECT\s
+                    		v.id AS variation_id,\s
+                    		v.variation_name,\s
+                    		o.id AS option_id,\s
+                    		o.option_value 
+                    	FROM product_categories p 
+                    	JOIN product_categories s 
+                    		ON p.id = s.parent_category_id 
+                    	JOIN category_variation_configuration c 
+                    		ON s.id = c.category_id 
+                    	JOIN variations v\s
+                    		ON v.id = c.variation_id 
+                    	JOIN variation_options o\s
+                    		ON v.id = o.variation_id 
+                    	WHERE (:isParent = TRUE AND p.id = :categoryId 
+                    	    OR :isParent = FALSE AND s.id = :categoryId)
+                    	GROUP BY option_value 
+                    """,
             nativeQuery = true
     )
-    public List<Object[]> findAllByCategoryId(@Param("subCategoryId") Long subCategoryId);          // TESTED
+    public List<Object[]> findAllByCategoryId(@Param("categoryId") Long categoryId,
+                                              @Param("isParent") boolean isParent);
 
     //  find variation-options by given variation name
     @Query("""
-            SELECT new com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto(o.id, o.optionValue)
-            FROM Variation v
-            JOIN v.options o
-            WHERE v.variationName = :variationName
-    """)
+                    SELECT new com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto(o.id, o.optionValue)
+                    FROM Variation v
+                    JOIN v.options o
+                    WHERE v.variationName = :variationName
+            """)
     public List<OptionWithIdDto> findOptionsByVariationName(@Param("variationName") String variationName);      // TESTED
 }

@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.Dto.SpecificationsDto;
+package com.menzo.Product_Service.Dto.FilterDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

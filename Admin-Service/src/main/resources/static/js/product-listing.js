@@ -34,7 +34,7 @@ const fetchProducts = async function(sortParam = null, requestDto = null, page) 
         if(!response.ok) throw new Error("Failed to fetch products");
         return response.json();
     } catch(error) {
-        console.error("Error fetching products", error);
+        console.error("Error fetching products - ", error);
         return null;
     }
 };
@@ -124,7 +124,7 @@ const loadProducts = async () => {
 */
 
 //  update new sort
-window.updateNewSort = (newSortParam = null) => {
+window.updateNewSort = async (newSortParam = null) => {
     if(newSortParam && newSortParam !== currentSortParam) {
         currentSortParam = newSortParam;
         await loadProducts();
@@ -132,7 +132,7 @@ window.updateNewSort = (newSortParam = null) => {
 }
 
 //  update new filter
-window.updateNewFilter = (newRequestDto) => {
+window.updateNewFilter = async (newRequestDto) => {
     if(newRequestDto && newRequestDto !== currentRequestDto) {
         currentRequestDto = newRequestDto;
         await loadProducts();
@@ -143,8 +143,8 @@ window.updateNewFilter = (newRequestDto) => {
 
 //  ******* DOM loading event *******
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     tBody = document.getElementById('product-table-body');
     paginationContainer = document.querySelector('.pagination');
-    loadProducts();
+    await loadProducts();
 });
