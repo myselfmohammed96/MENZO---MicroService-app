@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"
-  xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<!--  xmlns:th="http://www.thymeleaf.org"-->
 
 <head>
   <meta charset="UTF-8">
@@ -95,11 +95,11 @@
   <div class="main-content-container">
     <div id="page-title-container">
       <h1 id="page-title">Add product</h1>
-      <!-- <button onclick="addCategory()" id="add-button">Add new</button> -->
+      <!-- <button onclick="addCategory()" id="add-button">Add new</button> th:action="@{/products/add-product}" th:object="${newProduct}" -->
     </div>
     <hr class="custom-line-1" />
 
-    <form id="addProductForm" enctype="multipart/form-data" th:action="@{/products/add-product}" th:object="${newProduct}" method="POST">
+    <form id="addProductForm" enctype="multipart/form-data" method="POST">
 
       <!-- General Information -->
       <fieldset id="general-info">
@@ -107,49 +107,49 @@
 
         <label class="general-info-label">Product Name:
           <div style="position: relative;">
-            <input type="text" th:field="*{productName}" name="productName" id="product-name" placeholder="Product Name" required />
+            <input type="text" name="productName" id="product-name" placeholder="Product Name" required />
             <ul class="suggestion-box" id="suggestions"></ul>
           </div>
         </label>
-
+<!--        th:field="*{productName}"th:field="*{categoryId}"  th:field="*{subCategoryId}" -->
         <label class="general-info-label">Category:
           <div class="custom-select-wrapper">
-            <select th:field="*{categoryId}" id="category-select" class="custom-select" name="categoryId" required></select>
+            <select id="category-select" class="custom-select" name="categoryId" required></select>
           </div>
         </label>
 
         <label class="general-info-label">Sub Category:
           <div class="custom-select-wrapper">
-            <select th:field="*{subCategoryId}" id="sub-category-select" name="subCategoryId" required>
+            <select id="sub-category-select" name="subCategoryId" required>
               <option value="">Sub-category</option>
             </select>
           </div>
         </label>
 
         <label class="general-info-label">Description:
-          <textarea th:field="*{description}" name="description" placeholder="Description" required></textarea>
+          <textarea name="description" placeholder="Description" required></textarea>
         </label>
 
         <label class="general-info-label">Pay on Delivery:
-          <input type="radio" th:field="*{cod}" name="cod" value="available" checked /> Available
-          <input type="radio" th:field="*{cod}" name="cod" value="not_available" /> Not Available
+          <input type="radio"name="cod" value="available" checked /> Available
+          <input type="radio" name="cod" value="not_available" /> Not Available
         </label>
       </fieldset>
-
-        <!-- Product Details -->
+<!--   th:field="*{countryOfOrigin}" th:field="*{genericName}"    th:field="*{description}" th:field="*{cod}" th:field="*{cod}"th:field="*{itemWeight}"-->
+      <!-- Product Details -->
         <fieldset id="product-details">
           <legend>Product Details</legend>
 
           <label class="product-details-label">Item Weight (g):
-            <input type="number" th:field="*{itemWeight}" name="weight">
+            <input type="number" name="weight">
           </label>
 
           <label class="product-details-label">Generic Name:
-            <input type="text" th:field="*{genericName}" name="genericName">
+            <input type="text" name="genericName">
           </label>
 
           <label class="product-details-label">Country of Origin:
-            <input type="text" th:field="*{countryOfOrigin}" name="countryOfOrigin">
+            <input type="text" name="countryOfOrigin">
           </label>
 
 <!--          <label class="product-details-label">Manufacturer:-->

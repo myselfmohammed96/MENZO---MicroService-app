@@ -1,9 +1,11 @@
 package com.menzo.Product_Service.Controller;
 
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
+import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +27,13 @@ public class ProductRestController {
         System.out.println("page: " + page + "\tsize: " + size);
         System.out.println("sort: " + sortRequest);
         System.out.println("requestDto: " + requestDto);
-        productsRetrievalService.getAdminAllProductListing(
+        Page<ProductListingDto> pageContent = productsRetrievalService.getAdminAllProductListing(
                 page,
                 size,
-                sortRequest,
-                requestDto
+                sortRequest != null ? sortRequest : "",
+                requestDto != null ? requestDto : new RequestDto()
         );
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok(pageContent);
     }
 
     //  Get all products with pagination for listing - for Admin-Service (/admin/all-products)

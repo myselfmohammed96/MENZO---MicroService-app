@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<!--      xmlns:th="http://www.thymeleaf.org"-->
 
 <head>
     <meta charset="UTF-8">
@@ -106,58 +106,58 @@
             <div id="product-details-container">
                 <div class="details-text">
                     <strong class="details-key">Product name:</strong>
-                    <p class="details-value" th:text="${product.productName}">Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket
+                    <p class="details-value">Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket
                         Design & Spread Collar Full Sleeves Formal Shirt</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Category: </strong>
-                    <p class="details-value" th:text="${product.categoryName}">Shirts & T-shirts</p>
+                    <p class="details-value">Shirts & T-shirts</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Sub-category: </strong>
-                    <p class="details-value" th:text="${product.subCategoryName}">Formal shirts</p>
+                    <p class="details-value">Formal shirts</p>
                 </div>
-                <input type="hidden" id="sub-category-id" th:value="${product.subCategoryId}" />
+                <input type="hidden" id="sub-category-id" />
             </div>
         </div>
         <hr class="custom-line-2"/>
 
-        <!-- Form -->
+        <!-- Form  th:text="${product.productName}" th:text="${product.categoryName}"  th:action="@{http://localhost:8080/products/add-product-item}" th:object="${newProductItem}" th:value="${product.subCategoryId}"th:text="${product.subCategoryName}"-->
 
-        <form th:action="@{http://localhost:8080/products/add-product-item}" th:object="${newProductItem}" id="addProductForm" enctype="multipart/form-data" method="POST">
+        <form id="addProductForm" enctype="multipart/form-data" method="POST">
             <!--th:action="@{/products/add-product}" th:object="${newProduct}"-->
 
             <!-- Item Information -->
             <fieldset id="general-info">
                 <legend>Item Information</legend>
 
-                <input type="hidden" id="product-id" th:field="*{productId}" />
+                <input type="hidden" id="product-id"" />
 
                 <label class="general-info-label">SKU:
-<!--                    <div style="position: relative;">-->
-                        <input th:field="*{sku}" type="text" name="sku" id="product-name" placeholder="SKU" required/>
+<!--                    <div style="position: relative;"> th:field="*{sku}" th:field="*{productId}-->
+                        <input type="text" name="sku" id="product-name" placeholder="SKU" required/>
                         <!--            <ul class="suggestion-box" id="suggestions"></ul> th:field="*{sku}th:field="*{categoryId}""
                         th:field="*{subCategoryId}"-->
 <!--                    </div>-->
                 </label>
 
                 <label class="general-info-label">Price:
-<!--                    <div class="custom-select-wrapper">-->
-                        <input th:field="*{price}" type="number" step="0.01" min="0" id="category-select" placeholder="Price" name="price" required></input>
-<!--                    </div>-->
+<!--                th:field="*{price}"     <div class="custom-select-wrapper">-->
+                        <input type="number" step="0.01" min="0" id="category-select" placeholder="Price" name="price" required></input>
+<!--             th:field="*{stockQty}"        </div>-->
                 </label>
 
                 <label class="general-info-label">Stock:
 <!--                    <div class="custom-select-wrapper">-->
-                        <input th:field="*{stockQty}" type="number" min="0"  name="stock" placeholder="Stock qty" required>
-                        <!--              <option value="">Sub-category</option>id="sub-category-select"-->
+                        <input type="number" min="0"  name="stock" placeholder="Stock qty" required>
+                        <!--      th:field="*{status}"     th:field="*{status}"     <option value="">Sub-category</option>id="sub-category-select"-->
 
 <!--                    </div>-->
                 </label>
 
                 <label class="general-info-label">Status:
-                    <input type="radio" th:field="*{status}" name="status" value="active" checked/> Active
-                    <input type="radio" th:field="*{status}" name="status" value="inactive"/> Inactive
+                    <input type="radio" name="status" value="active" checked/> Active
+                    <input type="radio" name="status" value="inactive"/> Inactive
                 </label>
             </fieldset>
 

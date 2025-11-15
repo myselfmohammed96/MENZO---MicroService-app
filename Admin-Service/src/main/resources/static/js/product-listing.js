@@ -6,7 +6,7 @@ let currentRequestDto;
 let currentPage = 1;
 //  ##  apply server side default pageSize control -
 //  (with admin preference & user preference on client side)
-let pageSize = 10;
+let pageSize = 3;
 
 /*
 *   ********* product page loading *********
@@ -18,8 +18,8 @@ let pageSize = 10;
 
 //  fetch products
 const fetchProducts = async function(sortParam = null, requestDto = null, page) {
-    console.log("sortParam: ", sortParam);
-    console.log("requestDto: ", requestDto);
+//    console.log("sortParam: ", sortParam);
+//    console.log("requestDto: ", requestDto);
     try {
         const url = sortParam
                         ? `${getProductList}?page=${page - 1}&size=${pageSize}&sort=${sortParam}`
@@ -58,8 +58,8 @@ const renderProducts = (products) => {
                     </div>
                 </td>
                 <td class="center-text">${product.subCategoryName}</td>
-                <td class="center-text">${product.startingPrice}</td>
-                <td class="center-text">${product.totalItems}</td>
+                <td class="center-text">${product.minPrice}</td>
+                <td class="center-text">${product.colorCount}</td>
                 <td class="center-text">
                     <span class="status-indicator ${statusColor}">${product.activeStatus.replace('_', ' ')}</span>
                 </td>
@@ -75,6 +75,7 @@ const renderProducts = (products) => {
 
 //  render pagination
 const renderPagination = (totalPages) => {
+//    console.log("pagination -> " + totalPages)
     paginationContainer.innerHTML = '';
     if (currentPage > 1) {
         paginationContainer.innerHTML += `<a href="#" data-page="${currentPage - 1}">&laquo;</a>`;
@@ -103,13 +104,14 @@ const renderPagination = (totalPages) => {
 const loadProducts = async () => {
     console.log("currentSortParam: ", currentSortParam);
     console.log("currentRequestDto: ", currentRequestDto);
-    console.log("currentPage: ", currentPage);
-    console.log("pageSize: ", pageSize);
+//    console.log("currentPage: ", currentPage);
+//    console.log("pageSize: ", pageSize);
     try {
         const result = await fetchProducts(currentSortParam, currentRequestDto, currentPage);
         if (!result) return;
         renderProducts(result.content);
-        renderPagination(result.totalPages);
+//        console.log("total => ", result.page.totalPages)
+        renderPagination(result.page.totalPages);
     } catch(error) {
         console.error("Failed to load products: ", error);
     }

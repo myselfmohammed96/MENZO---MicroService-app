@@ -153,7 +153,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         document.querySelectorAll(".filter-section").forEach(section => {
             let h3 = section.querySelector("p");
-            let filterType = h3 ? h3.dataset.value.trim() : null;
+//            let filterType = h3 ? h3.dataset.value.trim() : null;
+            let filterType = h3 ? h3.textContent.trim() : null;
 
             let selectedValues = [...section.querySelectorAll("input[type='checkbox']:checked")]
                 .map(cb => cb.value.trim());

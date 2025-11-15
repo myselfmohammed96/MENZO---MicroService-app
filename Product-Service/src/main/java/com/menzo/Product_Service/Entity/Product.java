@@ -38,6 +38,7 @@ import java.util.List;
                         @ColumnResult(name = "maxStockQty", type = Integer.class),
                         @ColumnResult(name = "latestCreatedAt", type = Timestamp.class),
                         @ColumnResult(name = "oldestCreatedAt", type = Timestamp.class),
+                        @ColumnResult(name = "colorCount", type = Integer.class),
                         @ColumnResult(name = "activeStatus", type = String.class),
                 }
         )

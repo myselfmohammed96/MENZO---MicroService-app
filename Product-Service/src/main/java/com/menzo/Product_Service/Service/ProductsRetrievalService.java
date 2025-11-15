@@ -58,7 +58,11 @@ public class ProductsRetrievalService {
                                                              Integer size,
                                                              String sortRequest,
                                                              RequestDto filterRequest) {
-        String sortParam = getSortValue(sortRequest);
+
+        String sortParam = "";
+        if (sortRequest != null && !sortRequest.isEmpty()) {
+            sortParam = getSortValue(sortRequest);
+        }
 //        Map<String, List<?>> filterValues = getFilterValues(filterRequest.getFilterRequestDtos());
 
         Map<String, Integer> statusFlags = new HashMap<>();
@@ -75,7 +79,13 @@ public class ProductsRetrievalService {
                 .statusFlags(statusFlags)
                 .build();
 
-        productsRepo.findAdminProductListing(queryDetails);
+        Page<ProductListingDto> pageContent = productsRepo.findAdminProductListing(queryDetails);
+
+        for(ProductListingDto p : pageContent.getContent()) {
+            System.out.println(p);
+        }
+
+        return pageContent;
 
         //  creating 'pageable' object with sorting
 //        Sort.Order order = generateSortOrder(sortRequest);
@@ -90,7 +100,7 @@ public class ProductsRetrievalService {
 
 //        Page<Product> products = productsRepo.findAll(sortedPageable);
 //        return convertToDto(products);
-        return null;
+//        return null;
     }
 
 

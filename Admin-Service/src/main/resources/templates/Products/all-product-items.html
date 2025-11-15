@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"
-    xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<!--    xmlns:th="http://www.thymeleaf.org"-->
 
 <head>
     <meta charset="UTF-8">
@@ -106,74 +106,75 @@
             </div>
         </div>
 
-        <!-- Product details -->
+        <!-- Product details th:each="image: ${productDetails.imageUrls}" th:src="'http://localhost:8080/' + ${image}"-->
 
         <div class="product-details-wrapper">
             <div class="product-images-container">
-                <div th:each="image: ${productDetails.imageUrls}" class="image-preview-wrapper">
-                    <img th:src="'http://localhost:8080/' + ${image}" class="image-preview" alt="">
+                <div  class="image-preview-wrapper">
+                    <img class="image-preview" alt="">
                     <div class="image-overlay"></div>
                 </div>
             </div>
 
             <div class="product-details-container">
-<!--                <h2 class="details-heading top-details-heading">Product details</h2>-->
+<!--          th:text="${productDetails.categoryName}th:text="${productDetails.productName}"        <h2 class="details-heading top-details-heading">Product details</h2>-->
                 <div class="details-text">
                     <strong class="details-key">Product name:</strong>
-                    <p th:text="${productDetails.productName}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Category: </strong>
-                    <p th:text="${productDetails.categoryName}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Sub-category: </strong>
-                    <p th:text="${productDetails.subCategoryName}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Description: </strong>
-                    <p th:text="${productDetails.productDescription}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
+<!--                th:unless="${productDetails.podAvailable}"     th:text="${productDetails.subCategoryName}"th:text="${productDetails.productDescription}"th:if="${productDetails.podAvailable}"-->
                 <div class="details-text">
                     <strong class="details-key">Pay on Delivery: </strong>
-                    <p th:if="${productDetails.podAvailable}" class="details-value "><span class="pod-indicator status-green">Available</span></p>
-                    <p th:unless="${productDetails.podAvailable}" class="details-value"><span class="pod-indicator status-red">Not available</span></p>
+                    <p class="details-value "><span class="pod-indicator status-green">Available</span></p>
+                    <p class="details-value"><span class="pod-indicator status-red">Not available</span></p>
                 </div>
-
+<!--                th:text="${productDetails.itemWeight + ' g'}"th:text="${productDetails.genericName}" th:text="${productDetails.countryOfOrigin}"-->
                 <h2 class="details-heading">Other details</h2>
                 <div class="details-text">
                     <strong class="details-key">Item weight: </strong>
-                    <p th:text="${productDetails.itemWeight + ' g'}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Generic name: </strong>
-                    <p th:text="${productDetails.genericName}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Country of Origin: </strong>
-                    <p th:text="${productDetails.countryOfOrigin}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Manufactured by: </strong>
-                    <p th:text="${productDetails.manufacturer}" class="details-value">N/A</p>
+                    <p  class="details-value">N/A</p>
                 </div>
                 <div class="details-text">
                     <strong class="details-key">Packed by: </strong>
-                    <p th:text="${productDetails.packer}" class="details-value">N/A</p>
+                    <p class="details-value">N/A</p>
                 </div>
             </div>
         </div>
 
         <hr class="custom-line">
 
-        <!-- Product items - Listing table -->
+        <!-- Product items - Listing tableth:href="@{/admin/add-item(id=${productDetails.productId})}"  th:text="${productDetails.packer}"th:text="${productDetails.manufacturer}" -->
 
         <div class="table-wrapper">
             <div id="page-title-container">
                 <h1 id="page-title">Product Items</h1>
                 <div>
                     <!-- <button class="title-option-button">Product by Category</button> -->
-                    <a th:href="@{/admin/add-item(id=${productDetails.productId})}" class="title-option-button" id="add-button">Add Item</a>
+                    <a class="title-option-button" id="add-button">Add Item</a>
                     <a href="#" id="filter-button"><span class="filter-icon">⏚</span> Filter</a>
                 </div>
 
@@ -215,8 +216,8 @@
         </div>
     </div>
 </div>
-
-<script th:inline="javascript">
+<!--th:inline="javascript"-->
+<script>
     window.images = /*[[${productDetails.imageUrls}]]*/ [];
     window.productId = /*[[${productDetails.productId}]]*/;
 </script>

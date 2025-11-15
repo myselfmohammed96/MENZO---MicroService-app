@@ -1,14 +1,9 @@
 package com.menzo.Product_Service.Dto.ProductDto;
 
-import com.menzo.Product_Service.Enum.ProductActiveStatus;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -37,6 +32,8 @@ public class ProductListingDto {
     private Date latestCreatedAt;
 
     private Date oldestCreatedAt;
+
+    private Integer colorCount;
 
     private String activeStatus;
 

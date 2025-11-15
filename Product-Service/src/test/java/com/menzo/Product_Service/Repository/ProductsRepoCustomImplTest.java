@@ -6,8 +6,8 @@ import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +29,16 @@ class ProductsRepoCustomImplTest {
                 .page(0)
                 .size(10)
                 .sortRequest(null)
+                .allowInactiveProductItems(true)
                 .filterValues(null)
                 .statusFlags(statusFlags)
                 .build();
-        List<ProductListingDto> list = productsRepoCustom.findAdminProductListing(queryDetails);
+        Page<ProductListingDto> page = productsRepoCustom.findAdminProductListing(queryDetails);
 
-        for(ProductListingDto dto : list) {
+        for(ProductListingDto dto : page.getContent()) {
             System.out.println(dto);
         }
-        System.out.println(list.size());
+        System.out.println(page.getContent().size());
     }
 
 }

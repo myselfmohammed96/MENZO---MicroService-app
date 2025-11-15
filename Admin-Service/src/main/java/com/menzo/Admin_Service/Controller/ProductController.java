@@ -44,11 +44,10 @@ public class ProductController {
 
 
     //  ********* Add forms *********
-    //  Product - add form
+    //  Product - add form                          *** add-product-form ***
     @GetMapping("/add-product")
-    public String adminAddProductForm(@RequestHeader("roles") String roles,
-                                      Model model) {
-        model.addAttribute("newProduct", new NewProductDto());
+    public String adminAddProductForm() {
+//        model.addAttribute("newProduct", new NewProductDto());
         return "Products/add-product-form";
     }
 
@@ -69,8 +68,8 @@ public class ProductController {
     }
 
     //  Product item - add form
-//    @GetMapping("/add-item")
-//    public String adminAddProductItemForm(@RequestHeader("roles") String roles,
+    @GetMapping("/add-item")
+    public String adminAddProductItemForm() {
 ////                                          @RequestParam("category-id") Long subCategoryId,
 //                                          @RequestParam("id") Long productId,
 //                                          Model model) {
@@ -78,8 +77,8 @@ public class ProductController {
 //        ProductMinimalDto productDto = productRetrievalService.getProductById(productId);
 //        model.addAttribute("product", productDto);
 //        model.addAttribute("newProductItem", new NewProductItemDto(productDto.getProductId()));
-//        return "Products/add-product-item-form";
-//    }
+        return "Products/add-product-item-form";
+    }
 
 
 
@@ -91,14 +90,13 @@ public class ProductController {
     }
 
     //  Product details & Product items listing - by product ID
-    @GetMapping("/product-items")
-    public String getAllProductItemsByProductId(@RequestParam("id") Long productId,
-                                                Model model) {
-        ProductDetailsDto productDetails = productRetrievalService.getProductDetailsById(productId);
-        model.addAttribute("productDetails", productDetails);
+    @GetMapping( "/product-items")
+    public String getAllProductItemsByProductId() {
+//        ProductDetailsDto productDetails = productRetrievalService.getProductDetailsById(productId);
+//        model.addAttribute("productDetails", productDetails);@RequestParam("id") Long productId,
+//                                                Model model
         return "Products/all-product-items";
     }
-
 
 
     //  ********* Details page *********

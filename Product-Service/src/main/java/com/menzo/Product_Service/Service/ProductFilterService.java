@@ -141,11 +141,11 @@ public class ProductFilterService {
                         .filterOptions(priceRanges)
                         .build();
             }
-            case "color" -> {
+            case "colors" -> {
                 //  ## add hex code with the colors string
                 yield FilterTypeDto.builder()
-                        .filterType(ProductFilterType.COLOR.toString())
-                        .typeValue("color")
+                        .filterType(ProductFilterType.COLORS.toString())
+                        .typeValue("colors")
                         .filterOptions(variationsRetrievalService.getOptionsByVariationName(null, "Colors"))
                         .build();
             }
@@ -182,7 +182,7 @@ public class ProductFilterService {
         Map<ProductFilterType, List<String>> filters = new LinkedHashMap<>();
 
         filters.put(ProductFilterType.PRICE, priceRanges);
-        filters.put(ProductFilterType.COLOR, variationsRetrievalService.getOptionsByVariationName(null, "Colors"));
+        filters.put(ProductFilterType.COLORS, variationsRetrievalService.getOptionsByVariationName(null, "Colors"));
         filters.put(ProductFilterType.SIZE, variationsRetrievalService.getOptionsByVariationName(null, "Size"));
 //        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(null, "Fit type"));
 
@@ -193,7 +193,7 @@ public class ProductFilterService {
         Map<ProductFilterType, List<String>> filters = new LinkedHashMap<>();
 
         filters.put(ProductFilterType.PRICE, priceRanges);
-        filters.put(ProductFilterType.COLOR, variationsRetrievalService.getOptionsByVariationName(categoryId, "Colors"));
+        filters.put(ProductFilterType.COLORS, variationsRetrievalService.getOptionsByVariationName(categoryId, "Colors"));
         filters.put(ProductFilterType.SIZE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Size"));
 //        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Fit type"));
 
@@ -202,7 +202,7 @@ public class ProductFilterService {
 
     public enum ProductFilterType {
         PRICE,
-        COLOR,
+        COLORS,
         SIZE,
         PAY_ON_DELIVERY,
         STOCK,
