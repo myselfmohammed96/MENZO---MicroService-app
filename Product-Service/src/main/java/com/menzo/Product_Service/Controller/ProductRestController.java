@@ -36,6 +36,8 @@ public class ProductRestController {
         return ResponseEntity.ok(pageContent);
     }
 
+
+
     //  Get all products with pagination for listing - for Admin-Service (/admin/all-products)
 //    @GetMapping("/all-products-listing")
 //    public ResponseEntity<Page<ProductListingDto>> getAllProductListingWithPagination(@RequestParam(defaultValue = "0") Integer page,

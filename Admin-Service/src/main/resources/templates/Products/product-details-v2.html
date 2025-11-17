@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin-style.css">
+    <link rel="stylesheet" href="/css/admin-side-menu.css">
+    <link rel="stylesheet" href="/css/admin-details.css">
+    <link rel="stylesheet" href="/css/admin-table.css">
+    <link rel="stylesheet" href="/css/admin-image-preview-modal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/admin-style.css">
+    <link rel="stylesheet" href="/admin panels/css/admin-table.css">
+    <link rel="stylesheet" href="/admin panels/css/admin-filter-menu.css">
+
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css">
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css">
+    <title>MENZO | Admin-All Products</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+            <span id="clear-search">&#10005;</span>
+            <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-profile">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="profile-icon" src="/media/profile_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p>sign in</p>
+                        </div>
+                        <div><strong>Account</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="hamBurger-searchIcon-container">
+                <div id="search-icon">
+                    <img id="search-icon-img" src="/media/search-v3.png" alt="">
+                </div>
+                <div id="hamBurger-icon">
+                    <img src="/media/hamburger-icon-v3.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+    <div class="side-menu-bar-container">
+        <h2 id="dashboard-option">Dashboard</h2>
+        <h2>Inventory</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Categories</a></li>
+            <li class="menu-item"><a href="">Variations</a></li>
+            <li class="menu-item" id="current-option"><a href="">Products</a></li>
+            <li class="menu-item"><a href="">Discount & offers</a></li>
+            <li class="menu-item"><a href="">Coupons</a></li>
+            <li class="menu-item"><a href="">Order management</a></li>
+            <li class="menu-item"><a href="">Return & cancellation</a></li>
+            <li class="menu-item"><a href="">Sales & revenue</a></li>
+        </ul>
+        <h2>Users</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">User management</a></li>
+            <li class="menu-item"><a href="">Blocked users</a></li>
+            <li class="menu-item"><a href="">Subscriptions</a></li>
+            <li class="menu-item"><a href="">News letters</a></li>
+            <li class="menu-item"><a href="">Contact requests</a></li>
+            <li class="menu-item"><a href="">Sent messages</a></li>
+        </ul>
+        <h2>Others</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Banners</a></li>
+            <li class="menu-item"><a href="">About Us</a></li>
+        </ul>
+    </div>
+
+    <!-- Categories and sub categories accordion -->
+
+    <div class="main-content-container">
+        <h1>Product details</h1>
+        <hr class="user-title-custom-line" />
+
+        <!-- Product details -->
+
+        <div id="open-image-preview-modal">
+            <div id="image-preview-modal-container">
+                <div id="modal-header"><span id="modal-close">&#10005;</span></div>
+                <div id="modal-body">
+                    <div id="modal-body-left"><span class="left-nav-btn">&lsaquo;</span></div>
+                    <div id="modal-body-center"><img id="modal-image" src="" alt=""></div>
+                    <div id="modal-body-right"><span class="right-nav-btn">&rsaquo;</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-details-wrapper">
+            <div class="product-images-container">
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/red-cross.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/MENZO_logo.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/product_image_sample.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/red-cross.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/MENZO_logo.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/product_image_sample.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/red-cross.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/MENZO_logo.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-preview-wrapper">
+                    <img class="image-preview" src="/media/product_image_sample.jpg" alt="">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+            <!-- <hr class="custom-line"> -->
+
+            <div class="product-details-container">
+
+                <div id="product-details-col-1">
+                    <!-- <span class="product-name">Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket Design
+                    & Spread Collar Full Sleeves Formal Shirt</span> -->
+                    <input type="hidden" id="product-id" name="productId" th:value="${productId}" />
+                    <h2 class="details-heading top-details-heading">Product details</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Product name:</strong>
+                        <p class="details-value">
+                            Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket Design & Spread
+                            Collar
+                            Full Sleeves Formal Shirt</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Category: </strong>
+                        <p class="details-value">Shirts & t-shirts</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Sub-category: </strong>
+                        <p class="details-value">Formal shirts</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Description: </strong>
+                        <p class="details-value">Solid shirts are easy to match with different bottoms, such as
+                            jeans,
+                            chinos, or shorts, making them suitable for various outfits. Short-sleeve shirts are
+                            perfect
+                            for layering with jackets or sweaters during cooler weather or for creating stylish
+                            looks.
+                            Solid short-sleeve shirts serve as go-to options for days when you need a quick and
+                            stylish
+                            outfit without much fuss.</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Pay on Delivery: </strong>
+                        <p class="details-value "><span class="pod-indicator status-green">Available</span></p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Base price: </strong>
+                        <p class="details-value">₹: <strong>1499/-</strong></p>
+                    </div>
+
+                    <div class="details-text">
+                        <strong class="details-key">Color: </strong>
+                        <div class="details-value">
+                            <p>Black</p>
+                            <div class="color-icon"></div>
+                        </div>
+                    </div>
+
+                    <div class="details-text">
+                        <strong class="details-key">Super SKU: </strong>
+                        <p class="details-value">FS-23-BK</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Created At: </strong>
+                        <p class="details-value">23 Jun 2024</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Updated At: </strong>
+                        <p class="details-value">23 Jun 2025</p>
+                    </div>
+
+                    <h2 class="details-heading">Other details</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Item weight: </strong>
+                        <p class="details-value">150 g</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Generic name: </strong>
+                        <p class="details-value">Cotton shirt</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Country of Origin: </strong>
+                        <p class="details-value">India</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Manufactured by: </strong>
+                        <p class="details-value">abc enterprises, Bangalore</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Packed by: </strong>
+                        <p class="details-value">xyz private ltd., Mumbai</p>
+                    </div>
+
+                </div>
+                <div id="product-details-col-2">
+                    <div id="items-list-wrapper">
+                        <div id="list-wrapper-header">
+                            <div class="list-header-row">
+                                <div class="list-heading-container">
+                                    <h2>Product Items</h2>
+                                </div>
+                                <div class="list-heading-container">
+                                    <button id="sort-button">⇅</button>
+                                </div>
+                            </div>
+                            <div class="list-header-row">
+                                <p>Selected item - 1 / 22</p>
+                            </div>
+                        </div>
+                        <div id="list-wrapper-body">
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                            <!-- <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">MSV: </p>
+                                                    <p class="item-color-value">264 pcs</p>
+                                                </div>
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Added: </p>
+                                                    <p class="item-color-value">12 Jun 24</p>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+
+                            <div class="item-list selected-item">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                            <div class="item-list">
+                                <div class="item-list-content">
+                                    <div class="item-counter-container">
+                                        <p>1</p>
+                                    </div>
+                                    <div class="item-icon-container">
+                                        <img src="/media/product_image_sample.jpg" alt="">
+                                    </div>
+                                    <div class="item-text-container">
+                                        <div class="item-text-1">
+                                            <div class="item-sku-container">FS-233-DBL-XL</div>
+                                            <div class="item-status-container">
+                                                <span class="item-status status-red">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                        <div class="item-text-2">
+                                            <div class="item-text-2-row">
+                                                <div class="item-color">
+                                                    <p class="item-color-key">Color: </p>
+                                                    <p class="item-color-value">Dark blue</p>
+                                                    <div class="item-color-icon"></div>
+                                                </div>
+                                                <p class="item-stock">InStock</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-option-button-container">
+                                        <img src="/media/menu-icon.png" tabindex="0" alt="">
+                                    </div>
+                                </div>
+                                <!-- <hr> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-details-container-2">
+                <div>
+                    <h2 class="details-heading">Size details</h2>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="center-text">Sizes</th>
+                            <th class="center-text">SKU</th>
+                            <th class="center-text">Status</th>
+                            <th class="center-text">Stock qty</th>
+                            <th class="center-text">Created at</th>
+                            <th class="center-text">Updated at</th>
+                            <th class="center-text"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="center-text">L</td>
+                            <td class="center-text">FS-23-DBL-L</td>
+                            <td class="center-text">Active</td>
+                            <td class="center-text">233 units</td>
+                            <td class="center-text">23 Jun 24</td>
+                            <td class="center-text">22 Jul 24</td>
+                            <td class="center-text">
+                                <button>✎</button>
+                                <button>🗑︎</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center-text">L</td>
+                            <td class="center-text">FS-23-DBL-L</td>
+                            <td class="center-text">Active</td>
+                            <td class="center-text">233 units</td>
+                            <td class="center-text">23 Jun 24</td>
+                            <td class="center-text">22 Jul 24</td>
+                            <td class="center-text">
+                                <button>✎</button>
+                                <button>🗑︎</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center-text">L</td>
+                            <td class="center-text">FS-23-DBL-L</td>
+                            <td class="center-text">Active</td>
+                            <td class="center-text">233 units</td>
+                            <td class="center-text">23 Jun 24</td>
+                            <td class="center-text">22 Jul 24</td>
+                            <td class="center-text">
+                                <button>✎</button>
+                                <button>🗑︎</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center-text">L</td>
+                            <td class="center-text">FS-23-DBL-L</td>
+                            <td class="center-text">Active</td>
+                            <td class="center-text">233 units</td>
+                            <td class="center-text">23 Jun 24</td>
+                            <td class="center-text">22 Jul 24</td>
+                            <td class="center-text">
+                                <button>✎</button>
+                                <button>🗑︎</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center-text">L</td>
+                            <td class="center-text">FS-23-DBL-L</td>
+                            <td class="center-text">Active</td>
+                            <td class="center-text">233 units</td>
+                            <td class="center-text">23 Jun 24</td>
+                            <td class="center-text">22 Jul 24</td>
+                            <td class="center-text">
+                                <button>✎</button>
+                                <button>🗑︎</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <h2 class="details-heading">Analytics</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Sales: </strong>
+                        <p class="details-value">223 units</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Review: </strong>
+                        <p class="details-value">4.5 stars</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+<script>
+    // document.querySelectorAll('.item-option-button-container img').forEach(el => {
+    //     el.addEventListener('mouseup', () => {
+    //         el.classList.add('show-border');
+    //         //  remove after 300ms and remove focus so it doesn't stick
+    //         setTimeout(() => {
+    //             el.classList.remove('show-border');
+    //             // el.blur();
+    //         }, 300);
+    //     });
+    //     //  clean up if cursor leaves before mouseup
+    //     el.addEventListener('mouseleave', () => el.classList.remove('show-border'));
+    // });
+</script>
+<script src="/js/nav-bar-script.js"></script>
+<script src="/js/product-details-script-v2.js"></script>
+</body>
+
+</html>
