@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Dto.ProductDto;
 
 import com.menzo.Product_Service.Enum.ProductActiveStatus;
+import com.menzo.Product_Service.Enum.StockStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,20 +11,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductItemListingDto {
+public class ItemListingDto {
 
-    private Long id;
+//    private Long id;
 
-    private String sku;
+    private String superSku;
 
-    private Float price;
-
-    private String size;
-
-    private Integer stockQty;
+    private StockStatus stockStatus;
 
     private ProductActiveStatus activeStatus;
 
+    private String color;
+
+    private String hexCode;
+
     private String iconImage;
+
+    private ItemDetailsDto itemDetails;
 
 }

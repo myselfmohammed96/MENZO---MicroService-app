@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Controller;
 
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
+import com.menzo.Product_Service.Dto.ProductDto.ItemListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -34,6 +37,12 @@ public class ProductRestController {
                 requestDto != null ? requestDto : new RequestDto()
         );
         return ResponseEntity.ok(pageContent);
+    }
+
+    @GetMapping("/items")
+    public ResponseEntity<?> getAllItems(@RequestParam("id") Long productId) {
+        List<ItemListingDto> items = productsRetrievalService.getAllItems(productId);
+        return ResponseEntity.ok(items);
     }
 
 
@@ -84,10 +93,10 @@ public class ProductRestController {
 
     //  Get all productItems by product id, with pagination for listing - for Admin-Service
 //    @GetMapping("/product-items")
-//    public ResponseEntity<Page<ProductItemListingDto>> getAllProductItemsByProductIdWithPagination(@RequestParam("id") Long productId,
+//    public ResponseEntity<Page<ItemListingDto>> getAllProductItemsByProductIdWithPagination(@RequestParam("id") Long productId,
 //                                                                                   @RequestParam(defaultValue = "0") Integer page,
 //                                                                                   @RequestParam(defaultValue = "10") Integer size) {
-//        Page<ProductItemListingDto> productItemsListingDtos = productsRetrievalService.getAllProductItemsByProductIdWithPagination(productId, page, size);
+//        Page<ItemListingDto> productItemsListingDtos = productsRetrievalService.getAllProductItemsByProductIdWithPagination(productId, page, size);
 //        return ResponseEntity.ok(productItemsListingDtos);
 //    }
 //

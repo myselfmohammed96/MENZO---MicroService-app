@@ -1,25 +1,31 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
-import com.menzo.Product_Service.Dto.FilterDtos.FilterRequestDto;
 import com.menzo.Product_Service.Dto.FilterDtos.QueryDetailsDto;
 import com.menzo.Product_Service.Dto.ProductDto.*;
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
 import com.menzo.Product_Service.Entity.*;
+import com.menzo.Product_Service.Enum.ProductActiveStatus;
+import com.menzo.Product_Service.Enum.StockStatus;
 import com.menzo.Product_Service.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
+//@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
+@PropertySource("classpath:metaConfig.properties")
 public class ProductsRetrievalService {
 
     @Autowired
@@ -51,6 +57,14 @@ public class ProductsRetrievalService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductsRetrievalService.class);
 
+    //  assuming this til as the average til of every product item with common superSku
+    private static Long til;
+
+    @Value("#{'${target-inventory-level}'}")
+    public void setTil(String til) {
+        this.til = Long.valueOf(til);
+    }
+
 
     //  ********* Get all products listing with pagination & filtering *********
 
@@ -81,7 +95,7 @@ public class ProductsRetrievalService {
 
         Page<ProductListingDto> pageContent = productsRepo.findAdminProductListing(queryDetails);
 
-        for(ProductListingDto p : pageContent.getContent()) {
+        for (ProductListingDto p : pageContent.getContent()) {
             System.out.println(p);
         }
 
@@ -124,6 +138,102 @@ public class ProductsRetrievalService {
             default -> throw new IllegalArgumentException("Invalid sortRequest: " + sortRequest);
         };
     }
+
+
+
+    //  ********* Get all items by product ID *********
+
+    @Transactional
+    public List<ItemListingDto> getAllItems(Long productId) {
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+        List<ProductItem> items = product.getItems();
+        List<ItemListingDto> itemDtoList = new ArrayList<>();
+
+        //  getting unique 'super SKUs'
+        Set<String> superSkus = new HashSet<>();
+        items.stream().forEach(item -> superSkus.add(item.getSuperSKU()));
+
+        //  building item Dto for every super SKU
+        for (String superSku : superSkus) {
+
+            //  Aggregating for collective 'status' & 'stock' values & color details
+            StringBuilder color = new StringBuilder();
+            StringBuilder hexCode = new StringBuilder();
+
+            AtomicInteger statusFlag = new AtomicInteger(0);
+            AtomicInteger stockSum = new AtomicInteger(0);
+
+            items.stream()
+                    .filter(item -> superSku.equals(item.getSuperSKU()))
+                    .forEach(item -> {
+                        if (item.getIsActive()) statusFlag.incrementAndGet();
+                        stockSum.addAndGet(item.getQtyInStock());
+
+                        if (color.length() == 0 && hexCode.length() == 0) {
+                            item.getConfigurations().stream()
+                                    .filter(config -> config.getVariationOption()
+                                            .getVariation()
+                                            .getVariationName().equalsIgnoreCase("colors"))
+                                    .findFirst()
+                                    .ifPresent(config -> {
+                                        VariationOption option = config.getVariationOption();
+                                        color.append(option.getOptionValue());
+                                        hexCode.append(option.getColorCode().getColorCode());
+                                    });
+                        }
+                    });
+
+            //  total item count with common super SKU
+            long itemCount = items.stream()
+                    .filter(item -> superSku.equals(item.getSuperSKU()))
+                    .count();
+
+            ProductActiveStatus activeStatus = statusFlag.get() == itemCount
+                    ? ProductActiveStatus.ACTIVE
+                    : statusFlag.get() == 0 ? ProductActiveStatus.INACTIVE
+                    : ProductActiveStatus.PARTIAL;
+
+            //  get image icon url
+            List<ProductImage> imageUrls = productImagesRepo.findBySuperSku(superSku);
+            ProductImage imageIconUrl = imageUrls.stream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("No images found for super SKU: " + superSku));
+
+            //  stock status calculation
+            StockStatus stockStatus = getStockStatus(til, stockSum.get()/itemCount);
+
+            //  building Item dto
+            ItemListingDto item = ItemListingDto.builder()
+                    .superSku(superSku)
+                    .stockStatus(stockStatus)
+                    .activeStatus(activeStatus)
+                    .color(color.toString())
+                    .hexCode(hexCode.toString())
+                    .iconImage(imageIconUrl.getImageUrl())
+                    .build();
+
+            itemDtoList.add(item);
+        }
+        return itemDtoList;
+    }
+
+
+
+    private StockStatus getStockStatus(long til, long currentStock) {
+        if (currentStock >= til) {
+            return StockStatus.IN_STOCK;
+        } else if (currentStock > 0 && currentStock < til) {
+            return StockStatus.LOW_STOCK;
+        } else if(currentStock <= 0) {
+            return StockStatus.OUT_OF_STOCK;
+        } else if(currentStock >= 1.5*til) {
+            return StockStatus.OVER_STOCKED;
+        } else {
+            throw new IllegalArgumentException("Invalid StockStatus");
+        }
+    }
+
 
 //    private Map<String, List<?>> getFilterValues(List<FilterRequestDto> filterRequests) {
 //        return filterRequests.stream()
@@ -261,14 +371,14 @@ public class ProductsRetrievalService {
 
 
     //  ********* Get all productItems listing with pagination *********
-//    public Page<ProductItemListingDto> getAllProductItemsByProductIdWithPagination(Long productId,
+//    public Page<ItemListingDto> getAllProductItemsByProductIdWithPagination(Long productId,
 //                                                                                   Integer page,
 //                                                                                   Integer size) {
 //
 //        Pageable pageable = PageRequest.of(page, size);
 //        Page<ProductItem> productItemsPageByProductId = productItemsRepo.findAllByProductId(productId, pageable);
 //
-//        List<ProductItemListingDto> productItemListingDtos = productItemsPageByProductId.stream()
+//        List<ItemListingDto> productItemListingDtos = productItemsPageByProductId.stream()
 //                .map(productItem -> this.convertProductItemToProductItemListingDto(productItem))
 //                .collect(Collectors.toList());
 //        return new PageImpl<>(productItemListingDtos, pageable, productItemsPageByProductId.getTotalElements());
@@ -386,13 +496,13 @@ public class ProductsRetrievalService {
 //        }
 //    }
 
-    //  converter - ProductItem -> ProductItemListingDto
-//    private ProductItemListingDto convertProductItemToProductItemListingDto(ProductItem productItem) {
+    //  converter - ProductItem -> ItemListingDto
+//    private ItemListingDto convertProductItemToProductItemListingDto(ProductItem productItem) {
 //        try {
 //            String sizeVariationOption = this.getVariationOfProductItemByProductItemId(productItem.getId(), "Size");
 //            ProductActiveStatus activeStatus = productItem.getIsActive() == true ? ProductActiveStatus.ACTIVE : ProductActiveStatus.INACTIVE;
 //
-//            return new ProductItemListingDto(
+//            return new ItemListingDto(
 //                    productItem.getId(),
 //                    productItem.getSKU(),
 //                    productItem.getPrice(),
@@ -402,7 +512,7 @@ public class ProductsRetrievalService {
 //                    this.getIconImage(null, productItem.getId())
 //            );
 //        } catch (Exception e) {
-//            logger.error("Error converting ProductItem to ProductItemListingDto. ProductItem ID: {}", productItem.getId(), e);
+//            logger.error("Error converting ProductItem to ItemListingDto. ProductItem ID: {}", productItem.getId(), e);
 //            return null;
 //        }
 

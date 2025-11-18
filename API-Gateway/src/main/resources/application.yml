@@ -42,7 +42,7 @@ spring:
         - id: home-service
           uri: lb://HOME-SERVICE
           predicates:
-            - Path=/index, /login, /sign-in, /all-categories, /product-listing,  /category/**, /home-css/**, /home-js/**, /home-media/**
+            - Path=/index, /login, /sign-in, /all-categories, /product-listing, /category/**, /home-css/**, /home-js/**, /home-media/**
           filters:
             - AuthenticationFilter
   #
