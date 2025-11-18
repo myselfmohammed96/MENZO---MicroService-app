@@ -1,12 +1,19 @@
-const getAllItems = "http://localhost:8080/products/items";
-const getItem = "";
+const productDetailsAndItems = "http://localhost:8080/products/items";
+const getItem = "http://localhost:8080/products/item";
 
 let productId;
 let itemsListWrapper;
 
-const fetchAllItems = async () => {
+const itemInfoMap = new Map();
+
+
+
+//  ********* fetch & populate - basic product details & product items list *********
+
+//  fetch basic product details and items list
+const fetchProductDetailsAndItems = async () => {
     try {
-        const response = await fetch(`${getAllItems}?id=${productId}`, {
+        const response = await fetch(`${productDetailsAndItems}?id=${productId}`, {
             method: "GET",
             credentials: "include"
         });
@@ -18,6 +25,41 @@ const fetchAllItems = async () => {
     }
 };
 
+//  populate basic product details
+const populateProductDetails = (productDetails) => {
+    document.getElementById('product-name').textContent = productDetails.productName ? productDetails.productName : "-";
+    document.getElementById('category').textContent = productDetails.categoryName ? productDetails.categoryName : "-";
+    document.getElementById('sub-category').textContent = productDetails.subCategoryName ? productDetails.subCategoryName : "-";
+    document.getElementById('product-description').textContent = productDetails.description ? productDetails.description : "-";
+
+    const podIndicator = document.getElementById('pod');
+    podIndicator.textContent = productDetails.pod ? "Available" : "Not Available";
+    podIndicator.classList = "";
+    podIndicator.classList.add("pod-indicator", productDetails.pod ? "status-green" : "status-red");
+
+    const productCreated = document.getElementById('product-created');
+    if (productDetails.productCreated) {
+        const createdDate = new Date(productDetails.productCreated);
+        const createdDateFormat = createdDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+        productCreated.textContent = createdDateFormat;
+    } else {
+        productCreated.textContent = "-";
+    }
+
+    const productUpdated = document.getElementById('product-updated');
+
+    document.getElementById('item-weight').textContent = productDetails.itemWeight ? productDetails.itemWeight + " g" : "-";
+    document.getElementById('generic-name').textContent = productDetails.genericName ? productDetails.genericName : "-";
+    document.getElementById('country-of-origin').textContent = productDetails.countryOfOrigin ? productDetails.countryOfOrigin : "-";
+    document.getElementById('manufacturer').textContent;
+    document.getElementById('packer').textContent;
+}
+
+//  populate items list
 let itemCount = 1;
 const populateItemsList = (items) => {
 
@@ -138,6 +180,11 @@ const populateItemsList = (items) => {
     });
 }
 
+
+
+//  ********* fetch & populate - items details *********
+
+//  fetch product item details
 const fetchItem = async (superSku) => {
     try {
         const response = await fetch(`${getItem}?ssku=${superSku}`, {
@@ -152,22 +199,79 @@ const fetchItem = async (superSku) => {
     }
 }
 
-const populateItemDetails = () => {}
+//  populate item details - with images & size details
+const populateItemDetails = (itemDetails) => {
+    document.getElementById('base-price').textContent = itemDetails.basePrice ? itemDetails.basePrice + "/-" : "-";
+    document.getElementById('color').textContent = itemDetails.color ? itemDetails.color : "-";
+    document.getElementById('color-icon').style.backgroundColor = itemDetails.hexCode ? itemDetails.hexCode : "none";
+    document.getElementById('super-sku').textContent = itemDetails.superSku ? itemDetails.superSku : "-";
 
-const loadItems = async () => {
-    try {
-        itemsListWrapper.innerHTML = '';
-        const items = await fetchAllItems();
-        if (!items) return;
-        populateItemsList(items);
-    } catch (error) {
-        console.error("Error loading product items");
+    const itemCreated = document.getElementById('item-created');
+    if (itemDetails.itemCreated) {
+        const createdDate = new Date(itemDetails.itemCreated);
+        const createdDateFormat = createdDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+        itemCreated.textContent = createdDateFormat;
+    } else {
+        itemCreated.textContent = "-";
+    }
+    itemUpdated: document.getElementById('item-updated');
+
+    if (itemDetails.imageUrls) {
+        populateItemImages(itemDetails.imageUrls);
+    }
+    if (itemDetails.sizeDetails) {
+        populateSizeDetails(itemDetails.sizeDetails);
     }
 }
 
+//  populate images
+const populateItemImages = (imageUrls) => {}
+
+//  populate size details
+const populateSizeDetails = (sizeDetails) => {}
+
+
+
+//  ********* initial data loader - on page load *********
+const loadInitialData = async () => {
+    let firstItem;
+    try {
+        itemsListWrapper.innerHTML = '';
+        const details = await fetchProductDetailsAndItems();
+
+        if (!details) return;
+        populateProductDetails(details);
+        populateItemsList(details.productItems);
+        firstItem = details.productItems[0];
+    } catch (error) {
+        console.error("Error loading product items");
+    }
+    try {
+        if (firstItem) {
+            const itemDetails = await fetchItem(firstItem.superSku);
+
+            if(!itemDetails) return;
+            itemInfoMap.set(firstItem.superSku, itemDetails);
+            populateItemDetails(itemDetails)
+        } else {
+            console.error("No product item found");
+            return;
+        }
+    } catch (error) {
+        console.error("Error loading initial item");
+    }
+}
+
+
+
+//  ********* DOM Loading event listener *********
 document.addEventListener("DOMContentLoaded", async () => {
     productId = document.getElementById('product-id').value;
     itemsListWrapper = document.getElementById('list-wrapper-body');
 
-    loadItems();
+    loadInitialData();
 });

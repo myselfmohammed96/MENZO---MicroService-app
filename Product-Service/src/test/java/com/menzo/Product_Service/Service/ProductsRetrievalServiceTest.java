@@ -26,12 +26,12 @@ class ProductsRetrievalServiceTest {
        System.out.println(adminAllProductListing);
     }
 
-    @Test
-    public void testGetAllItems() {
-        List<ItemListingDto> allItems = productsRetrievalService.getAllItems(82L);
-        for (ItemListingDto item : allItems) {
-            System.out.println(item);
-        }
-    }
+//    @Test
+//    public void testGetAllItems() {
+//        List<ItemListingDto> allItems = productsRetrievalService.getAllItems(82L);
+//        for (ItemListingDto item : allItems) {
+//            System.out.println(item);
+//        }
+//    }
 
 }

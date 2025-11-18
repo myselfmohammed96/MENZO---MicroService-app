@@ -156,90 +156,88 @@
             <div class="product-details-container">
 
                 <div id="product-details-col-1">
-                    <!-- <span class="product-name">Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket Design
-                    & Spread Collar Full Sleeves Formal Shirt</span> -->
                     <input type="hidden" id="product-id" name="productId" th:value="${productId}" />
+
                     <h2 class="details-heading top-details-heading">Product details</h2>
                     <div class="details-text">
                         <strong class="details-key">Product name:</strong>
-                        <p class="details-value">
-                            Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket Design & Spread
-                            Collar
-                            Full Sleeves Formal Shirt</p>
+                        <p class="details-value" id="product-name"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Category: </strong>
-                        <p class="details-value">Shirts & t-shirts</p>
+                        <p class="details-value" id="category"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Sub-category: </strong>
-                        <p class="details-value">Formal shirts</p>
+                        <p class="details-value" id="sub-category"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Description: </strong>
-                        <p class="details-value">Solid shirts are easy to match with different bottoms, such as
-                            jeans,
-                            chinos, or shorts, making them suitable for various outfits. Short-sleeve shirts are
-                            perfect
-                            for layering with jackets or sweaters during cooler weather or for creating stylish
-                            looks.
-                            Solid short-sleeve shirts serve as go-to options for days when you need a quick and
-                            stylish
-                            outfit without much fuss.</p>
+                        <p class="details-value" id="product-description"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Pay on Delivery: </strong>
-                        <p class="details-value "><span class="pod-indicator status-green">Available</span></p>
+                        <p class="details-value ">
+                            <span id="pod" class="pod-indicator"></span>
+                        </p>
                     </div>
                     <div class="details-text">
-                        <strong class="details-key">Base price: </strong>
-                        <p class="details-value">₹: <strong>1499/-</strong></p>
+                        <strong class="details-key">Product Created: </strong>
+                        <p class="details-value" id="product-created"></p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Product Updated: </strong>
+                        <p class="details-value" id="product-updated">23 Jun 2025</p>
                     </div>
 
+                    <h2 class="details-heading">Item details</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Base price: </strong>
+                        <p class="details-value">₹ <strong id="base-price">1499/-</strong></p>
+                    </div>
                     <div class="details-text">
                         <strong class="details-key">Color: </strong>
                         <div class="details-value">
-                            <p>Black</p>
-                            <div class="color-icon"></div>
+                            <p id="color">Black</p>
+                            <div class="color-icon" id="color-icon"></div>
                         </div>
                     </div>
-
                     <div class="details-text">
                         <strong class="details-key">Super SKU: </strong>
-                        <p class="details-value">FS-23-BK</p>
+                        <p class="details-value" id="super-sku">FS-23-BK</p>
                     </div>
                     <div class="details-text">
-                        <strong class="details-key">Created At: </strong>
-                        <p class="details-value">23 Jun 2024</p>
+                        <strong class="details-key">Item Created: </strong>
+                        <p class="details-value" id="item-created">23 Jun 2024</p>
                     </div>
                     <div class="details-text">
-                        <strong class="details-key">Updated At: </strong>
-                        <p class="details-value">23 Jun 2025</p>
+                        <strong class="details-key">Item Updated: </strong>
+                        <p class="details-value" id="item-updated">23 Jun 2025</p>
                     </div>
 
                     <h2 class="details-heading">Other details</h2>
                     <div class="details-text">
                         <strong class="details-key">Item weight: </strong>
-                        <p class="details-value">150 g</p>
+                        <p class="details-value" id="item-weight"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Generic name: </strong>
-                        <p class="details-value">Cotton shirt</p>
+                        <p class="details-value" id="generic-name"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Country of Origin: </strong>
-                        <p class="details-value">India</p>
+                        <p class="details-value" id="country-of-origin"></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Manufactured by: </strong>
-                        <p class="details-value">abc enterprises, Bangalore</p>
+                        <p class="details-value" id="manufacturer">abc enterprises, Bangalore</p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Packed by: </strong>
-                        <p class="details-value">xyz private ltd., Mumbai</p>
+                        <p class="details-value" id="packer">xyz private ltd., Mumbai</p>
                     </div>
-
                 </div>
+
                 <div id="product-details-col-2">
                     <div id="items-list-wrapper">
                         <div id="list-wrapper-header">

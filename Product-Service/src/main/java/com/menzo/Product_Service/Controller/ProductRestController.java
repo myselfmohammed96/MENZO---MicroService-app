@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Controller;
 
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
 import com.menzo.Product_Service.Dto.ProductDto.ItemListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.ProductDetailsDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
@@ -41,9 +42,12 @@ public class ProductRestController {
 
     @GetMapping("/items")
     public ResponseEntity<?> getAllItems(@RequestParam("id") Long productId) {
-        List<ItemListingDto> items = productsRetrievalService.getAllItems(productId);
-        return ResponseEntity.ok(items);
+        ProductDetailsDto productDetails = productsRetrievalService.getProductDetailsWithAllItems(productId);
+        return ResponseEntity.ok(productDetails);
     }
+
+    @GetMapping("/item")
+    public ResponseEntity<?> getItem(@RequestParam("ssku") String superSku) {}
 
 
 

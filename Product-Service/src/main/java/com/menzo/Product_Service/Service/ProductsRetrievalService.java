@@ -143,10 +143,35 @@ public class ProductsRetrievalService {
 
     //  ********* Get all items by product ID *********
 
-    @Transactional
-    public List<ItemListingDto> getAllItems(Long productId) {
+    public ProductDetailsDto getProductDetailsWithAllItems(Long productId) {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        List<ItemListingDto> productItems = getAllItems(product);
+
+        ProductCategory subCategory = product.getCategory();
+        ParentCategoryView category = categoriesRetrievalService.getParentBySubCategoryId(subCategory.getId());
+        CountryOfOrigin countryOfOrigin = countryOfOriginRepo.findById(product.getCountryOfOriginId())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found with ID: " + product.getCountryOfOriginId()));
+
+        return ProductDetailsDto.builder()
+                .productName(product.getProductName())
+                .categoryName(category.getCategoryName())
+                .subCategoryName(subCategory.getCategoryName())
+                .description(product.getProductDescription())
+                .pod(product.getPodAvailable())
+                .productCreated(product.getCreatedAt())
+                .itemWeight(product.getItemWeight())
+                .genericName(product.getGenericName())
+                .countryOfOrigin(countryOfOrigin.getCountryName())
+                .manufacturer(null)
+                .packer(null)
+                .productItems(productItems)
+                .build();
+    }
+
+    @Transactional
+    private List<ItemListingDto> getAllItems(Product product) {
         List<ProductItem> items = product.getItems();
         List<ItemListingDto> itemDtoList = new ArrayList<>();
 

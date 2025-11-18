@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -14,18 +15,19 @@ import java.util.List;
 @Builder
 public class ProductDetailsDto {
 
-    private Long productId;
-
     private String productName;
 
     private String categoryName;
 
     private String subCategoryName;
 
-    private String productDescription;
+    private String description;
 
-    private boolean podAvailable;
+    private boolean pod;
 
+    private Date productCreated;
+
+    private Date productUpdated;
 
     private Float itemWeight;
 
@@ -37,6 +39,6 @@ public class ProductDetailsDto {
 
     private String packer;
 
-    private List<String> imageUrls = new ArrayList<>();
+    private List<ItemListingDto> productItems;
 
 }
