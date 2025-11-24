@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Repository;
 
 import com.menzo.Product_Service.Entity.VariationOption;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public interface VariationsOptionsRepo extends JpaRepository<VariationOption, Lo
     public List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
 
     public List<VariationOption> findByVariationId(Long variationId);   // TESTED
+
 }
 
 

@@ -15,6 +15,22 @@ public interface ProductItemsRepo extends JpaRepository<ProductItem, Long>, JpaS
 
     public Page<ProductItem> findAllByProductId(Long productId, Pageable pageable);
 
+    public boolean existsBySuperSku(String superSku);
+
+    public List<ProductItem> findAllBySuperSku(String superSku);
+
+    @Query(value = """
+            SELECT 
+                    o.optionValue 
+                FROM ProductItem i 
+                JOIN i.configurations pc 
+                JOIN pc.variationOption o 
+                JOIN o.variation v 
+                WHERE v.variationName = :variationName 
+                    AND i.id = :itemId 
+            """)
+    public String findSizeByItemId(String variationName, Long itemId);
+
 
 
 //    ********* Fetching sequence *********

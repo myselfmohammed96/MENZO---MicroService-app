@@ -11,9 +11,12 @@
     <link rel="stylesheet" href="/css/admin-style.css"/>
     <link rel="stylesheet" href="/css/admin-side-menu.css"/>
     <link rel="stylesheet" href="/css/admin-accordion.css"/>
-    <link rel="stylesheet" href="/css/admin-accordion-modal.css"/>
+<!--    <link rel="stylesheet" href="/css/admin-accordion-modal.css"/>-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="/css/multiple-select-style.css"/>
+
+    <link rel="stylesheet" href="/css/components-styling.css" />
+    <link rel="stylesheet" href="/css/components-theme-font-effects.css" />
     <title>MENZO | Admin-Categories</title>
 </head>
 
@@ -92,13 +95,13 @@
     <!-- Modal for parent categories -->
 
     <div id="category-modal" class="modal">
-        <div id="modal-container">
-            <h1 id="modal-title">Add Category</h1>
-            <input type="text" id="modal-category-input" placeholder="Category name"/>
-            <input type="text" placeholder="Description"/>
-            <div>
-                <button id="save-category-btn">Save</button>
-                <button onclick="closeCategoryModal()">Cancel</button>
+        <div class="modal-container">
+            <h1 id="modal-title" class="modal-title">Add Category</h1>
+            <input type="text" class="modal-input" id="modal-category-input" placeholder="Category name"/>
+            <input type="text" class="modal-input" placeholder="Description"/>
+            <div class="modal-button-container">
+                <button class="modal-button" id="save-category-btn">Save</button>
+                <button class="modal-button" onclick="closeCategoryModal()">Cancel</button>
             </div>
         </div>
     </div>
@@ -106,16 +109,16 @@
     <!-- Modal for Sub-categories -->
 
     <div id="sub-category-modal" class="modal">
-        <div id="sub-modal-container">
-            <h1 id="sub-modal-title">Add Option</h1>
-            <input type="text" id="sub-modal-category-input" placeholder="Option name"/>
-            <input type="text" placeholder="Description"/>
+        <div class="modal-container">
+            <h1 id="sub-modal-title" class="modal-title">Add Option</h1>
+            <input type="text" class="modal-input" id="sub-modal-category-input" placeholder="Option name"/>
+            <input type="text" class="modal-input" placeholder="Description"/>
             <div class="custom-select-wrapper">
                 <select id="my-multi-select" class="custom-select" multiple placeholder="Select variations..."></select>
             </div>
-            <div>
-                <button id="save-sub-category-btn">Save</button>
-                <button onclick="closeSubCategoryModal()">Cancel</button>
+            <div class="modal-button-container">
+                <button class="modal-button" id="save-sub-category-btn">Save</button>
+                <button class="modal-button" onclick="closeSubCategoryModal()">Cancel</button>
             </div>
         </div>
     </div>
@@ -135,7 +138,6 @@
 <!-- Footer menu -->
 
 <div class="footer-menu-container">
-
     <div class="footer-options-container">
         <div class="footer-options footer-contact-wrapper">
             <img src="/media/MENZO_logo.jpg" alt="">
@@ -148,6 +150,7 @@
         </div>
     </div>
 </div>
+
 <!--<script src="/js/categories-accordion-script.js"></script>-->
 <script src="/js/categories-script.js"></script>
 <script src="/js/nav-bar-script.js"></script>

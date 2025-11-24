@@ -17,7 +17,8 @@ table {
     margin-top: 30px;
 }
 
-th, td {
+th,
+td {
     padding: 8px;
 }
 
@@ -58,8 +59,10 @@ tr:nth-child(even):hover {
     padding: 25px 10px;
 }
 
-td.center-text, .product-text,
-.status-indicator, .action-btn {
+td.center-text,
+.product-text,
+.status-indicator,
+.action-btn {
     font-size: 1rem;
 }
 
@@ -91,14 +94,11 @@ td.center-text, .product-text,
     display: inline-block;
     max-width: 240px;
     color: #3480b2 !important;
-
 }
 
 .status-indicator {
     padding: 4px 10px;
     border-radius: 3px;
-    /* background-color: #5dc53a80;
-    color: #046E00; */
 }
 
 .status-green {
@@ -148,8 +148,6 @@ td.center-text, .product-text,
     color: #7F7F7F;
     padding: 6px 12px;
     text-decoration: none;
-    /* border: 1px solid #ddd; */
-    /* border-radius: 4px; */
     transition: background-color 0.2s ease;
 }
 

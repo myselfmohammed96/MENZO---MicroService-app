@@ -6,7 +6,7 @@ const getVariations = "http://localhost:8080/variations/get-variations";
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-console.log("Hello");
+//console.log("Hello");
 
     const categorySelect = document.getElementById('category-select');
     const subCategorySelect = document.getElementById('sub-category-select');

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-    xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,10 @@
     <link rel="stylesheet" href="/css/admin-details.css">
     <link rel="stylesheet" href="/css/admin-table.css">
     <link rel="stylesheet" href="/css/admin-image-preview-modal.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
 
     <link rel="stylesheet" href="/css/admin-style.css">
     <link rel="stylesheet" href="/admin panels/css/admin-table.css">
@@ -18,6 +21,12 @@
 
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css">
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css">
+
+    <link rel="stylesheet" href="/css/components-styling.css">
+    <link rel="stylesheet" href="/css/components-theme-font-effects.css">
+
+    <link rel="stylesheet" href="/css/forms-styling.css">
+    <link rel="stylesheet" href="/css/forms-theme-font-effects.css">
     <title>MENZO | Admin-All Products</title>
 </head>
 
@@ -93,11 +102,9 @@
         </ul>
     </div>
 
-    <!-- Categories and sub categories accordion -->
-
     <div class="main-content-container">
         <h1>Product details</h1>
-        <hr class="user-title-custom-line" />
+        <hr class="user-title-custom-line"/>
 
         <!-- Product details -->
 
@@ -112,7 +119,11 @@
             </div>
         </div>
 
+        <!-- product details -->
+
         <div class="product-details-wrapper">
+
+            <!-- product images -->
             <div class="product-images-container">
                 <div class="image-preview-wrapper">
                     <img class="image-preview" src="/media/red-cross.jpg" alt="">
@@ -156,7 +167,7 @@
             <div class="product-details-container">
 
                 <div id="product-details-col-1">
-                    <input type="hidden" id="product-id" name="productId" th:value="${productId}" />
+                    <input type="hidden" id="product-id" name="productId" th:value="${productId}"/>
 
                     <h2 class="details-heading top-details-heading">Product details</h2>
                     <div class="details-text">
@@ -192,8 +203,8 @@
 
                     <h2 class="details-heading">Item details</h2>
                     <div class="details-text">
-                        <strong class="details-key">Base price: </strong>
-                        <p class="details-value">₹ <strong id="base-price">1499/-</strong></p>
+                        <strong class="details-key">Starting price: </strong>
+                        <p class="details-value">₹ <strong id="starting-price">1499/-</strong></p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Color: </strong>
@@ -206,14 +217,14 @@
                         <strong class="details-key">Super SKU: </strong>
                         <p class="details-value" id="super-sku">FS-23-BK</p>
                     </div>
-                    <div class="details-text">
-                        <strong class="details-key">Item Created: </strong>
-                        <p class="details-value" id="item-created">23 Jun 2024</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Item Updated: </strong>
-                        <p class="details-value" id="item-updated">23 Jun 2025</p>
-                    </div>
+                    <!--                    <div class="details-text">-->
+                    <!--                        <strong class="details-key">Item Created: </strong>-->
+                    <!--                        <p class="details-value" id="item-created">23 Jun 2024</p>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="details-text">-->
+                    <!--                        <strong class="details-key">Item Updated: </strong>-->
+                    <!--                        <p class="details-value" id="item-updated">23 Jun 2025</p>-->
+                    <!--                    </div>-->
 
                     <h2 class="details-heading">Other details</h2>
                     <div class="details-text">
@@ -238,6 +249,7 @@
                     </div>
                 </div>
 
+                <!-- product items - list box -->
                 <div id="product-details-col-2">
                     <div id="items-list-wrapper">
                         <div id="list-wrapper-header">
@@ -245,8 +257,9 @@
                                 <div class="list-heading-container">
                                     <h2>Product Items</h2>
                                 </div>
-                                <div class="list-heading-container">
-                                    <button id="sort-button">⇅</button>
+                                <div class="list-heading-container list-heading-buttons-container">
+                                    <button id="add-item-button">+</button>
+                                    <button id="sort-items-button">⇅</button>
                                 </div>
                             </div>
                             <div class="list-header-row">
@@ -527,82 +540,87 @@
             </div>
             <div class="product-details-container-2">
                 <div>
+
+                    <!-- size details - table -->
                     <h2 class="details-heading">Size details</h2>
                     <table>
                         <thead>
-                        <tr>
-                            <th class="center-text">Sizes</th>
-                            <th class="center-text">SKU</th>
-                            <th class="center-text">Status</th>
-                            <th class="center-text">Stock qty</th>
-                            <th class="center-text">Created at</th>
-                            <th class="center-text">Updated at</th>
-                            <th class="center-text"></th>
-                        </tr>
+                            <tr>
+                                <th class="center-text">Sizes</th>
+                                <th class="center-text">SKU</th>
+                                <th class="center-text">Status</th>
+                                <th class="center-text">Stock qty</th>
+                                <th class="center-text">Created at</th>
+                                <th class="center-text">Updated at</th>
+                                <th class="center-text"></th>
+                            </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td class="center-text">L</td>
-                            <td class="center-text">FS-23-DBL-L</td>
-                            <td class="center-text">Active</td>
-                            <td class="center-text">233 units</td>
-                            <td class="center-text">23 Jun 24</td>
-                            <td class="center-text">22 Jul 24</td>
-                            <td class="center-text">
-                                <button>✎</button>
-                                <button>🗑︎</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="center-text">L</td>
-                            <td class="center-text">FS-23-DBL-L</td>
-                            <td class="center-text">Active</td>
-                            <td class="center-text">233 units</td>
-                            <td class="center-text">23 Jun 24</td>
-                            <td class="center-text">22 Jul 24</td>
-                            <td class="center-text">
-                                <button>✎</button>
-                                <button>🗑︎</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="center-text">L</td>
-                            <td class="center-text">FS-23-DBL-L</td>
-                            <td class="center-text">Active</td>
-                            <td class="center-text">233 units</td>
-                            <td class="center-text">23 Jun 24</td>
-                            <td class="center-text">22 Jul 24</td>
-                            <td class="center-text">
-                                <button>✎</button>
-                                <button>🗑︎</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="center-text">L</td>
-                            <td class="center-text">FS-23-DBL-L</td>
-                            <td class="center-text">Active</td>
-                            <td class="center-text">233 units</td>
-                            <td class="center-text">23 Jun 24</td>
-                            <td class="center-text">22 Jul 24</td>
-                            <td class="center-text">
-                                <button>✎</button>
-                                <button>🗑︎</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="center-text">L</td>
-                            <td class="center-text">FS-23-DBL-L</td>
-                            <td class="center-text">Active</td>
-                            <td class="center-text">233 units</td>
-                            <td class="center-text">23 Jun 24</td>
-                            <td class="center-text">22 Jul 24</td>
-                            <td class="center-text">
-                                <button>✎</button>
-                                <button>🗑︎</button>
-                            </td>
-                        </tr>
+                        <tbody id="size-table-body">
+                            <tr>
+                                <td class="center-text">L</td>
+                                <td class="center-text">FS-23-DBL-L</td>
+                                <td class="center-text">
+                                    <span>Active</span>
+                                </td>
+                                <td class="center-text">233 units</td>
+                                <td class="center-text">23 Jun 24</td>
+                                <td class="center-text">22 Jul 24</td>
+                                <td class="center-text">
+                                    <button>✎</button>
+                                    <button>🗑︎</button>
+                                </td>
+                            </tr>
+<!--                        <tr>-->
+<!--                            <td class="center-text">L</td>-->
+<!--                            <td class="center-text">FS-23-DBL-L</td>-->
+<!--                            <td class="center-text">Active</td>-->
+<!--                            <td class="center-text">233 units</td>-->
+<!--                            <td class="center-text">23 Jun 24</td>-->
+<!--                            <td class="center-text">22 Jul 24</td>-->
+<!--                            <td class="center-text">-->
+<!--                                <button>✎</button>-->
+<!--                                <button>🗑︎</button>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="center-text">L</td>-->
+<!--                            <td class="center-text">FS-23-DBL-L</td>-->
+<!--                            <td class="center-text">Active</td>-->
+<!--                            <td class="center-text">233 units</td>-->
+<!--                            <td class="center-text">23 Jun 24</td>-->
+<!--                            <td class="center-text">22 Jul 24</td>-->
+<!--                            <td class="center-text">-->
+<!--                                <button>✎</button>-->
+<!--                                <button>🗑︎</button>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="center-text">L</td>-->
+<!--                            <td class="center-text">FS-23-DBL-L</td>-->
+<!--                            <td class="center-text">Active</td>-->
+<!--                            <td class="center-text">233 units</td>-->
+<!--                            <td class="center-text">23 Jun 24</td>-->
+<!--                            <td class="center-text">22 Jul 24</td>-->
+<!--                            <td class="center-text">-->
+<!--                                <button>✎</button>-->
+<!--                                <button>🗑︎</button>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="center-text">L</td>-->
+<!--                            <td class="center-text">FS-23-DBL-L</td>-->
+<!--                            <td class="center-text">Active</td>-->
+<!--                            <td class="center-text">233 units</td>-->
+<!--                            <td class="center-text">23 Jun 24</td>-->
+<!--                            <td class="center-text">22 Jul 24</td>-->
+<!--                            <td class="center-text">-->
+<!--                                <button>✎</button>-->
+<!--                                <button>🗑︎</button>-->
+<!--                            </td>-->
+<!--                        </tr>-->
                         </tbody>
                     </table>
+
                     <h2 class="details-heading">Analytics</h2>
                     <div class="details-text">
                         <strong class="details-key">Sales: </strong>
@@ -619,10 +637,298 @@
     </div>
 </div>
 
+<!--  modal  -->
+
+<div class="modal" id="add-item-form-modal">
+    <div class="modal-container-1">
+        <div class="modal-scroll">
+            <h1 class="modal-title-1">Add new Item</h1>
+            <form>
+                <div id="item-form-modal-body">
+
+                    <!-- Product item form -->
+                    <div id="item-info">
+                        <div id="item-info-col1">
+
+                            <!-- Image upload field -->
+
+                            <div class="item-info-blocks">
+                                <div id="modal-image-heading">
+                                    <label class="general-info-label">Upload images</label>
+                                    <p class="option-description">Add min 3 to max 9 images</p>
+                                </div>
+                                <div id="image-preview-container"></div>
+                                <div id="image-icons-container">
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="item-info-col2">
+
+                            <!-- color & active status th:field="*{categoryId}" -->
+
+                            <div class="item-info-blocks">
+
+                                <!-- Color options -->
+
+                                <div id="color-options-container">
+                                <label class="general-info-label">Color</label>
+                                <p class="option-description">Pick Available Colors</p>
+                                <div class="custom-select-wrapper">
+                                    <select id="category-select" class="custom-select"
+                                            name="categoryId" required>
+                                        <option value="">Black</option>
+                                        <option value="">White</option>
+                                        <option value="">Yellow</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                                <!-- Product active status -->
+                                <div id="pod-options-container">
+                                    <label class="general-info-label">Active Status</label>
+                                    <p class="option-description">Pick an option</p>
+                                    <label class="status-option">
+                                        <input type="radio" name="status" value="active" checked>
+                                        <span>Active</span>
+                                    </label>
+                                    <label class="status-option">
+                                        <input type="radio" name="status" value="inactive">
+                                        <span>Inactive</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Size options -->
+                            <div class="item-info-blocks" id="sizes">
+                                <label class="general-info-label">Size Details</label>
+                                <p class="option-description">Pick Available Sizes</p>
+                                <!-- <div id="size-options-container"> -->
+                                <!-- <div class="size-wrapper">
+                                <label class="size-option">
+                                    <input type="checkbox" class="size-checkbox" name="size">
+                                    <span>XL</span>
+                                </label>
+                                <input class="text-input-2" type="number" placeholder="Enter stock" disabled
+                                    required />
+                            </div> -->
+
+                                <!-- <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>XS</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div>
+
+                                <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>S</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div>
+
+                                <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>M</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div>
+
+                                <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>L</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div>
+
+                                <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>XL</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div>
+
+                                <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>2XL</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div>
+                            </div> -->
+                                <div id="size-options-container">
+                                    <!-- <div class="size-wrapper">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="sizes">
+                                        <span>XS</span>
+                                    </label>
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter stock" disabled required />
+                                    <input class="text-input-2 size-option-text-input" type="number"
+                                        placeholder="Enter price" disabled required />
+                                </div> -->
+                                    <!-- <div class="size-wrapper"> -->
+                                    <div id="size-wrapper-col-1">
+                                        <div class="size-column-heading">
+                                            <label class="general-info-label">Size</label>
+                                        </div>
+                                        <div class="size-column-body-1">
+                                            <div class="size-element">
+                                                <label class="size-option">
+                                                    <input type="checkbox" name="sizes">
+                                                    <span>XS</span>
+                                                </label>
+                                            </div>
+                                            <div class="size-element">
+                                                <label class="size-option">
+                                                    <input type="checkbox" name="sizes">
+                                                    <span>XS</span>
+                                                </label>
+                                            </div>
+                                            <div class="size-element">
+                                                <label class="size-option">
+                                                    <input type="checkbox" name="sizes">
+                                                    <span>XS</span>
+                                                </label>
+                                            </div>
+                                            <div class="size-element">
+                                                <label class="size-option">
+                                                    <input type="checkbox" name="sizes">
+                                                    <span>XS</span>
+                                                </label>
+                                            </div>
+                                            <div class="size-element">
+                                                <label class="size-option">
+                                                    <input type="checkbox" name="sizes">
+                                                    <span>XS</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="size-wrapper-col-2">
+                                        <div id="size-stock-column">
+                                            <div class="size-column-heading">
+                                                <label class="general-info-label">Stock</label>
+                                            </div>
+                                            <div class="size-column-body-2">
+                                                <div class="size-stock-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter stock" disabled required />
+                                                </div>
+                                                <div class="size-stock-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter stock" disabled required />
+                                                </div>
+                                                <div class="size-stock-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter stock" disabled required />
+                                                </div>
+                                                <div class="size-stock-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter stock" disabled required />
+                                                </div>
+                                                <div class="size-stock-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter stock" disabled required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="size-price-column">
+                                            <div class="size-column-heading">
+                                                <label class="general-info-label">Price</label>
+                                            </div>
+                                            <div class="size-column-body-2">
+                                                <div class="size-price-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter price" disabled required />
+                                                </div>
+                                                <div class="size-price-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter price" disabled required />
+                                                </div>
+                                                <div class="size-price-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter price" disabled required />
+                                                </div>
+                                                <div class="size-price-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter price" disabled required />
+                                                </div>
+                                                <div class="size-price-element">
+                                                    <input class="text-input-3 size-option-text-input" type="text"
+                                                           placeholder="Enter price" disabled required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- </div> -->
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- temporary image upload -->
+                    <div class="item-info-blocks">
+                        <input type="file" name="images" id="product-images" multiple />
+                        <div id="image-stats"></div>
+                    </div>
+                </div>
+                <!-- <input type="text" id="modal-first-name" placeholder="First Name" />
+                <input type="text" id="modal-last-name" placeholder="Last Name" />
+                <input type="text" id="modal-phone-number" placeholder="Phone Number" />
+                <input type="text" id="modal-category-input" placeholder="Date of Birth" /> -->
+                <div class="modal-button-container">
+                    <button class="modal-button-1" id="save-btn">Save</button>
+                    <button class="modal-button-1">Draft</button>
+                    <button class="modal-button-1" id="modal-form-close">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <!-- Footer menu -->
 
 <div class="footer-menu-container">
-
     <div class="footer-options-container">
         <div class="footer-options footer-contact-wrapper">
             <img src="/media/MENZO_logo.jpg" alt="">
@@ -635,6 +941,7 @@
         </div>
     </div>
 </div>
+
 <script>
     // document.querySelectorAll('.item-option-button-container img').forEach(el => {
     //     el.addEventListener('mouseup', () => {
@@ -652,6 +959,13 @@
 <script src="/js/nav-bar-script.js"></script>
 <script src="/js/product-details-script-v2.js"></script>
 <script src="/js/product-details.js"></script>
+<script src="/js/product-details-add-item.js"></script>
+
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
 </body>
 
 </html>

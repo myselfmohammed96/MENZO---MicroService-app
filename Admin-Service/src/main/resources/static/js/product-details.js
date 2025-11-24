@@ -4,7 +4,7 @@ const getItem = "http://localhost:8080/products/item";
 let productId;
 let itemsListWrapper;
 
-const itemInfoMap = new Map();
+window.itemInfoMap = new Map();
 
 
 
@@ -85,7 +85,6 @@ const populateItemsList = (items) => {
         itemIconContainer.classList.add('item-icon-container');
 
         const itemIcon = document.createElement('img');
-        console.log(item.iconImage);
         itemIcon.src = "/" + item.iconImage;
 
         itemIconContainer.appendChild(itemIcon);
@@ -112,8 +111,18 @@ const populateItemsList = (items) => {
         itemStatusContainer.classList.add('item-status-container');
 
         const itemStatus = document.createElement('span');
-        itemStatus.classList.add('item-status', 'status-red');
-        itemStatus.textContent = item.activeStatus;
+        let colorClass = {
+            ACTIVE: 'status-green',
+            INACTIVE: 'status-red',
+            PARTIAL: 'status-yellow'
+        };
+        let statusColor = colorClass[item.activeStatus];
+        itemStatus.classList.add('item-status');
+        if(item.activeStatus === "ACTIVE" || item.activeStatus === "INACTIVE" || item.activeStatus === "PARTIAL") {
+            itemStatus.classList.add(statusColor);
+        }
+
+        itemStatus.textContent = item.activeStatus.charAt(0).toUpperCase() + item.activeStatus.slice(1).toLowerCase();
 
         itemStatusContainer.appendChild(itemStatus);
         itemText1.append(itemSkuContainer, itemStatusContainer);
@@ -199,26 +208,36 @@ const fetchItem = async (superSku) => {
     }
 }
 
+//  edit product item details
+const editItem = async (itemId) => {
+    console.log("edit itemId: " + itemId);
+}
+
+//  delete product item
+const deleteItem = async (itemId) => {
+    console.log("delete itemId: ", itemId);
+}
+
 //  populate item details - with images & size details
 const populateItemDetails = (itemDetails) => {
-    document.getElementById('base-price').textContent = itemDetails.basePrice ? itemDetails.basePrice + "/-" : "-";
+    document.getElementById('starting-price').textContent = itemDetails.startingPrice ? itemDetails.startingPrice + "/-" : "-";
     document.getElementById('color').textContent = itemDetails.color ? itemDetails.color : "-";
     document.getElementById('color-icon').style.backgroundColor = itemDetails.hexCode ? itemDetails.hexCode : "none";
     document.getElementById('super-sku').textContent = itemDetails.superSku ? itemDetails.superSku : "-";
 
-    const itemCreated = document.getElementById('item-created');
-    if (itemDetails.itemCreated) {
-        const createdDate = new Date(itemDetails.itemCreated);
-        const createdDateFormat = createdDate.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        });
-        itemCreated.textContent = createdDateFormat;
-    } else {
-        itemCreated.textContent = "-";
-    }
-    itemUpdated: document.getElementById('item-updated');
+//    const itemCreated = document.getElementById('item-created');
+//    if (itemDetails.itemCreated) {
+//        const createdDate = new Date(itemDetails.itemCreated);
+//        const createdDateFormat = createdDate.toLocaleDateString("en-GB", {
+//            day: "2-digit",
+//            month: "short",
+//            year: "numeric"
+//        });
+//        itemCreated.textContent = createdDateFormat;
+//    } else {
+//        itemCreated.textContent = "-";
+//    }
+//    itemUpdated: document.getElementById('item-updated');
 
     if (itemDetails.imageUrls) {
         populateItemImages(itemDetails.imageUrls);
@@ -229,10 +248,104 @@ const populateItemDetails = (itemDetails) => {
 }
 
 //  populate images
-const populateItemImages = (imageUrls) => {}
+const populateItemImages = (imageUrls) => {
+    const imagesContainer = document.querySelector('.product-images-container');
+    imagesContainer.innerHTML = '';
+
+    imageUrls.forEach(url => {
+        const imagePreviewWrapper = document.createElement('div');
+        imagePreviewWrapper.classList.add('image-preview-wrapper');
+
+        const imagePreview = document.createElement('img');
+        imagePreview.classList.add('image-preview');
+        imagePreview.src = "/" + url;
+
+        const imageOverlay = document.createElement('div');
+        imageOverlay.classList.add('image-overlay');
+
+        imagePreviewWrapper.append(imagePreview, imageOverlay);
+        imagesContainer.appendChild(imagePreviewWrapper);
+    });
+}
 
 //  populate size details
-const populateSizeDetails = (sizeDetails) => {}
+const populateSizeDetails = (sizeDetails) => {
+    const tBody = document.getElementById('size-table-body');
+    tBody.innerHTML = '';
+
+    sizeDetails.forEach(sDetails => {
+        const tRow = document.createElement('tr');
+
+        const size = document.createElement('td');
+        size.classList.add('center-text');
+        size.textContent = sDetails.size;
+
+        const sku = document.createElement('td');
+        sku.classList.add('center-text');
+        sku.textContent = sDetails.sku
+
+        const status = document.createElement('td');
+        status.classList.add('center-text');
+
+        const statusSpan = document.createElement('span');
+        statusSpan.classList.add("item-status", sDetails.active ? "status-green" : "status-red");
+        statusSpan.textContent = sDetails.active ? 'Active' : 'Inactive';
+
+        status.appendChild(statusSpan);
+
+        const stock = document.createElement('td');
+        stock.classList.add('center-text');
+        stock.textContent = sDetails.qtyInStock + " units";
+
+        const itemCreated = document.createElement('td');
+        itemCreated.classList.add('center-text');
+        const createdDate = new Date(sDetails.createdAt);
+        const createdDateFormat = createdDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+        itemCreated.textContent = createdDateFormat;
+
+        const itemUpdated = document.createElement('td');
+        itemUpdated.classList.add('center-text');
+        itemUpdated.textContent = "22 Jul 24"
+
+        const buttons = document.createElement('td');
+        buttons.classList.add('center-text');
+
+        //  adding edit button
+        const editBtn = document.createElement('button');
+        editBtn.classList.add("edit-button");
+
+        const editBtnIcon = document.createElement('img');
+        editBtnIcon.src = "/media/edit.png";
+
+        editBtn.appendChild(editBtnIcon);
+        editBtn.addEventListener('click', () => {
+            editItem(sDetails.itemId);
+        });
+//        editBtn.textContent = '✎';
+
+        //  adding delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-button');
+
+        const deleteBtnIcon = document.createElement('img');
+        deleteBtnIcon.src = "/media/delete.png";
+
+        deleteBtn.appendChild(deleteBtnIcon);
+        deleteBtn.addEventListener('click', () => {
+            deleteItem(sDetails.itemId);
+        });
+//        deleteBtn.textContent = '🗑︎';
+
+        buttons.append(editBtn, deleteBtn);
+
+        tRow.append(size, sku, status, stock, itemCreated, itemUpdated, buttons);
+        tBody.appendChild(tRow);
+    });
+}
 
 
 
@@ -253,8 +366,11 @@ const loadInitialData = async () => {
     try {
         if (firstItem) {
             const itemDetails = await fetchItem(firstItem.superSku);
-
             if(!itemDetails) return;
+            itemDetails.superSku = firstItem.superSku
+            itemDetails.color = firstItem.color
+            itemDetails.hexCode = firstItem.hexCode
+
             itemInfoMap.set(firstItem.superSku, itemDetails);
             populateItemDetails(itemDetails)
         } else {
@@ -266,12 +382,29 @@ const loadInitialData = async () => {
     }
 }
 
+//const closeFormModal = () => {
+//    const formModal = document.getElementById('add-item-form-modal');
+//    const modalDisplay = getComputedStyle(formModal).display;
+//
+//    if(modalDisplay ===)
+//}
+
 
 
 //  ********* DOM Loading event listener *********
 document.addEventListener("DOMContentLoaded", async () => {
     productId = document.getElementById('product-id').value;
     itemsListWrapper = document.getElementById('list-wrapper-body');
+
+
+//    //  product item form modal - toggle events
+//    document.getElementById('add-item-button').addEventListener("click", () => {
+//        toggleFormModal('open');
+//    });
+//
+//    document.getElementById('modal-form-close').addEventListener("click", () => {
+//        toggleFormModal('close');
+//    });
 
     loadInitialData();
 });

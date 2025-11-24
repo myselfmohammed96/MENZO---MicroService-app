@@ -14,17 +14,17 @@ import java.util.List;
 @Builder
 public class ItemDetailsDto {
 
-    private String superSku;
+//    private String superSku;
 
-    private Float basePrice;
+    private Float startingPrice;
 
-    private String color;
+//    private String color;
 
-    private String hexCode;
+//    private String hexCode;
 
-    private Date itemCreated;
+//    private Date itemCreated;
 
-    private Date itemUpdated;
+//    private Date itemUpdated;
 
     private List<String> imageUrls;
 

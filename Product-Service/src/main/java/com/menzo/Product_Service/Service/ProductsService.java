@@ -116,7 +116,7 @@ public class ProductsService {
             throw new RuntimeException("Number of (product items input) doesn't match (saved product items)");
 
         String superSku = savedProductItems.stream().findFirst()
-                .map(item -> item.getSuperSKU())
+                .map(item -> item.getSuperSku())
                 .orElseThrow(() -> new RuntimeException("Saved item doesn't have superSKU"));
 
         //  saving images
@@ -256,7 +256,7 @@ public class ProductsService {
             //  creating new product item object
             ProductItem item = ProductItem.builder()
                     .product(product)
-                    .superSKU(superSku)
+                    .superSku(superSku)
                     .SKU(sku)
                     .price(price)
                     .qtyInStock(e.getValue())

@@ -27,6 +27,6 @@ public class ItemListingDto {
 
     private String iconImage;
 
-    private ItemDetailsDto itemDetails;
+//    private ItemDetailsDto itemDetails;
 
 }

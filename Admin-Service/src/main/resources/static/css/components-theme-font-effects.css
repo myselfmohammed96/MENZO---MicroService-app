@@ -151,6 +151,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 /* ******* Toast notification ******* */
 
 .toast {
@@ -186,6 +197,85 @@
 
 .toast-close-container span {
     font-size: 15px;
+}
+
+/* ///////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Modal ******* */
+
+.modal {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(3px);
+}
+
+.modal-container,
+.modal-container-1 {
+    background: #fff;
+    border-radius: 5px;
+}
+
+.modal-title,
+.modal-title-1 {
+    text-align: center;
+}
+
+.modal-message {
+    color: #7c7c7c;
+    font-size: 1em;
+}
+
+.modal-container select,
+.modal-input {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #cacaca;
+    color: #383838;
+    font-size: 1em;
+}
+
+.modal-input:focus {
+    border-bottom: 2px solid #969696;
+}
+
+input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+}
+
+.error-message,   /*dep*/
+.error-message-1 {  /*dep*/
+    color: red !important;
+    font-size: 13px !important;
+}
+
+.error-message-1 {  /*dep*/
+    text-align: left;
+}
+
+.modal-button-container {
+    text-align: center;
+}
+
+.modal-button,
+.modal-button-1 {
+    background-color: #3e3e3e;
+    color: rgb(226, 226, 226);
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.modal-button:hover,
+.modal-button-1:hover {
+    color: #fff;
 }
 
 /* ///////////////////////////////////// */

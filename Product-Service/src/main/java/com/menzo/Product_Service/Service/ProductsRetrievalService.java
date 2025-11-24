@@ -32,7 +32,7 @@ public class ProductsRetrievalService {
     private ProductsRepo productsRepo;
 
     @Autowired
-    private ProductItemsRepo productItemsRepo;
+    private ProductItemsRepo itemsRepo;
 
     @Autowired
     private ProductImagesRepo productImagesRepo;
@@ -140,7 +140,6 @@ public class ProductsRetrievalService {
     }
 
 
-
     //  ********* Get all items by product ID *********
 
     public ProductDetailsDto getProductDetailsWithAllItems(Long productId) {
@@ -177,7 +176,7 @@ public class ProductsRetrievalService {
 
         //  getting unique 'super SKUs'
         Set<String> superSkus = new HashSet<>();
-        items.stream().forEach(item -> superSkus.add(item.getSuperSKU()));
+        items.stream().forEach(item -> superSkus.add(item.getSuperSku()));
 
         //  building item Dto for every super SKU
         for (String superSku : superSkus) {
@@ -190,7 +189,7 @@ public class ProductsRetrievalService {
             AtomicInteger stockSum = new AtomicInteger(0);
 
             items.stream()
-                    .filter(item -> superSku.equals(item.getSuperSKU()))
+                    .filter(item -> superSku.equals(item.getSuperSku()))
                     .forEach(item -> {
                         if (item.getIsActive()) statusFlag.incrementAndGet();
                         stockSum.addAndGet(item.getQtyInStock());
@@ -211,7 +210,7 @@ public class ProductsRetrievalService {
 
             //  total item count with common super SKU
             long itemCount = items.stream()
-                    .filter(item -> superSku.equals(item.getSuperSKU()))
+                    .filter(item -> superSku.equals(item.getSuperSku()))
                     .count();
 
             ProductActiveStatus activeStatus = statusFlag.get() == itemCount
@@ -226,7 +225,7 @@ public class ProductsRetrievalService {
                     .orElseThrow(() -> new EntityNotFoundException("No images found for super SKU: " + superSku));
 
             //  stock status calculation
-            StockStatus stockStatus = getStockStatus(til, stockSum.get()/itemCount);
+            StockStatus stockStatus = getStockStatus(til, stockSum.get() / itemCount);
 
             //  building Item dto
             ItemListingDto item = ItemListingDto.builder()
@@ -244,20 +243,58 @@ public class ProductsRetrievalService {
     }
 
 
-
     private StockStatus getStockStatus(long til, long currentStock) {
         if (currentStock >= til) {
             return StockStatus.IN_STOCK;
         } else if (currentStock > 0 && currentStock < til) {
             return StockStatus.LOW_STOCK;
-        } else if(currentStock <= 0) {
+        } else if (currentStock <= 0) {
             return StockStatus.OUT_OF_STOCK;
-        } else if(currentStock >= 1.5*til) {
+        } else if (currentStock >= 1.5 * til) {
             return StockStatus.OVER_STOCKED;
         } else {
             throw new IllegalArgumentException("Invalid StockStatus");
         }
     }
+
+
+
+    //  ********* get product item details by given super SKU *********
+
+    public ItemDetailsDto getItemDetails(String superSku) {
+        boolean exists = itemsRepo.existsBySuperSku(superSku);
+        if (!exists) throw new IllegalArgumentException("super SKU doesn't exist");
+
+        List<ProductItem> items = itemsRepo.findAllBySuperSku(superSku);
+
+        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
+
+        List<ItemSizeDto> sizeDetails = items.stream()
+                .map(item -> {
+                    if (item.getPrice() < startingPrice.get()) {
+                        startingPrice.set(item.getPrice());
+                    }
+                    return ItemSizeDto.builder()
+                            .itemId(item.getId())
+                            .size(itemsRepo.findSizeByItemId("Size", item.getId()))
+                            .sku(item.getSKU())
+                            .qtyInStock(item.getQtyInStock())
+                            .isActive(item.getIsActive())
+                            .createdAt(item.getCreatedAt())
+                            .build();
+                }).toList();
+
+        List<String> imageUrls = productImagesRepo.findBySuperSku(superSku).stream()
+                .map(image -> image.getImageUrl())
+                .toList();
+
+        return ItemDetailsDto.builder()
+                .startingPrice(startingPrice.get() != Float.MAX_VALUE ? startingPrice.get() : null)
+                .imageUrls(imageUrls)
+                .sizeDetails(sizeDetails)
+                .build();
+    }
+
 
 
 //    private Map<String, List<?>> getFilterValues(List<FilterRequestDto> filterRequests) {
@@ -451,7 +488,7 @@ public class ProductsRetrievalService {
 
 
     public ProductItemDetailsDto getProductItemDetailsById(Long itemId) {
-        ProductItem p = productItemsRepo.findById(itemId)
+        ProductItem p = itemsRepo.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("ProductItem not found with ID: " + itemId));
         return new ProductItemDetailsDto(
                 p.getId(),

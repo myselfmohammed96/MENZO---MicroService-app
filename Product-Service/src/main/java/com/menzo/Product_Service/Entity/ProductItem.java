@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "configurations")
+@ToString(exclude = { "configurations", "images" })
 @Table(name = "product_items")
 public class ProductItem {
 
@@ -59,7 +59,7 @@ public class ProductItem {
             nullable = false,
             name = "super_sku"
     )
-    private String superSKU;
+    private String superSku;
 
     @Column(
             nullable = false,

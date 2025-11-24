@@ -12,7 +12,10 @@
     <link rel="stylesheet" href="/css/admin-side-menu.css">
     <link rel="stylesheet" href="/css/admin-table.css">
     <link rel="stylesheet" href="/css/admin-details.css">
-    <link rel="stylesheet" href="/css/admin-accordion-modal.css">
+<!--    <link rel="stylesheet" href="/css/admin-accordion-modal.css">-->
+
+    <link rel="stylesheet" href="/css/components-styling.css" />
+    <link rel="stylesheet" href="/css/components-theme-font-effects.css" />
     <title>MENZO | Admin-User</title>
 </head>
 
@@ -91,13 +94,13 @@
 
     <!-- Block/Unblock confirmation modal -->
 
-    <div id="confirm-modal" class="hidden">
-        <div id="modal-container">
-            <h1 id="confirm-title">Are you sure?</h1>
-            <p class="confirm-message">Do you really want to block this user?</p>
-            <div>
-                <button id="confirm-yes">Yes</button>
-                <button id="confirm-no">Cancel</button>
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-container">
+            <h1 id="confirm-title" class="modal-title">Are you sure?</h1>
+            <p class="confirm-message modal-message">Do you really want to block this user?</p>
+            <div class="modal-button-container">
+                <button class="modal-button" id="confirm-yes">Yes</button>
+                <button class="modal-button" id="confirm-no">Cancel</button>
             </div>
         </div>
     </div>
@@ -220,7 +223,6 @@
 <!-- Footer menu -->
 
 <div class="footer-menu-container">
-
     <div class="footer-options-container">
         <div class="footer-options footer-contact-wrapper">
             <img src="/media/MENZO_logo.jpg" alt="">
@@ -233,6 +235,7 @@
         </div>
     </div>
 </div>
+
 <script src="/js/nav-bar-script.js"></script>
 <script src="/js/user-details-script.js"></script>
 </body>

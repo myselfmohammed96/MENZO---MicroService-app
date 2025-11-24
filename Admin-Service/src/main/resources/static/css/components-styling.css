@@ -130,9 +130,11 @@
   margin-left: 3% !important;
 }
 
-
-
 /* ///////////////////////////////////// */
+
+
+
+
 
 
 
@@ -188,6 +190,7 @@
 .toast.show {
     animation: slideInBounce 0.6s ease-out forwards;
 }
+
 .toast.hide {
     animation: slideOut 0.6s ease-in forwards;
 }
@@ -220,6 +223,139 @@
         transform: translateX(-100%);
         opacity: 0;
     }
+}
+
+/* ///////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Modal ******* */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-container,
+.modal-container-1 {
+    /* padding: 30px 50px; */
+    min-width: 200px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    justify-content: flex-start;
+    align-items: center;
+    /* overflow-y: auto; */
+    overflow: hidden;
+    max-height: 95vh;
+}
+
+.modal-container {
+    padding: 30px 50px
+}
+
+.modal-scroll {
+    height: 100%;
+    width: 100%;
+    padding: 20px 35px;
+    overflow-y: auto;
+}
+
+.modal-title {
+    margin-bottom: 15px;
+}
+
+.modal-title-1 {
+    margin-bottom: 10px;
+}
+
+#modal-body {
+    /*dep*/
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+#item-form-modal-body {
+    min-width: 900px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.custom-select-wrapper {
+    margin-top: 0px !important;
+    height: auto;
+}
+
+.modal-input {
+    width: 90%;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    padding: 10px 25px 5px 15px;
+}
+
+.modal-button-container {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+.error-message {
+    /*dep*/
+    display: block;
+    margin: 0px !important;
+    padding-left: 15px;
+}
+
+.error-message-1 {
+    /*dep*/
+    display: block;
+    margin: 0px !important;
+    width: 100%;
+}
+
+.modal-button {
+    width: 35%;
+    padding: 7px 0px;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.05s ease;
+}
+
+.modal-button-1 {
+    width: 30%;
+    padding: 7px 0px;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.05s ease;
+}
+
+.modal-button:active {
+    transform: scale(0.95);
 }
 
 /* ///////////////////////////////////// */

@@ -375,6 +375,7 @@ const urls = {
             editingParaEl = paraEl;
 
             document.getElementById("modal-title").textContent = variationId ? "Edit Variation" : "Add Variation";
+
             input.value = paraEl ? paraEl.textContent : "";
             modal.style.display = "flex";
 
