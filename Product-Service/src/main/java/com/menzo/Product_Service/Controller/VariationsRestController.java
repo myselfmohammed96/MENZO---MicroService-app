@@ -263,13 +263,30 @@ public class VariationsRestController {
 
 
 
+    /*  used in
+    * admin-service - product-details-add-item.js
+    *
+    */
     @GetMapping("/size")
-    public NestedVariationDto getSizes() {
-        return variationsRetrievalService.getSizes("Size");
+    public ResponseEntity<VariationOptionsMinimalDto> getSizes() {
+        VariationOptionsMinimalDto variationOptions = variationsRetrievalService
+                .getVariationWithOptionsByVariationName("Size");
+        return ResponseEntity.ok(variationOptions);
     }
 
+    /*  used in
+     * admin-service - product-details-add-item.js
+     *
+     */
     @GetMapping("/colors")
-    public NestedVariationDto getColors() {
-        return variationsRetrievalService.getSizes("Colors");
+    public ResponseEntity<VariationOptionsMinimalDto> getColors() {
+        VariationOptionsMinimalDto variationOptions = variationsRetrievalService
+                .getVariationWithOptionsByVariationName("Colors");
+        return ResponseEntity.ok(variationOptions);
     }
+
+//    @GetMapping("/color-opts")
+//    public void getColorOpts() {
+//        return;
+//    }
 }

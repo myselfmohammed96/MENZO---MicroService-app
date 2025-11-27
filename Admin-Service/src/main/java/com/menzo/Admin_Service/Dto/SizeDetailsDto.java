@@ -5,20 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewProductItemDto {
+public class SizeDetailsDto {
 
-    private Long productId;
+    private Long sizeId;
 
-    private String status;
+    private String sizeValue;
 
-    private Long colorId;
+    private Integer sizeStock;
 
-    private List<SizeDetailsDto> sizeDetails;
+    private Float sizePrice;
 
 }

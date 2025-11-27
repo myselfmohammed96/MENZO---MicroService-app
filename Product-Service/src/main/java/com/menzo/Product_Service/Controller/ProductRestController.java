@@ -2,7 +2,6 @@ package com.menzo.Product_Service.Controller;
 
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
 import com.menzo.Product_Service.Dto.ProductDto.ItemDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ItemListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductDetailsDto;
 import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;

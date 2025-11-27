@@ -1,9 +1,9 @@
 package com.menzo.Admin_Service.Feign;
 
-import com.menzo.Admin_Service.Dto.NestedVariationDto;
 import com.menzo.Admin_Service.Dto.ProductDetailsDto;
 import com.menzo.Admin_Service.Dto.ProductListingDto;
 import com.menzo.Admin_Service.Dto.ProductMinimalDto;
+import com.menzo.Admin_Service.Dto.VariationOptionsMinimalDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +25,10 @@ public interface ProductServiceFeign {
     public ProductDetailsDto getProductDetailsById(@RequestParam("id") Long productId);
 
     @GetMapping("variations/size")
-    public NestedVariationDto getSizes();
+    public VariationOptionsMinimalDto getSizes();
 
     @GetMapping("/variations/colors")
-    public NestedVariationDto getColors();
+    public VariationOptionsMinimalDto getColors();
 //    @GetMapping("/categories/")
 //    public void getSubCategoryByProductId(@RequestParam("id") Long productId);
 

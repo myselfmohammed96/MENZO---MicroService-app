@@ -1,9 +1,6 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.VariationsDto.NestedVariationDto;
-import com.menzo.Product_Service.Dto.VariationsDto.OptionDto;
-import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
-import com.menzo.Product_Service.Dto.VariationsDto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Dto.VariationsDto.*;
 import com.menzo.Product_Service.Entity.VariationOption;
 import com.menzo.Product_Service.Enum.Components;
 import org.junit.jupiter.api.Test;
@@ -53,7 +50,8 @@ class VariationsRetrievalServiceTest {
 
     @Test
     public void testGetSizes() {
-        NestedVariationDto sizes = variationsRetrievalService.getSizes("Size");
+        VariationOptionsMinimalDto sizes = variationsRetrievalService
+                .getVariationWithOptionsByVariationName("Size");
         System.out.println(sizes);
     }
 

@@ -54,8 +54,8 @@ public class ProductController {
     @GetMapping("/add-product-v2")
     public String addProductFormV2(@RequestHeader("roles") String roles,
                                    Model model) {
-        NestedVariationDto sizesDto = productRetrievalService.getSizes();
-        NestedVariationDto colorsDto = productRetrievalService.getColors();
+        VariationOptionsMinimalDto sizesDto = productRetrievalService.getSizes();
+        VariationOptionsMinimalDto colorsDto = productRetrievalService.getColors();
 
         NewProductDto productDto = NewProductDto.builder()
                 .status("active")
@@ -93,6 +93,7 @@ public class ProductController {
     public String getProductDetails(@RequestParam("id") Long productId,
                                     Model model) {
         model.addAttribute("productId", productId);
+        model.addAttribute("newItem", new NewProductItemDto());
         return "Products/product-details-v2";
     }
 

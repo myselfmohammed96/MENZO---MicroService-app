@@ -5,19 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VariationWithOptionsDto {
+public class VariationOptionsMinimalDto {
 
-    private Long id;
+    private Long variationId;
 
     private String variationName;
 
-    private Set<OptionMinimalDto> options = new HashSet<>();
+    private List<OptionMinimalDto> options;
 
 }

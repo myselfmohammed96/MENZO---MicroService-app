@@ -1,18 +1,15 @@
 package com.menzo.Product_Service.Dto.VariationsDto;
 
-import com.menzo.Product_Service.Entity.Variation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OptionDto {
+public class OptionMinimalDto {
 
     private Long optionId;
 
@@ -20,10 +17,9 @@ public class OptionDto {
 
     private String colorCode;
 
-    private Long variationId;
-
-    private String variationName;
-
-    private Date createdAt;
+    public OptionMinimalDto(Long optionId, String optionValue) {
+        this.optionId = optionId;
+        this.optionValue = optionValue;
+    }
 
 }

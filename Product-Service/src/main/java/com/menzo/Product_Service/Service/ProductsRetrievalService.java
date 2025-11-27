@@ -584,7 +584,7 @@ public class ProductsRetrievalService {
 //    private String getVariationOfProductItemByProductItemId(Long productItemId, String variationName) {
 //        try {
 //            List<ProductConfiguration> configList = productConfigurationRepo.findAllByProductItemId(productItemId);
-//            List<OptionWithIdDto> sizeOptions = variationsRepo.findOptionsByVariationName(variationName);
+//            List<OptionMinimalDto> sizeOptions = variationsRepo.findOptionsByVariationName(variationName);
 //
 //            Set<Long> optionIds = configList.stream()
 //                    .map(config -> config.getVariationOption().getId())
@@ -592,7 +592,7 @@ public class ProductsRetrievalService {
 //
 //            return sizeOptions.stream()
 //                    .filter(option -> optionIds.contains(option.getId()))
-//                    .map(option -> option.getOptionValue())     // .map(OptionWithIdDto::getOptionValue)
+//                    .map(option -> option.getOptionValue())     // .map(OptionMinimalDto::getOptionValue)
 //                    .findFirst()
 //                    .orElse(null);
 //        } catch (Exception e) {

@@ -13,7 +13,6 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +44,10 @@ public class VariationsRetrievalService {
         List<VariationWithOptionsDto> variationsList = new ArrayList<>();
 
         for (Variation variation : allVariations) {
-            Set<OptionWithIdDto> options = new HashSet<>();
+            Set<OptionMinimalDto> options = new HashSet<>();
             for (VariationOption option : variation.getOptions()) {
-                OptionWithIdDto optionDto = OptionWithIdDto.builder()
-                        .id(option.getId())
+                OptionMinimalDto optionDto = OptionMinimalDto.builder()
+                        .optionId(option.getId())
                         .optionValue(option.getOptionValue())
                         .build();
                 options.add(optionDto);
@@ -98,13 +97,13 @@ public class VariationsRetrievalService {
                                 .build();
                         return v;
                     });
-                    OptionWithIdDto option = OptionWithIdDto.builder()
-                            .id(optionId)
+                    OptionMinimalDto option = OptionMinimalDto.builder()
+                            .optionId(optionId)
                             .optionValue(optionValue)
                             .build();
-                    Set<OptionWithIdDto> opt = variation.getOptions() != null
+                    Set<OptionMinimalDto> opt = variation.getOptions() != null
                             ? variation.getOptions()
-                            : new HashSet<OptionWithIdDto>();
+                            : new HashSet<OptionMinimalDto>();
                     opt.add(option);
                     variation.setOptions(opt);
                 });
@@ -130,7 +129,7 @@ public class VariationsRetrievalService {
     //  get variation-options by given variation name - TESTED
     public List<String> getOptionsByVariationName(Long categoryId, String variationName) {
         if (categoryId == null) {
-            List<OptionWithIdDto> optionsDtoList = variationsRepo.findOptionsByVariationName(variationName);
+            List<OptionMinimalDto> optionsDtoList = variationsRepo.findOptionsByVariationName(variationName);
             return optionsDtoList.stream()
                     .map(dto -> dto.getOptionValue())
                     .collect(Collectors.toList());
@@ -143,31 +142,58 @@ public class VariationsRetrievalService {
     //  ## better to make this as a supplier.. fetching variation for "Size" explicitly
     //  ## filter for isDeleted false content
     @Transactional
-    public NestedVariationDto getSizes(String variationName) {
+    public VariationOptionsMinimalDto getVariationWithOptionsByVariationName(String variationName) {
 
         //  fetching variation by variation name
         Session session = entityManager.unwrap(Session.class);
         session.enableFilter("variationActiveFilter").setParameter("isDeleted", false);
         session.enableFilter("optionActiveFilter").setParameter("isDeleted", false);
+
         Variation variation = variationsRepo.findByVariationName(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
 
         //  building nested object for variation & the sizes
-        NestedVariationDto variationWithSizeList = NestedVariationDto.builder()
-                .id(variation.getId())
+//        NestedVariationDto variationWithSizeList = NestedVariationDto.builder()
+//                .id(variation.getId())
+//                .variationName(variation.getVariationName())
+//                .build();
+        VariationOptionsMinimalDto variationWithSizeList = VariationOptionsMinimalDto.builder()
+                .variationId(variation.getId())
                 .variationName(variation.getVariationName())
                 .build();
 
         //  extracting sizes from variation options
-        List<NestedVariationDto> sizes = variation.getOptions().stream()
-                .filter(opt -> !opt.getIsDeleted())
-                .map(opt -> {
-                    return NestedVariationDto.builder()
-                            .id(opt.getId())
-                            .variationName(opt.getOptionValue())
-                            .build();
-                }).collect(Collectors.toList());
-        variationWithSizeList.setOptions(sizes);
+//        List<NestedVariationDto> sizes = variation.getOptions().stream()
+//                .filter(opt -> !opt.getIsDeleted())
+//                .map(opt -> {
+//                    return NestedVariationDto.builder()
+//                            .id(opt.getId())
+//                            .variationName(opt.getOptionValue())
+//                            .build();
+//                }).collect(Collectors.toList());
+//        variationWithSizeList.setOptions(sizes);
+        if (variation.getVariationName().equals("Colors")) {
+            List<OptionMinimalDto> options = variation.getOptions().stream()
+                    .filter(opt -> !opt.getIsDeleted())
+                    .map(opt -> {
+                        return OptionMinimalDto.builder()
+                                .optionId(opt.getId())
+                                .optionValue(opt.getOptionValue())
+                                .colorCode(opt.getColorCode().getColorCode())
+                                .build();
+                    }).collect(Collectors.toList());
+            variationWithSizeList.setOptions(options);
+        } else {
+            List<OptionMinimalDto> options = variation.getOptions().stream()
+                    .filter(opt -> !opt.getIsDeleted())
+                    .map(opt -> {
+                        return OptionMinimalDto.builder()
+                                .optionId(opt.getId())
+                                .optionValue(opt.getOptionValue())
+                                .build();
+                    }).collect(Collectors.toList());
+            variationWithSizeList.setOptions(options);
+        }
         return variationWithSizeList;
     }
 
@@ -193,7 +219,7 @@ public class VariationsRetrievalService {
         if (variation.getVariationName().equals("Colors")) {
             return options.stream().map(opt -> {
                 return OptionDto.builder()
-                        .id(opt.getId())
+                        .optionId(opt.getId())
                         .optionValue(opt.getOptionValue())
                         .colorCode(opt.getColorCode().getColorCode())
                         .variationName(variation.getVariationName())
@@ -202,7 +228,7 @@ public class VariationsRetrievalService {
         } else {
             return options.stream().map(opt -> {
                 return OptionDto.builder()
-                        .id(opt.getId())
+                        .optionId(opt.getId())
                         .optionValue(opt.getOptionValue())
                         .variationName(variation.getVariationName())
                         .build();
@@ -213,9 +239,9 @@ public class VariationsRetrievalService {
     //  get list of option IDs by variation name - TESTED
     @Transactional
     public List<Long> getOptionIdsByVariation(String variationName) {
-        return getSizes(variationName).getOptions()
+        return getVariationWithOptionsByVariationName(variationName).getOptions()
                 .stream()
-                .map(opt -> opt.getId())
+                .map(opt -> opt.getOptionId())
                 .collect(Collectors.toList());
     }
 

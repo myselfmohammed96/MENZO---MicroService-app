@@ -347,14 +347,17 @@
 }
 
 .modal-button-1 {
-    width: 30%;
+    width: 30% !important;
     padding: 7px 0px;
     margin: 10px 0px;
     cursor: pointer;
     transition: color 0.15s ease, transform 0.05s ease;
 }
 
-.modal-button:active {
+.modal-button-1:hover {}
+
+.modal-button:active,
+.modal-button-1:active {
     transform: scale(0.95);
 }
 

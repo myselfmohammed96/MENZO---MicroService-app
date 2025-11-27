@@ -362,7 +362,23 @@ button[type="submit"]:active {
   height: 100%;
 }
 
+/* custom color select */
 
+.color-icon {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.color-option {
+  color: #555;
+  display:flex;
+  align-items: center;
+  padding: 7px 0px;
+}
 
 
 

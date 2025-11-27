@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Repository;
 
-import com.menzo.Product_Service.Dto.VariationsDto.OptionWithIdDto;
+import com.menzo.Product_Service.Dto.VariationsDto.OptionMinimalDto;
 import com.menzo.Product_Service.Entity.Variation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ class VariationsRepoTest {
 
     @Test
     public void testFindOptionsByVariationName() {
-        List<OptionWithIdDto> options = variationsRepo.findOptionsByVariationName("Sleeve");
+        List<OptionMinimalDto> options = variationsRepo.findOptionsByVariationName("Sleeve");
         System.out.println(options);
     }
 }

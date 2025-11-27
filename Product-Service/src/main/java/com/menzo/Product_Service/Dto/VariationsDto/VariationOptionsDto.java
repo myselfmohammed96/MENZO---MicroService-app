@@ -1,19 +1,21 @@
 package com.menzo.Product_Service.Dto.VariationsDto;
 
-import com.menzo.Product_Service.Entity.VariationOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OptionWithIdDto {
+public class VariationOptionsDto {
 
-    private Long id;
+    private Long variationId;
 
-    private String optionValue;
+    private String variationName;
 
+    private List<OptionDto> options;
 }

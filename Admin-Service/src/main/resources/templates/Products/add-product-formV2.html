@@ -146,11 +146,11 @@
                                     <div id="size-options-container">
                                         <div th:each="size : ${sizesList}" class="size-wrapper">
                                             <label class="size-option">
-                                                <input th:value="${size.id}" type="checkbox" class="size-checkbox"
+                                                <input th:value="${size.optionId}" type="checkbox" class="size-checkbox"
                                                        name="size">
-                                                <span th:text="${size.variationName}"></span>
+                                                <span th:text="${size.optionValue}"></span>
                                             </label>
-                                            <input th:name="${'sizeStockMap[' + size.id + ']'}" class="text-input-2"
+                                            <input th:name="${'sizeStockMap[' + size.optionId + ']'}" class="text-input-2"
                                                    type="number" placeholder="Enter stock" disabled required/>
                                         </div>
                                     </div>
@@ -171,8 +171,8 @@
                                                 required>
 <!--                                            <option value="" hidden disabled selected>Colors</option>-->
                                             <option th:each="color : ${colorsList}"
-                                                    th:value="${color.id}"
-                                                    th:text="${color.variationName}"></option>
+                                                    th:value="${color.optionId}"
+                                                    th:text="${color.optionValue}"></option>
                                         </select>
                                     </div>
                                 </div>

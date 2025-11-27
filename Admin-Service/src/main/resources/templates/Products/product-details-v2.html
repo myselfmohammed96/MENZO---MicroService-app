@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
     <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
 
     <link rel="stylesheet" href="/css/admin-style.css">
     <link rel="stylesheet" href="/admin panels/css/admin-table.css">
@@ -639,11 +640,24 @@
 
 <!--  modal  -->
 
+<div id="confirm-modal" class="modal hidden">
+    <div class="modal-container">
+        <h1 id="confirm-title" class="modal-title">Are you sure?</h1>
+        <p class="confirm-message modal-message">Do you really want to block this user?</p>
+        <div class="modal-button-container">
+            <button class="modal-button" id="confirm-yes">Yes</button>
+            <button class="modal-button" id="confirm-no">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="add-item-form-modal">
     <div class="modal-container-1">
         <div class="modal-scroll">
             <h1 class="modal-title-1">Add new Item</h1>
-            <form>
+            <form id="add-item-form" enctype="multipart/form-data" th:action="@{/products/add-item}"
+                th:object="${newItem}" method="POST">
+
                 <div id="item-form-modal-body">
 
                     <!-- Product item form -->
@@ -684,11 +698,11 @@
                                 <label class="general-info-label">Color</label>
                                 <p class="option-description">Pick Available Colors</p>
                                 <div class="custom-select-wrapper">
-                                    <select id="category-select" class="custom-select"
-                                            name="categoryId" required>
-                                        <option value="">Black</option>
-                                        <option value="">White</option>
-                                        <option value="">Yellow</option>
+                                    <select th:field="*{colorId}" id="color-select" class="custom-select"
+                                            name="colorId" required>
+<!--                                        <option value="">Black</option>-->
+<!--                                        <option value="">White</option>-->
+<!--                                        <option value="">Yellow</option>-->
                                     </select>
                                 </div>
                             </div>
@@ -712,194 +726,106 @@
                             <div class="item-info-blocks" id="sizes">
                                 <label class="general-info-label">Size Details</label>
                                 <p class="option-description">Pick Available Sizes</p>
-                                <!-- <div id="size-options-container"> -->
-                                <!-- <div class="size-wrapper">
-                                <label class="size-option">
-                                    <input type="checkbox" class="size-checkbox" name="size">
-                                    <span>XL</span>
-                                </label>
-                                <input class="text-input-2" type="number" placeholder="Enter stock" disabled
-                                    required />
-                            </div> -->
 
-                                <!-- <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>XS</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div>
-
-                                <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>S</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div>
-
-                                <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>M</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div>
-
-                                <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>L</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div>
-
-                                <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>XL</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div>
-
-                                <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>2XL</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div>
-                            </div> -->
                                 <div id="size-options-container">
-                                    <!-- <div class="size-wrapper">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="sizes">
-                                        <span>XS</span>
-                                    </label>
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter stock" disabled required />
-                                    <input class="text-input-2 size-option-text-input" type="number"
-                                        placeholder="Enter price" disabled required />
-                                </div> -->
-                                    <!-- <div class="size-wrapper"> -->
                                     <div id="size-wrapper-col-1">
                                         <div class="size-column-heading">
                                             <label class="general-info-label">Size</label>
                                         </div>
-                                        <div class="size-column-body-1">
-                                            <div class="size-element">
-                                                <label class="size-option">
-                                                    <input type="checkbox" name="sizes">
-                                                    <span>XS</span>
-                                                </label>
-                                            </div>
-                                            <div class="size-element">
-                                                <label class="size-option">
-                                                    <input type="checkbox" name="sizes">
-                                                    <span>XS</span>
-                                                </label>
-                                            </div>
-                                            <div class="size-element">
-                                                <label class="size-option">
-                                                    <input type="checkbox" name="sizes">
-                                                    <span>XS</span>
-                                                </label>
-                                            </div>
-                                            <div class="size-element">
-                                                <label class="size-option">
-                                                    <input type="checkbox" name="sizes">
-                                                    <span>XS</span>
-                                                </label>
-                                            </div>
-                                            <div class="size-element">
-                                                <label class="size-option">
-                                                    <input type="checkbox" name="sizes">
-                                                    <span>XS</span>
-                                                </label>
-                                            </div>
+
+                                        <div id="size-container" class="size-column-body-1">
+<!--                                            <div class="size-element">-->
+<!--                                                <label class="size-option">-->
+<!--                                                    <input type="checkbox" name="sizes">-->
+<!--                                                    <span>XS</span>-->
+<!--                                                </label>-->
+<!--                                            </div>-->
+<!--                                            <div class="size-element">-->
+<!--                                                <label class="size-option">-->
+<!--                                                    <input type="checkbox" name="sizes">-->
+<!--                                                    <span>XS</span>-->
+<!--                                                </label>-->
+<!--                                            </div>-->
+<!--                                            <div class="size-element">-->
+<!--                                                <label class="size-option">-->
+<!--                                                    <input type="checkbox" name="sizes">-->
+<!--                                                    <span>XS</span>-->
+<!--                                                </label>-->
+<!--                                            </div>-->
+<!--                                            <div class="size-element">-->
+<!--                                                <label class="size-option">-->
+<!--                                                    <input type="checkbox" name="sizes">-->
+<!--                                                    <span>XS</span>-->
+<!--                                                </label>-->
+<!--                                            </div>-->
+<!--                                            <div class="size-element">-->
+<!--                                                <label class="size-option">-->
+<!--                                                    <input type="checkbox" name="sizes">-->
+<!--                                                    <span>XS</span>-->
+<!--                                                </label>-->
+<!--                                            </div>-->
                                         </div>
                                     </div>
+
                                     <div id="size-wrapper-col-2">
                                         <div id="size-stock-column">
                                             <div class="size-column-heading">
                                                 <label class="general-info-label">Stock</label>
                                             </div>
-                                            <div class="size-column-body-2">
-                                                <div class="size-stock-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter stock" disabled required />
-                                                </div>
-                                                <div class="size-stock-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter stock" disabled required />
-                                                </div>
-                                                <div class="size-stock-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter stock" disabled required />
-                                                </div>
-                                                <div class="size-stock-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter stock" disabled required />
-                                                </div>
-                                                <div class="size-stock-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter stock" disabled required />
-                                                </div>
+
+                                            <div id="stock-container" class="size-column-body-2">
+<!--                                                <div class="size-stock-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter stock" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-stock-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter stock" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-stock-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter stock" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-stock-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter stock" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-stock-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter stock" disabled required />-->
+<!--                                                </div>-->
                                             </div>
                                         </div>
+
                                         <div id="size-price-column">
                                             <div class="size-column-heading">
                                                 <label class="general-info-label">Price</label>
                                             </div>
-                                            <div class="size-column-body-2">
-                                                <div class="size-price-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter price" disabled required />
-                                                </div>
-                                                <div class="size-price-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter price" disabled required />
-                                                </div>
-                                                <div class="size-price-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter price" disabled required />
-                                                </div>
-                                                <div class="size-price-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter price" disabled required />
-                                                </div>
-                                                <div class="size-price-element">
-                                                    <input class="text-input-3 size-option-text-input" type="text"
-                                                           placeholder="Enter price" disabled required />
-                                                </div>
+                                            <div id="price-container" class="size-column-body-2">
+<!--                                                <div class="size-price-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter price" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-price-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter price" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-price-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter price" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-price-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter price" disabled required />-->
+<!--                                                </div>-->
+<!--                                                <div class="size-price-element">-->
+<!--                                                    <input class="text-input-3 size-option-text-input" type="text"-->
+<!--                                                           placeholder="Enter price" disabled required />-->
+<!--                                                </div>-->
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- </div> -->
                                 </div>
-
-
-
-
-
 
                             </div>
                         </div>
@@ -916,7 +842,7 @@
                 <input type="text" id="modal-phone-number" placeholder="Phone Number" />
                 <input type="text" id="modal-category-input" placeholder="Date of Birth" /> -->
                 <div class="modal-button-container">
-                    <button class="modal-button-1" id="save-btn">Save</button>
+                    <button class="modal-button-1" id="save-btn" type="submit">Save</button>
                     <button class="modal-button-1">Draft</button>
                     <button class="modal-button-1" id="modal-form-close">Cancel</button>
                 </div>
@@ -960,6 +886,8 @@
 <script src="/js/product-details-script-v2.js"></script>
 <script src="/js/product-details.js"></script>
 <script src="/js/product-details-add-item.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
 <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
