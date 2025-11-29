@@ -213,6 +213,8 @@ public class VariationsRetrievalService {
     public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
         Variation variation = variationsRepo.findByVariationName(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Variation not found with name: " + variationName));
+
+        logger.info("Returning '{}' variation option for option ID: {}", variationName, optionId);
         return variation.getOptions().stream()
                 .filter(opt -> opt.getId() == optionId)
                 .findFirst()

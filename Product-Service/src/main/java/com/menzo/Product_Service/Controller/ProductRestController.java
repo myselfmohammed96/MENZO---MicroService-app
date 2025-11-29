@@ -4,19 +4,26 @@ import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
 import com.menzo.Product_Service.Dto.ProductDto.*;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
 public class ProductRestController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductRestController.class);
 
     @Autowired
     private ProductsService productsService;
@@ -55,24 +62,46 @@ public class ProductRestController {
 
 
 
-//    @PostMapping(
-//            value = "/add-item",
-//            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-//    )
-//    public ResponseEntity<?> addProductItem(@RequestPart("newItem") NewProductItemDto newProductItem,
-//                                 @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
-//                                 @RequestPart("images") List<MultipartFile> images) throws IOException {
-//        if (images.size() > 9) {
-//            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
-//        }
-//        System.out.println(newProductItem);
-//        System.out.println(sizeDetails);
-//
-//        System.out.println(newProductItem.getColorId());
-//
-//        productsService.addNewProductItem(newProductItem, sizeDetails, images);
-//        return ResponseEntity.ok("successfully uploaded");
-//    }
+    //  Add new PRODUCT ITEM by 'product ID' - *** DONE ***
+    @PostMapping(
+            value = "/add-item",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<Map<String, Object>> addProductItem(@RequestPart("newItem") NewProductItemDto newProductItem,
+                                 @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
+                                 @RequestPart("images") List<MultipartFile> images) throws IOException {
+        //  validations
+        if (images.size() > 9) {
+            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+        }
+        System.out.println(newProductItem);
+        System.out.println(sizeDetails);
+        System.out.println(newProductItem.getColorId());
+
+        //  forwarding to service layer
+        ItemDetailsDto itemDetails = productsService.addNewProductItem(
+                newProductItem,
+                sizeDetails,
+                images
+        );
+
+        //  building response
+        Map<String, Object> responseBody = new HashMap<>();
+        if (itemDetails != null) {
+            logger.info("Product item saved successfully with super SKU: {}", itemDetails.getSuperSku());
+            responseBody.put("message", "Product item saved successfully");
+            responseBody.put("itemDetails", itemDetails);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(responseBody);
+        } else {
+            logger.warn("Product item saving failed");
+            responseBody.put("message", "Product item saving failed");
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
+        }
+    }
 
 
 

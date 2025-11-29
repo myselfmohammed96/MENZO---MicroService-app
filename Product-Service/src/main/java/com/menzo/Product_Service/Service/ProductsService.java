@@ -10,6 +10,8 @@ import com.menzo.Product_Service.Repository.*;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductsService.class);
 
     @Autowired
     private ProductsRepo productsRepo;
@@ -166,6 +170,7 @@ public class ProductsService {
      *
      *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
      *
+     *      *** DONE ***
      */
     @Transactional
     public ItemDetailsDto addNewProductItem(NewProductItemDto newProductItem,
@@ -174,6 +179,7 @@ public class ProductsService {
 
         //  --------- Data Pre-processing ---------
         //  getting PRODUCT, CATEGORY & SUB-CATEGORY by 'product ID'
+        logger.info("Add new item: Data pre-processing");
         Product product = productsRepo.findById(newProductItem.getProductId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + newProductItem.getProductId()));
 
@@ -218,6 +224,7 @@ public class ProductsService {
         List<ProductItem> savedItems = new ArrayList<>();
         List<ItemSizeDto> sizeDetailDtos = new ArrayList<>();
 
+        logger.info("Saving product items");
         for (SizeDetailsDto sizeDetail : sizeDetails) {
             ProductItem savedItem = saveNewItem(
                     product,
@@ -251,6 +258,7 @@ public class ProductsService {
 
         //  --------- returning ITEM DETAILS ---------
         //  get stockStatus & activeStatus
+        logger.info("Deriving stock & active status");
         long itemCount = savedItems.size();
         StockStatus stockStatus = productsRetrievalService.getStockStatus(
                 til,
@@ -275,6 +283,7 @@ public class ProductsService {
                 .map(image -> image.getImageUrl())
                 .toList();
 
+        logger.info("Returning item details for super SKU: {}", superSku);
         return ItemDetailsDto.builder()
                 .startingPrice(startingPrice.get())
                 .imageUrls(imageUrls)
@@ -290,7 +299,7 @@ public class ProductsService {
 
     ////    ********* Save methods *********
 
-    //  Save new PRODUCT to DB - TESTED
+    //  Save new PRODUCT to DB - TESTED - ### PENDING ###
     private Product saveNewProduct(
             NewProductDto newProductDto,
             ProductCategory subCategory) {
@@ -318,7 +327,7 @@ public class ProductsService {
     }
 
 
-    //  Save PRODUCT ITEMs
+    //  Save PRODUCT ITEMs - *** DONE ***
     @Transactional
     private ProductItem saveNewItem(Product product,
                                     String superSku,
@@ -359,31 +368,33 @@ public class ProductsService {
                 .isActive(isActive)
                 .build();
 
-        //  creating a list of PRODUCT & VARIATION CONFIGURATION for each PRDOUCT ITEM
+        ProductItem saved = productItemsRepo.save(item);
+
+        //  creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
         List<ProductConfiguration> configs = variations.stream()
                 .map(opt -> {
                     return ProductConfiguration.builder()
-                            .productItem(item)
+                            .productItem(saved)
                             .variationOption(opt)
                             .build();
-                }).toList();
+                }).collect(Collectors.toList());
 
         //  adding COLOR variation to 'configs' list
         configs.add(ProductConfiguration.builder()
-                .productItem(item)
+                .productItem(saved)
                 .variationOption(color)
                 .build()
         );
 
         //  adding SIZE variation to 'configs' list
         configs.add(ProductConfiguration.builder()
-                .productItem(item)
+                .productItem(saved)
                 .variationOption(size)
                 .build()
         );
-        item.setConfigurations(configs);
+        saved.setConfigurations(configs);
 
-        return productItemsRepo.save(item);
+        return productItemsRepo.save(saved);
     }
 
 
@@ -439,6 +450,7 @@ public class ProductsService {
                     .collect(Collectors.toList());
             return variationsRetrievalService.getOptionsByIds(idList);
         } else if (variationsMap == null && productConfigs != null) {
+            logger.info("Processing variations: config list");
 
             //  fetching the IDs of all 'size' & 'color' options available in DB
             List<Long> variationIds = new ArrayList<>(variationsRetrievalService.getOptionIdsByVariation("Size"));
@@ -462,10 +474,12 @@ public class ProductsService {
                                String colorAbbreviation,
                                String size) {
         if (superSku == null && size == null) {
+            logger.info("Generating super SKU");
             return subCategoryAbbreviation + "-" +
                     productId.toString() + "-" +
                     colorAbbreviation;
         } else if (subCategoryAbbreviation == null && productId == null && colorAbbreviation == null) {
+            logger.info("Generating SKU");
             return superSku + "-" +
                     size;
         } else return null;
@@ -504,6 +518,7 @@ public class ProductsService {
         Files.createDirectories(uploadDir);
 
         //  image processing
+        logger.info("Saving images for super SKU: {}", superSku);
         for (MultipartFile image : images) {
             String contentType = image.getContentType();
 
