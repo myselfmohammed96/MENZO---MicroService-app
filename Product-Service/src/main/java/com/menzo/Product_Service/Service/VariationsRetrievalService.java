@@ -208,6 +208,24 @@ public class VariationsRetrievalService {
                 .orElseThrow(() -> new EntityNotFoundException("No variation option found for Option ID: " + id));
     }
 
+    //  gets variation option by ID - with validating the variation name
+    //  used to get color option by ID - with validating that it is indeed a color option
+    public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
+        Variation variation = variationsRepo.findByVariationName(variationName)
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with name: " + variationName));
+        return variation.getOptions().stream()
+                .filter(opt -> opt.getId() == optionId)
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("'" +variationName + "' option not found with ID: " + optionId));
+//        return OptionDto.builder()
+//                .optionId(option.getId())
+//                .optionValue(option.getOptionValue())
+//                .variationId(variation.getId())
+//                .variationName(variation.getVariationName())
+//                .colorCode(option.getColorCode().getColorCode())
+//                .build();
+    }
+
     //  get options by variation ID - TESTED
     public List<OptionDto> getOptionsByVariationId(Long variationId) {
         Variation variation = variationsRepo.findById(variationId)

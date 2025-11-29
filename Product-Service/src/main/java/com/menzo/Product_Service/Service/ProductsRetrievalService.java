@@ -66,6 +66,7 @@ public class ProductsRetrievalService {
     }
 
 
+
     //  ********* Get all products listing with pagination & filtering *********
 
     public Page<ProductListingDto> getAdminAllProductListing(Integer page,
@@ -118,6 +119,7 @@ public class ProductsRetrievalService {
     }
 
 
+
     private String getSortValue(String sortRequest) {
         return switch (sortRequest) {
             case "latest" -> {
@@ -138,6 +140,7 @@ public class ProductsRetrievalService {
             default -> throw new IllegalArgumentException("Invalid sortRequest: " + sortRequest);
         };
     }
+
 
 
     //  ********* Get all items by product ID *********
@@ -165,7 +168,7 @@ public class ProductsRetrievalService {
                 .countryOfOrigin(countryOfOrigin.getCountryName())
                 .manufacturer(null)
                 .packer(null)
-                .productItems(productItems)
+                .productItems(productItems)     //  items list details
                 .build();
     }
 
@@ -191,7 +194,9 @@ public class ProductsRetrievalService {
             items.stream()
                     .filter(item -> superSku.equals(item.getSuperSku()))
                     .forEach(item -> {
-                        if (item.getIsActive()) statusFlag.incrementAndGet();
+                        if (item.getIsActive()) {
+                            statusFlag.incrementAndGet();
+                        }
                         stockSum.addAndGet(item.getQtyInStock());
 
                         if (color.length() == 0 && hexCode.length() == 0) {
@@ -225,7 +230,10 @@ public class ProductsRetrievalService {
                     .orElseThrow(() -> new EntityNotFoundException("No images found for super SKU: " + superSku));
 
             //  stock status calculation
-            StockStatus stockStatus = getStockStatus(til, stockSum.get() / itemCount);
+            StockStatus stockStatus = getStockStatus(
+                    til,
+                    stockSum.get() / itemCount
+            );
 
             //  building Item dto
             ItemListingDto item = ItemListingDto.builder()
@@ -243,7 +251,7 @@ public class ProductsRetrievalService {
     }
 
 
-    private StockStatus getStockStatus(long til, long currentStock) {
+    public StockStatus getStockStatus(long til, long currentStock) {
         if (currentStock >= til) {
             return StockStatus.IN_STOCK;
         } else if (currentStock > 0 && currentStock < til) {

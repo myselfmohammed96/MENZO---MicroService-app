@@ -141,6 +141,12 @@ class CategoriesRepoTest {
         );
     }
 
+    @Test
+    public void testFindParentByProductId() {
+        ParentCategoryView category = categoriesRepo.findParentByProductId(83L);
+        System.out.println(category.getId() + " - " + category.getCategoryName());
+    }
+
 
 
 //    ********* Sub-categories *********

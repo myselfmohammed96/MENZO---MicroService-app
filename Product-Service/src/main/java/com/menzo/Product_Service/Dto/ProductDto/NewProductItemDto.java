@@ -16,9 +16,9 @@ public class NewProductItemDto {
 
     private Long productId;
 
-    private String status;
-
     private  Long colorId;
+
+    private String status;
 
 //    private List<SizeDetailsDto> sizeDetails;
 

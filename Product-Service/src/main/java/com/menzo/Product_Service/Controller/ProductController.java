@@ -30,31 +30,33 @@ public class ProductController {
 
 
 
-    @PostMapping("/add-product-v2")
-    public String addProductV2(@ModelAttribute NewProductDto newProduct,
-                               @RequestParam Map<String, String> variationMap,
-                               @RequestParam("images") List<MultipartFile> images) throws IOException {
-        if(images.size() > 9) throw new IllegalArgumentException("You can upload a maximum of 9 images.");
-        System.out.println(newProduct);
-        System.out.println(newProduct.getSizeStockMap());
-
-
-        System.out.println(variationMap);
-
-        Product product = productsService.addNewProduct(newProduct, variationMap, images);
-        if (product == null) {
-            throw new RuntimeException("Product adding failed");
-        }
-
-//        List<VariationOption> list = productsService.processVariations(variationMap, null);
-//        System.out.println(list);
-//        String redirectUrl = UriComponentsBuilder
-//                .fromUriString("http://localhost:8080")
-//                .pathSegment("admin", "all-products")
-//                .toUriString();
-//        return "redirect:" + redirectUrl;
-        return "redirect:http://localhost:8080/index";
-    }
+//    @PostMapping("/add-product-v2")
+//    public String addProductV2(@ModelAttribute NewProductDto newProduct,
+//                               @RequestParam Map<String, String> variationMap,
+//                               @RequestParam("images") List<MultipartFile> images) throws IOException {
+//        if(images.size() > 9) {
+//            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+//        }
+//        System.out.println(newProduct);
+//        System.out.println(newProduct.getSizeStockMap());
+//
+//
+//        System.out.println(variationMap);
+//
+//        Product product = productsService.addNewProduct(newProduct, variationMap, images);
+//        if (product == null) {
+//            throw new RuntimeException("Product adding failed");
+//        }
+//
+////        List<VariationOption> list = productsService.processVariations(variationMap, null);
+////        System.out.println(list);
+////        String redirectUrl = UriComponentsBuilder
+////                .fromUriString("http://localhost:8080")
+////                .pathSegment("admin", "all-products")
+////                .toUriString();
+////        return "redirect:" + redirectUrl;
+//        return "redirect:http://localhost:8080/index";
+//    }
 
 
 //    @PostMapping("/add-product-item")
@@ -78,20 +80,6 @@ public class ProductController {
 //        return "redirect:" + redirectUrl;
 //    }
 
-    @PostMapping("/add-item")
-    public String addProductItem(@RequestPart("newItem") NewProductItemDto newProductItem,
-                                 @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
-                                 @RequestPart("images") List<MultipartFile> images) {
-        if (images.size() > 9) {
-            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
-        }
 
-        System.out.println(newProductItem);
-//        for (SizeDetailsDto sizes : newProductItem.getSizeDetails()) {
-//            System.out.println(sizes);
-//        }
-        System.out.println(sizeDetails);
-        return "redirect:http://localhost:8080/index";
-    }
 
 }

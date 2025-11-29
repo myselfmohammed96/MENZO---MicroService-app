@@ -35,7 +35,8 @@ public class CategoriesRetrievalService {
     private EntityManager entityManager;
 
 
-//    ********* Parent categories *********
+
+////    ********* Parent categories *********
 
     //  Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
     //  TESTED
@@ -56,6 +57,8 @@ public class CategoriesRetrievalService {
                     );
                 }).collect(Collectors.toList());
     }
+
+
 
     //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
     //  TESTED
@@ -87,6 +90,9 @@ public class CategoriesRetrievalService {
         }
         return new ArrayList<>(parentMap.values());
     }
+
+
+
 //    @Transactional
 //    public void getAllParentWithSub() {
 //        Session session = entityManager.unwrap(Session.class);
@@ -111,6 +117,9 @@ public class CategoriesRetrievalService {
 
     //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
     //  TESTED
+
+
+
     public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
         ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
@@ -122,6 +131,8 @@ public class CategoriesRetrievalService {
                 parentCategory.getCreatedAt()
         );
     }
+
+
 
     //  Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))  ---@RequestHeader("roles") String roles,
     //  TESTED
@@ -155,11 +166,21 @@ public class CategoriesRetrievalService {
         return parentMap.values().iterator().next();
     }
 
+
+
     //  Get parent category by sub category id
     //  TESTED
     public ParentCategoryView getParentBySubCategoryId(Long subCategoryId) {
         return categoriesRepo.findParentCategoryBySubId(subCategoryId);
     }
+
+
+
+    //  Get parent category by product ID
+    public ParentCategoryView getParentByProductId(Long productId) {
+        return categoriesRepo.findParentByProductId(productId);
+    }
+
 
 
 //    ********* Sub categories *********

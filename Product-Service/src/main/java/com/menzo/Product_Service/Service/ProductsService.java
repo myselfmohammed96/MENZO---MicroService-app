@@ -1,14 +1,17 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
-import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductItemDto;
+import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
+import com.menzo.Product_Service.Dto.ProductDto.*;
 import com.menzo.Product_Service.Entity.*;
+import com.menzo.Product_Service.Enum.ProductActiveStatus;
+import com.menzo.Product_Service.Enum.StockStatus;
 import com.menzo.Product_Service.Repository.*;
+
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.commons.fileupload.MultipartStream;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +55,17 @@ public class ProductsService {
     @Autowired
     private UtilityService utilityService;
 
+    @Autowired
+    private ProductsRetrievalService productsRetrievalService;
+
+    //  TARGET_INVENTORY_LEVEL
+    private static Long til;
+
+    @Value("#{'${target-inventory-level}'}")
+    public void setTil(String til) {
+        this.til = Long.valueOf(til);
+    }
+
 
     /*
      *   ******* Add new PRODUCT *******
@@ -75,66 +91,70 @@ public class ProductsService {
      *   Every 'sku'  ->  Unique to the PRODUCT ITEM
      *
      */
-    @Transactional
-    public Product addNewProduct(NewProductDto newProduct,
-                                 Map<String, String> variationMap,
-                                 List<MultipartFile> images) throws IOException {
-
-        //  Fetching sub-category
-        ParentCategoryDto parentCategory = categoriesRetrievalService
-                .getParentCategoryById(newProduct.getCategoryId());
-        ProductCategory subCategory = categoriesRetrievalService
-                .getSubCategoryById(newProduct.getSubCategoryId());
-        if (parentCategory == null) throw new IllegalArgumentException("Parent category cannot be null");
-        if (subCategory == null || subCategory.getParentCategoryId() == null)
-            throw new IllegalArgumentException("Invalid sub-category with ID: " +
-                    newProduct.getSubCategoryId() + " - must have a parent category");
-
-        //  Saving Product
-        Product savedProduct = saveNewProduct(
-                newProduct,
-                subCategory
-        );
-
-        // Processing Variation Options
-        List<VariationOption> variationOptionList = processVariations(variationMap, null);
-        if (variationOptionList == null) {
-            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
-        }
-
-        //  Saving Product Item
-        List<ProductItem> savedProductItems = saveNewProductItem(
-                newProduct.getSizeStockMap(),
-                variationOptionList,
-                subCategory,
-                savedProduct,
-                newProduct.getColor(),
-                newProduct.getPrice(),
-                newProduct.getStatus().equals("active")
-        );
-        if (savedProductItems.size() != newProduct.getSizeStockMap().size())
-            throw new RuntimeException("Number of (product items input) doesn't match (saved product items)");
-
-        String superSku = savedProductItems.stream().findFirst()
-                .map(item -> item.getSuperSku())
-                .orElseThrow(() -> new RuntimeException("Saved item doesn't have superSKU"));
-
-        //  saving images
-        List<ProductImage> savedImages = saveImages(
-                parentCategory.getCategoryName(),
-                subCategory.getCategoryName(),
-                savedProduct.getId(),
-                superSku,
-                savedProductItems,
-                images
-        );
-        if (savedProduct == null
-                || savedProductItems == null
-                || savedImages == null) {
-            throw new IOException("Error saving product");
-        }
-        return savedProduct;
-    }
+//    @Transactional
+//    public Product addNewProduct(NewProductDto newProduct,
+//                                 Map<String, String> variationMap,
+//                                 List<MultipartFile> images) throws IOException {
+//
+//        //  Fetching sub-category
+//        ParentCategoryDto parentCategory = categoriesRetrievalService       // ## validate - subcategory belongs to category
+//                .getParentCategoryById(newProduct.getCategoryId());
+//        ProductCategory subCategory = categoriesRetrievalService
+//                .getSubCategoryById(newProduct.getSubCategoryId());
+//        if (parentCategory == null)
+//            throw new IllegalArgumentException("Parent category cannot be null");
+//        if (subCategory == null || subCategory.getParentCategoryId() == null)
+//            throw new IllegalArgumentException("Invalid sub-category with ID: " +
+//                    newProduct.getSubCategoryId() + " - must have a parent category");
+//
+//        //  Saving Product
+//        Product savedProduct = saveNewProduct(
+//                newProduct,
+//                subCategory
+//        );
+//
+//        // Processing Variation Options
+//        List<VariationOption> variationOptionList = processVariations(
+//                variationMap,
+//                null
+//        );
+//        if (variationOptionList == null) {
+//            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
+//        }
+//
+//        //  Saving Product Item
+//        List<ProductItem> savedProductItems = saveNewProductItem(
+//                newProduct.getSizeStockMap(),
+//                variationOptionList,
+//                subCategory,
+//                savedProduct,
+//                newProduct.getColor(),
+//                newProduct.getPrice(),
+//                newProduct.getStatus().equals("active")
+//        );
+//        if (savedProductItems.size() != newProduct.getSizeStockMap().size())
+//            throw new RuntimeException("Number of (product items input) doesn't match (saved product items)");
+//
+//        String superSku = savedProductItems.stream().findFirst()
+//                .map(item -> item.getSuperSku())
+//                .orElseThrow(() -> new RuntimeException("Saved item doesn't have superSKU"));
+//
+//        //  saving images
+//        List<ProductImage> savedImages = saveImages(
+//                parentCategory.getCategoryName(),
+//                subCategory.getCategoryName(),
+//                savedProduct.getId(),
+//                superSku,
+//                savedProductItems,
+//                images
+//        );
+//        if (savedProduct == null
+//                || savedProductItems == null
+//                || savedImages == null) {
+//            throw new IOException("Error saving product");
+//        }
+//        return savedProduct;
+//    }
 
 
     /*
@@ -147,43 +167,128 @@ public class ProductsService {
      *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
      *
      */
-    public void addNewProductItem(ProductItemDto newProductItemDto,
-                                  Map<Long, Integer> sizeStockMap,
-                                  List<MultipartFile> images) {
+    @Transactional
+    public ItemDetailsDto addNewProductItem(NewProductItemDto newProductItem,
+                                            List<SizeDetailsDto> sizeDetails,
+                                            List<MultipartFile> images) throws IOException {
 
-        //  Product object processing
-        Product product = productsRepo.findById(newProductItemDto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + newProductItemDto.getProductId()));
-        newProductItemDto.setProduct(product);
+        //  --------- Data Pre-processing ---------
+        //  getting PRODUCT, CATEGORY & SUB-CATEGORY by 'product ID'
+        Product product = productsRepo.findById(newProductItem.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + newProductItem.getProductId()));
 
-        //  Sub category of product
+        ParentCategoryView category = categoriesRetrievalService.getParentByProductId(product.getId());
         ProductCategory subCategory = product.getCategory();
 
-        //  Processing Variation Options
-        List<VariationOption> variationOptionList = processVariations(
-                null,
-                product.getItems().stream()
-                        .findFirst()
-                        .orElseThrow(() -> new EntityNotFoundException("No Product items found in product with ID: " + product.getId()))
-                        .getConfigurations()
-        );
-        if (variationOptionList == null) {
-            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
+        //  getting list of PRODUCT_VARIATION_CONFIGURATION from 1st found 'productItem' of 'product'
+        List<ProductConfiguration> configs = product.getItems().get(0).getConfigurations();
+        if (configs == null || configs.isEmpty()) {
+            throw new EntityNotFoundException("Product doesn't have any Items");
         }
 
-        //  saving ProductItems
-        List<ProductItem> saveProductItems = saveNewProductItem(
-                sizeStockMap,
-                variationOptionList,
-                subCategory,
-                product,
-                newProductItemDto.getColorId(),
-                newProductItemDto.getPrice(),
-                newProductItemDto.isActive()
+        //  getting VARIATION OPTIONS - excluding 'color' & 'size'
+        List<VariationOption> variationOptionList = processVariations(
+                null,
+                configs
+        );
+        if (variationOptionList == null || variationOptionList.isEmpty()) {
+            throw new RuntimeException("Variations unavailable. Error while processing variationsMap.");
+        }
+
+        //  getting COLOR variation option by 'color ID'
+        VariationOption color = variationsRetrievalService.getOptionByIdAndVariationName(
+                newProductItem.getColorId(),
+                "Colors"
         );
 
+        //  generating SUPER SKU
+        String superSku = generateSKU(
+                null,
+                subCategory.getAbbreviation(),
+                product.getId(),
+                color.getColorCode().getColorAbbreviation(),
+                null
+        );
+
+        //  --------- saving PRODUCT ITEMS ---------
+        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
+        AtomicInteger statusFlag = new AtomicInteger(0);
+        AtomicInteger stockSum = new AtomicInteger(0);
+
+        List<ProductItem> savedItems = new ArrayList<>();
+        List<ItemSizeDto> sizeDetailDtos = new ArrayList<>();
+
+        for (SizeDetailsDto sizeDetail : sizeDetails) {
+            ProductItem savedItem = saveNewItem(
+                    product,
+                    superSku,
+                    sizeDetail,
+                    variationOptionList,
+                    color,
+                    newProductItem.getStatus().equalsIgnoreCase("active")
+            );
+            savedItems.add(savedItem);
+
+            if (savedItem.getPrice() < startingPrice.get()) {
+                startingPrice.set(savedItem.getPrice());
+            }
+            if (savedItem.getIsActive()) {
+                statusFlag.incrementAndGet();
+            }
+            stockSum.addAndGet(savedItem.getQtyInStock());
+
+            ItemSizeDto sizeDto = ItemSizeDto.builder()
+                    .itemId(savedItem.getId())
+                    .size(sizeDetail.getSizeValue())
+                    .sku(savedItem.getSKU())
+                    .qtyInStock(savedItem.getQtyInStock())
+                    .isActive(savedItem.getIsActive())
+                    .createdAt(savedItem.getCreatedAt())
+                    .build();
+
+            sizeDetailDtos.add(sizeDto);
+        }
+
+        //  --------- returning ITEM DETAILS ---------
+        //  get stockStatus & activeStatus
+        long itemCount = savedItems.size();
+        StockStatus stockStatus = productsRetrievalService.getStockStatus(
+                til,
+                stockSum.get() / itemCount
+        );
+
+        ProductActiveStatus activeStatus = statusFlag.get() == itemCount
+                ? ProductActiveStatus.ACTIVE
+                : statusFlag.get() == 0 ? ProductActiveStatus.INACTIVE
+                : ProductActiveStatus.PARTIAL;
+
+        List<ProductImage> savedImages = saveImages(
+                category.getCategoryName(),
+                subCategory.getCategoryName(),
+                product.getId(),
+                superSku,
+                savedItems,
+                images
+        );
+
+        List<String> imageUrls = savedImages.stream()
+                .map(image -> image.getImageUrl())
+                .toList();
+
+        return ItemDetailsDto.builder()
+                .startingPrice(startingPrice.get())
+                .imageUrls(imageUrls)
+                .sizeDetails(sizeDetailDtos)
+                .superSku(superSku)
+                .stockStatus(stockStatus)
+                .activeStatus(activeStatus)
+                .color(color.getOptionValue())
+                .hexCode(color.getColorCode().getColorCode())
+                .build();
     }
 
+
+    ////    ********* Save methods *********
 
     //  Save new PRODUCT to DB - TESTED
     private Product saveNewProduct(
@@ -213,88 +318,76 @@ public class ProductsService {
     }
 
 
-    //  Save multiple new PRODUCT ITEMs to DB - TESTED
+    //  Save PRODUCT ITEMs
     @Transactional
-    private List<ProductItem> saveNewProductItem(Map<Long, Integer> sizeStockMap,
-                                                 List<VariationOption> variations,
-                                                 ProductCategory subCategory,
-                                                 Product product,
-                                                 Long colorId,
-                                                 Float price,
-                                                 Boolean isActive) {
-        List<ProductItem> itemsList = new ArrayList<>();
+    private ProductItem saveNewItem(Product product,
+                                    String superSku,
+                                    SizeDetailsDto sizeDetail,
+                                    List<VariationOption> variations,
+                                    VariationOption color,
+                                    Boolean isActive) {
 
-        //  fetching color option by color ID
-        VariationOption color = variationsRetrievalService.getOptionById(colorId);
-
+        //  --------- Data Pre-processing ---------
         //  product object validation
-        if (product == null || product.getId() == null || product.getId() <= 0)
+        if (product == null || product.getId() == null || product.getId() <= 0) {
             throw new IllegalArgumentException("Product or productId required.");
+        }
 
-        //  generating super sku
-        String superSku = generateSKU(
-                null,
-                subCategory.getAbbreviation(),
-                product.getId(),
-                color.getColorCode().getColorAbbreviation(),
-                null
+        //  getting the 'size' by ID
+        VariationOption size = variationsRetrievalService.getOptionByIdAndVariationName(
+                sizeDetail.getSizeId(),
+                "Size"
         );
 
-        //  Looping size & stock map  ->  each loop creates one new PRODUCT ITEM with an individual size
-        for (Map.Entry<Long, Integer> e : sizeStockMap.entrySet()) {
-            VariationOption size = variationsRetrievalService.getOptionById(e.getKey());
+        // generating sku - concatenating super sku with size & next sequenced item ID
+        String sku = generateSKU(
+                superSku,
+                null,
+                null,
+                null,
+                size.getOptionValue()
+        );
 
-            // generating sku - concatenating super sku with size & next sequenced item ID
-            String sku = generateSKU(
-                    superSku,
-                    null,
-                    null,
-                    null,
-                    size.getOptionValue()
-            );
+        //  --------- saving Product Item ---------
+        //  creating new product item object
+        ProductItem item = ProductItem.builder()
+                .product(product)
+                .superSku(superSku)
+                .SKU(sku)
+                .price(sizeDetail.getSizePrice())
+                .qtyInStock(sizeDetail.getSizeStock())
+                .isActive(isActive)
+                .build();
 
-            //  creating new product item object
-            ProductItem item = ProductItem.builder()
-                    .product(product)
-                    .superSku(superSku)
-                    .SKU(sku)
-                    .price(price)
-                    .qtyInStock(e.getValue())
-                    .isActive(isActive)
-                    .build();
+        //  creating a list of PRODUCT & VARIATION CONFIGURATION for each PRDOUCT ITEM
+        List<ProductConfiguration> configs = variations.stream()
+                .map(opt -> {
+                    return ProductConfiguration.builder()
+                            .productItem(item)
+                            .variationOption(opt)
+                            .build();
+                }).toList();
 
-            //  Creating a list of PRODUCT & VARIATION CONFIGURATION for each PRODUCT ITEM
-            List<ProductConfiguration> config = variations.stream()
-                    .map(opt -> {
-                        return ProductConfiguration.builder()
-                                .productItem(item)
-                                .variationOption(opt)
-                                .build();
-                    })
-                    .collect(Collectors.toList());
+        //  adding COLOR variation to 'configs' list
+        configs.add(ProductConfiguration.builder()
+                .productItem(item)
+                .variationOption(color)
+                .build()
+        );
 
-            //  adding 'color' variation to 'config' list
-            config.add(ProductConfiguration.builder()
-                    .productItem(item)
-                    .variationOption(color)
-                    .build()
-            );
+        //  adding SIZE variation to 'configs' list
+        configs.add(ProductConfiguration.builder()
+                .productItem(item)
+                .variationOption(size)
+                .build()
+        );
+        item.setConfigurations(configs);
 
-            //  adding 'size' variation to 'config' list
-            config.add(ProductConfiguration.builder()
-                    .productItem(item)
-                    .variationOption(size)
-                    .build()
-            );
-            item.setConfigurations(config);
-            ProductItem savedItem = productItemsRepo.save(item);
-            itemsList.add(savedItem);
-        }
-        return itemsList;
+        return productItemsRepo.save(item);
     }
 
 
-    /// /    ********* Utility methods *********
+    ////    ********* Utility methods *********
 
     //  Country of origin - management - TESTED
     public Long addCountryOfOrigin(String countryName) {
@@ -315,8 +408,8 @@ public class ProductsService {
     //  provides the variation details of the product other than 'size' & 'color' variations
     //  ## no validation for if the optionIds in value is bound with the key data or not
     public List<VariationOption> processVariations(Map<String, String> variationsMap,
-                                                    List<ProductConfiguration> productConfig) {
-        if (variationsMap != null && productConfig == null) {
+                                                   List<ProductConfiguration> productConfigs) {
+        if (variationsMap != null && productConfigs == null) {
             Map<String, String> variations = variationsMap.entrySet().stream()
                     .filter(e -> !List.of(
                             "productName",
@@ -333,7 +426,6 @@ public class ProductsService {
                             "packer",
                             "categoryId",
                             "subCategoryId",
-
                             "size",
                             "discount",
                             "discount-type"
@@ -346,14 +438,14 @@ public class ProductsService {
                     .map(e -> Long.valueOf(e.getValue()))
                     .collect(Collectors.toList());
             return variationsRetrievalService.getOptionsByIds(idList);
-        } else if (variationsMap == null && productConfig != null) {
+        } else if (variationsMap == null && productConfigs != null) {
 
             //  fetching the IDs of all 'size' & 'color' options available in DB
             List<Long> variationIds = new ArrayList<>(variationsRetrievalService.getOptionIdsByVariation("Size"));
             variationIds.addAll(variationsRetrievalService.getOptionIdsByVariation("Colors"));
 
             //  getting the variation options of the product available in the ProductConfiguration table - other than 'size' & 'color'
-            return productConfig.stream()
+            return productConfigs.stream()
                     .filter(config -> !variationIds.contains(config.getVariationOption().getId()))
                     .map(config -> config.getVariationOption())
                     .collect(Collectors.toList());
@@ -381,7 +473,7 @@ public class ProductsService {
 
 
     //  save Images
-    private List<ProductImage> saveImages(String categoryName,              //  ### superSku pending
+    private List<ProductImage> saveImages(String categoryName,
                                           String subCategoryName,
                                           Long productId,
                                           String superSku,
@@ -389,13 +481,21 @@ public class ProductsService {
                                           List<MultipartFile> images) throws IOException {
 
         //  input validation
-        if (categoryName == null || subCategoryName == null)
+        if (categoryName == null || subCategoryName == null) {
             throw new IllegalArgumentException("Category and Sub-category names cannot be null");
-        if (productId == null) throw new IllegalArgumentException("Product ID cannot be null");
-        if (superSku == null || superSku.isEmpty()) throw new IllegalArgumentException("superSKU missing");
-        if (productItems == null || productItems.isEmpty())
+        }
+        if (productId == null) {
+            throw new IllegalArgumentException("Product ID cannot be null");
+        }
+        if (superSku == null || superSku.isEmpty()) {
+            throw new IllegalArgumentException("superSKU missing");
+        }
+        if (productItems == null || productItems.isEmpty()) {
             throw new IllegalArgumentException("Product items cannot be null");
-        if (images == null || images.isEmpty()) throw new IllegalArgumentException("Images are mandatory.");
+        }
+        if (images == null || images.isEmpty()) {
+            throw new IllegalArgumentException("Images are mandatory.");
+        }
 
         List<String> imagePaths = new ArrayList<>();
 

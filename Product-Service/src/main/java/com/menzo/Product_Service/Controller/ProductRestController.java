@@ -1,16 +1,17 @@
 package com.menzo.Product_Service.Controller;
 
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
-import com.menzo.Product_Service.Dto.ProductDto.ItemDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.*;
 import com.menzo.Product_Service.Service.ProductsRetrievalService;
 import com.menzo.Product_Service.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -51,6 +52,27 @@ public class ProductRestController {
         ItemDetailsDto itemDetails = productsRetrievalService.getItemDetails(superSku);
         return ResponseEntity.ok(itemDetails);
     }
+
+
+
+//    @PostMapping(
+//            value = "/add-item",
+//            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+//    )
+//    public ResponseEntity<?> addProductItem(@RequestPart("newItem") NewProductItemDto newProductItem,
+//                                 @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
+//                                 @RequestPart("images") List<MultipartFile> images) throws IOException {
+//        if (images.size() > 9) {
+//            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+//        }
+//        System.out.println(newProductItem);
+//        System.out.println(sizeDetails);
+//
+//        System.out.println(newProductItem.getColorId());
+//
+//        productsService.addNewProductItem(newProductItem, sizeDetails, images);
+//        return ResponseEntity.ok("successfully uploaded");
+//    }
 
 
 
