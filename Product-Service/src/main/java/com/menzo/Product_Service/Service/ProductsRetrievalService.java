@@ -300,6 +300,12 @@ public class ProductsRetrievalService {
                 .startingPrice(startingPrice.get() != Float.MAX_VALUE ? startingPrice.get() : null)
                 .imageUrls(imageUrls)
                 .sizeDetails(sizeDetails)
+
+//                .superSku()
+//                .stockStatus()
+//                .activeStatus()
+//                .color()
+//                .hexCode()
                 .build();
     }
 

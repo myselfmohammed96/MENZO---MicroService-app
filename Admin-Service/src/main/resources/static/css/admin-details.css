@@ -250,8 +250,25 @@
     max-height: 450px;
 }
 
+.item-list {
+    border: 1px solid transparent;
+}
+
+.item-list:hover {
+    background-color: #f1f1f1c3;
+}
+
+.item-list:active {
+    background-color: #fae9e5;
+    border: 1px solid #fce2dd;
+}
+
 .selected-item {
-    background-color: #e7e7e7c3;
+    background-color: #fae9e5;
+}
+
+.selected-item:hover {
+    background-color: #fae9e5;
 }
 
 .item-list-content {

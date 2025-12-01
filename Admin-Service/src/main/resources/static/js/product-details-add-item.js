@@ -3,25 +3,43 @@ const getSizes = "http://localhost:8080/variations/size";
 
 
 
-//  ********* colors & sizes *********
+//  ********* fetch methods *********
 
-//  fetch colors
+//  FETCH - colors
 const fetchColors = async () => {
     try {
         const response = await fetch(getColors, {
             method: "GET",
             credentials: "include"
         });
-        if(!response.ok) {
-            throw new Error('error fetching colors');
-        }
+        if(!response.ok) throw new Error('error fetching colors');
         return response.json();
     } catch (error) {
         console.error("colors fetching failed");
+        return null;
     }
 };
 
-//  populate colors
+//  FETCH - sizes
+const fetchSizes = async () => {
+    try {
+        const response = await fetch(getSizes, {
+            method: "GET",
+            credentials: "include"
+        });
+        if(!response.ok) throw new Error("Error fetching colors");
+        return response.json();
+    } catch (error) {
+        console.error("Failed fetching sizes");
+        return null;
+    }
+};
+
+
+
+//  ********* populating methods *********
+
+//  POPULATE - colors
 const populateColors = (colorOptions) => {
     const colorSelect = document.getElementById('color-select');
     colorSelect.innerHTML = '';
@@ -36,11 +54,10 @@ const populateColors = (colorOptions) => {
             "data-custom-properties",
             JSON.stringify({ hex: opt.colorCode })
         );
-
         colorSelect.appendChild(option);
     });
 
-    //  choice.js initialization
+    //  ------- choice.js initialization -------
     const choices = new Choices('#color-select', {
         callbackOnCreateTemplates: function(template) {
             return {
@@ -83,23 +100,7 @@ const populateColors = (colorOptions) => {
     document.getElementById('color-select')._choicesInstance = choices;
 };
 
-//  fetch sizes
-const fetchSizes = async () => {
-    try {
-        const response = await fetch(getSizes, {
-            method: "GET",
-            credentials: "include"
-        });
-        if(!response.ok) {
-            throw new Error("Error fetching colors");
-        }
-        return response.json();
-    } catch (error) {
-        console.error("Failed fetching sizes");
-    }
-};
-
-//  populate sizes
+//  POPULATE - sizes
 const populateSizes = (sizeOptions) => {
     const sizeContainer = document.getElementById('size-container');
     const stockContainer = document.getElementById('stock-container');
@@ -169,10 +170,10 @@ const populateSizes = (sizeOptions) => {
 
 
 
-//  ********* load modal *********
+//  ********* modal methods *********
 
+//  load modal
 const loadModal = async (formModal) => {
-
     if (formModal) {
         const colors = await fetchColors();
         populateColors(colors.options);
@@ -183,7 +184,6 @@ const loadModal = async (formModal) => {
         formModal.style.display = "flex";
     }
 }
-
 
 //  Modal toggle
 const toggleFormModal = (modalStatus) => {
@@ -197,8 +197,7 @@ const toggleFormModal = (modalStatus) => {
     }
 }
 
-
-//  size, stock & price details
+//  Get - size, stock & price details
 const getSizeDetails = () => {
     return [...document.querySelectorAll('input[name="sizes"]:checked')]
         .map(sizeCheckbox => {
@@ -232,7 +231,9 @@ const getSizeDetails = () => {
 
 
 
-//  ********* DOM Loading event *********
+//  ********* data loader - on page load *********
+
+//  DOM Loading event loader
 document.addEventListener("DOMContentLoaded", () => {
 
     //  Modal open
@@ -288,17 +289,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: formData
             });
 
-            if(response.ok) {
-                window.location.href = "/index";
-            } else {
+            if(!response.ok) {
                 console.error("Error submitting form");
+                return;
             }
+
         } catch (error) {
             console.error(error);
             alert("Form submission failed. Try again");
         }
     });
-
 
 
     //  ------- Image upload - FilePond -------
