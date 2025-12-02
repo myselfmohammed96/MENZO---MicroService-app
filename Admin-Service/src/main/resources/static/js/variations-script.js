@@ -89,19 +89,23 @@ const urls = {
 
 
     //  ******* Save new variation options *******
-    async function saveOption(name, variationId) {
+    async function saveOption(variationId, optionValue, hexCode = null) {
         try {
             const response = await fetch(urls.addNewOption, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ variationId: variationId, optionValue: name})
+                body: JSON.stringify({
+                    variationId: variationId,
+                    optionValue: optionValue,
+                    hexCode: hexCode
+                })
             });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
                 throw new Error(err.message || "Failed to save variation option");
             }
-            return await response;
+            return await response.json();
         } catch (error) {
             console.error("Save variation option error: ", error);
             alert("Failed to save variation option.");
@@ -175,8 +179,8 @@ const urls = {
                 if(index >= 0) priorities.push(variations.splice(index, 1)[0]);
             }
             //  add prioritised variations first then add the rest
-            priorities.forEach(v => addVariation(v.id, v.variationName));
-            variations.forEach(v => addVariation(v.id, v.variationName));
+            priorities.forEach(v => addVariation(v.variationId, v.variationName));
+            variations.forEach(v => addVariation(v.variationId, v.variationName));
         } catch (error) {
             console.error("Load Error: ", error);
             alert("Unable to load variations.");
@@ -205,23 +209,25 @@ const urls = {
         let buttonGroup = document.createElement("div");
         buttonGroup.classList.add("button-group");
 
-        let updateBtn = document.createElement("button");
-        updateBtn.classList.add("update-variation-btn");
-        updateBtn.textContent = "Edit";
-        updateBtn.onclick = async function (event) {
-            event.stopPropagation();
-            if(variationId) await openVariationModal(variationNamePara, variationId);
+        if (variationName != "Colors" && variationName != "Size") {
+            let updateBtn = document.createElement("button");
+            updateBtn.classList.add("update-variation-btn");
+            updateBtn.textContent = "Edit";
+            updateBtn.onclick = async function (event) {
+                event.stopPropagation();
+                if(variationId) await openVariationModal(variationNamePara, variationId);
+            }
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.classList.add("delete-variation-btn");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = async function (event) {
+                event.stopPropagation();
+                if (variationId) await deleteVariationHandler(variationId, accordion);
+            };
+
+            buttonGroup.append(updateBtn, deleteBtn);
         }
-
-        let deleteBtn = document.createElement("button");
-        deleteBtn.classList.add("delete-variation-btn");
-        deleteBtn.textContent = "Delete";
-        deleteBtn.onclick = async function (event) {
-            event.stopPropagation();
-            if (variationId) await deleteVariationHandler(variationId, accordion);
-        };
-
-        buttonGroup.append(updateBtn, deleteBtn);
         header.append(variationNamePara, buttonGroup);
 
         // Accordion content - options list of variation
@@ -238,7 +244,7 @@ const urls = {
         addOptionBtn.classList.add("add-option-btn");
         addOptionBtn.onclick = async function (event) {
             event.stopPropagation();
-            if(variationId) await openAddOptionModal(variationId);
+            if(variationId) await openAddOptionModal(variationId, variationName);
         };
 
         addOptionContainer.appendChild(addOptionBtn);
@@ -302,7 +308,7 @@ const urls = {
 
 
     // Add new option - UI functions
-    function addOption(optionId, optionValue, colorCode, variationName) {
+    function addOption(optionId, optionValue, hexCode, variationName) {
         let optionDiv = document.createElement("div");
         optionDiv.classList.add("option");
         optionDiv.dataset.id = optionId;
@@ -321,10 +327,10 @@ const urls = {
             if(variationName === "Colors") {
                 let colorIcon = document.createElement("div");
                 colorIcon.classList.add("color-icon");
-                colorIcon.style.backgroundColor = colorCode;
+                colorIcon.style.backgroundColor = hexCode;
 
                 let colorHex = document.createElement("p");
-                colorHex.textContent = colorCode;
+                colorHex.textContent = hexCode;
 
                 colorGroup.append(colorIcon, colorHex);
             }
@@ -385,20 +391,30 @@ const urls = {
 
 
         // Open Add Option modal
-        function openAddOptionModal(variationId = null) {
+        function openAddOptionModal(variationId = null, variationName = null) {
             const modal = document.getElementById("option-modal");
             const input = document.getElementById("option-modal-input");
             const saveBtn = document.getElementById("save-option-btn");
 
             document.getElementById("option-modal-title").textContent = "Add Option";
             input.value = "";
+
+            if (variationName === "Colors") {
+                const hexCodeInput = document.createElement('input');
+                hexCodeInput.type = "text";
+                hexCodeInput.classList.add('modal-input');
+                hexCodeInput.id = "hex-code-input";
+                hexCodeInput.placeholder = "Hex code";
+
+                input.insertAdjacentElement("afterend", hexCodeInput);
+            }
             modal.style.display = "flex";
 
             input.focus();
 
             saveBtn.onclick = async function (event) {
                 event.stopPropagation();
-                if (variationId) await saveAddOptionModal(variationId);
+                if (variationId) await saveAddOptionModal(variationId, variationName);
             }
         }
 
@@ -452,14 +468,17 @@ const urls = {
 
 
         // Save from Add option modal
-        async function saveAddOptionModal(variationId = null) {
-            const name = document.getElementById("option-modal-input").value.trim();
-            if (!name) return;
+        async function saveAddOptionModal(variationId = null, variationName = null) {
+            const optionValue = document.getElementById("option-modal-input").value.trim();
+            let hexCode;
+            if (variationName === "Colors") {
+                hexCode = document.getElementById("hex-code-input").value.trim();
+            }
+            if (!optionValue) return;
             try {
                 if (variationId) {
-                    const response = await saveOption(name, variationId);
-                    const savedSub = await response.json();
-                    const optionDiv = addOption(savedSub.variationId, name);
+                    const savedOption = await saveOption(variationId, optionValue, hexCode);
+                    const optionDiv = addOption(savedOption.optionId, optionValue, hexCode, variationName);
                     const parentAccordion = document.querySelector(`.accordion[data-id='${variationId}'] .accordion-content`);
                     if (parentAccordion) {
                         parentAccordion.appendChild(optionDiv);

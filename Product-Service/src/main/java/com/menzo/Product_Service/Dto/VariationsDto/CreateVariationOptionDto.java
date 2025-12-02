@@ -23,7 +23,7 @@ public class CreateVariationOptionDto {
     @NotNull(message = "Variation is required")
     private Long variationId;
 
-    private String colorCode;
+    private String hexCode;
 
     private Date createdAt;
 

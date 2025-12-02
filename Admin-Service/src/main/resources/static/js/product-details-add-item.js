@@ -289,9 +289,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: formData
             });
 
+
+            console.log("Statu : " + response.status);
+
             if(!response.ok) {
                 console.error("Error submitting form");
                 return;
+            }
+            const savedItemData = await response.json();
+
+            try {
+                window.handleSavedItemData(savedItemData);
+            } catch (error) {
+                console.error("Error populating saved item data.", error);
             }
 
         } catch (error) {

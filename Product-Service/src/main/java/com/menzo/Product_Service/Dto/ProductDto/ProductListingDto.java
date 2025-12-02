@@ -50,6 +50,6 @@ public class ProductListingDto {
 //
 //    private ProductActiveStatus activeStatus;
 //
-//    private String iconImage;
+    private String iconImage;
 
 }

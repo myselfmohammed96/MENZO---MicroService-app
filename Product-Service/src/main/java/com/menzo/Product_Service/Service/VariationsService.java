@@ -15,11 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Service
 public class VariationsService {
 
@@ -114,8 +109,8 @@ public class VariationsService {
         // saving Variation Option - with respect to 'COLOR' or 'NON-COLOR' variation
         VariationOption newVariationOption;
         if (variation.getVariationName().equals("Colors")) {
-            if (newOption.getColorCode() == null || newOption.getColorCode().isEmpty()) {
-                throw new IllegalArgumentException("Color code required.");
+            if (newOption.getHexCode() == null || newOption.getHexCode().isEmpty()) {
+                throw new IllegalArgumentException("Hex code for color option required.");
             }
             VariationOption option = VariationOption.builder()
                     .optionValue(newOption.getOptionValue())
@@ -132,7 +127,7 @@ public class VariationsService {
             );
             ColorCode colorCode = ColorCode.builder()
                     .colorOption(newVariationOption)
-                    .colorCode(newOption.getColorCode())
+                    .colorCode(newOption.getHexCode())
                     .colorAbbreviation(colorAbbreviation)
                     .build();
             newVariationOption.setColorCode(colorCode);

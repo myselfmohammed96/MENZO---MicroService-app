@@ -48,12 +48,13 @@ const renderProducts = (products) => {
             'INACTIVE': 'status-red',
             'PARTIALLY_ACTIVE': 'status-yellow'
         }[product.activeStatus] || '';
+        console.log("icon" + product.iconImage);
 
         const row = `
             <tr>
                 <td class="products-table-data">
                     <div class="product-content-wrapper">
-                        <img class="product-icon-img" src="http://localhost:8080/${product.iconImage}" alt="">
+                        <img class="product-icon-img" src="/${product.iconImage}" alt="">
                         <span class="product-text">${product.productName}</span>
                     </div>
                 </td>
@@ -64,7 +65,7 @@ const renderProducts = (products) => {
                     <span class="status-indicator ${statusColor}">${product.activeStatus.replace('_', ' ')}</span>
                 </td>
                 <td class="center-text action-buttons-column">
-                    <a class="action-btn action-view-btn" href="#">View</a>
+                    <a class="action-btn action-view-btn" href="/admin/product?id=${product.productId}">View</a>
                     <a class="action-btn action-delete-btn" href="#">Delete</a>
                 </td>
             </tr>
@@ -102,16 +103,11 @@ const renderPagination = (totalPages) => {
 
 //  load products
 const loadProducts = async () => {
-    console.log("currentSortParam: ", currentSortParam);
-    console.log("currentRequestDto: ", currentRequestDto);
-//    console.log("currentPage: ", currentPage);
-//    console.log("pageSize: ", pageSize);
     try {
         const result = await fetchProducts(currentSortParam, currentRequestDto, currentPage);
         if (!result) return;
         renderProducts(result.content);
-//        console.log("total => ", result.page.totalPages)
-        renderPagination(result.page.totalPages);
+        renderPagination(result.totalPages);
     } catch(error) {
         console.error("Failed to load products: ", error);
     }

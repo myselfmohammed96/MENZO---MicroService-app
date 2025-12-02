@@ -160,7 +160,7 @@ const populateProductDetails = (productDetails) => {
 
 //  POPULATE - items list
 let itemCount = 1;
-const populateItemsList = (item, itemSelected) => {
+const populateItemsList = (item, itemSelected = false) => {
     const itemList = document.createElement('div');
     itemList.classList.add('item-list');
     if(itemCount === 1) {
@@ -484,7 +484,7 @@ const changeItemDetails = async (superSku) => {
 //  handle newly saved item data
 window.handleSavedItemData = (savedItem) => {
     if (!savedItem || !savedItem.superSku) {
-        console.error("Product save failed: invalid server response");
+        console.error("Invalid response from server: saved item data or superSku missing.");
         return;
     }
     const itemListData = {

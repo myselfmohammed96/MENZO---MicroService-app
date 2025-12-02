@@ -84,6 +84,7 @@ public class ProductRestController {
                 sizeDetails,
                 images
         );
+        System.out.println("Saved item:\n" + itemDetails);
 
         //  building response
         Map<String, Object> responseBody = new HashMap<>();
@@ -91,12 +92,14 @@ public class ProductRestController {
             logger.info("Product item saved successfully with super SKU: {}", itemDetails.getSuperSku());
             responseBody.put("message", "Product item saved successfully");
             responseBody.put("itemDetails", itemDetails);
+            System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(responseBody);
         } else {
             logger.warn("Product item saving failed");
             responseBody.put("message", "Product item saving failed");
+            System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(responseBody);

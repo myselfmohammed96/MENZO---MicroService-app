@@ -6,12 +6,9 @@ import com.menzo.Product_Service.Dto.VariationsDto.OptionDto;
 import com.menzo.Product_Service.Dto.VariationsDto.VariationDto;
 import com.menzo.Product_Service.Entity.Variation;
 import com.menzo.Product_Service.Entity.VariationOption;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class VariationsServiceTest {
@@ -57,7 +54,7 @@ class VariationsServiceTest {
     public void testAddNewOption() {
         CreateVariationOptionDto newOption = CreateVariationOptionDto.builder()
                 .optionValue("Peach")
-                .colorCode("#FFE5B4")
+                .hexCode("#FFE5B4")
                 .variationId(3L)
                 .build();
         VariationOption addedOption = variationsService.addNewOption(newOption);
