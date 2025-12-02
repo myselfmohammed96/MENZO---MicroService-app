@@ -295,7 +295,7 @@ const urls = {
             const options = await response.json();
 
             options.forEach(opt => {
-                const optionDiv = addOption(opt.id, opt.optionValue, opt.colorCode, opt.variationName);
+                const optionDiv = addOption(opt.optionId, opt.optionValue, opt.colorCode, opt.variationName);
                 content.appendChild(optionDiv);
             });
             return content;
@@ -344,17 +344,15 @@ const urls = {
         let optionEditBtn = document.createElement("button");
         optionEditBtn.classList.add("update-variation-btn");
         optionEditBtn.textContent = "Edit";
-        optionEditBtn.onclick = async function (event) {
-            event.stopPropagation();
-            if(optionId) await openEditOptionModal(optionPara, optionId);
+        optionEditBtn.onclick = function (event) {
+            if(optionId) openEditOptionModal(optionPara, optionId);
         }
 
         let optionDeleteBtn = document.createElement("button");
         optionDeleteBtn.classList.add("delete-variation-btn");
         optionDeleteBtn.textContent = "Delete";
-        optionDeleteBtn.onclick = async function (event) {
-            event.stopPropagation();
-            if(optionId) await deleteOptionHandler(optionId, optionDiv);
+        optionDeleteBtn.onclick = function (event) {
+            if(optionId) deleteOptionHandler(optionId, optionDiv);
         }
 
         optionBtnGroup.append(optionEditBtn, optionDeleteBtn);
@@ -422,16 +420,16 @@ const urls = {
 
         // Open Edit option modal
         function openEditOptionModal(paraEl = null, optionId = null) {
+            console.log("in open edit option modal");
+
             const modal = document.getElementById("option-modal");
             const input = document.getElementById("option-modal-input");
             const saveBtn = document.getElementById("save-option-btn");
 
             document.getElementById("option-modal-title").textContent = "Edit Option";
             input.value = paraEl.textContent;
-            modal.style.display = "flex";
-
             input.focus();
-
+console.log("added stuff in the edit modal");
             saveBtn.onclick = async function (event) {
                 event.stopPropagation();
                 const name = document.getElementById("option-modal-input").value.trim();
@@ -439,6 +437,8 @@ const urls = {
                 if (!name) return;
                 if (optionId) await saveEditOptionModal(paraEl, name, optionId);
             }
+            console.log("flexing edit modal");
+            modal.style.display = "flex";
         }
 
 
