@@ -61,6 +61,52 @@ public class ProductRestController {
     }
 
 
+    //  Add PRODUCT
+    @PostMapping(
+            value = "/add-product",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<?> addProduct(@RequestPart("productDetails") NewProductDto productDetails,
+                                        @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
+                                        @RequestPart("variationDetails") Map<String, String> variationDetailsMap,
+                                        @RequestPart("images") List<MultipartFile> images) throws IOException {
+        if (images.size() > 9) {
+            throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+        }
+        System.out.println(productDetails);
+        System.out.println(sizeDetails);
+        System.out.println(variationDetailsMap);
+
+        images.stream().forEach(image -> System.out.println(image.getOriginalFilename()));
+
+        Long savedProductId = productsService.addNewProduct(
+                productDetails,
+                sizeDetails,
+                variationDetailsMap,
+                images
+        );
+        System.out.println("saved Product ID: " + savedProductId);
+
+        //  building response
+        Map<String, Object> responseBody = new HashMap<>();
+        if (savedProductId != null && savedProductId > 0) {
+            logger.info("Product saved successfully with ID: {}", savedProductId);
+            responseBody.put("message", "Product saved successfully");
+            responseBody.put("productId", savedProductId);
+            System.out.println(responseBody);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(responseBody);
+        } else {
+            logger.warn("Product saving failed");
+            responseBody.put("message", "Product saving failed");
+            System.out.println(responseBody);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
+        }
+    }
+
 
     //  Add new PRODUCT ITEM by 'product ID' - *** DONE ***
     @PostMapping(
@@ -68,8 +114,8 @@ public class ProductRestController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Map<String, Object>> addProductItem(@RequestPart("newItem") NewProductItemDto newProductItem,
-                                 @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
-                                 @RequestPart("images") List<MultipartFile> images) throws IOException {
+                                                              @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
+                                                              @RequestPart("images") List<MultipartFile> images) throws IOException {
         //  validations
         if (images.size() > 9) {
             throw new IllegalArgumentException("You can upload a maximum of 9 images.");
@@ -105,7 +151,6 @@ public class ProductRestController {
                     .body(responseBody);
         }
     }
-
 
 
     //  Get all products with pagination for listing - for Admin-Service (/admin/all-products)
@@ -144,14 +189,6 @@ public class ProductRestController {
 //    }
 
 
-
-
-
-
-
-
-
-
     //  Get all productItems by product id, with pagination for listing - for Admin-Service
 //    @GetMapping("/product-items")
 //    public ResponseEntity<Page<ItemListingDto>> getAllProductItemsByProductIdWithPagination(@RequestParam("id") Long productId,
@@ -180,13 +217,6 @@ public class ProductRestController {
 //        Optional<ProductItem> p = productsRetrievalService.getProductItemDetailsById(itemId);
 //        return ResponseEntity.ok(p);
 //    }
-
-
-
-
-
-
-
 
 
 //    @GetMapping("/uploads/**")

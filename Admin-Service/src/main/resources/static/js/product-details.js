@@ -500,6 +500,7 @@ window.handleSavedItemData = (savedItem) => {
 
     itemDetailsMap.set(savedItem.superSku, savedItem);
     changeItemDetails(savedItem.superSku);
+    return;
 }
 
 

@@ -1,257 +1,220 @@
 const getCategories = "http://localhost:8080/categories/get-all-parents";
 const getSubCategories = "http://localhost:8080/categories/get-all-sub";
 const getVariations = "http://localhost:8080/variations/get-variations";
+const getColors = "http://localhost:8080/variations/colors";
+const getSizes = "http://localhost:8080/variations/size";
+
+let subCategoryChoices;
+let colorChoices;
+
+let variationsSpace;
 
 
 
-document.addEventListener('DOMContentLoaded', async () => {
+//  ********* FETCH methods *********
 
-//console.log("Hello");
+//  FETCH - categories
+async function fetchCategories() {
+    try {
+        const response = await fetch(getCategories, {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) {
+            throw new Error("Error fetching categories: ", response.status);
+        }
+        return await response.json();
+    } catch (error) {
+        console.log("Fetching categories failed: ", error);
+    }
+}
 
-    const categorySelect = document.getElementById('category-select');
-    const subCategorySelect = document.getElementById('sub-category-select');
-    const secondColumn = document.getElementById('product-info-col-2');
-    const variationsSpace = document.getElementById('variations-space');
-    let variationsFieldSet;
-    let subCategoryChoices;
+//  FETCH - sub-categories
+async function fetchSubCategories(categoryId) {
+    try {
+        const response = await fetch(`${getSubCategories}?id=${categoryId}`, {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) {
+            throw new Error("Error fetching sub-categories: ", response.status);
+        }
+        return await response.json();
+    } catch (error) {
+        console.log("Fetching sub-categories failed: ", error);
+    }
+}
+
+//  FETCH - variations
+async function fetchVariations(subCategoryId) {
+    try {
+        const response = await fetch(`${getVariations}?id=${subCategoryId}`, {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) {
+            throw new Error("Error fetching variations: ", response.status);
+        }
+        return await response.json();
+    } catch (error) {
+        console.log("Fetching variations failed: ", error);
+    }
+}
+
+//  FETCH - colors
+async function fetchColors() {
+    try {
+        const response = await fetch(getColors, {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) {
+            throw new Error("Error fetching colors");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Fetching colors failed: ", error);
+    }
+}
+
+//  FETCH - sizes
+async function fetchSizes() {
+    try {
+        const response = await fetch(getSizes, {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) {
+            throw new Error("Error fetching sizes");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Fetching sizes failed: ", error);
+    }
+}
 
 
 
-    //    ********* load categories *********
+//  ********* POPULATE - methods *********
 
-    //  fetch & load categories
-    async function loadCategories() {
-        try{
-            const response = await fetch(getCategories, {
-                method: "GET",
-                credentials: "include"
-            });
-            console.log("Categories loaded");
-            if(!response.ok) {
-                throw new Error(`HTTP error ${response.status}`);
+//  POPULATE - categories
+function populateCategories(categories = []) {
+    try {
+        if (categories.length === 0) {
+            throw new Error("Invalid data: categories should not be empty");
+        }
+        const categorySelect = document.getElementById('category-select');
+        categories.forEach(cat => {
+            if (cat && cat.id !== undefined && cat.categoryName) {
+                const categoryOption = document.createElement('option');
+                categoryOption.value = cat.id;
+                categoryOption.textContent = cat.categoryName;
+
+                categorySelect.appendChild(categoryOption);
+            } else {
+                console.warn("Skipping invalid categories: ", cat);
             }
-            const categories = await response.json();
-            if (!Array.isArray(categories)) throw new Error("Invalid data format: categories should be array");
-            categories.forEach(cat => {
-                if (cat && cat.id !== undefined && cat.categoryName) {
-                    addCategorySelect(cat.id, cat.categoryName);
-                } else {
-                    console.warn("Skipping invalid categories: ", cat);
-                }
-            });
+        });
+        initializeCategoriesChoices();
 
-            initializeCategoriesChoices();
+        //  category select - event listener (to trigger sub-categories loading)
+        categorySelect.addEventListener('change', async () => {
+            const selectedCategoryId = categorySelect.value;
+            if (!selectedCategoryId) return;
+            await loadSubCategories(selectedCategoryId);        // ## is await needed here?
 
-        } catch (error) {
-            console.error("Load Error: ",error);
-//            alert("Unable to load categories. Please try again.");
-        }
+            variationsSpace.innerHTML = '';
+        });
+    } catch (error) {
+        console.error("Category populate error: ", error);
     }
+}
 
-
-    //  populate category select
-    function addCategorySelect(id, categoryName) {
-        try {
-            const categoryOption = document.createElement('option');
-            categoryOption.value = id;
-            categoryOption.textContent = categoryName;
-            categorySelect.appendChild(categoryOption);
-        } catch (error) {
-            console.error("Category Option Add Error: ", error);
-        }
-    }
-
-
-    //  initialize category select
-    function initializeCategoriesChoices() {
-        try {
-            new Choices('#category-select', {
-                placeholder: true,
-                placeholderValue: 'Category',
-                searchEnabled: true,
-                searchPlaceholderValue: 'Search category...',
-                shouldSort: true
-            });
-        } catch (error) {
-            console.error("Choices Initialization Error: ", error);
-//            alert("Unable to initialize categories selector.");
-        }
-    }
-
-
-    //  eventListener on category select - to trigger load sub-categories
-    categorySelect.addEventListener('change',async () => {
-        const categoryId = categorySelect.value;
-
+//  POPULATE - sub-categories
+function populateSubCategories(subCategories = []) {
+    try {
+//        if (subCategories.length === 0) {
+//            throw new Error("Invalid data: sub-categories should not be empty");
+//        }
+        const subCategorySelect = document.getElementById('sub-category-select');
         subCategorySelect.innerHTML = '';
-        variationsSpace.innerHTML = '';
         if(subCategoryChoices) {
             subCategoryChoices.removeActiveItems();
             subCategoryChoices.clearChoices();
             subCategoryChoices.disable();
         }
-        if (!categoryId) return;
 
-        await loadSubCategories(categoryId);
-        subCategoryChoices.enable();
-        console.log("Categories changed");
-    });
+        subCategories.forEach(sub => {
+            if (sub && sub.id !== undefined && sub.categoryName) {
+                const subOption = document.createElement('option');
+                subOption.value = sub.id;
+                subOption.textContent = sub.categoryName;
 
-
-
-    //    ********* load sub-categories *********
-
-    //  fetch & load sub-categories by category ID
-    async function loadSubCategories(categoryId) {
-        try {
-            const response = await fetch(`${getSubCategories}?id=${categoryId}`, {
-                method: "GET",
-                credentials: "include"
-            });
-            if(!response.ok) {
-                throw new Error(`HTTP error ${response.status}`);
+                subCategorySelect.appendChild(subOption);
+            } else {
+                console.warn("Skipping invalid sub-categories: ", sub);
             }
-            const subCategories = await response.json();
-
-            if (!Array.isArray(subCategories)) {
-                throw new Error("Invalid subcategory format");
-            }
-            subCategories.forEach(sub => {
-                if(sub && sub.id !== undefined && sub.categoryName) {
-                    addSubCategorySelect(sub.id, sub.categoryName);
-                } else {
-                    console.warn("Skipping invalid sub categories: ", sub)
-                }
-            });
-            subCategoryChoices.setChoices([...subCategorySelect.options], 'value', 'text', true);
-//            subCategoryChoices.enable();
-            console.log("Sub-categories loaded");
-        } catch (error) {
-            console.error("Sub-category Load Error: ", error);
-//            alert("Unable to load sub-categories. Please try again.");
-        }
-    }
-
-
-    //  populate sub-category select
-    function addSubCategorySelect(id, subCategoryName) {
-        try {
-            const subOption = document.createElement('option');
-            subOption.value = id;
-            subOption.textContent = subCategoryName;
-            subCategorySelect.appendChild(subOption)
-        } catch (error) {
-            console.error("Sub Category Option Add Error: ", error);
-        }
-    }
-
-
-    //  initialize sub-category select
-    function initializeSubCategoriesChoices() {
-        try {
-            subCategorySelect.removeAttribute('disabled');
-            document.querySelector('#sub-category-select').parentElement.classList.remove('select-disabled');
-
-            subCategoryChoices = new Choices('#sub-category-select', {
-                placeholder: true,
-                placeholderValue: 'Sub-category',
-                searchEnabled: true,
-                searchPlaceholderValue: 'Search sub-category...',
-                shouldSort: true
-            });
-
-        } catch (error) {
-            console.error("Sub Category Choices Initialization Error: ", error);
-            alert("Unable to initialize sub categories selector.");
-        }
-    }
-
-
-    //  eventListener on sub-category select - to trigger load variations
-    subCategorySelect.addEventListener('change', async () => {
-            const subCategoryId = subCategorySelect.value;
-
-            variationsSpace.innerHTML = '';
-            variationsFieldSet = document.createElement('fieldset');
-            variationsFieldSet.id = "variations-fieldset";
-            const legend = document.createElement('legend');
-            legend.textContent = "Variations";
-
-            variationsFieldSet.appendChild(legend);
-            variationsSpace.appendChild(variationsFieldSet);
-
-//            variationsFieldSet.innerHTML = '';
-            if(!subCategoryId) return;
-
-            loadVariations(subCategoryId);
-            console.log("Sub-categories changed");
         });
+        subCategoryChoices.setChoices(
+            [...subCategorySelect.options],
+            'value',
+            'text',
+            true
+        );
+        subCategoryChoices.enable();
 
-    initializeSubCategoriesChoices();
-    subCategoryChoices.disable();
-    await loadCategories();
+        //  sub-category select - event listener (to trigger variations loading)
+        subCategorySelect.addEventListener('change', async () => {
+            const selectedSubCategoryId = subCategorySelect.value;
+            if (!selectedSubCategoryId) return;
 
-
-
-    //    ********* load variations *********
-
-    //  fetch and load variations by sub-category ID
-    async function loadVariations(subCategoryId) {
-        try {
-            const response = await fetch(`${getVariations}?id=${subCategoryId}`, {
-                method: "GET",
-                credentials: "include"
-            });
-            if(!response.ok) throw new Error("Error fetching variations: ", response.status);
-
-            const variations = await response.json();
-            if(!Array.isArray(variations)) throw new Error("Invalid variation format");
-
-            populateVariations(variations);
-            console.log("variations loaded");
-        } catch (error) {
-            console.error("Variation Load Error", error);
-            alert("Unable to load variations. Please try again");
-        }
+            loadVariations(selectedSubCategoryId);
+        });
+    } catch (error) {
+        console.error("Sub-category populate error: ", error);
     }
+}
 
+//  POPULATE - variations
+function populateVariations(variations = []) {
+    try {
+        variationsSpace.innerHTML = '';
 
-    //  populate variations & options in fieldset
-    function populateVariations(variations) {
-//        const legend = document.createElement('legend');
-//        legend.textContent = "Variations";
-//        variationsFieldSet.appendChild(legend);
+        if (variations.length === 0) {
+            throw new Error("Invalid data: variations should not be empty");
+        }
+        const variationsFieldSet = document.createElement('fieldset');
+        variationsFieldSet.id = "variations-fieldset";
+
+        const legend = document.createElement('legend');
+        legend.textContent = "Variations";
+
+        variationsFieldSet.appendChild(legend);
+        variationsSpace.appendChild(variationsFieldSet);
 
         variations.forEach(variation => {
-            if(variation && variation.variationName && Array.isArray(variation.options)) {
+            if (variation && variation.variationName && Array.isArray(variation.options)) {
                 const label = document.createElement('label');
                 label.classList.add("general-info-label");
                 label.textContent = variation.variationName + ':';
 
                 //  create select for variation
                 const select = document.createElement('select');
-//                select.name = variation.variationName;
+                select.classList.add('custom-select', 'variation-select');
                 select.name = `variation.${variation.variationName}`
                 select.required = true;
-
-//                const placeholderOption = document.createElement('option');
-//                placeholderOption.value = '';
-//                placeholderOption.textContent = `Select ${variation.variationName}`;
-//                placeholderOption.disabled = true;
-//                placeholderOption.selected = true;
-//                select.appendChild(placeholderOption);
 
                 //  populating options
                 variation.options.forEach(option => {
                     const optionElement = document.createElement('option');
-                    optionElement.value = option.id;
+                    optionElement.value = option.optionId;
                     optionElement.textContent = option.optionValue;
                     select.appendChild(optionElement);
                 });
                 label.appendChild(select);
                 variationsFieldSet.appendChild(label);
 
-                //  initialize Choice.js for variation select
+                //  initialize Choices.js for variation select
                 new Choices(select, {
                     placeholder: true,
                     placeholderValue: variation.variationName,
@@ -264,48 +227,296 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.warn("Skipping invalid variation: ", variation);
             }
         });
+    } catch (error) {
+        console.error("Variations populate error: ", error);
     }
+}
 
+//  POPULATE - colors
+function populateColors(colorOptions) {
+    const colorSelect = document.getElementById('color-select');
+    colorSelect.innerHTML = '';
 
+    if(!colorOptions || !Array.isArray(colorOptions)) return;
 
-
-
-
-
-
-
-
-
-
-    //    Color variation - select
-    function initializeColorsChoices() {
-        try {
-            new Choices('#colors', {
-                placeholder: true,
-                placeholderValue: "Color",
-                searchEnabled: true,
-                searchPlaceholderValue: "Search color...",
-                shouldSort: true
-            });
-        } catch (error) {
-            console.error("Color choice initialization error", error);
-        }
-    }
-    initializeColorsChoices();
-
-
-
-    //    ******* Size & stock - check box & text mapping *******
-
-    document.querySelectorAll('.size-wrapper').forEach(size => {
-        size.querySelector('.size-checkbox').addEventListener('change', (e) => {
-            size.querySelector('.text-input-2').disabled = !e.target.checked;
-        });
+    colorOptions.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.optionId;
+        option.textContent = opt.optionValue;
+        option.setAttribute(
+            "data-custom-properties",
+            JSON.stringify({ hex: opt.colorCode })
+        );
+        colorSelect.appendChild(option);
     });
 
+    document.getElementById('color-select')._choicesInstance = initializeColorsChoices();
+}
+
+//  POPULATE - sizes
+function populateSizes(sizeOptions) {
+    const sizeContainer = document.getElementById('size-container');
+    const stockContainer = document.getElementById('stock-container');
+    const priceContainer = document.getElementById('price-container');
+
+    sizeContainer.innerHTML = '';
+    stockContainer.innerHTML = '';
+    priceContainer.innerHTML = '';
+
+    sizeOptions.forEach(size => {
+
+        //  ------- SIZE CHECKBOX -------
+        const sizeElement = document.createElement('div');
+        sizeElement.classList.add('size-element');
+
+        const sizeOption = document.createElement('label');
+        sizeOption.classList.add('size-option');
+
+        const sizeInput = document.createElement('input');
+        sizeInput.type = 'checkbox';
+        sizeInput.name = 'sizes';
+        sizeInput.setAttribute("data-id", size.optionId);
+
+        const sizeSpan = document.createElement('span');
+        sizeSpan.textContent = size.optionValue;
+
+        sizeOption.append(sizeInput, sizeSpan);
+        sizeElement.appendChild(sizeOption);
+        sizeContainer.appendChild(sizeElement);
+
+        //  ------- STOCK INPUT -------
+        const stockElement = document.createElement('div');
+        stockElement.classList.add('size-stock-element');
+
+        const stockInput = document.createElement('input');
+        stockInput.classList.add('text-input-3', 'size-option-text-input');
+        stockInput.type = 'text';
+        stockInput.placeholder = "Enter stock";
+        stockInput.setAttribute('data-id', size.optionId);
+        stockInput.disabled = true;
+
+        stockElement.appendChild(stockInput);
+        stockContainer.appendChild(stockElement);
+
+        //  ------- PRICE INPUT -------
+        const priceElement = document.createElement('div');
+        priceElement.classList.add('size-price-element');
+
+        const priceInput = document.createElement('input');
+        priceInput.classList.add('text-input-3', 'size-option-text-input');
+        priceInput.type = 'text';
+        priceInput.placeholder = "Enter price";
+        priceInput.setAttribute('data-id', size.optionId);
+        priceInput.disabled = true;
+
+        priceElement.appendChild(priceInput);
+        priceContainer.appendChild(priceElement);
+
+        //  ------- ENABLE / DISABLE ON CHECK -------
+        sizeInput.addEventListener('change', () => {
+            const isChecked = sizeInput.checked;
+            stockInput.disabled = !isChecked;
+            priceInput.disabled = !isChecked;
+        });
+    });
+}
 
 
-    //  ******* Image adding - FilePond *******
+
+//  ********* CHOICES.JS INITIALIZATION *********
+
+//  INITIALIZE - category select
+function initializeCategoriesChoices() {
+    try {
+        new Choices('#category-select', {
+            placeholder: true,
+            placeholderValue: 'Category',
+            searchEnabled: true,
+            searchPlaceholderValue: 'Search category...',
+            shouldSort: true
+        });
+    } catch (error) {
+        console.error("Choices Initialization Error: ", error);
+        return;
+    }
+}
+
+//  INITIALIZE - sub-category select
+function initializeSubCategoriesChoices() {
+    try {
+//        subCategorySelect.removeAttribute('disabled');
+//        document.querySelector('#sub-category-select').parentElement.classList.remove('select-disabled');
+
+        const choices = new Choices('#sub-category-select', {
+            placeholder: true,
+            placeholderValue: 'Sub-category',
+            searchEnabled: true,
+            searchPlaceholderValue: 'Search sub-category...',
+            shouldSort: true
+        });
+        return choices;
+    } catch (error) {
+        console.error("Sub-Category Choices Initialization Error: ", error);
+        return;
+    }
+}
+
+//  INITIALIZE - 'color' variation select
+function initializeColorsChoices() {
+    if (!colorChoices) {
+        const choices = new Choices('#color-select', {
+            callbackOnCreateTemplates: function(template) {
+                return {
+//                    item: (classNames, data) => {
+//                        return template(`
+//                            <div class="${classNames.item}">
+//                                <span style="display:inline-block;width:12px;height:12px;background:${data.customProperties.hex};border-radius:3px;margin-right:6px;"></span>
+//                                ${data.label}
+//                            </div>
+//                        `);
+//                    },
+                    choice: (classNames, data) => {
+                        const hex = (data.customProperties && data.customProperties.hex) || 'transparent';
+                        const trimmedLabel = data.label.length > 15 ? data.label.slice(0, 15) + "..." : data.label;
+                        return template(`
+                            <div
+                                class="${classNames.item} ${classNames.choice} color-option"
+                                data-select-text="${this.config.itemSelectText || ''}"
+                                data-choice
+                                data-id="${data.id}"
+                                data-value="${data.value}"
+                                title="${data.label}"
+                            >
+                                <span class="color-icon" style="background:${hex};"></span>
+                                ${trimmedLabel}
+                            </div>
+                        `);
+                    }
+                };
+            },
+            removeItemButton: false,
+            placeholder: true,
+            placeholderValue: 'Color',
+            searchEnabled: true,
+            searchPlaceholderValue: 'Search color...',
+            shouldSort: true,
+            renderSelectedChoices: 'always'
+        });
+        colorChoices = choices;
+        return choices;
+    }
+}
+
+
+
+//  ********* Data Loader methods *********
+
+//  LOADER - categories select
+async function loadCategories() {
+    try {
+        const categories = await fetchCategories();
+        if (!categories) {
+            console.log("Categories not found");
+            return;
+        }
+        if (!Array.isArray(categories)) {
+            throw new Error("Invalid data format: categories should be array");
+        }
+        populateCategories(categories);
+    } catch (error) {
+        console.error("Error loading categories.", error);
+    }
+}
+
+//  LOADER - sub-categories select
+async function loadSubCategories(categoryId) {
+    try {
+        const subCategories = await fetchSubCategories(categoryId);
+        if (!subCategories) {
+            console.error("Sub-categories not found");
+            return;
+        }
+        if (!Array.isArray(subCategories)) {
+            throw new Error("Invalid data format: sub-categories should be array");
+        }
+        populateSubCategories(subCategories);
+    } catch (error) {
+        console.error("Error loading sub-categories.", error);
+    }
+}
+
+//  LOADER - variations
+async function loadVariations(subCategoryId) {
+    try {
+        const variations = await fetchVariations(subCategoryId);
+        if (!variations) {
+            console.error("Variations not found");
+            return;
+        }
+        if (!Array.isArray(variations)) {
+            throw new Error("Invalid data format: variations should be array");
+        }
+        populateVariations(variations);
+    } catch (error) {
+        console.error("Error loading variations.", error);
+    }
+}
+
+//  LOADER - colors & sizes
+async function loadColorAndSize() {
+
+    //  load colors
+    try {
+        const colors = await fetchColors();
+        if(!colors) {
+            console.error("Colors not found");
+            return;
+        }
+        if(!Array.isArray(colors.options)) {
+            throw new Error("Invalid data format: color options should be array");
+        }
+        populateColors(colors.options);
+    } catch (error) {
+        console.error("Error loading colors.", error);
+    }
+
+    //  load sizes
+    try {
+        const sizes = await fetchSizes();
+        if(!sizes) {
+            console.error("Sizes not found");
+            return;
+        }
+        if(!Array.isArray(sizes.options)) {
+            throw new Error("Invalid data format: size options should be array");
+        }
+        populateSizes(sizes.options);
+    } catch (error) {
+        console.error("Error loading sizes.", error);
+    }
+}
+
+
+//  DOM Loading event
+document.addEventListener('DOMContentLoaded', async () => {
+
+    //  ------- Load - initial data -------
+
+    await loadCategories();
+    await loadColorAndSize();
+
+    variationsSpace = document.getElementById('variations-space');
+
+
+    //  ------- Initialize - choices.js -------
+
+    subCategoryChoices = initializeSubCategoriesChoices();
+    subCategoryChoices.disable();
+
+//    initializeColorsChoices();
+
+
+    //  ------- Image adding - FilePond -------
 
     FilePond.registerPlugin(
         FilePondPluginImagePreview,
@@ -342,6 +553,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -418,73 +641,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 //
 //        document.querySelector(`input[name="status"][value="${productDetails.status}"]`).checked = true;
 //        document.querySelector(`input[name="cod"][value="${productDetails.podAvailable ? 'available' : 'not_available'}"]`).checked = true;
-//    }
-
-//---------
-
-//------------
-
-//    async function loadVariations(subCategoryId) {
-//        try {
-//            const response = await fetch(`${getAllVariations}?id=${subCategoryId}`, {
-//                method: "GET",
-//                credentials: "include"
-//            });
-//            if (!response.ok) {
-//                throw new Error(`HTTP error ${response.status}`);
-//            }
-//            const variations = await response.json();
-//            if (!Array.isArray(variations)) {
-//                throw new Error("Invalid variation format");
-//            }
-//
-//            populateVariations(variations);
-//        } catch (error) {
-//            console.error("Variation Load Error: ", error);
-//            alert("Unable to load variations. Please try again.");
-//        }
-//    }
-//
-//    function populateVariations(variations) {
-//        variationsFieldSet.innerHTML = '<legend>Product Variations</legend>';
-//
-//        variations.forEach(variation => {
-//            if(variation && variation.variationName && Array.isArray(variation.options)) {
-//                const label = document.createElement('label');
-//                label.classList.add("general-info-label");
-//                label.textContent = variation.variationName + ':';
-//
-//                const select = document.createElement('select');
-//                select.name = variation.variationName;
-//                select.required = true;
-//
-//                const placeholderOption = document.createElement('option');
-//                placeholderOption.value = '';
-//                placeholderOption.textContent = `Select ${variation.variationName}`;
-//                placeholderOption.disabled = true;
-//                placeholderOption.selected = true;
-//                select.appendChild(placeholderOption);
-//
-//                variation.options.forEach(option => {
-//                    const optionElement = document.createElement('option');
-//                    optionElement.value = option.id;
-//                    optionElement.textContent = option.optionValue;
-//                    select.appendChild(optionElement);
-//                });
-//                label.appendChild(select);
-//                variationsFieldSet.appendChild(label);
-//
-//                new Choices(select, {
-//                    placeholder: true,
-//                    searchEnabled: true,
-//                    searchPlaceholderValue: 'Search...',
-//                    itemSelectText: '',
-//                    shouldSort: true
-//                });
-//            } else {
-//                console.warn("Skipping invalid variation: ", variation);
-//            }
-//        });
 //    }
 
 //-------------

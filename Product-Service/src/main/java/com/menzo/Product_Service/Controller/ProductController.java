@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Controller;
 
-import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
+//import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
 import com.menzo.Product_Service.Dto.ProductDto.NewProductItemDto;
 import com.menzo.Product_Service.Dto.ProductDto.SizeDetailsDto;
 import com.menzo.Product_Service.Entity.Product;

@@ -398,13 +398,15 @@ const urls = {
             input.value = "";
 
             if (variationName === "Colors") {
-                const hexCodeInput = document.createElement('input');
-                hexCodeInput.type = "text";
-                hexCodeInput.classList.add('modal-input');
-                hexCodeInput.id = "hex-code-input";
-                hexCodeInput.placeholder = "Hex code";
+                if (!document.getElementById('hex-code-input')) {
+                    const hexCodeInput = document.createElement('input');
+                    hexCodeInput.type = "text";
+                    hexCodeInput.classList.add('modal-input');
+                    hexCodeInput.id = "hex-code-input";
+                    hexCodeInput.placeholder = "Hex code";
 
-                input.insertAdjacentElement("afterend", hexCodeInput);
+                    input.insertAdjacentElement("afterend", hexCodeInput);
+                }
             }
             modal.style.display = "flex";
 

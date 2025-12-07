@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
+//import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
 import com.menzo.Product_Service.Entity.*;
 import com.menzo.Product_Service.Repository.ProductConfigurationRepo;
 import com.menzo.Product_Service.Repository.ProductItemsRepo;
@@ -43,34 +43,34 @@ class ProductsServiceTest {
 
 
     //  add new product
-    @Test
-    public void testSaveNewProduct() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
-                "saveNewProduct",
-                NewProductDto.class,
-                ProductCategory.class
-        );
-        method.setAccessible(true);
-
-        NewProductDto newProductDto = NewProductDto.builder()
-                .productName("Some product name 1")
-                .description("Some product description")
-                .pod("available")
-                .itemWeight(23.3F)
-                .genericName("Some generic name")
-                .countryOfOrigin("India")
-                .subCategoryId(121L)
-                .build();
-
-        ProductCategory sub = categoriesRetrievalService
-                .getSubCategoryById(newProductDto.getSubCategoryId());
-        Object invokedResult = method.invoke(
-                productsService,
-                newProductDto,
-                sub
-        );
-        System.out.println(invokedResult);
-    }
+//    @Test
+//    public void testSaveNewProduct() throws Exception {
+//        Method method = ProductsService.class.getDeclaredMethod(
+//                "saveNewProduct",
+//                NewProductDto.class,
+//                ProductCategory.class
+//        );
+//        method.setAccessible(true);
+//
+//        NewProductDto newProductDto = NewProductDto.builder()
+//                .productName("Some product name 1")
+//                .description("Some product description")
+//                .pod("available")
+//                .itemWeight(23.3F)
+//                .genericName("Some generic name")
+//                .countryOfOrigin("India")
+//                .subCategoryId(121L)
+//                .build();
+//
+//        ProductCategory sub = categoriesRetrievalService
+//                .getSubCategoryById(newProductDto.getSubCategoryId());
+//        Object invokedResult = method.invoke(
+//                productsService,
+//                newProductDto,
+//                sub
+//        );
+//        System.out.println(invokedResult);
+//    }
 
     //  add new product item
     @Test

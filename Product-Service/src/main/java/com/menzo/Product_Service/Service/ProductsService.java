@@ -95,70 +95,115 @@ public class ProductsService {
      *   Every 'sku'  ->  Unique to the PRODUCT ITEM
      *
      */
-//    @Transactional
-//    public Product addNewProduct(NewProductDto newProduct,
-//                                 Map<String, String> variationMap,
-//                                 List<MultipartFile> images) throws IOException {
+    @Transactional
+    public Long addNewProduct(NewProductDto productDetails,
+                              List<SizeDetailsDto> sizeDetails,
+                              Map<String, String> variationDetailsMap,
+                              List<MultipartFile> images) throws IOException {
+
+        //  --------- Data Pre-processing ---------
+        //  getting parent category & sub-category
+        ParentCategoryDto parentCategory = categoriesRetrievalService
+                .getParentCategoryById(productDetails.getCategoryId());
+        ProductCategory subCategory = categoriesRetrievalService            //  ## validate - subcategory belongs to category
+                .getSubCategoryById(productDetails.getSubCategoryId());
+        if (parentCategory == null)
+            throw new IllegalArgumentException("Parent category cannot be null");
+        if (subCategory == null || subCategory.getParentCategoryId() == null)
+            throw new IllegalArgumentException("Invalid sub-category with ID: " +
+                    productDetails.getSubCategoryId() + " - must have a parent category");
+
+        //  saving product
+        Product savedProduct = saveNewProduct(
+                productDetails,
+                subCategory
+        );
+
+        //  Processing Variation Options
+        List<VariationOption> variationOptionList = processVariations(
+                variationDetailsMap,
+                null
+        );
+        if (variationOptionList == null) {
+            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
+        }
+
+        //  getting COLOR variation option by 'color ID'
+        VariationOption color = variationsRetrievalService.getOptionByIdAndVariationName(
+                productDetails.getColorId(),
+                "Colors"
+        );
+
+        //  generating SUPER SKU
+        String superSku = generateSKU(
+                null,
+                subCategory.getAbbreviation(),
+                savedProduct.getId(),
+                color.getColorCode().getColorAbbreviation(),
+                null
+        );
+
+        //  --------- saving PRODUCT ITEMS ---------
+//        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
+//        AtomicInteger statusFlag = new AtomicInteger(0);
+//        AtomicInteger stockSum = new AtomicInteger(0);
+
+        List<ProductItem> savedItems = new ArrayList<>();
+//        List<ItemSizeDto> sizeDetailDtos = new ArrayList<>();
+
+        logger.info("Saving product items");
+        for (SizeDetailsDto sizeDetail : sizeDetails) {
+            ProductItem savedItem = saveNewItem(
+                    savedProduct,
+                    superSku,
+                    sizeDetail,
+                    variationOptionList,
+                    color,
+                    productDetails.getStatus().equalsIgnoreCase("active")
+            );
+            savedItems.add(savedItem);
+
+//            if (savedItem.getPrice() < startingPrice.get()) {
+//                startingPrice.set(savedItem.getPrice());
+//            }
+//            if (savedItem.getIsActive()) {
+//                statusFlag.incrementAndGet();
+//            }
+//            stockSum.addAndGet(savedItem.getQtyInStock());
+
+//            ItemSizeDto sizeDto = ItemSizeDto.builder()
+//                    .itemId(savedItem.getId())
+//                    .size(sizeDetail.getSizeValue())
+//                    .sku(savedItem.getSKU())
+//                    .qtyInStock(savedItem.getQtyInStock())
+//                    .isActive(savedItem.getIsActive())
+//                    .createdAt(savedItem.getCreatedAt())
+//                    .build();
 //
-//        //  Fetching sub-category
-//        ParentCategoryDto parentCategory = categoriesRetrievalService       // ## validate - subcategory belongs to category
-//                .getParentCategoryById(newProduct.getCategoryId());
-//        ProductCategory subCategory = categoriesRetrievalService
-//                .getSubCategoryById(newProduct.getSubCategoryId());
-//        if (parentCategory == null)
-//            throw new IllegalArgumentException("Parent category cannot be null");
-//        if (subCategory == null || subCategory.getParentCategoryId() == null)
-//            throw new IllegalArgumentException("Invalid sub-category with ID: " +
-//                    newProduct.getSubCategoryId() + " - must have a parent category");
-//
-//        //  Saving Product
-//        Product savedProduct = saveNewProduct(
-//                newProduct,
-//                subCategory
-//        );
-//
-//        // Processing Variation Options
-//        List<VariationOption> variationOptionList = processVariations(
-//                variationMap,
-//                null
-//        );
-//        if (variationOptionList == null) {
-//            throw new RuntimeException("Variations list is null. Error while processing variationsMap.");
-//        }
-//
-//        //  Saving Product Item
-//        List<ProductItem> savedProductItems = saveNewProductItem(
-//                newProduct.getSizeStockMap(),
-//                variationOptionList,
-//                subCategory,
-//                savedProduct,
-//                newProduct.getColor(),
-//                newProduct.getPrice(),
-//                newProduct.getStatus().equals("active")
-//        );
-//        if (savedProductItems.size() != newProduct.getSizeStockMap().size())
-//            throw new RuntimeException("Number of (product items input) doesn't match (saved product items)");
-//
-//        String superSku = savedProductItems.stream().findFirst()
-//                .map(item -> item.getSuperSku())
-//                .orElseThrow(() -> new RuntimeException("Saved item doesn't have superSKU"));
-//
-//        //  saving images
-//        List<ProductImage> savedImages = saveImages(
-//                parentCategory.getCategoryName(),
-//                subCategory.getCategoryName(),
-//                savedProduct.getId(),
-//                superSku,
-//                savedProductItems,
-//                images
-//        );
-//        if (savedProduct == null
-//                || savedProductItems == null
-//                || savedImages == null) {
-//            throw new IOException("Error saving product");
-//        }
-//        return savedProduct;
-//    }
+//            sizeDetailDtos.add(sizeDto);
+        }
+        if (savedItems.size() != sizeDetails.size()) {
+            throw new RuntimeException("Number of 'product items input' doesn't match 'saved product items'");
+        }
+
+        //  saving images
+        List<ProductImage> savedImages = saveImages(
+                parentCategory.getCategoryName(),
+                subCategory.getCategoryName(),
+                savedProduct.getId(),
+                superSku,
+                savedItems,
+                images
+        );
+        if (savedProduct == null
+                || savedItems == null
+                || savedItems.isEmpty()
+                || savedImages == null
+                || savedImages.isEmpty()) {
+            throw new RuntimeException("Error saving product");
+        }
+        return savedProduct.getId();
+    }
 
 
     /*
@@ -301,23 +346,23 @@ public class ProductsService {
 
     //  Save new PRODUCT to DB - TESTED - ### PENDING ###
     private Product saveNewProduct(
-            NewProductDto newProductDto,
+            NewProductDto productDetails,
             ProductCategory subCategory) {
 
         //  duplicate product name - validation
-        if (productsRepo.existsByProductName(newProductDto.getProductName())) {
-            throw new IllegalArgumentException("Product with product name '" + newProductDto.getProductName() + "' already exists.");
+        if (productsRepo.existsByProductName(productDetails.getProductName())) {
+            throw new IllegalArgumentException("Product with product name '" + productDetails.getProductName() + "' already exists.");
         }
-        Boolean podAvailable = newProductDto.getPod().equals("available");
-        Long countryOfOriginId = addCountryOfOrigin(newProductDto.getCountryOfOrigin());
-        Long companyId = Long.valueOf(1);
+        Boolean podAvailable = productDetails.getPod().equals("available");
+        Long countryOfOriginId = addCountryOfOrigin(productDetails.getCountryOfOrigin());
+        long companyId = 1L;
 
         Product newProduct = Product.builder()
-                .productName(newProductDto.getProductName())
+                .productName(productDetails.getProductName())
                 .category(subCategory)
-                .productDescription(newProductDto.getDescription())
-                .genericName(newProductDto.getGenericName())
-                .itemWeight(newProductDto.getItemWeight())
+                .productDescription(productDetails.getDescription())
+                .genericName(productDetails.getGenericName())
+                .itemWeight(productDetails.getItemWeight())
                 .manufacturerId(companyId)
                 .packersId(companyId)
                 .countryOfOriginId(countryOfOriginId)
@@ -418,38 +463,39 @@ public class ProductsService {
     //  Variations processing - TESTED
     //  provides the variation details of the product other than 'size' & 'color' variations
     //  ## no validation for if the optionIds in value is bound with the key data or not
-    public List<VariationOption> processVariations(Map<String, String> variationsMap,
+    public List<VariationOption> processVariations(Map<String, String> variationDetailsMap,
                                                    List<ProductConfiguration> productConfigs) {
-        if (variationsMap != null && productConfigs == null) {
-            Map<String, String> variations = variationsMap.entrySet().stream()
-                    .filter(e -> !List.of(
-                            "productName",
-                            "description",
-                            "sizeStockMap",
-                            "color",
-                            "status",
-                            "pod",
-                            "price",
-                            "itemWeight",
-                            "genericName",
-                            "countryOfOrigin",
-                            "manufacturer",
-                            "packer",
-                            "categoryId",
-                            "subCategoryId",
-                            "size",
-                            "discount",
-                            "discount-type"
-                    ).contains(e.getKey()))
-                    .filter(e -> !e.getKey().startsWith("sizeStockMap["))
-                    .collect(Collectors.toMap(e -> e.getKey().split("\\.")[1], Map.Entry::getValue));       //  ## can simplify this operation by doing both filtering the map and extracting ids together
+        if (variationDetailsMap != null && productConfigs == null) {
+//            Map<String, String> variations = variationsMap.entrySet().stream()
+//                    .filter(e -> !List.of(
+//                            "productName",
+//                            "description",
+//                            "sizeStockMap",
+//                            "color",
+//                            "status",
+//                            "pod",
+//                            "price",
+//                            "itemWeight",
+//                            "genericName",
+//                            "countryOfOrigin",
+//                            "manufacturer",
+//                            "packer",
+//                            "categoryId",
+//                            "subCategoryId",
+//                            "size",
+//                            "discount",
+//                            "discount-type"
+//                    ).contains(e.getKey()))
+//                    .filter(e -> !e.getKey().startsWith("sizeStockMap["))
+//                    .collect(Collectors.toMap(e -> e.getKey().split("\\.")[1], Map.Entry::getValue));       //  ## can simplify this operation by doing both filtering the map and extracting ids together
 
-//            variations.entrySet().stream().forEach(v -> System.out.println(v));
-            List<Long> idList = variations.entrySet().stream()
+////            variations.entrySet().stream().forEach(v -> System.out.println(v));
+            List<Long> idList = variationDetailsMap.entrySet().stream()
                     .map(e -> Long.valueOf(e.getValue()))
                     .collect(Collectors.toList());
             return variationsRetrievalService.getOptionsByIds(idList);
-        } else if (variationsMap == null && productConfigs != null) {
+
+        } else if (variationDetailsMap == null && productConfigs != null) {
             logger.info("Processing variations: config list");
 
             //  fetching the IDs of all 'size' & 'color' options available in DB

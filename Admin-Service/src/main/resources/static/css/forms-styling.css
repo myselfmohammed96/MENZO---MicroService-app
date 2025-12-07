@@ -415,7 +415,7 @@ div.choices {
 div.choices__list {
   border-bottom: 1.5px solid #8F8F8F;
   padding: 10px;
-  /* font-weight: normal; */
+  font-weight: normal;
 }
 
 div.choices__list--dropdown {

@@ -253,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
+        console.log("submit initiated");
 
         //  product ID
         const productIdValue = document.getElementById('product-id').value.trim();
@@ -289,23 +290,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: formData
             });
 
+//            console.log("Statu : " + response.status);
 
-            console.log("Statu : " + response.status);
-
-            if(!response.ok) {
+            if(response.status !== 201) {
                 console.error("Error submitting form");
+                alert("Error saving item");
                 return;
             }
             const savedItemData = await response.json();
 
+            //  post form submit operations
             try {
-                window.handleSavedItemData(savedItemData);
+                window.handleSavedItemData(savedItemData.itemDetails);
+                toggleFormModal('close');
+                alert("Item saved successfully");
             } catch (error) {
                 console.error("Error populating saved item data.", error);
             }
 
         } catch (error) {
-            console.error(error);
+            console.error("Failed to save item. ", error);
             alert("Form submission failed. Try again");
         }
     });

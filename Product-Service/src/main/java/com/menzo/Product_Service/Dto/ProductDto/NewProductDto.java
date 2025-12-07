@@ -17,15 +17,17 @@ public class NewProductDto {
 
     private String description;
 
-    private Map<Long, Integer> sizeStockMap;
+    private Long categoryId;
 
-    private Long color;
+    private Long subCategoryId;
+
+
+    private Long colorId;
 
     private String status;
 
     private String pod;
 
-    private Float price;
 
     private String discount;
 
@@ -41,9 +43,4 @@ public class NewProductDto {
 
     private String packer;
 
-    private Long categoryId;
-
-    private Long subCategoryId;
-
-    //    variations
 }

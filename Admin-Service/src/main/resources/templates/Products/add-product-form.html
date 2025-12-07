@@ -1,257 +1,570 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--&lt;!&ndash;  xmlns:th="http://www.thymeleaf.org"&ndash;&gt;-->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
-<!--<head>-->
-<!--  <meta charset="UTF-8">-->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!--  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!--  <link rel="stylesheet" href="/css/admin-style.css" />-->
-<!--  <link rel="stylesheet" href="/css/admin-side-menu.css" >-->
-<!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />-->
-<!--  <link rel="stylesheet" href="/css/admin-add-product-form-style.css" />-->
-<!--  <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css" />-->
-<!--  <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" />-->
-<!--  <title>MENZO | Admin-Add product</title>-->
-<!--</head>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
 
-<!--<body>-->
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css"/>
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css"/>
 
-<!--&lt;!&ndash; Nav bar &ndash;&gt;-->
+    <link rel="stylesheet" href="/css/forms-styling.css">
+    <link rel="stylesheet" href="/css/forms-theme-font-effects.css">
 
-<!--<nav id="nav-bar-container">-->
-<!--  <div id="top-nav-bar">-->
-<!--    <div class="top-nav-bar-elements" id="nav-bar-logo">-->
-<!--      <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>-->
-<!--    </div>-->
-<!--    <div class="top-nav-bar-elements" id="nav-bar-search-bar">-->
-<!--      <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">-->
-<!--      <span id="clear-search">&#10005;</span>-->
-<!--      <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">-->
-<!--    </div>-->
-<!--    <div class="top-nav-bar-elements" id="nav-bar-icons">-->
-<!--      <div id="nav-icon-profile">-->
-<!--        <a href="">-->
-<!--          <div class="icon-image-container">-->
-<!--            <img id="profile-icon" src="/media/profile_icon.png" alt="">-->
-<!--          </div>-->
-<!--          <div class="icon-details-container">-->
-<!--            <div>-->
-<!--              <p>sign in</p>-->
-<!--            </div>-->
-<!--            <div><strong>Account</strong></div>-->
-<!--          </div>-->
-<!--        </a>-->
-<!--      </div>-->
-<!--      <div id="hamBurger-searchIcon-container">-->
-<!--        <div id="search-icon">-->
-<!--          <img id="search-icon-img" src="/media/search-v3.png" alt="">-->
-<!--        </div>-->
-<!--        <div id="hamBurger-icon">-->
-<!--          <img src="/media/hamburger-icon-v3.png" alt="">-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</nav>-->
+    <link rel="stylesheet" href="/css/components-styling.css">
+    <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
-<!--&lt;!&ndash; All categories page content &ndash;&gt;-->
+    <link rel="stylesheet" href="/css/admin-side-menu.css"/>
 
-<!--<div class="page-container">-->
-<!--  <div class="side-menu-bar-container">-->
-<!--    <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>-->
-<!--    <h2>Inventory</h2>-->
-<!--    <ul class="category-menu">-->
-<!--      <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>-->
-<!--      <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>-->
-<!--      <li class="menu-item" id="current-option"><a href="http://localhost:8080/admin/all-products">Products</a></li>-->
-<!--      <li class="menu-item"><a href="">Discount & offers</a></li>-->
-<!--      <li class="menu-item"><a href="">Coupons</a></li>-->
-<!--      <li class="menu-item"><a href="">Order management</a></li>-->
-<!--      <li class="menu-item"><a href="">Return & cancellation</a></li>-->
-<!--      <li class="menu-item"><a href="">Sales & revenue</a></li>-->
-<!--    </ul>-->
-<!--    <h2>Users</h2>-->
-<!--    <ul class="category-menu">-->
-<!--      <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>-->
-<!--      <li class="menu-item"><a href="">Blocked users</a></li>-->
-<!--      <li class="menu-item"><a href="">Subscriptions</a></li>-->
-<!--      <li class="menu-item"><a href="">News letters</a></li>-->
-<!--      <li class="menu-item"><a href="">Contact requests</a></li>-->
-<!--      <li class="menu-item"><a href="">Sent messages</a></li>-->
-<!--    </ul>-->
-<!--    <h2>Others</h2>-->
-<!--    <ul class="category-menu">-->
-<!--      <li class="menu-item"><a href="">Banners</a></li>-->
-<!--      <li class="menu-item"><a href="">About Us</a></li>-->
-<!--    </ul>-->
-<!--  </div>-->
+    <link rel="stylesheet" href="/css/admin-style.css"/>
+
+    <title>MENZO | Admin-Add product</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+            <span id="clear-search">&#10005;</span>
+            <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-profile">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="profile-icon" src="/media/profile_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p>sign in</p>
+                        </div>
+                        <div><strong>Account</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="hamBurger-searchIcon-container">
+                <div id="search-icon">
+                    <img id="search-icon-img" src="/media/search-v3.png" alt="">
+                </div>
+                <div id="hamBurger-icon">
+                    <img src="/media/hamburger-icon-v3.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+    <div class="side-menu-bar-container">
+        <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+        <h2>Inventory</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
+            <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>
+            <li class="menu-item" id="current-option"><a href="http://localhost:8080/admin/all-products">Products</a>
+            </li>
+            <li class="menu-item"><a href="">Discount & offers</a></li>
+            <li class="menu-item"><a href="">Coupons</a></li>
+            <li class="menu-item"><a href="">Order management</a></li>
+            <li class="menu-item"><a href="">Return & cancellation</a></li>
+            <li class="menu-item"><a href="">Sales & revenue</a></li>
+        </ul>
+        <h2>Users</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
+            <li class="menu-item"><a href="">Blocked users</a></li>
+            <li class="menu-item"><a href="">Subscriptions</a></li>
+            <li class="menu-item"><a href="">News letters</a></li>
+            <li class="menu-item"><a href="">Contact requests</a></li>
+            <li class="menu-item"><a href="">Sent messages</a></li>
+        </ul>
+        <h2>Others</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Banners</a></li>
+            <li class="menu-item"><a href="">About Us</a></li>
+        </ul>
+    </div>
+
+    <!-- Main page content -->
+
+    <div class="main-content-container">
+        <div id="page-title-container">
+            <h1 id="page-title">Add product</h1>
+            <button id="add-button">Save Draft</button>
+        </div>
+        <hr class="custom-line-1"/>
+
+        <form id="add-product-form" enctype="multipart/form-data" th:action="@{/products/add-product}"
+              th:object="${newProduct}" method="POST">
+
+            <div id="form-container">
+                <div id="product-info-col-1">
+
+                    <!-- Product General info fieldset -->
+                    <fieldset>
+                        <legend>General Information</legend>
+
+                        <!-- Product image input -->
+                        <label class="general-info-label">Product Name:
+                            <div style="position: relative;">
+                                <input type="text"
+                                       class="text-input-1"
+                                       th:field="*{productName}"
+                                       name="productName"
+                                       id="product-name"
+                                       placeholder="Product Name"
+                                       required/>
+                                <ul class="suggestion-box" id="suggestions"></ul>
+                            </div>
+                        </label>
+
+                        <!-- Product description input -->
+                        <label class="general-info-label">Description:
+                            <textarea
+                                    th:field="*{description}"
+                                    name="description"
+                                    id="product-description"
+                                    placeholder="Description"
+                                    required></textarea>
+                        </label>
+
+                        <!-- Product size & color options -->
+                        <div id="info-options-container">
+                            <div id="info-opt-container-col1">
+
+                                <!-- Size options -->
+                                <div id="sizes">
+                                    <label class="general-info-label">Size Details</label>
+                                    <p class="option-description">Pick Available Sizes</p>
+
+                                    <div id="size-options-container">
+                                        <div id="size-wrapper-col-1">
+                                            <div class="size-column-heading">
+                                                <label class="general-info-label">Size</label>
+                                            </div>
+
+                                            <div id="size-container" class="size-column-body-1">
+<!--                                                <div class="size-element">-->
+<!--                                                    <label class="size-option">-->
+<!--                                                        <input type="checkbox" name="sizes">-->
+<!--                                                        <span>XS</span>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+<!--                                                <div class="size-element">-->
+<!--                                                    <label class="size-option">-->
+<!--                                                        <input type="checkbox" name="sizes">-->
+<!--                                                        <span>XS</span>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+<!--                                                <div class="size-element">-->
+<!--                                                    <label class="size-option">-->
+<!--                                                        <input type="checkbox" name="sizes">-->
+<!--                                                        <span>XS</span>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+<!--                                                <div class="size-element">-->
+<!--                                                    <label class="size-option">-->
+<!--                                                        <input type="checkbox" name="sizes">-->
+<!--                                                        <span>XS</span>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+<!--                                                <div class="size-element">-->
+<!--                                                    <label class="size-option">-->
+<!--                                                        <input type="checkbox" name="sizes">-->
+<!--                                                        <span>XS</span>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+                                            </div>
+                                        </div>
+                                        <div id="size-wrapper-col-2">
+                                            <div id="size-stock-column">
+                                                <div class="size-column-heading">
+                                                    <label class="general-info-label">Stock</label>
+                                                </div>
+                                                <div id="stock-container" class="size-column-body-2">
+<!--                                                    <div class="size-stock-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter stock" required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-stock-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter stock" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-stock-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter stock" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-stock-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter stock" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-stock-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter stock" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+                                                </div>
+                                            </div>
+                                            <div id="size-price-column">
+                                                <div class="size-column-heading">
+                                                    <label class="general-info-label">Price</label>
+                                                </div>
+                                                <div id="price-container" class="size-column-body-2">
+<!--                                                    <div class="size-price-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter price" required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-price-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter price" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-price-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter price" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-price-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter price" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+<!--                                                    <div class="size-price-element">-->
+<!--                                                        <input class="text-input-3 size-option-text-input"-->
+<!--                                                               type="text" placeholder="Enter price" disabled-->
+<!--                                                               required />-->
+<!--                                                    </div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <div id="sizes">-->
+<!--                                    <label class="general-info-label">Size</label>-->
+<!--                                    <p class="option-description">Pick Available Sizes</p>-->
+<!--                                    <div id="size-options-container">-->
+<!--                                        <div th:each="size : ${sizesList}" class="size-wrapper">-->
+<!--                                            <label class="size-option">-->
+<!--                                                <input th:value="${size.optionId}" type="checkbox" class="size-checkbox"-->
+<!--                                                       name="size">-->
+<!--                                                <span th:text="${size.optionValue}"></span>-->
+<!--                                            </label>-->
+<!--                                            <input th:name="${'sizeStockMap[' + size.optionId + ']'}" class="text-input-2"-->
+<!--                                                   type="number" placeholder="Enter stock" disabled required/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </div>
+
+                            <div id="info-opt-container-col2">
+
+                                <!-- Color options -->
+                                <div id="color-options-container">
+                                    <label class="general-info-label">Color</label>
+                                    <p class="option-description">Pick Available Colors</p>
+                                    <div class="custom-select-wrapper">
+                                        <select id="color-select"
+                                                class="custom-select"
+                                                name="colors"
+                                                required>
+<!--                                                th:field="*{color}"-->
+<!--                                                required>-->
+<!--                                            <option value="" hidden disabled selected>Colors</option>-->
+<!--                                            <option th:each="color : ${colorsList}"-->
+<!--                                                    th:value="${color.optionId}"-->
+<!--                                                    th:text="${color.optionValue}"></option>-->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Pay on delivery options -->
+                                <div id="pod-options-container">
+                                    <label class="general-info-label">Active Status</label>
+                                    <p class="option-description">Pick an option</p>
+                                    <label class="status-option">
+                                        <input th:field="*{status}" type="radio" name="status" value="active" checked>
+                                        <span>Active</span>
+                                    </label>
+                                    <label class="status-option">
+                                        <input th:field="*{status}" type="radio" name="status" value="inactive">
+                                        <span>Inactive</span>
+                                    </label>
+                                </div>
+
+                                <!-- Product active status -->
+                                <div id="active-options-container">
+                                    <label class="general-info-label">Pay On Delivery</label>
+                                    <p class="option-description">Pick an option</p>
+                                    <label class="status-option">
+                                        <input th:field="*{pod}" type="radio" name="pod" value="available" checked>
+                                        <span>Available</span>
+                                    </label>
+                                    <label class="status-option">
+                                        <input th:field="*{pod}" type="radio" name="pod" value="unavailable">
+                                        <span>Unavailable</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
 
 
-<!--  &lt;!&ndash; Main page content &ndash;&gt;-->
+                    <!-- Price & Stock fieldset -->
+<!--                    <fieldset id="price-stock-fieldset">-->
+<!--                        <legend>Pricing and Stock</legend>-->
+<!--                        <label class="general-info-label">Base Price:-->
+<!--                            <input th:field="*{price}" type="number" name="price" class="text-input-1" id="price"-->
+<!--                                   placeholder="Base Price" required/>-->
+<!--                        </label>-->
 
-<!--  <div class="main-content-container">-->
-<!--    <div id="page-title-container">-->
-<!--      <h1 id="page-title">Add product</h1>-->
-<!--      &lt;!&ndash; <button onclick="addCategory()" id="add-button">Add new</button> th:action="@{/products/add-product}" th:object="${newProduct}" &ndash;&gt;-->
-<!--    </div>-->
-<!--    <hr class="custom-line-1" />-->
+<!--                    </fieldset>-->
 
-<!--    <form id="addProductForm" enctype="multipart/form-data" method="POST">-->
 
-<!--      &lt;!&ndash; General Information &ndash;&gt;-->
-<!--      <fieldset id="general-info">-->
-<!--        <legend>General Information</legend>-->
+                    <!-- Additional information -->
+                    <fieldset id="additional-info-fieldset">
+                        <legend>Additional Information</legend>
+                        <label class="general-info-label">Discount (in %):
+                            <input type="text"
+                                   name="discount"
+                                   class="text-input-1"
+                                   id="discount"
+                                   placeholder="Discount"
+                                   required/>
+                        </label>
+                        <label class="general-info-label">Discount Type:
+                            <input type="text"
+                                   name="discount-type"
+                                   class="text-input-1"
+                                   id="discount-type"
+                                   placeholder="Discount Type"
+                                   required/>
+                        </label>
+                        <label class="general-info-label">Item Weight:
+                            <input type="number"
+                                   th:field="*{itemWeight}"
+                                   name="itemWeight"
+                                   class="text-input-1"
+                                   id="item-weight"
+                                   placeholder="Item Weight"
+                                   required/>
+                        </label>
+                        <label class="general-info-label">Generic Name:
+                            <input type="text"
+                                   th:field="*{genericName}"
+                                   name="genericName"
+                                   class="text-input-1"
+                                   id="generic-name"
+                                   placeholder="Generic Name"
+                                   required/>
+                        </label>
+                        <label class="general-info-label">Country of Origin:
+                            <input type="text"
+                                   th:field="*{countryOfOrigin}"
+                                   name="countryOfOrigin"
+                                   class="text-input-1"
+                                   id="country-of-origin"
+                                   placeholder="Country of Origin"
+                                   required/>
+                        </label>
+                        <label class="general-info-label">Manufacturer:
+                            <input type="text"
+                                   th:field="*{manufacturer}"
+                                   name="manufacturer"
+                                   class="text-input-1"
+                                   id="manufacturer"
+                                   placeholder="Manufacturer"
+                                   required/>
+                        </label>
+                        <label class="general-info-label">Packer:
+                            <input type="text"
+                                   th:field="*{packer}"
+                                   name="packer"
+                                   class="text-input-1"
+                                   id="packer"
+                                   placeholder="Packer"
+                                   required/>
+                        </label>
+                    </fieldset>
+                </div>
 
-<!--        <label class="general-info-label">Product Name:-->
-<!--          <div style="position: relative;">-->
-<!--            <input type="text" name="productName" id="product-name" placeholder="Product Name" required />-->
-<!--            <ul class="suggestion-box" id="suggestions"></ul>-->
-<!--          </div>-->
+
+                <div id="product-info-col-2">
+
+                    <fieldset>
+                        <legend>Category</legend>
+                        <label class="general-info-label">Category:
+                            <div class="custom-select-wrapper">
+                                <select th:field="*{categoryId}"
+                                        id="category-select"
+                                        class="custom-select"
+                                        name="categoryId"
+                                        required></select>
+                            </div>
+                        </label>
+                        <label class="general-info-label">Sub Category:
+                            <div class="custom-select-wrapper">
+                                <select th:field="*{subCategoryId}"
+                                        id="sub-category-select"
+                                        class="custom-select"
+                                        name="subCategoryId"
+                                        required>
+                                    <option value="">Sub-category</option>
+                                </select>
+                            </div>
+                        </label>
+                    </fieldset>
+
+                    <!-- Image upload field -->
+                    <fieldset>
+                        <legend>Upload Images</legend>
+                        <div id="image-preview-container"></div>
+                        <div id="image-icons-container">
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                            <div class="image-icon"></div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Variations -->
+                    <div id="variations-space"></div>
+
+
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <fieldset>
+                <legend>Upload Images (max 9)</legend>
+                <input type="file" name="images" id="product-images" multiple/>
+                <div id="image-stats"></div>
+            </fieldset>
+
+            <!-- Submit Button -->
+            <div id="button-container">
+                <button type="submit">Add Product</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- Toast notification -->
+
+<div class="toast show" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+
+<script src="/js/nav-bar-script.js"></script>
+<script src="/js/product-form-config.js"></script>
+<script src="/js/product-form-submit.js"></script>
+<script src="/js/toaster-script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
+</body>
+
+
+</html>
+
+
+<!--        <label class="general-info-label">SKU:-->
+<!--          <input type="text" th:field="*{sku}" name="sku" placeholder="SKU" required />-->
 <!--        </label>-->
-<!--&lt;!&ndash;        th:field="*{productName}"th:field="*{categoryId}"  th:field="*{subCategoryId}" &ndash;&gt;-->
-<!--        <label class="general-info-label">Category:-->
-<!--          <div class="custom-select-wrapper">-->
-<!--            <select id="category-select" class="custom-select" name="categoryId" required></select>-->
-<!--          </div>-->
+<!--        <label class="general-info-label">Stock:-->
+<!--          <input type="number" th:field="*{stock}" name="stock" placeholder="Stock count" required />-->
+<!--        </label>-->
+<!--        <label class="general-info-label">Price:-->
+<!--          <input type="number" th:field="*{price}" name="price" placeholder="Price" required />-->
 <!--        </label>-->
 
-<!--        <label class="general-info-label">Sub Category:-->
-<!--          <div class="custom-select-wrapper">-->
-<!--            <select id="sub-category-select" name="subCategoryId" required>-->
-<!--              <option value="">Sub-category</option>-->
-<!--            </select>-->
-<!--          </div>-->
+
+<!--        <label class="general-info-label">Status:-->
+<!--          <input type="radio" th:field="*{status}" name="status" value="active" checked /> Active-->
+<!--          <input type="radio" th:field="*{status}" name="status" value="inactive" /> Inactive-->
 <!--        </label>-->
 
-<!--        <label class="general-info-label">Description:-->
-<!--          <textarea name="description" placeholder="Description" required></textarea>-->
-<!--        </label>-->
 
-<!--        <label class="general-info-label">Pay on Delivery:-->
-<!--          <input type="radio"name="cod" value="available" checked /> Available-->
-<!--          <input type="radio" name="cod" value="not_available" /> Not Available-->
-<!--        </label>-->
-<!--      </fieldset>-->
-<!--&lt;!&ndash;   th:field="*{countryOfOrigin}" th:field="*{genericName}"    th:field="*{description}" th:field="*{cod}" th:field="*{cod}"th:field="*{itemWeight}"&ndash;&gt;-->
-<!--      &lt;!&ndash; Product Details &ndash;&gt;-->
-<!--        <fieldset id="product-details">-->
-<!--          <legend>Product Details</legend>-->
+<!--      Product Variations-->
 
-<!--          <label class="product-details-label">Item Weight (g):-->
-<!--            <input type="number" name="weight">-->
+<!--      <fieldSet id="variations-fieldset">-->
+<!--      </fieldSet>-->
+
+
+<!--          <label>Material Composition: <input type="text" name="materialComposition"></label>accept="image/*"-->
+<!--          <label>Pattern: <input type="text" name="pattern"></label>-->
+<!--          <label>Fit Type: <input type="text" name="fitType"></label>-->
+<!--          <label>Sleeve Type: <input type="text" name="sleeveType"></label>-->
+<!--          <label>Length: <input type="text" name="length"></label>-->
+<!--          <label>Collar Style: <input type="text" name="collarStyle"></label>-->
+
+<!--          <label>About this Item:-->
+<!--            <textarea name="aboutItem" placeholder="Use bullet points or separate lines"></textarea>-->
 <!--          </label>-->
 
-<!--          <label class="product-details-label">Generic Name:-->
-<!--            <input type="text" name="genericName">-->
-<!--          </label>-->
 
-<!--          <label class="product-details-label">Country of Origin:-->
-<!--            <input type="text" name="countryOfOrigin">-->
-<!--          </label>-->
-
-<!--&lt;!&ndash;          <label class="product-details-label">Manufacturer:&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="text" th:field="*{manufacturer}" name="manufacturer">&ndash;&gt;-->
-<!--&lt;!&ndash;          </label>&ndash;&gt;-->
-
-<!--&lt;!&ndash;          <label class="product-details-label">Packer:&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="text" th:field="*{packer}" name="packer">&ndash;&gt;-->
-<!--&lt;!&ndash;          </label>&ndash;&gt;-->
-<!--        </fieldset>-->
-
-<!--        &lt;!&ndash; Image Upload &ndash;&gt;-->
+<!-- Additional Information -->
 <!--        <fieldset>-->
-<!--          <legend>Upload Images (max 3)</legend>-->
-<!--          <input type="file" name="images" id="product-images" multiple />-->
-<!--          <div id="image-stats"></div>-->
+<!--          <legend>Additional Information</legend>-->
+
+
+<!--          <label>Item Dimensions:-->
+<!--            <input type="number" name="length" placeholder="Length (cm)">-->
+<!--            <input type="number" name="width" placeholder="Width (cm)">-->
+<!--            <input type="number" name="height" placeholder="Height (cm)">-->
+<!--          </label>-->
+
 <!--        </fieldset>-->
-
-<!--        &lt;!&ndash; Submit Button &ndash;&gt;-->
-<!--        <button type="submit">Add Product</button>-->
-<!--    </form>-->
-
-<!--  </div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Footer menu &ndash;&gt;-->
-
-<!--<div class="footer-menu-container">-->
-
-<!--  <div class="footer-options-container">-->
-<!--    <div class="footer-options footer-contact-wrapper">-->
-<!--      <img src="/media/MENZO_logo.jpg" alt="">-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  <div class="end-footer">-->
-<!--    <div id="copy-right-container">-->
-<!--      <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-<!--<script src="/js/nav-bar-script.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>-->
-
-<!--<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>-->
-<!--<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>-->
-<!--<script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>-->
-<!--<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>-->
-<!--<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>-->
-<!--<script src="/js/add-product-form-fields.js"></script>-->
-<!--</body>-->
-
-<!--</html>-->
-
-
-<!--&lt;!&ndash;        <label class="general-info-label">SKU:&ndash;&gt;-->
-<!--&lt;!&ndash;          <input type="text" th:field="*{sku}" name="sku" placeholder="SKU" required />&ndash;&gt;-->
-<!--&lt;!&ndash;        </label>&ndash;&gt;-->
-<!--&lt;!&ndash;        <label class="general-info-label">Stock:&ndash;&gt;-->
-<!--&lt;!&ndash;          <input type="number" th:field="*{stock}" name="stock" placeholder="Stock count" required />&ndash;&gt;-->
-<!--&lt;!&ndash;        </label>&ndash;&gt;-->
-<!--&lt;!&ndash;        <label class="general-info-label">Price:&ndash;&gt;-->
-<!--&lt;!&ndash;          <input type="number" th:field="*{price}" name="price" placeholder="Price" required />&ndash;&gt;-->
-<!--&lt;!&ndash;        </label>&ndash;&gt;-->
-
-
-
-<!--&lt;!&ndash;        <label class="general-info-label">Status:&ndash;&gt;-->
-<!--&lt;!&ndash;          <input type="radio" th:field="*{status}" name="status" value="active" checked /> Active&ndash;&gt;-->
-<!--&lt;!&ndash;          <input type="radio" th:field="*{status}" name="status" value="inactive" /> Inactive&ndash;&gt;-->
-<!--&lt;!&ndash;        </label>&ndash;&gt;-->
-
-
-<!--&lt;!&ndash;      Product Variations&ndash;&gt;-->
-
-<!--&lt;!&ndash;      <fieldSet id="variations-fieldset">&ndash;&gt;-->
-<!--&lt;!&ndash;      </fieldSet>&ndash;&gt;-->
-
-
-
-<!--&lt;!&ndash;          <label>Material Composition: <input type="text" name="materialComposition"></label>accept="image/*"&ndash;&gt;-->
-<!--&lt;!&ndash;          <label>Pattern: <input type="text" name="pattern"></label>&ndash;&gt;-->
-<!--&lt;!&ndash;          <label>Fit Type: <input type="text" name="fitType"></label>&ndash;&gt;-->
-<!--&lt;!&ndash;          <label>Sleeve Type: <input type="text" name="sleeveType"></label>&ndash;&gt;-->
-<!--&lt;!&ndash;          <label>Length: <input type="text" name="length"></label>&ndash;&gt;-->
-<!--&lt;!&ndash;          <label>Collar Style: <input type="text" name="collarStyle"></label>&ndash;&gt;-->
-
-<!--&lt;!&ndash;          <label>About this Item:&ndash;&gt;-->
-<!--&lt;!&ndash;            <textarea name="aboutItem" placeholder="Use bullet points or separate lines"></textarea>&ndash;&gt;-->
-<!--&lt;!&ndash;          </label>&ndash;&gt;-->
-
-
-
-<!--&lt;!&ndash; Additional Information &ndash;&gt;-->
-<!--&lt;!&ndash;        <fieldset>&ndash;&gt;-->
-<!--&lt;!&ndash;          <legend>Additional Information</legend>&ndash;&gt;-->
-
-
-<!--&lt;!&ndash;          <label>Item Dimensions:&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="number" name="length" placeholder="Length (cm)">&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="number" name="width" placeholder="Width (cm)">&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="number" name="height" placeholder="Height (cm)">&ndash;&gt;-->
-<!--&lt;!&ndash;          </label>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        </fieldset>&ndash;&gt;-->
