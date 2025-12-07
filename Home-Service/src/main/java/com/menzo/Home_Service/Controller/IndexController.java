@@ -32,10 +32,10 @@ public class IndexController {
             String userEmail = jwtUtil.extractUserEmail(token);
             ClientSideUserDetailsDto user = userService.getUserDetailsForClientSide(userEmail);
             model.addAttribute("user", user);
-            System.out.println("this one is running..." + user);
+//            System.out.println("this one is running..." + user);
         } else {
             model.addAttribute("user", null);
-            System.out.println("This 2 is running...");
+//            System.out.println("This 2 is running...");
         }
 //        System.out.println("Index user details: " + token);
         return "IndexTemplates/index-page.html";
@@ -70,7 +70,7 @@ public class IndexController {
 
         ParentCategoryDto parentCategory = productService.getParentCategoryById(id);
         List<CategoryMinimalDto> subCategories = productService.getAllSubCategoriesByCategoryId(id);
-
+//
         model.addAttribute("category", parentCategory);
         model.addAttribute("subCategories", subCategories);
         return "IndexTemplates/category";

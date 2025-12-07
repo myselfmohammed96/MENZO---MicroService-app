@@ -11,4 +11,6 @@ public interface ProductsRepoCustom {
 
     Page<ProductListingDto> findAdminProductListing(QueryDetailsDto queryDetails);
 
+//    Page<ProductListingDto> findUserProductListing();
+
 }

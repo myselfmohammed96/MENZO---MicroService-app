@@ -1,6 +1,6 @@
 package com.menzo.Home_Service.Dto;
 
-public class LoginCredectials {
+public class LoginCredentials {
 
     private String email;
     private String password;

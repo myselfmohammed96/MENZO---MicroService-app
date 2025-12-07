@@ -350,6 +350,34 @@ public class CategoriesRestController {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //    Get all parent categories with Banner images - without sub-categories (id, categoryName, categoryBannerImg)
+    @GetMapping("/get-all-with-banner")
+    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
+        return categoriesRetrievalService.getAllCategoriesWithBanner();
+    }
+
+    //    Get all sub-categories by parent id with Banner images - (id, categoryName, categoryBannerImg)
+    @GetMapping("/get-sub-with-banner")
+    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
+        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService
+                .getAllSubCategoriesByParentIdWithBanner(parentId);
+        return ResponseEntity.ok(subCategoriesList);
+    }
 }
 
 
@@ -360,11 +388,6 @@ public class CategoriesRestController {
 
 
 
-//    Get all parent categories with Banner images - without sub-categories (id, categoryName, categoryBannerImg)
-//    @GetMapping("/get-all-with-banner")
-//    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
-//        return categoriesRetrievalService.getAllCategoriesWithBanner();
-//    }
 
 
 
@@ -374,10 +397,4 @@ public class CategoriesRestController {
 
 
 
-//    Get all sub-categories by parent id with Banner images - (id, categoryName, categoryBannerImg)
-//    @GetMapping("/get-sub-with-banner")
-//    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
-//        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService
-//                .getAllSubCategoriesByParentIdWithBanner(parentId);
-//        return ResponseEntity.ok(subCategoriesList);
-//    }
+

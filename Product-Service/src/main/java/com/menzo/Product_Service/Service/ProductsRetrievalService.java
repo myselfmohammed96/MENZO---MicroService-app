@@ -66,7 +66,6 @@ public class ProductsRetrievalService {
     }
 
 
-
     //  ********* Get all products listing with pagination & filtering *********
 
     public Page<ProductListingDto> getAdminAllProductListing(Integer page,
@@ -119,7 +118,6 @@ public class ProductsRetrievalService {
     }
 
 
-
     private String getSortValue(String sortRequest) {
         return switch (sortRequest) {
             case "latest" -> {
@@ -140,7 +138,6 @@ public class ProductsRetrievalService {
             default -> throw new IllegalArgumentException("Invalid sortRequest: " + sortRequest);
         };
     }
-
 
 
     //  ********* Get all items by product ID *********
@@ -266,7 +263,6 @@ public class ProductsRetrievalService {
     }
 
 
-
     //  ********* get product item details by given super SKU *********
 
     public ItemDetailsDto getItemDetails(String superSku) {
@@ -308,7 +304,6 @@ public class ProductsRetrievalService {
 //                .hexCode()
                 .build();
     }
-
 
 
 //    private Map<String, List<?>> getFilterValues(List<FilterRequestDto> filterRequests) {

@@ -144,12 +144,7 @@ public class ProductsService {
         );
 
         //  --------- saving PRODUCT ITEMS ---------
-//        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
-//        AtomicInteger statusFlag = new AtomicInteger(0);
-//        AtomicInteger stockSum = new AtomicInteger(0);
-
         List<ProductItem> savedItems = new ArrayList<>();
-//        List<ItemSizeDto> sizeDetailDtos = new ArrayList<>();
 
         logger.info("Saving product items");
         for (SizeDetailsDto sizeDetail : sizeDetails) {
@@ -162,25 +157,6 @@ public class ProductsService {
                     productDetails.getStatus().equalsIgnoreCase("active")
             );
             savedItems.add(savedItem);
-
-//            if (savedItem.getPrice() < startingPrice.get()) {
-//                startingPrice.set(savedItem.getPrice());
-//            }
-//            if (savedItem.getIsActive()) {
-//                statusFlag.incrementAndGet();
-//            }
-//            stockSum.addAndGet(savedItem.getQtyInStock());
-
-//            ItemSizeDto sizeDto = ItemSizeDto.builder()
-//                    .itemId(savedItem.getId())
-//                    .size(sizeDetail.getSizeValue())
-//                    .sku(savedItem.getSKU())
-//                    .qtyInStock(savedItem.getQtyInStock())
-//                    .isActive(savedItem.getIsActive())
-//                    .createdAt(savedItem.getCreatedAt())
-//                    .build();
-//
-//            sizeDetailDtos.add(sizeDto);
         }
         if (savedItems.size() != sizeDetails.size()) {
             throw new RuntimeException("Number of 'product items input' doesn't match 'saved product items'");
@@ -466,30 +442,6 @@ public class ProductsService {
     public List<VariationOption> processVariations(Map<String, String> variationDetailsMap,
                                                    List<ProductConfiguration> productConfigs) {
         if (variationDetailsMap != null && productConfigs == null) {
-//            Map<String, String> variations = variationsMap.entrySet().stream()
-//                    .filter(e -> !List.of(
-//                            "productName",
-//                            "description",
-//                            "sizeStockMap",
-//                            "color",
-//                            "status",
-//                            "pod",
-//                            "price",
-//                            "itemWeight",
-//                            "genericName",
-//                            "countryOfOrigin",
-//                            "manufacturer",
-//                            "packer",
-//                            "categoryId",
-//                            "subCategoryId",
-//                            "size",
-//                            "discount",
-//                            "discount-type"
-//                    ).contains(e.getKey()))
-//                    .filter(e -> !e.getKey().startsWith("sizeStockMap["))
-//                    .collect(Collectors.toMap(e -> e.getKey().split("\\.")[1], Map.Entry::getValue));       //  ## can simplify this operation by doing both filtering the map and extracting ids together
-
-////            variations.entrySet().stream().forEach(v -> System.out.println(v));
             List<Long> idList = variationDetailsMap.entrySet().stream()
                     .map(e -> Long.valueOf(e.getValue()))
                     .collect(Collectors.toList());

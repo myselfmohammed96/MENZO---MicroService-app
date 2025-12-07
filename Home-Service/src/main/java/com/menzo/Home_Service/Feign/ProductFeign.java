@@ -19,4 +19,5 @@ public interface ProductFeign {
 
     @GetMapping("/categories/get-sub-with-banner")
     public List<CategoryMinimalDto> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId);
+
 }

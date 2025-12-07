@@ -159,6 +159,7 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
     }
 
 
+    //  ********* Utility methods *********
 
     private Map<String, String> generatePredicates(List<FilterRequestDto> filterValues) {
 

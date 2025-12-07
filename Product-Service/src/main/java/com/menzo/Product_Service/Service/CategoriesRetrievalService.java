@@ -216,27 +216,27 @@ public class CategoriesRetrievalService {
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
     }
 
-//    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
-//        List<ParentCategoryDto> allParentCategories = getAllParents();
-//        return allParentCategories.stream()
-//                .map(parent -> new CategoryMinimalDto(
-//                        parent.getId(),
-//                        parent.getCategoryName(),
-//                        null)
-//                )
-//                .collect(Collectors.toList());
-//    }
+    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
+        List<ParentCategoryDto> allParentCategories = getAllParents();
+        return allParentCategories.stream()
+                .map(parent -> new CategoryMinimalDto(
+                        parent.getId(),
+                        parent.getCategoryName(),
+                        null)
+                )
+                .collect(Collectors.toList());
+    }
 
-//    public List<CategoryMinimalDto> getAllSubCategoriesByParentIdWithBanner(Long parentId) {
-//        List<SubCategoryDto> allSubByParentId = getAllSubOfParentId(parentId);
-//        return allSubByParentId.stream()
-//                .map(sub -> new CategoryMinimalDto(
-//                        sub.getId(),
-//                        sub.getCategoryName(),
-//                        null)
-//                )
-//                .collect(Collectors.toList());
-//    }
+    public List<CategoryMinimalDto> getAllSubCategoriesByParentIdWithBanner(Long parentId) {
+        List<SubCategoryDto> allSubByParentId = getAllSubOfParentId(parentId);
+        return allSubByParentId.stream()
+                .map(sub -> new CategoryMinimalDto(
+                        sub.getId(),
+                        sub.getCategoryName(),
+                        null)
+                )
+                .collect(Collectors.toList());
+    }
 
 }
 

@@ -1,6 +1,6 @@
 package com.menzo.Home_Service.Controller;
 
-import com.menzo.Home_Service.Dto.LoginCredectials;
+import com.menzo.Home_Service.Dto.LoginCredentials;
 import com.menzo.Home_Service.Dto.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginForm(Model model){
-        model.addAttribute("loginCred", new LoginCredectials());
+        model.addAttribute("loginCred", new LoginCredentials());
         return "AuthTemplates/log-in-form";
     }
 
