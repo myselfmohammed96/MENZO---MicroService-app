@@ -1,9 +1,12 @@
 const getProductList = "http://localhost:8080/products/all-products";
+
 let tBody;
 let paginationContainer;
+
 let currentSortParam;
 let currentRequestDto;
 let currentPage = 1;
+
 //  ##  apply server side default pageSize control -
 //  (with admin preference & user preference on client side)
 let pageSize = 3;

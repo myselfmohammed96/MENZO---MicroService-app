@@ -28,4 +28,8 @@ public class ProductService {
         List<CategoryMinimalDto> allSubCategories = productFeign.getAllSubCategoriesWithBanner(id);
         return allSubCategories;
     }
+
+    public void getProductDetails(String superSku) {
+        productFeign.getProductDetails(superSku);
+    }
 }

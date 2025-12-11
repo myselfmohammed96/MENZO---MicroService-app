@@ -2,13 +2,12 @@ package com.menzo.Product_Service.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingView;
+import com.menzo.Product_Service.Dto.ProductDto.AdminProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.UserProductListingDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,26 +22,42 @@ import java.util.List;
         "items",
         "category"
 })
-@SqlResultSetMapping(
-        name = "ProductListingDtoMapping",
-        classes = @ConstructorResult(
-                targetClass = ProductListingDto.class,
-                columns = {
-                        @ColumnResult(name = "productId", type = Long.class),
-                        @ColumnResult(name = "productName", type = String.class),
-                        @ColumnResult(name = "subCategoryName", type = String.class),
-                        @ColumnResult(name = "categoryName", type = String.class),
-                        @ColumnResult(name = "minPrice", type = Float.class),
-                        @ColumnResult(name = "maxPrice", type = Float.class),
-                        @ColumnResult(name = "minStockQty", type = Integer.class),
-                        @ColumnResult(name = "maxStockQty", type = Integer.class),
-                        @ColumnResult(name = "latestCreatedAt", type = Timestamp.class),
-                        @ColumnResult(name = "oldestCreatedAt", type = Timestamp.class),
-                        @ColumnResult(name = "colorCount", type = Integer.class),
-                        @ColumnResult(name = "activeStatus", type = String.class),
-                }
+@SqlResultSetMappings({
+        @SqlResultSetMapping(
+                name = "AdminProductListingDtoMapping",
+                classes = @ConstructorResult(
+                        targetClass = AdminProductListingDto.class,
+                        columns = {
+                                @ColumnResult(name = "productId", type = Long.class),
+                                @ColumnResult(name = "productName", type = String.class),
+                                @ColumnResult(name = "subCategoryName", type = String.class),
+                                @ColumnResult(name = "categoryName", type = String.class),
+                                @ColumnResult(name = "minPrice", type = Float.class),
+                                @ColumnResult(name = "maxPrice", type = Float.class),
+                                @ColumnResult(name = "minStockQty", type = Integer.class),
+                                @ColumnResult(name = "maxStockQty", type = Integer.class),
+                                @ColumnResult(name = "latestCreatedAt", type = Timestamp.class),
+                                @ColumnResult(name = "oldestCreatedAt", type = Timestamp.class),
+                                @ColumnResult(name = "colorCount", type = Integer.class),
+                                @ColumnResult(name = "activeStatus", type = String.class),
+                        }
+                )
+        ),
+        @SqlResultSetMapping(
+                name = "UserProductListingDtoMapping",
+                classes = @ConstructorResult(
+                        targetClass = UserProductListingDto.class,
+                        columns = {
+                                @ColumnResult(name = "productId", type = Long.class),
+                                @ColumnResult(name = "productName", type = String.class),
+                                @ColumnResult(name = "minPrice", type = Float.class),
+                                @ColumnResult(name = "maxPrice", type = Float.class),
+                                @ColumnResult(name = "minStockQty", type = Integer.class),
+                                @ColumnResult(name = "iconImage", type = String.class)
+                        }
+                )
         )
-)
+})
 @Table(name = "products")
 public class Product {
 

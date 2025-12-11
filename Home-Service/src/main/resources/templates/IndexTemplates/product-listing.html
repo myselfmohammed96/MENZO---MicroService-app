@@ -149,11 +149,31 @@
 
         <div class="categories-container">
             <!-- Product Grid -->
-            <div class="product-grid">
+            <div class="grid-wrapper">
+                <div class="product-grid">
 
+                    <div class="product-card">
+                        <a href="">
+                            <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
+                            <p class="product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="discount-card">
+                                <p class="discount-text">45% off</p>
+                            </div>
+                            <div class="discount-price-wishlist-container">
+                                <div class="na-discount-price">
+                                    <strong class="current-price">₹ 1,500</strong>
+                                    <p class="deprecated-price">₹ 2,500</p>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
 
-
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -173,8 +193,7 @@
                         </div>
                     </a>
                 </div>
-
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -194,8 +213,7 @@
                         </div>
                     </a>
                 </div>
-
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -215,7 +233,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -235,7 +253,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -255,7 +273,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -275,7 +293,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -295,7 +313,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -315,7 +333,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -335,7 +353,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
+                    <div class="product-card">
                     <a href="">
                         <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
                         <p class="product-name">Peter England Men's Regular Fit Branded Insignia
@@ -355,28 +373,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="product-card">
-                    <a href="">
-                        <img class="product-image-preview" src="/home-media/banner-images/tshirt_preview image.webp" alt="">
-                        <p class="product-name">Peter England Men's Regular Fit Branded Insignia
-                            Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
-                        <div class="discount-card">
-                            <p class="discount-text">45% off</p>
-                        </div>
-                        <div class="discount-price-wishlist-container">
-                            <div class="na-discount-price">
-                                <strong class="current-price">₹ 1,500</strong>
-                                <p class="deprecated-price">₹ 2,500</p>
-                            </div>
-                            <label class="wishlist-label">
-                                <input type="checkbox" class="wishlist-checkbox">
-                                <span class="wishlist-heart">❤</span>
-                            </label>
-                        </div>
-                    </a>
                 </div>
-
             </div>
+
 
             <!-- Pagination -->
 
@@ -524,7 +523,7 @@
 
 <!-- Toast notification -->
 
-<div class="toast show" id="toast">
+<div class="toast" id="toast">
     <div class="toast-icon toast-success-icon" id="toast-icon"></div>
     <div class="toast-message-container">
         <h3 id="toast-title">Success!</h3>
@@ -641,7 +640,8 @@
 </script>
 <script src="/home-js/nav-bar-script.js"></script>
 <script src="/home-js/user-side-menu-script.js"></script>
+<script src="/home-js/product-listing.js"></script>
 
-<script src="/home-js/script.js"></script>
+<!--<script src="/home-js/script.js"></script>-->
 </body>
 </html>

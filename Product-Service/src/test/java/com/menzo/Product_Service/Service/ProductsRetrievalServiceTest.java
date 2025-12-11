@@ -1,16 +1,14 @@
 package com.menzo.Product_Service.Service;
 
 import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
+import com.menzo.Product_Service.Dto.ProductDto.AdminProductListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ItemDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ItemListingDto;
 import com.menzo.Product_Service.Dto.ProductDto.ItemSizeDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.UserProductDetailsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @SpringBootTest
 class ProductsRetrievalServiceTest {
@@ -20,7 +18,7 @@ class ProductsRetrievalServiceTest {
 
     @Test
     public void testGetAdminAllProductListing() {
-        Page<ProductListingDto> adminAllProductListing = productsRetrievalService.getAdminAllProductListing(0,
+        Page<AdminProductListingDto> adminAllProductListing = productsRetrievalService.getAdminProductListing(0,
                 10,
                 null,
                 new RequestDto());
@@ -40,10 +38,16 @@ class ProductsRetrievalServiceTest {
         }
     }
 
+    @Test
+    public void testGetUserProductDetails() {
+        UserProductDetailsDto userProductDetails = productsRetrievalService.getUserProductDetails("C-90-BK");
+        System.out.println(userProductDetails);
+    }
+
 //    @Test
 //    public void testGetAllItems() {
-//        List<ItemListingDto> allItems = productsRetrievalService.getAllItems(82L);
-//        for (ItemListingDto item : allItems) {
+//        List<AdminItemListingDto> allItems = productsRetrievalService.getAllItems(82L);
+//        for (AdminItemListingDto item : allItems) {
 //            System.out.println(item);
 //        }
 //    }

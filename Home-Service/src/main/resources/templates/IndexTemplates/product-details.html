@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/home-css/navbar-footer-sidenav-styling.css">
+    <link rel="stylesheet" href="/home-css/navbar-footer-sidenav-theme-font-effects.css">
+
+    <link rel="stylesheet" href="/home-css/components-styling.css">
+    <link rel="stylesheet" href="/home-css/Components-theme-fonts-effects.css">
+
+
+
+
+
+
+
+    <!-- <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/components-media-queries.css"> -->
+
+    <link rel="stylesheet" href="/home-css/theme-fonts-effects.css">
+    <link rel="stylesheet" href="/home-css/theme-fonts-effects-media-queries.css">
+
+    <!-- <link rel="stylesheet" href="../css/all-categories.css"> -->
+    <link rel="stylesheet" href="/home-css/home.css">
+    <!-- <link rel="stylesheet" href="../css/side-menu.css"> -->
+    <link rel="stylesheet" href="/home-css/details.css">
+    <title>MENZO | Product</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+
+    <!-- Top nav bar -->
+
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href=""><img src="../media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-wishlist">
+                <a id="wishlist-icon-container" href="">
+                    <div class="icon-image-container">
+                        <img id="heart-icon" src="../media/heart_icon.jpeg" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p id="wishlist-count">0</p>
+                        </div>
+                        <div><strong>Saved</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="nav-icon-cart">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="cart-icon" src="../media/cart_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p id="cart-count">50</p>
+                        </div>
+                        <div><strong>My cart</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="user-profile-icon" class="dropdown-toggle">
+                <div class="icon-image-container">
+                    <img id="profile-icon" src="../media/profile_icon.png" alt="">
+                </div>
+                <div class="icon-details-container">
+                    <div>
+                        <p id="profile-greeting">sign in</p>
+                    </div>
+                    <div><strong id="profile-label">Account</strong></div>
+                </div>
+                <ul id="user-dropdown" class="dropdown hidden">
+                    <li><a href="">Create an account</a></li>
+                    <li><a href="">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom nav bar (for categories) -->
+
+    <div id="bottom-nav-bar">
+        <ul id="bottom-nav-options-container">
+            <li class="bottom-nav-options"><a href="">Shirts & T-Shirts</a></li>
+            <li class="bottom-nav-options"><a href="">Pants</a></li>
+            <li class="bottom-nav-options"><a href="">Hoodies</a></li>
+            <li class="bottom-nav-options"><a href="">Coats & Jackets</a></li>
+            <li class="bottom-nav-options"><a href="">Perfumes</a></li>
+            <li class="bottom-nav-options"><a href="">Watches</a></li>
+            <li class="bottom-nav-options"><a href="">Caps</a></li>
+            <li class="bottom-nav-options"><a href="">Shoes</a></li>
+
+            <li class="bottom-nav-options" id="more-option">
+                <span>More ▾</span>
+                <ul class="more-dropdown hidden">
+                    <li><a href="">hello</a></li>
+                    <li><a href="">hi</a></li>
+                    <li><a href="">hi</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+
+    <div class="side-menu-bar-container no-select">
+
+        <h2 class="main-menu-options" id="categories-menu-option">
+            <span id="categories-heading">Categories</span>
+            <span id="categories-option-arrow"><img src="../media/down-arrow.png" alt=""></span>
+        </h2>
+
+        <ul class="menu category-menu display" id="categories-menu-content">
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Shirts & T-Shirts</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container current-category-option">
+                    <span>pants</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Hoodies</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Coats & Jackets</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"><a href="">Formal shirts</a></li>
+                    <li class="sub-category-item"><a href="">Casual shirts</a></li>
+                    <li class="sub-category-item"><a href="">T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">Polo T-shirts</a></li>
+                    <li class="sub-category-item"><a href="">V-neck T-shirts</a></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Perfumes</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Watches</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Caps</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Shoes</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Sunglasses</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Belts & Wallets</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>Sports Fit</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+
+            <li class="category-item">
+                <div class="category-item-title-container">
+                    <span>More</span>
+                </div>
+                <ul class="sub-category-menu hidden">
+                    <li class="sub-category-item"></li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr class="side-menu-custom-line" />
+
+        <h2 class="main-menu-options" id="profile-menu-option">
+            <span id="profile-heading">Profile</span>
+            <span id="profile-option-arrow" class="flip"><img src="../media/down-arrow.png" alt=""></span>
+        </h2>
+        <ul class="menu profile-menu" id="profile-menu-content">
+            <li class="profile-item">
+                <a href="">My account</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Orders</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Addresses</a>
+            </li>
+
+            <li class="profile-item">
+                <a href="">Wishlist</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Wallet</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Coupons</a>
+            </li>
+            <li class="profile-item">
+                <a href="">Logout</a>
+            </li>
+        </ul>
+        <hr class="side-menu-custom-line" />
+    </div>
+
+    <div class="main-content-container">
+        <!-- Product details -->
+
+        <div class="product-details-wrapper">
+            <div class="product-display-col-1">
+                <!-- <div class="image-display-container"> -->
+                <div id="image-icons-wrapper">
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                    <div class="image-icon-container">
+                        <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    </div>
+                </div>
+                <div id="image-zoom" style="
+                        --url: url('/admin panels/media/51NW7DOyfEL._SY741_.jpg');
+                        --zoom-x: 0%; --zoom-y: 0%;
+                        --display: none;
+                        ">
+                    <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                </div>
+                <!-- </div> -->
+            </div>
+            <div class="product-display-col-2">
+                <div>
+                    <h2 class="product-name">Men's Regular Fit Soft Cotton Blend Casual Combo Shirt with Pocket
+                        Design
+                        & Spread Collar Full Sleeves Formal Shirt</h2>
+                    <span id="product-monthly-sale-note"><strong>200+ bought </strong>in past month</span>
+                </div>
+
+                <hr class="custom-line">
+
+                <div>
+                    <div id="limited-time-deal-tag-container">
+                        <span id="limited-time-deal-tag">Limited time deal</span>
+                    </div>
+                    <div id="product-pricing-details">
+                        <span id="product-discount-percentage">-53%</span>
+                        <span id="product-pricing">₹ 516</span>
+                    </div>
+                    <span id="mrp-price-note">M.R.P: <span id="mrp-price">₹ 1,099</span></span>
+                    <p id="tax-inclusion-note">Inclusive of all taxes</p>
+                    <a href="" id="save-later-option">Save for later</a>
+                </div>
+
+                <hr class="custom-line">
+
+                <div class="meta-tags-container">
+                    <div class="meta-tag-wrapper">
+                        <img class="meta-tag-images" src="../media/icon-returns._CB562506492_.png" alt="">
+                        <span class="meta-tag-text">10 days Return & Exchange</span>
+                    </div>
+                    <div class="meta-tag-wrapper">
+                        <img class="meta-tag-images" src="../media/icon-cod._CB562506657_.png" alt="">
+                        <span class="meta-tag-text">Pay on Delivery</span>
+                    </div>
+                    <div class="meta-tag-wrapper">
+                        <img class="meta-tag-images" src="../media/trust_icon_free_shipping_81px._CB562549966_.png"
+                             alt="">
+                        <span class="meta-tag-text">Free Delivery</span>
+                    </div>
+                    <div class="meta-tag-wrapper">
+                        <img class="meta-tag-images" src="../media/Secure-payment._CB650126890_.png" alt="">
+                        <span class="meta-tag-text">Secure Transaction</span>
+                    </div>
+                </div>
+
+                <hr class="custom-line">
+
+                <div id="product-details-buttons-container">
+                    <input type="number" id="product-quantity" placeholder="Quantity">
+                    <button id="add-to-cart-btn" class="button-checkout-1">Add to Cart</button>
+                    <button id="buy-now-btn" class="button-checkout-2">Buy now</button>
+                </div>
+
+                <hr class="custom-line">
+
+                <div class="product-details-data">
+                    <h2 class="details-heading top-details-heading">Product details</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Pattern: </strong>
+                        <p class="details-value">Solid</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Fit type: </strong>
+                        <p class="details-value">Regular fit</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Sleeve type: </strong>
+                        <p class="details-value">Half sleeve</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Collor type: </strong>
+                        <p class="details-value">Pollar collar</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Length: </strong>
+                        <p class="details-value">Standard length</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Country of Origin: </strong>
+                        <p class="details-value">India</p>
+                    </div>
+
+                    <h2 class="details-heading">Description</h2>
+                    <p class="details-value">Solid shirts are easy to match with different bottoms, such as jeans,
+                        chinos, or shorts, making them suitable for various outfits. Short-sleeve shirts are perfect
+                        for layering with jackets or sweaters during cooler weather or for creating stylish looks.
+                        Solid short-sleeve shirts serve as go-to options for days when you need a quick and stylish
+                        outfit without much fuss.</p>
+
+                    <h2 class="details-heading">Additional details</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Manufacturer:</strong>
+                        <p class="details-value">ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli
+                            Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk,
+                            Bangalore,Karnataka,India</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Packer: </strong>
+                        <p class="details-value">ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli
+                            Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk,
+                            Bangalore,Karnataka,India</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Item weight: </strong>
+                        <p class="details-value">400 g</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Net quantity: </strong>
+                        <p class="details-value">1 count</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Generic name: </strong>
+                        <p class="details-value">Polo Tshirt</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="custom-line-2">
+
+        <!-- New arrivals -->
+
+        <div class="new-arrivals-container">
+            <h2>TOP RATED</h2>
+            <div class="new-arrivals-options-container">
+                <div class="new-arrivals-options-wrap">
+
+                    <!-- Wrapper containing individual product - begins -->
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Wrapper containing individual product - ends -->
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-details-container">
+                        <a href="">
+                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
+                                Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
+                            <div class="na-discount-price-wishlist">
+                                <div class="na-discount-price">
+                                    <p class="na-discount">-47%</p>
+                                    <strong class="na-price">₹ 1,500</strong>
+                                </div>
+                                <label class="wishlist-label">
+                                    <input type="checkbox" class="wishlist-checkbox">
+                                    <span class="wishlist-heart">❤</span>
+                                </label>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- View all button -->
+
+                <div id="view-all-button-container">
+                    <button class="button-transparent-1">View all</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+
+<div class="toast " id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span>&#10005;</span>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+    <div class="email-sub-container">
+        <div class="email-sub-label">
+            <img src="../media/paper-rocket.jpg" alt="">
+            <p>SUBSCRIBE OUR NEWSLETTER & GET ALL OUR NEWS <br>ABOUT NEW PRODUCTS, OFFERS AND BLOGS.</p>
+        </div>
+        <div class="email-sub-input">
+            <p>*Get a 5% offer by subscribing our newsletter. Expires on 31 May.</p>
+            <div class="email-input-wrapper">
+                <input type="email" placeholder="Enter your email..." />
+                <button>Subscribe</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="../media/MENZO_logo.jpg" alt="">
+
+            <div class="footer-contacts" id="footer-address">
+                <img src="../media/location-icon.png" alt="">
+                <strong>Address: </strong>
+                <p>Road No, Street line 1, <br>City, State.</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-telephone">
+                <img src="../media/telephone-icon.jpg" alt="">
+                <strong>Telephone: </strong>
+                <p>09876 54321</p>
+            </div>
+
+            <div class="footer-contacts" id="footer-email">
+                <img src="../media/Email-icon.png" alt="">
+                <strong>Email Address: </strong>
+                <p>info@menzo.in</p>
+            </div>
+        </div>
+
+        <div class="footer-options footer-pages-wrapper">
+            <h2>PAGES</h2>
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="">About us</a></li>
+                <li><a href="">Shop</a></li>
+                <li><a href="">Cart</a></li>
+                <li><a href="">Wishlist</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-categories-wrapper">
+            <h2>CATEGORIES</h2>
+            <ul>
+                <li><a href="">Shirts & T-Shirts</a></li>
+                <li><a href="">Pants</a></li>
+                <li><a href="">Hoodies</a></li>
+                <li><a href="">Coats & Jackets</a></li>
+                <li><a href="">Perfumes</a></li>
+                <li><a href="">Watches</a></li>
+                <li><a href="">Caps</a></li>
+                <li><a href="">Shoes</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-support-wrapper">
+            <h2>SUPPORT</h2>
+            <ul>
+                <li><a href="">My Account</a></li>
+                <li><a href="">My Orders</a></li>
+                <li><a href="">My wallet</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="">FAQs</a></li>
+                <li><a href="">Privacy policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-options footer-social-media-wrapper">
+            <h2>SOCIAL MEDIA</h2>
+            <div id="social-media-links-wrapper">
+                <a href=""><img id="footer-facebook-link" src="../media/facebook.jpg" alt=""></a>
+                <a href=""><img id="footer-instagram-link" src="../media/Instagram.png" alt=""></a>
+                <a href=""><img id="footer-whatsapp-link" src="../media/whatsapp-icon.jpg" alt=""></a>
+                <a href=""><img id="footer-tiktok-link" src="../media/tiktok.png" alt=""></a>
+                <a href=""><img id="footer-twitter-link" src="../media/twitter.jpg" alt=""></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+        <div id="payment-cards-container">
+            <img id="visa-card-logo" src="../media/visa.png" alt="">
+            <img id="apple-pay-logo" src="../media/apple-pay.png" alt="">
+            <img id="mastercard-logo" src="../media/mastercart-logo.webp" alt="">
+            <img id="paypal-logo" src="../media/paypal.png" alt="">
+            <img id="stripe-pay-logo" src="../media/stripe-pay.png" alt="">
+        </div>
+    </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script src="../js/nav-bar-script.js"></script>
+<script src="../js/user-side-menu-script.js"></script>
+<script src="/admin panels/js/product-details-script.js"></script>
+</body>
+
+</html>

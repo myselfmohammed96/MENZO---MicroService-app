@@ -1,15 +1,14 @@
 package com.menzo.Product_Service.Repository;
 
-import com.menzo.Product_Service.Dto.FilterDtos.FilterRequestDto;
 import com.menzo.Product_Service.Dto.FilterDtos.QueryDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.AdminProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.UserProductListingDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -33,9 +32,37 @@ class ProductsRepoCustomImplTest {
                 .filterValues(null)
                 .statusFlags(statusFlags)
                 .build();
-        Page<ProductListingDto> page = productsRepoCustom.findAdminProductListing(queryDetails);
+        Page<AdminProductListingDto> page = productsRepoCustom.findAdminProductListing(queryDetails);
 
-        for(ProductListingDto dto : page.getContent()) {
+        for(AdminProductListingDto dto : page.getContent()) {
+            System.out.println(dto);
+        }
+        System.out.println(page.getContent().size());
+    }
+
+    @Test
+    public void testFindUserProductListing() {
+        Map<String, Integer> statusFlags = new HashMap<>();
+        statusFlags.put("isItemActive", 1);
+        statusFlags.put("podAvailable", 1);
+
+        statusFlags.put("isCategoryDeleted", 0);
+        statusFlags.put("isSubCategoryDeleted", 0);
+        statusFlags.put("isCategoryActive", 1);
+        statusFlags.put("isSubCategoryActive", 1);
+
+        QueryDetailsDto queryDetails = QueryDetailsDto.builder()
+                .page(0)
+                .size(10)
+                .sortRequest(null)
+                .allowInactiveProductItems(true)
+                .filterValues(null)
+                .statusFlags(statusFlags)
+                .build();
+        Page<UserProductListingDto> page = productsRepoCustom.findUserProductListing(queryDetails);
+
+        System.out.println("User Product Listing: ");
+        for(UserProductListingDto dto : page.getContent()) {
             System.out.println(dto);
         }
         System.out.println(page.getContent().size());

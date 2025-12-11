@@ -23,17 +23,20 @@ public class RouteValidator {
             "/auth/login",
             "/auth/grantcode",
             "/oauth2/",
-            "product-listing",
+            "/product-listing",
+            "/products/user-listing",
+            "/product",
 
             "/categories/get-all-parents",
 
-        //  static end points
+            //  static end points
             "/home-css/",
             "/home-js/",
             "/home-media/",
             "/css/",
             "/js/",
-            "/media/"
+            "/media/",
+            "/uploads"
 //            "/admin/categories"
 //            "/categories/health-check"
     );

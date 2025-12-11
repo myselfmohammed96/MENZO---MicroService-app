@@ -95,7 +95,7 @@ async function fetchSizes() {
 
 
 
-//  ********* POPULATE - methods *********
+//  ********* POPULATE methods *********
 
 //  POPULATE - categories
 function populateCategories(categories = []) {

@@ -76,9 +76,20 @@ public class IndexController {
         return "IndexTemplates/category";
     }
 
+
     @GetMapping("/product-listing")
-    public String productListing() {
+    public String productListing(@RequestParam(value = "id", required = false) Long id,
+                                 Model model) {
+        System.out.println("id: " + id);
+//        model.addAttribute()
         return "IndexTemplates/product-listing";
+    }
+
+    @GetMapping("/product")
+    public String productDetails(@RequestParam("ssku") String superSku,
+                                 Model model) {
+        productService.getProductDetails(superSku);
+        return "IndexTemplates/product-details";
     }
 
 }

@@ -1,6 +1,6 @@
 //package com.menzo.Product_Service.Service;
 //
-//import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
+//import com.menzo.Product_Service.Dto.ProductDto.AdminProductListingDto;
 //import com.menzo.Product_Service.Dto.ProductDto.ProductMinimalListingDto;
 //import com.menzo.Product_Service.Entity.Product;
 //import com.menzo.Product_Service.Entity.ProductItem;

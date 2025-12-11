@@ -20,6 +20,13 @@ public class QueryDetailsDto {
 
     private String sortRequest;
 
+    private String categoryName;
+    //  only one category at a time
+    //  check for existance in product retrieval servie
+
+    private List<String> subCategoryNames;
+    //  can be multiple at a time
+
     private boolean allowInactiveProductItems;
 
     private List<FilterRequestDto> filterValues;

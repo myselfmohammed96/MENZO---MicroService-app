@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductDetailsDto {
+public class AdminProductDetailsDto {
 
     private String productName;
 
@@ -39,6 +38,6 @@ public class ProductDetailsDto {
 
     private String packer;
 
-    private List<ItemListingDto> productItems;
+    private List<AdminItemListingDto> productItems;
 
 }

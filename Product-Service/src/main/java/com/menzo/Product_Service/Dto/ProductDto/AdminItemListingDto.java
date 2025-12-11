@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ItemListingDto {
+public class AdminItemListingDto {
 
 //    private Long id;
 

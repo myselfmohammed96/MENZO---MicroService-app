@@ -13,7 +13,7 @@ class ProductRestControllerTest {
 
     @Test
     public void testGetAllProducts() {
-        ResponseEntity<?> allProducts = productRestController.getAllProducts(
+        ResponseEntity<?> allProducts = productRestController.getAdminProductListing(
                 0,
                 15,
                 null,

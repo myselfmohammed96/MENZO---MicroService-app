@@ -2,7 +2,8 @@ package com.menzo.Product_Service.Repository;
 
 import com.menzo.Product_Service.Dto.FilterDtos.FilterRequestDto;
 import com.menzo.Product_Service.Dto.FilterDtos.QueryDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.AdminProductListingDto;
+import com.menzo.Product_Service.Dto.ProductDto.UserProductListingDto;
 import com.menzo.Product_Service.Service.VariationsRetrievalService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Repository
@@ -31,8 +33,11 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
     private VariationsRetrievalService variationsRetrievalService;
 
 
+    /// /  ********* PRODUCT LISTING methods *********
+
+    //  get product listing - for ADMIN side
     @Override
-    public Page<ProductListingDto> findAdminProductListing(QueryDetailsDto queryDetails) {
+    public Page<AdminProductListingDto> findAdminProductListing(QueryDetailsDto queryDetails) {
 
         //  generating WHERE Clause for given filter values
         Map<String, String> predicatesMap = new HashMap<>();
@@ -131,13 +136,14 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
         countQuery.setParameter("isSubCategoryActive", queryDetails.getStatusFlags().get("isSubCategoryActive"));
         countQuery.setParameter("isCategoryActive", queryDetails.getStatusFlags().get("isCategoryActive"));
 
-        Long totalElements = ((Number) countQuery.getSingleResult()).longValue();
+        long totalElements = ((Number) countQuery.getSingleResult()).longValue();
+
 
         //  ***** main page query *****
 
         String mainPageQueryString = adminSelectClause + baseQuery;
 
-        Query query = entityManager.createNativeQuery(mainPageQueryString, "ProductListingDtoMapping");
+        Query query = entityManager.createNativeQuery(mainPageQueryString, "AdminProductListingDtoMapping");
 
         query.setParameter("isSubCategoryDeleted", queryDetails.getStatusFlags().get("isSubCategoryDeleted"));
         query.setParameter("isCategoryDeleted", queryDetails.getStatusFlags().get("isCategoryDeleted"));
@@ -151,7 +157,7 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
         query.setMaxResults(size);
 
         logger.info("fetching query content");
-        List<ProductListingDto> pageContent = query.getResultList();
+        List<AdminProductListingDto> pageContent = query.getResultList();
 
         //  ***** returning page object *****
         Pageable pageable = PageRequest.of(page, size);
@@ -159,26 +165,176 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
     }
 
 
-    //  ********* Utility methods *********
+    //  get product listing - for USER side
+    @Override
+    public Page<UserProductListingDto> findUserProductListing(QueryDetailsDto queryDetails) {
+
+        String userSelectClause = """
+                        SELECT 
+                                p.id AS productId, 
+                                p.product_name as productName, 
+                                it.minPrice, 
+                                it.maxPrice, 
+                                it.minStockQty, 
+                                it.iconImage 
+                """;
+
+        //  generating WHERE clause for given FILTER VALUES
+        Map<String, String> predicatesMap = new HashMap<>();
+        if (queryDetails.getFilterValues() != null && !queryDetails.getFilterValues().isEmpty()) {
+            logger.info("generating filter predicates");
+            predicatesMap = generatePredicates(queryDetails.getFilterValues());
+        }
+        StringBuilder variationAndPriceFilters = new StringBuilder();
+
+        if (predicatesMap.containsKey("variationFilterQuery")) {
+            variationAndPriceFilters.append("AND (")
+                    .append(predicatesMap.get("variationFilterQuery"))
+                    .append(")");
+        }
+
+        if (predicatesMap.containsKey("priceFilterQuery")) {
+            variationAndPriceFilters.append("AND (")
+                    .append(predicatesMap.get("priceFilterQuery"))
+                    .append(")");
+        }
+
+        //  generating CATEGORY FILTER query
+        String categoryFilterQuery = "";
+        if (queryDetails.getCategoryName() != null && !queryDetails.getCategoryName().isEmpty()) {
+            categoryFilterQuery = "AND LOWER(c.category_name) = '"
+                    + queryDetails.getCategoryName().toLowerCase()
+                    + "'";
+        }
+        StringBuilder subCategoryFilterQuery = new StringBuilder();
+        if (queryDetails.getSubCategoryNames() != null && !queryDetails.getSubCategoryNames().isEmpty()) {
+            subCategoryFilterQuery.append("AND LOWER(sc.category_name) IN (");
+
+            List<String> lowerCased = queryDetails.getSubCategoryNames()
+                    .stream()
+                    .map(String::toLowerCase)
+                    .toList();
+
+            subCategoryFilterQuery.append("'")
+                    .append(String.join("', '", lowerCased))
+                    .append("')");
+        }
+        String categoryFilters = categoryFilterQuery + subCategoryFilterQuery;
+
+        //  generating SORT query
+        String sortingQuery = "";
+        if (queryDetails.getSortRequest() != null && !queryDetails.getSortRequest().isEmpty()) {
+            String sortField = queryDetails.getSortRequest().split(",")[0];
+            String sortDirection = queryDetails.getSortRequest().split(",")[1];
+
+            sortingQuery = "ORDER BY " + sortField + " " + sortDirection;
+        }
+
+        //  Building Base query
+        String baseQuery = """                       
+                FROM products p 
+                INNER JOIN product_categories sc
+                    ON p.category_id = sc.id 
+                INNER JOIN product_categories c 
+                    ON sc.parent_category_id = c.id 
+                LEFT JOIN ( 
+                    SELECT 
+                            i.product_id AS productId, 
+                            MIN(i.price) AS minPrice, 
+                            MAX(i.price) AS maxPrice, 
+                            MIN(i.created_at) AS oldestCreatedAt, 
+                            MAX(i.created_at) AS latestCreatedAt, 
+                            MIN(i.qty_in_stock) AS minStockQty, 
+                            im.image_url AS iconImage 
+                        FROM product_items i 
+                        JOIN product_configurations pc 
+                            ON i.id = pc.product_item_id 
+                        JOIN variation_options o 
+                            ON pc.variation_option_id = o.id 
+                        JOIN variations v 
+                            ON o.variation_id = v.id 
+                        JOIN item_image_configuration iic 
+                            ON i.id = iic.item_id 
+                        JOIN product_images im 
+                            ON iic.image_id = im.id 
+                        WHERE 
+                            i.is_active = :isItemActive 
+                """ + variationAndPriceFilters + """
+                        GROUP BY i.product_id 
+                ) AS it ON p.id = it.productId 
+                WHERE p.pod_available = :podAvailable 
+                """ + categoryFilters + """
+                    AND c.is_deleted = :isCategoryDeleted 
+                    AND sc.is_deleted = :isSubCategoryDeleted 
+                    AND c.is_active = :isCategoryActive 
+                    AND sc.is_active = :isSubCategoryActive 
+                    AND minPrice IS NOT NULL 
+                    AND maxPrice IS NOT NULL 
+                    AND minStockQty IS NOT NULL 
+                    AND latestCreatedAt IS NOT NULL 
+                    AND oldestCreatedAt IS NOT NULL 
+                """ + sortingQuery;
+
+        //  ***** Count query *****
+        String countQueryString = "SELECT COUNT(*) " + baseQuery;
+
+        Query countQuery = entityManager.createNativeQuery(countQueryString);
+
+        countQuery.setParameter("isItemActive", queryDetails.getStatusFlags().get("isItemActive"));
+        countQuery.setParameter("podAvailable", queryDetails.getStatusFlags().get("podAvailable"));
+
+        countQuery.setParameter("isCategoryDeleted", queryDetails.getStatusFlags().get("isCategoryDeleted"));
+        countQuery.setParameter("isSubCategoryDeleted", queryDetails.getStatusFlags().get("isSubCategoryDeleted"));
+        countQuery.setParameter("isCategoryActive", queryDetails.getStatusFlags().get("isCategoryActive"));
+        countQuery.setParameter("isSubCategoryActive", queryDetails.getStatusFlags().get("isSubCategoryActive"));
+
+        long totalElements = ((Number) countQuery.getSingleResult()).longValue();
+
+        // ***** main page query *****
+
+        String mainQueryString = userSelectClause + baseQuery;
+
+        Query query = entityManager.createNativeQuery(mainQueryString, "UserProductListingDtoMapping");
+
+        query.setParameter("isItemActive", queryDetails.getStatusFlags().get("isItemActive"));
+        query.setParameter("podAvailable", queryDetails.getStatusFlags().get("podAvailable"));
+
+        query.setParameter("isCategoryDeleted", queryDetails.getStatusFlags().get("isCategoryDeleted"));
+        query.setParameter("isSubCategoryDeleted", queryDetails.getStatusFlags().get("isSubCategoryDeleted"));
+        query.setParameter("isCategoryActive", queryDetails.getStatusFlags().get("isCategoryActive"));
+        query.setParameter("isSubCategoryActive", queryDetails.getStatusFlags().get("isSubCategoryActive"));
+
+        int page = queryDetails.getPage();
+        int size = queryDetails.getSize();
+
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+
+        logger.info("fetching query content - user product listing");
+        List<UserProductListingDto> pageContent = query.getResultList();
+
+        //  ***** returning page object *****
+        Pageable pageable = PageRequest.of(page, size);
+        return new PageImpl<>(pageContent, pageable, totalElements);
+    }
+
+
+    /// /  ********* Utility methods *********
 
     private Map<String, String> generatePredicates(List<FilterRequestDto> filterValues) {
 
-        System.out.println(filterValues);
         Map<String, String> predicatesMap = new HashMap<>();
+
+        //  getting all variation names
         List<String> variationNames = variationsRetrievalService.getAllVariations()
                 .stream()
-//                .map(VariationDto::getVariationName)
                 .map(v -> v.getVariationName().toLowerCase())
                 .toList();
-        System.out.println(variationNames);
 
         //  generating predicates for 'variations' filter values
         List<FilterRequestDto> variationFilters = filterValues.stream()
                 .filter(f -> variationNames.contains(f.getFilterType().toLowerCase()))
                 .toList();
-        filterValues.stream()
-                .filter(f -> variationNames.contains(f.getFilterType().toLowerCase()))
-                .forEach(f -> System.out.println("this -> " + f));
         String variationFilterQuery = generateVariationPredicates(variationFilters);
         if (!variationFilterQuery.isEmpty()) predicatesMap.put("variationFilterQuery", variationFilterQuery);
 
@@ -187,18 +343,36 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                 .filter(f -> f.getFilterType().equalsIgnoreCase("price")
                         || f.getFilterType().equalsIgnoreCase("stock"))
                 .toList();
-        String priceAndStockFilterQuery = generatePriceAndStockPredicates(priceAndStockFilters);
-        if (!priceAndStockFilterQuery.isEmpty())
-            predicatesMap.put("priceAndStockFilterQuery", priceAndStockFilterQuery);
+
+        //  checking if only 'price' filter or 'price' & 'stock' filter
+        AtomicBoolean priceOnly = new AtomicBoolean(true);
+        priceAndStockFilters.stream()
+                .filter(f -> f.getFilterType().equalsIgnoreCase("stock"))
+                .forEach(f -> priceOnly.set(false));
+        if (priceOnly.get()) {
+            String priceFilterQuery = generatePriceAndStockPredicates(priceAndStockFilters, priceOnly.get());
+            if (!priceFilterQuery.isEmpty()) {
+                predicatesMap.put("priceFilterQuery", priceFilterQuery);
+            }
+        } else {
+            String priceAndStockFilterQuery = generatePriceAndStockPredicates(priceAndStockFilters, priceOnly.get());
+            if (!priceAndStockFilterQuery.isEmpty()) {
+                predicatesMap.put("priceAndStockFilterQuery", priceAndStockFilterQuery);
+            }
+        }
 
         return predicatesMap;
     }
 
+
+    //  generate query to filter variation values
     private String generateVariationPredicates(List<FilterRequestDto> variationFilters) {
-        logger.info("generating variations filter predicates for '" + variationFilters.size() + "' variations");
+        logger.info("generating variations filter predicates for " + variationFilters.size() + " variations");
         return variationFilters.stream()
                 .map(f -> {
-                    List<String> correctedValues = Arrays.stream(f.getValues().split(", "))
+
+                    //  processing filter values
+                    List<String> correctedValues = Arrays.stream(f.getValues().split(", "))     //  ## take care f the ", " & ",\\s*"
                             .map(String::trim)
                             .map(value -> "'" + value.toLowerCase() + "'")
                             .toList();
@@ -207,13 +381,32 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
 
                     return "(LOWER(v.variation_name) = '" + f.getFilterType().toLowerCase() +
                             "' AND LOWER(o.option_value) IN (" + filterValue + "))";
-                })
-                .collect(Collectors.joining(" OR "));
+                }).collect(Collectors.joining(" OR "));
     }
 
-    private String generatePriceAndStockPredicates(List<FilterRequestDto> priceAndStockFilters) {
-        logger.info("generating price and stock predicates for '" + priceAndStockFilters.size() + "' filter requests");
+
+    //  generate query to filter PRICE & STOCK values
+    private String generatePriceAndStockPredicates(List<FilterRequestDto> priceAndStockFilters,
+                                                   boolean priceOnly) {
+
         List<String> predicates = new ArrayList<>();
+
+        if (!priceOnly) {
+            logger.info("generating price and stock predicates");
+
+            //  handling stock filters
+            priceAndStockFilters.stream()
+                    .filter(f -> f.getFilterType().equalsIgnoreCase("stock"))
+                    .forEach(f -> {
+                        Arrays.stream(f.getValues().toLowerCase().split(",\\s*"))
+                                .forEach(s -> {
+                                    String[] stockValues = s.split(" to ");
+                                    predicates.add("i.qty_in_stock BETWEEN " + stockValues[0].trim() + " AND " + stockValues[1].trim());
+                                });
+                    });
+        } else {
+            logger.info("generating price predicates");
+        }
 
         //  handling price filters
         priceAndStockFilters.stream()
@@ -226,59 +419,9 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                             });
                 });
 
-        //  handling stock filters
-        priceAndStockFilters.stream()
-                .filter(f -> f.getFilterType().equalsIgnoreCase("stock"))
-                .forEach(f -> {
-                    Arrays.stream(f.getValues().toLowerCase().split(",\\s*"))
-                            .forEach(s -> {
-                                String[] stockValues = s.split(" to ");
-                                predicates.add("i.qty_in_stock BETWEEN " + stockValues[0].trim() + " AND " + stockValues[1].trim());
-                            });
-                });
-
         return String.join(" OR ", predicates);
     }
 
 }
 
 
-//        String innerWhereClause = innerWhereClauseQueries.isEmpty() ? "" : innerWhereClauseQueries.toString();
-//        String outerWhereClause = "";
-
-//        StringBuilder queryBuilder = new StringBuilder(baseQuery);
-//        Map<String, Object> params = new HashMap<>();
-
-//        //  building filter query (Dynamic WHERE clause)
-//        if (queryDetails.getFilterValues() != null && !queryDetails.getFilterValues().isEmpty()) {
-//            queryBuilder.append("\nWHERE ");
-//            List<String> conditions = new ArrayList<>();
-//
-//            int index = 0;
-//            for (FilterRequestDto filter : queryDetails.getFilterValues()) {
-//                String paramName = filter.getFilterType() + index;
-//                conditions.add(filter.getFilterType() + " IN (:" + paramName + ")");
-//                params.put(paramName, Arrays.asList(filter.getValues().split(",")));
-//                index++;
-//            }
-//            queryBuilder.append(String.join(" AND ", conditions));
-//        }
-
-//        //  sorting query
-//        if (queryDetails.getSortRequest() != null && !queryDetails.getSortRequest().isEmpty()) {
-//            String[] sortParams = queryDetails.getSortRequest().toLowerCase().split(",");
-//            if (sortParams.length == 2) {
-//                queryBuilder.append("\nORDER BY ")
-//                        .append(sortParams[0].trim())
-//                        .append(" ")
-//                        .append(sortParams[1].trim());
-//            }
-//        }
-
-//        Query query = entityManager.createNativeQuery(queryBuilder.toString(), "ProductListingDtoMapping");
-
-
-//  dynamic filter params
-//        for (Map.Entry<String, Object> entry : params.entrySet()) {
-//            query.setParameter(entry.getKey(), entry.getValue());
-//        }
