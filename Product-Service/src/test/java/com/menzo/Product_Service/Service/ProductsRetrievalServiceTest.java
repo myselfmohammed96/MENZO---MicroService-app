@@ -1,10 +1,11 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.FilterDtos.RequestDto;
-import com.menzo.Product_Service.Dto.ProductDto.AdminProductListingDto;
-import com.menzo.Product_Service.Dto.ProductDto.ItemDetailsDto;
-import com.menzo.Product_Service.Dto.ProductDto.ItemSizeDto;
-import com.menzo.Product_Service.Dto.ProductDto.UserProductDetailsDto;
+import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import com.menzo.Product_Service.Modules.Product.Dto.AdminProductListingDto;
+import com.menzo.Product_Service.Modules.Product.Dto.ItemDetailsDto;
+import com.menzo.Product_Service.Modules.Product.Dto.ItemSizeDto;
+import com.menzo.Product_Service.Modules.Product.Dto.UserProductDetailsDto;
+import com.menzo.Product_Service.Modules.Product.Service.ProductsQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.Page;
 class ProductsRetrievalServiceTest {
 
     @Autowired
-    private ProductsRetrievalService productsRetrievalService;
+    private ProductsQueryService productsRetrievalService;
 
     @Test
     public void testGetAdminAllProductListing() {

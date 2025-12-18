@@ -1,11 +1,17 @@
 package com.menzo.Product_Service.Service;
 
 //import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
-import com.menzo.Product_Service.Entity.*;
-import com.menzo.Product_Service.Repository.ProductConfigurationRepo;
-import com.menzo.Product_Service.Repository.ProductItemsRepo;
-import com.menzo.Product_Service.Repository.ProductsRepo;
-import com.menzo.Product_Service.Repository.VariationsOptionsRepo;
+import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
+import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Modules.Product.Entity.Product;
+import com.menzo.Product_Service.Modules.Product.Entity.ProductConfiguration;
+import com.menzo.Product_Service.Modules.Product.Entity.ProductItem;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductConfigurationRepo;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductItemsRepo;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Modules.Product.Service.ProductsService;
+import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Modules.Variation.Repo.VariationsOptionsRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

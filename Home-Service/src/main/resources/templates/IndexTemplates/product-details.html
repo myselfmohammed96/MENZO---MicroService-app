@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+        xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -42,7 +43,7 @@
 
     <div id="top-nav-bar">
         <div class="top-nav-bar-elements" id="nav-bar-logo">
-            <a href=""><img src="../media/MENZO_logo.jpg" alt=""></a>
+            <a href=""><img src="/home-media/utility-media/MENZO_logo.jpg" alt=""></a>
         </div>
         <div class="top-nav-bar-elements" id="nav-bar-search-bar">
             <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
@@ -51,7 +52,7 @@
             <div id="nav-icon-wishlist">
                 <a id="wishlist-icon-container" href="">
                     <div class="icon-image-container">
-                        <img id="heart-icon" src="../media/heart_icon.jpeg" alt="">
+                        <img id="heart-icon" src="/home-media/utility-media/heart_icon.jpeg" alt="">
                     </div>
                     <div class="icon-details-container">
                         <div>
@@ -64,7 +65,7 @@
             <div id="nav-icon-cart">
                 <a href="">
                     <div class="icon-image-container">
-                        <img id="cart-icon" src="../media/cart_icon.png" alt="">
+                        <img id="cart-icon" src="/home-media/utility-media/cart_icon.png" alt="">
                     </div>
                     <div class="icon-details-container">
                         <div>
@@ -76,7 +77,7 @@
             </div>
             <div id="user-profile-icon" class="dropdown-toggle">
                 <div class="icon-image-container">
-                    <img id="profile-icon" src="../media/profile_icon.png" alt="">
+                    <img id="profile-icon" src="/home-media/utility-media/profile_icon.png" alt="">
                 </div>
                 <div class="icon-details-container">
                     <div>
@@ -126,7 +127,7 @@
 
         <h2 class="main-menu-options" id="categories-menu-option">
             <span id="categories-heading">Categories</span>
-            <span id="categories-option-arrow"><img src="../media/down-arrow.png" alt=""></span>
+            <span id="categories-option-arrow"><img src="/home-media/utility-media/down-arrow.png" alt=""></span>
         </h2>
 
         <ul class="menu category-menu display" id="categories-menu-content">
@@ -259,7 +260,7 @@
 
         <h2 class="main-menu-options" id="profile-menu-option">
             <span id="profile-heading">Profile</span>
-            <span id="profile-option-arrow" class="flip"><img src="../media/down-arrow.png" alt=""></span>
+            <span id="profile-option-arrow" class="flip"><img src="/home-media/utility-media/down-arrow.png" alt=""></span>
         </h2>
         <ul class="menu profile-menu" id="profile-menu-content">
             <li class="profile-item">
@@ -330,7 +331,7 @@
                         --zoom-x: 0%; --zoom-y: 0%;
                         --display: none;
                         ">
-                    <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                    <img id="image-preview" src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
                 </div>
                 <!-- </div> -->
             </div>
@@ -340,6 +341,7 @@
                         Design
                         & Spread Collar Full Sleeves Formal Shirt</h2>
                     <span id="product-monthly-sale-note"><strong>200+ bought </strong>in past month</span>
+                    <span id="init-load-super-sku" style="display:none;" th:text="${superSku}"></span>
                 </div>
 
                 <hr class="custom-line">
@@ -361,20 +363,20 @@
 
                 <div class="meta-tags-container">
                     <div class="meta-tag-wrapper">
-                        <img class="meta-tag-images" src="../media/icon-returns._CB562506492_.png" alt="">
+                        <img class="meta-tag-images" src="/home-media/utility-media/icon-returns._CB562506492_.png" alt="">
                         <span class="meta-tag-text">10 days Return & Exchange</span>
                     </div>
                     <div class="meta-tag-wrapper">
-                        <img class="meta-tag-images" src="../media/icon-cod._CB562506657_.png" alt="">
+                        <img class="meta-tag-images" src="/home-media/utility-media/icon-cod._CB562506657_.png" alt="">
                         <span class="meta-tag-text">Pay on Delivery</span>
                     </div>
                     <div class="meta-tag-wrapper">
-                        <img class="meta-tag-images" src="../media/trust_icon_free_shipping_81px._CB562549966_.png"
+                        <img class="meta-tag-images" src="/home-media/utility-media/trust_icon_free_shipping_81px._CB562549966_.png"
                              alt="">
                         <span class="meta-tag-text">Free Delivery</span>
                     </div>
                     <div class="meta-tag-wrapper">
-                        <img class="meta-tag-images" src="../media/Secure-payment._CB650126890_.png" alt="">
+                        <img class="meta-tag-images" src="/home-media/utility-media/Secure-payment._CB650126890_.png" alt="">
                         <span class="meta-tag-text">Secure Transaction</span>
                     </div>
                 </div>
@@ -389,35 +391,67 @@
 
                 <hr class="custom-line">
 
+                <div id="color-and-size-wrapper">
+                    <div id="color-wrapper">
+                        <div id="color-heading">
+                            <span class="heading-key">Color:</span>
+                            <span id="color-value" class="heading-value">Black</span>
+                        </div>
+                        <div id="color-body"></div>
+                    </div>
+                    <div id="size-wrapper">
+                        <div id="size-heading">
+                            <span class="heading-key">Size:</span>
+                            <span class="heading-value">M</span>
+                        </div>
+                        <div id="size-body">
+                            <div class="size-option"><span>XS</span></div>
+                            <div class="size-option"><span>S</span></div>
+                            <div class="size-option"><span>M</span></div>
+                            <div class="size-option"><span>L</span></div>
+                            <div class="size-option size-option-select"><span>XL</span></div>
+                            <div class="size-option"><span>2XL</span></div>
+                            <div class="size-option"><span>3XL</span></div>
+                            <div class="size-option"><span>4XL</span></div>
+                        </div>
+                        <div id="size-chart-option">
+                                <span id="size-chart-button">
+                                    <span id="size-chart-text">Size Chart</span>
+                                    <span id="size-chart-arrow">+</span>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="custom-line">
+
                 <div class="product-details-data">
                     <h2 class="details-heading top-details-heading">Product details</h2>
-                    <div class="details-text">
-                        <strong class="details-key">Pattern: </strong>
-                        <p class="details-value">Solid</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Fit type: </strong>
-                        <p class="details-value">Regular fit</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Sleeve type: </strong>
-                        <p class="details-value">Half sleeve</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Collor type: </strong>
-                        <p class="details-value">Pollar collar</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Length: </strong>
-                        <p class="details-value">Standard length</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Country of Origin: </strong>
-                        <p class="details-value">India</p>
+                    <div id="product-variation-details">
+                        <div class="details-text">
+                            <strong class="details-key">Pattern: </strong>
+                            <p class="details-value">Solid</p>
+                        </div>
+                        <div class="details-text">
+                            <strong class="details-key">Fit type: </strong>
+                            <p class="details-value">Regular fit</p>
+                        </div>
+                        <div class="details-text">
+                            <strong class="details-key">Sleeve type: </strong>
+                            <p class="details-value">Half sleeve</p>
+                        </div>
+                        <div class="details-text">
+                            <strong class="details-key">Color type: </strong>
+                            <p class="details-value">Polar collar</p>
+                        </div>
+                        <div class="details-text">
+                            <strong class="details-key">Length: </strong>
+                            <p class="details-value">Standard length</p>
+                        </div>
                     </div>
 
                     <h2 class="details-heading">Description</h2>
-                    <p class="details-value">Solid shirts are easy to match with different bottoms, such as jeans,
+                    <p id="product-description" class="details-value">Solid shirts are easy to match with different bottoms, such as jeans,
                         chinos, or shorts, making them suitable for various outfits. Short-sleeve shirts are perfect
                         for layering with jackets or sweaters during cooler weather or for creating stylish looks.
                         Solid short-sleeve shirts serve as go-to options for days when you need a quick and stylish
@@ -426,19 +460,23 @@
                     <h2 class="details-heading">Additional details</h2>
                     <div class="details-text">
                         <strong class="details-key">Manufacturer:</strong>
-                        <p class="details-value">ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli
+                        <p id="manufacturer" class="details-value">ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli
                             Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk,
                             Bangalore,Karnataka,India</p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Packer: </strong>
-                        <p class="details-value">ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli
+                        <p id="packer" class="details-value">ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli
                             Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk,
                             Bangalore,Karnataka,India</p>
                     </div>
                     <div class="details-text">
+                        <strong class="details-key">Country of Origin: </strong>
+                        <p id="country-of-origin" class="details-value">India</p>
+                    </div>
+                    <div class="details-text">
                         <strong class="details-key">Item weight: </strong>
-                        <p class="details-value">400 g</p>
+                        <p id="item-weight" class="details-value">400 g</p>
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Net quantity: </strong>
@@ -446,7 +484,7 @@
                     </div>
                     <div class="details-text">
                         <strong class="details-key">Generic name: </strong>
-                        <p class="details-value">Polo Tshirt</p>
+                        <p id="generic-name" class="details-value">Polo Tshirt</p>
                     </div>
                 </div>
             </div>
@@ -539,7 +577,7 @@
 
                     <div class="product-details-container">
                         <a href="">
-                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <img class="new-arrivals-image-preview" src="/home-media/tshirt_preview image.webp" alt="">
                             <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
                                 Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
                             <div class="na-discount-price-wishlist">
@@ -557,7 +595,7 @@
 
                     <div class="product-details-container">
                         <a href="">
-                            <img class="new-arrivals-image-preview" src="../media/tshirt_preview image.webp" alt="">
+                            <img class="new-arrivals-image-preview" src="/home-media/tshirt_preview image.webp" alt="">
                             <p class="new-arrivals-product-name">Peter England Men's Regular Fit Branded Insignia
                                 Half Sleeve Polo T-Shirt | Cotton Rich | Premium Pique Weave</p>
                             <div class="na-discount-price-wishlist">
@@ -603,7 +641,7 @@
 <div class="footer-menu-container">
     <div class="email-sub-container">
         <div class="email-sub-label">
-            <img src="../media/paper-rocket.jpg" alt="">
+            <img src="/home-media/utility-media/paper-rocket.jpg" alt="">
             <p>SUBSCRIBE OUR NEWSLETTER & GET ALL OUR NEWS <br>ABOUT NEW PRODUCTS, OFFERS AND BLOGS.</p>
         </div>
         <div class="email-sub-input">
@@ -617,22 +655,22 @@
 
     <div class="footer-options-container">
         <div class="footer-options footer-contact-wrapper">
-            <img src="../media/MENZO_logo.jpg" alt="">
+            <img src="/home-media/utility-media/MENZO_logo.jpg" alt="">
 
             <div class="footer-contacts" id="footer-address">
-                <img src="../media/location-icon.png" alt="">
+                <img src="/home-media/utility-media/location-icon.png" alt="">
                 <strong>Address: </strong>
                 <p>Road No, Street line 1, <br>City, State.</p>
             </div>
 
             <div class="footer-contacts" id="footer-telephone">
-                <img src="../media/telephone-icon.jpg" alt="">
+                <img src="/home-media/utility-media/telephone-icon.jpg" alt="">
                 <strong>Telephone: </strong>
                 <p>09876 54321</p>
             </div>
 
             <div class="footer-contacts" id="footer-email">
-                <img src="../media/Email-icon.png" alt="">
+                <img src="/home-media/utility-media/Email-icon.png" alt="">
                 <strong>Email Address: </strong>
                 <p>info@menzo.in</p>
             </div>
@@ -675,11 +713,11 @@
         <div class="footer-options footer-social-media-wrapper">
             <h2>SOCIAL MEDIA</h2>
             <div id="social-media-links-wrapper">
-                <a href=""><img id="footer-facebook-link" src="../media/facebook.jpg" alt=""></a>
-                <a href=""><img id="footer-instagram-link" src="../media/Instagram.png" alt=""></a>
-                <a href=""><img id="footer-whatsapp-link" src="../media/whatsapp-icon.jpg" alt=""></a>
-                <a href=""><img id="footer-tiktok-link" src="../media/tiktok.png" alt=""></a>
-                <a href=""><img id="footer-twitter-link" src="../media/twitter.jpg" alt=""></a>
+                <a href=""><img id="footer-facebook-link" src="/home-media/utility-media/facebook.jpg" alt=""></a>
+                <a href=""><img id="footer-instagram-link" src="/home-media/utility-media/Instagram.png" alt=""></a>
+                <a href=""><img id="footer-whatsapp-link" src="/home-media/utility-media/whatsapp-icon.jpg" alt=""></a>
+                <a href=""><img id="footer-tiktok-link" src="/home-media/utility-media/tiktok.png" alt=""></a>
+                <a href=""><img id="footer-twitter-link" src="/home-media/utility-media/twitter.jpg" alt=""></a>
             </div>
 
         </div>
@@ -690,11 +728,11 @@
             <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
         </div>
         <div id="payment-cards-container">
-            <img id="visa-card-logo" src="../media/visa.png" alt="">
-            <img id="apple-pay-logo" src="../media/apple-pay.png" alt="">
-            <img id="mastercard-logo" src="../media/mastercart-logo.webp" alt="">
-            <img id="paypal-logo" src="../media/paypal.png" alt="">
-            <img id="stripe-pay-logo" src="../media/stripe-pay.png" alt="">
+            <img id="visa-card-logo" src="/home-media/utility-media/visa.png" alt="">
+            <img id="apple-pay-logo" src="/home-media/utility-media/apple-pay.png" alt="">
+            <img id="mastercard-logo" src="/home-media/utility-media/mastercart-logo.webp" alt="">
+            <img id="paypal-logo" src="/home-media/utility-media/paypal.png" alt="">
+            <img id="stripe-pay-logo" src="/home-media/utility-media/stripe-pay.png" alt="">
         </div>
     </div>
 </div>
@@ -703,6 +741,7 @@
 <script src="../js/nav-bar-script.js"></script>
 <script src="../js/user-side-menu-script.js"></script>
 <script src="/admin panels/js/product-details-script.js"></script>
+<script src="/home-js/product-details.js"></script>
 </body>
 
 </html>

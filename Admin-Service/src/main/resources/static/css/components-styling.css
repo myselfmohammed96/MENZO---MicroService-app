@@ -113,8 +113,6 @@
     margin-left: .75em;
 }
 
-
-
 .custom-line-1,
 .custom-line-2 {
   /* width: 97%; */
@@ -129,6 +127,8 @@
   width: 94% !important;
   margin-left: 3% !important;
 }
+
+
 
 /* ///////////////////////////////////// */
 
@@ -247,21 +247,36 @@
 }
 
 .modal-container,
-.modal-container-1 {
+.modal-container-1,
+.modal-container-2,
+.modal-container-3 {
     /* padding: 30px 50px; */
     min-width: 200px;
+    max-width: 95%;
+
     position: relative;
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     justify-content: flex-start;
     align-items: center;
-    /* overflow-y: auto; */
     overflow: hidden;
     max-height: 95vh;
 }
 
-.modal-container {
+.modal-container-2 {
+
+    width: 40%;
+    height: 92%;
+}
+
+.modal-container-3 {
+    width: 40%;
+    min-height: 60%;
+}
+
+.modal-container,
+.modal-container-3 {
     padding: 30px 50px
 }
 
@@ -292,6 +307,52 @@
     min-width: 900px;
 }
 
+.modal-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    /* border: 1px solid red; */
+}
+
+.modal-key-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-input-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-key {
+    color: #a1a1a1;
+    padding: 10px 0 5px 0;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.modal-input-wrapper {
+    flex: 3;
+    /* border: 1px solid red; */
+}
+
+.modal-value {
+    max-width: 300px;
+}
+
+.modal-input-container {
+    display: flex;
+    justify-content: space-between;
+    flex: 3;
+    /* border: 1px solid red; */
+    margin-bottom: 10px;
+}
+
+#item-form-modal-body {
+    min-width: 900px;
+}
 
 
 
@@ -314,6 +375,21 @@
     box-sizing: border-box;
     margin-bottom: 5px;
     padding: 10px 25px 5px 15px;
+}
+
+.modal-input-2 {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    padding: 10px 25px 5px 15px;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #cacaca;
+    color: #383838;
+    font-size: 1em;
+}
+div.choices {
+    margin-bottom: 0px;
 }
 
 .modal-button-container {
@@ -353,8 +429,6 @@
     cursor: pointer;
     transition: color 0.15s ease, transform 0.05s ease;
 }
-
-.modal-button-1:hover {}
 
 .modal-button:active,
 .modal-button-1:active {

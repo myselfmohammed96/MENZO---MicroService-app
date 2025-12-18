@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Repository;
 
-import com.menzo.Product_Service.Entity.ColorCode;
+import com.menzo.Product_Service.Modules.Variation.Entity.ColorCode;
+import com.menzo.Product_Service.Modules.Variation.Repo.ColorCodeRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

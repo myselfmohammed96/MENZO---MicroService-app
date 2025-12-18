@@ -996,10 +996,10 @@ input:-webkit-autofill {
     text-align: left;
 }
 
-.product-name:hover {
+/* .product-name:hover {
     text-decoration: underline;
     color: #3186be;
-}
+} */
 
 .discount-card {
     text-align: left;
@@ -1074,12 +1074,29 @@ input:-webkit-autofill {
 /* *** details *** */
 
 .image-icon-container {
-    border: 1.5px solid rgb(179, 179, 179);
+    border: 1px solid rgb(179, 179, 179);
     border-radius: 5px;
+    position: relative;
 }
 
 .image-icon-container:hover {
-    border: 2px solid rgb(95, 95, 95);
+    border: 1px solid rgb(98, 164, 255);
+}
+
+.image-icon-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.image-icon-container:hover .image-icon-overlay {
+    background: rgba(12, 113, 255, 0.055);
+}
+
+.image-icon-select {
+    border: 3px solid rgba(0, 77, 184, 0.637) !important;
 }
 
 .image-icon-container img {

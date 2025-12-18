@@ -29,7 +29,7 @@ public class ProductService {
         return allSubCategories;
     }
 
-    public void getProductDetails(String superSku) {
-        productFeign.getProductDetails(superSku);
-    }
+//    public void getProductDetails(String superSku) {
+//        productFeign.getProductDetails(superSku);
+//    }
 }

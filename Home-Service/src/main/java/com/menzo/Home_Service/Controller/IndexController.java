@@ -88,7 +88,8 @@ public class IndexController {
     @GetMapping("/product")
     public String productDetails(@RequestParam("ssku") String superSku,
                                  Model model) {
-        productService.getProductDetails(superSku);
+//        productService.getProductDetails(superSku);
+        model.addAttribute("superSku", superSku);
         return "IndexTemplates/product-details";
     }
 

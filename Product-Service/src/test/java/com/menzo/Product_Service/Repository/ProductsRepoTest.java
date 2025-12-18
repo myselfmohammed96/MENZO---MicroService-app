@@ -1,14 +1,13 @@
 package com.menzo.Product_Service.Repository;
 
-import com.menzo.Product_Service.Dto.ProductDto.ProductListingView;
-import com.menzo.Product_Service.Entity.Product;
+import com.menzo.Product_Service.Modules.Product.Dto.ProductListingView;
+import com.menzo.Product_Service.Modules.Product.Entity.Product;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductsRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProductsRepoTest {

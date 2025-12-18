@@ -50,6 +50,14 @@ tr:nth-child(even):hover {
     white-space: normal;
 }
 
+.first-table-heading-1 {
+    text-align: center;
+    max-width: 250px !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
 .center-text {
     text-align: center;
     vertical-align: middle;
@@ -125,9 +133,44 @@ td.center-text,
 
 .action-view-btn {
     margin-right: 10px;
-    text-decoration: none;
-    color: #6D6D6D;
+    border: 1px solid #8d8d8d !important;
+    /* text-decoration: none;
+    color: #6D6D6D; */
+    border-radius: 5px;
+    background: transparent;
+    padding: 5px 5px 2px 4px !important;
+    transition: transform 0.15s ease;
 }
+
+.action-view-btn:active,
+.action-delete-btn:active {
+    transform: scale(0.9);
+}
+
+.action-delete-btn {
+    /* color: #CB2020;
+    text-decoration: none; */
+    margin-right: 10px;
+    border: 1px solid #8d8d8d !important;
+    border-radius: 5px;
+    background: transparent;
+    padding: 7.5px 5px 2px 4.5px !important;
+    transition: transform 0.15s ease;
+}
+
+.action-view-btn img {
+    width: 25px;
+    opacity: 0.4;
+}
+
+.action-delete-btn img {
+    width: 24px;
+    opacity: 0.5;
+    padding-bottom: 2px;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
 
 .action-delete-btn {
     color: #CB2020;

@@ -20,6 +20,6 @@ public interface ProductFeign {
     @GetMapping("/categories/get-sub-with-banner")
     public List<CategoryMinimalDto> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId);
 
-    @GetMapping("/products/get-user-product-details")
-    public void getProductDetails(@RequestParam("ssku") String superSku);
+//    @GetMapping("/products/get-user-product-details")
+//    public void getProductDetails(@RequestParam("ssku") String superSku);
 }

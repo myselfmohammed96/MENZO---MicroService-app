@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Controller;
 
+import com.menzo.Product_Service.Modules.Product.Controller.ProductRestController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

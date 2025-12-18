@@ -1,10 +1,11 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Dto.CategoriesDto.NestedCategoryDto;
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryDto;
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
-import com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto;
-import com.menzo.Product_Service.Entity.ProductCategory;
+import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
+import com.menzo.Product_Service.Modules.Category.Dto.NestedCategoryDto;
+import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;
+import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
+import com.menzo.Product_Service.Modules.Category.Dto.SubCategoryDto;
+import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

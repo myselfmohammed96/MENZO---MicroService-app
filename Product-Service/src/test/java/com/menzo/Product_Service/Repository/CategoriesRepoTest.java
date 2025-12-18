@@ -1,8 +1,9 @@
 package com.menzo.Product_Service.Repository;
 
-import com.menzo.Product_Service.Dto.CategoriesDto.ParentCategoryView;
-import com.menzo.Product_Service.Entity.ProductCategory;
-import com.menzo.Product_Service.Service.UtilityService;
+import com.menzo.Product_Service.Modules.Category.Repo.CategoriesRepo;
+import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
+import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Modules.Product.Service.UtilityService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Session;

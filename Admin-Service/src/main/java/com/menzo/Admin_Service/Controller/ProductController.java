@@ -42,14 +42,7 @@ public class ProductController {
     }
 
 
-
     //  ********* Add forms *********
-    //  Product - add form                          *** add-product-form ***
-//    @GetMapping("/add-product")
-//    public String adminAddProductForm() {
-////        model.addAttribute("newProduct", new NewProductDto());
-//        return "Products/add-product-form";
-//    }
 
     @GetMapping("/add-product-v2")
     public String addProductFormV2(@RequestHeader("roles") String roles,
@@ -66,20 +59,6 @@ public class ProductController {
         model.addAttribute("newProduct", productDto);
         return "Products/add-product-form";
     }
-
-    //  Product item - add form
-//    @GetMapping("/add-item")
-//    public String adminAddProductItemForm() {
-//////                                          @RequestParam("category-id") Long subCategoryId,
-////                                          @RequestParam("id") Long productId,
-////                                          Model model) {
-//////        categoriesService.getSubCategoryByProductId(productId);
-////        ProductMinimalDto productDto = productRetrievalService.getProductById(productId);
-////        model.addAttribute("product", productDto);
-////        model.addAttribute("newProductItem", new NewProductItemDto(productDto.getProductId()));
-//        return "Products/add-product-item-form";
-//    }
-
 
 
     //  ********* Listing pages *********
@@ -98,7 +77,46 @@ public class ProductController {
     }
 
 
-    //  Product details & Product items listing - by product ID
+    //  ********* Details page *********
+    //  Product item details - by product item ID
+    @GetMapping("/product-details")
+    public String getProductDetailsByItemId() {
+        return "Products/product-details";
+    }
+
+
+    @GetMapping("/discount")
+    public String getDiscountManagement() {
+        return "DiscountsAndCoupons/discount";
+    }
+
+
+}
+
+
+//  Product - add form                          *** add-product-form ***
+//    @GetMapping("/add-product")
+//    public String adminAddProductForm() {
+/// /        model.addAttribute("newProduct", new NewProductDto());
+//        return "Products/add-product-form";
+//    }
+
+
+//  Product item - add form
+//    @GetMapping("/add-item")
+//    public String adminAddProductItemForm() {
+//////                                          @RequestParam("category-id") Long subCategoryId,
+////                                          @RequestParam("id") Long productId,
+////                                          Model model) {
+//////        categoriesService.getSubCategoryByProductId(productId);
+////        ProductMinimalDto productDto = productRetrievalService.getProductById(productId);
+////        model.addAttribute("product", productDto);
+////        model.addAttribute("newProductItem", new NewProductItemDto(productDto.getProductId()));
+//        return "Products/add-product-item-form";
+//    }
+
+
+//  Product details & Product items listing - by product ID
 //    @GetMapping( "/product-items")
 //    public String getAllProductItemsByProductId() {
 ////        ProductDetailsDto productDetails = productRetrievalService.getProductDetailsById(productId);
@@ -107,13 +125,6 @@ public class ProductController {
 //        return "Products/all-product-items";
 //    }
 
-
-    //  ********* Details page *********
-    //  Product item details - by product item ID
-    @GetMapping("/product-details")
-    public String getProductDetailsByItemId() {
-        return "Products/product-details";
-    }
 
 //    public String getAllProductsListingWithPagination(@RequestParam(defaultValue = "0") Integer page,
 //                                                      @RequestParam(defaultValue = "10") Integer size,
@@ -124,4 +135,3 @@ public class ProductController {
 //        model.addAttribute("totalPages", productsPage.getTotalPages());
 //        return "Products/all-products";
 //    }
-}

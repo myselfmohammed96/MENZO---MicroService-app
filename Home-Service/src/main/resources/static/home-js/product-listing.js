@@ -54,7 +54,9 @@ function populateProducts(products = []) {
                 card.classList.add('product-card');
 
                 const cardLink = document.createElement('a');
-                cardLink.href = '';
+                cardLink.href = `/product?ssku=${product.superSku}`;
+                cardLink.target = "_blank";
+                cardLink.rel = "noopener noreferrer";
 
                 //  product image
                 const cardImage = document.createElement('img');

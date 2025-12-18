@@ -1,16 +1,8 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Entity.Product;
-import com.menzo.Product_Service.Repository.ProductsRepo;
-import org.junit.jupiter.api.Test;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.domain.Specification;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProductSpecificationServiceV2Test {
