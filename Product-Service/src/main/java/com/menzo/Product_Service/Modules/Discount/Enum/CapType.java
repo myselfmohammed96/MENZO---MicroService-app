@@ -1,8 +1,8 @@
 package com.menzo.Product_Service.Modules.Discount.Enum;
 
-public enum DiscountType {
+public enum CapType {
 
+    NONE,
     PERCENT,
-    FLAT
-
+    AMOUNT
 }

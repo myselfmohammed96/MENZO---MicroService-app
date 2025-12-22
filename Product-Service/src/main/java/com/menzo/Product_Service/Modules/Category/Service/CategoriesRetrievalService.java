@@ -35,8 +35,7 @@ public class CategoriesRetrievalService {
     private EntityManager entityManager;
 
 
-
-////    ********* Parent categories *********
+    /// /    ********* Parent categories *********
 
     //  Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
     //  TESTED
@@ -57,7 +56,6 @@ public class CategoriesRetrievalService {
                     );
                 }).collect(Collectors.toList());
     }
-
 
 
     //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
@@ -92,17 +90,17 @@ public class CategoriesRetrievalService {
     }
 
 
-
 //    @Transactional
 //    public void getAllParentWithSub() {
 //        Session session = entityManager.unwrap(Session.class);
 //        session.enableFilter("activeFilter")
 //                .setParameter("isDeleted", false);
 //        List<ProductCategory> all = categoriesRepo.findAll();
-////        for (ProductCategory c : all) {
-////            System.out.println(c);
-////        }
-////        System.out.println(all.size());
+
+    /// /        for (ProductCategory c : all) {
+    /// /            System.out.println(c);
+    /// /        }
+    /// /        System.out.println(all.size());
 //        List<NestedCategoryDto> list = all.stream().filter(a -> a.getParentCategoryId() == null)
 //                .map(a -> {
 //                    return NestedCategoryDto.builder()
@@ -117,9 +115,6 @@ public class CategoriesRetrievalService {
 
     //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
     //  TESTED
-
-
-
     public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
         ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
@@ -131,7 +126,6 @@ public class CategoriesRetrievalService {
                 parentCategory.getCreatedAt()
         );
     }
-
 
 
     //  Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))  ---@RequestHeader("roles") String roles,
@@ -167,7 +161,6 @@ public class CategoriesRetrievalService {
     }
 
 
-
     //  Get parent category by sub category id
     //  TESTED
     public ParentCategoryView getParentBySubCategoryId(Long subCategoryId) {
@@ -175,12 +168,10 @@ public class CategoriesRetrievalService {
     }
 
 
-
     //  Get parent category by product ID
     public ParentCategoryView getParentByProductId(Long productId) {
         return categoriesRepo.findParentByProductId(productId);
     }
-
 
 
 //    ********* Sub categories *********
