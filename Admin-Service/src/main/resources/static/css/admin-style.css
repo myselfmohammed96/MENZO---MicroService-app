@@ -447,6 +447,13 @@
     padding-top: 0px !important;
 }
 
+
+
+
+
+
+/* ------------------- */
+
 .title-option-button,
 #add-button,
 #filter-button,
@@ -459,6 +466,11 @@
     border-radius: 3px;
     cursor: pointer;
     transition: 0.2, transform 0.1s ease;
+}
+
+.title-option-button-2 {
+    margin-top: 0px !important;
+    margin-right: 7px !important;
 }
 
 .title-option-button, #add-button {
@@ -477,6 +489,8 @@
 .title-option-button:active, #add-button:active {
     transform: scale(0.95);
 }
+
+/* ------------ */
 
 #filter-button,
 #sort-button {
@@ -537,6 +551,11 @@
     border-radius: 3px;
     cursor: pointer;
     transition: 0.2, transform 0.1s ease;
+}
+
+.title-option-button-2 {
+    margin-top: 0px !important;
+    margin-right: 7px !important;
 }
 
 .title-option-button, #add-button {
@@ -821,6 +840,51 @@
     transition: 0.2, transform 0.1s ease;
 }
 
+/* Custom styling for title bar buttons (filter & sort)
+in discount listing page */
+
+.title-option-button-1 {
+    padding: 6px 10px 5px 12px;
+    /* margin-top: 10px; */
+    margin-right: 7px;
+    font-size: 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.2, transform 0.1s ease;
+}
+
+.title-option-button-3 {
+    padding: 7px 10px 4px 12px !important;
+}
+
+.title-option-button-1 {
+    background-color: rgba(189, 189, 189, 0.5);
+    color: #696969;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/*#add-button:hover{*/
+.title-option-button-1:hover {
+    background-color: rgba(158, 158, 158, 0.5);
+    color: #575757;
+}
+
+.title-option-button-1:active {
+    transform: scale(0.95);
+}
+
+
+
+
+
+
+
+
+
+
+
 .title-option-button {
     background-color: rgba(189, 189, 189, 0.5);
     color: #696969;
@@ -852,6 +916,13 @@
     margin-right: 4px;
 }
 
+.add-icon {
+    line-height: 0;
+    height: 100%;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
 #filter-button:hover,
 #sort-button:hover {
     background-color: rgba(189, 189, 189, 0.5);
@@ -881,6 +952,94 @@
 .top-delete-button:active {
     transform: scale(0.95);
 }
+
+
+
+/* Custom 2nd search bar: page level (in discount page) */
+
+.page-search-bar {
+    /* padding: 5px 10px; */
+    /* max-width: 350px;
+    min-width: 250px; */
+    width: 60%;
+    border: 1px solid #d6d6d6;
+    border-radius: 20px;
+    display: flex;
+    height: 33px;
+    /* flex: 1; */
+}
+.title-button-container {
+    /* flex: 1; */
+}
+
+.page-search-bar-input-space {
+    flex: 6;
+    border: 1px solid transparent;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    display: flex;
+}
+
+.page-search-bar-input {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    width: 100%;
+    border: none;
+    padding: 5px 15px;
+}
+
+.page-search-bar-input-clear {
+
+    width: 25px;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    color: #696969;
+    display: none;
+    cursor: pointer;
+}
+
+.page-search-bar-input:focus {
+    border: none;
+    outline: none;
+}
+
+.page-search-bar-input-space:focus-within {
+    border: 1px solid #d17b72ad;
+}
+/* D4A5A0 */
+
+.page-search-bar-icon-space {
+    border-left: 1px solid #d6d6d6;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    flex: 1;
+    max-width: 50px;
+    background: #f0f0f0;
+    /* padding: 2px 5px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-search-bar-icon-space img {
+    width: 28px;
+    opacity: 0.57;
+    margin-right: 5px;
+    /* border: 1px solid red; */
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

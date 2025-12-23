@@ -1,7 +1,20 @@
+/* ## documentation should mention the names of the templates to which the css file is related*/
+
 .page-actions {
     position: relative;
     display: inline-block;
     font-family:'Courier New', Courier, monospace;
+}
+
+.page-actions-1 {
+    position: relative;
+    /* display: inline-block; */
+    font-family:'Courier New', Courier, monospace;
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+    align-items: center;
 }
 
 .filter-hr {
