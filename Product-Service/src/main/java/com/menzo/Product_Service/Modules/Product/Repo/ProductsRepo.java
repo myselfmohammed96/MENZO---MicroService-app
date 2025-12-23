@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Modules.Product.Repo;
 
 import com.menzo.Product_Service.Modules.Product.Dto.ProductListingView;
 import com.menzo.Product_Service.Modules.Product.Entity.Product;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -86,6 +87,10 @@ public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecifica
             nativeQuery = true
     )
     public List<ProductListingView> findAdminProductsListing();
+
+
+    //  returns list of available entities with provided idList
+    List<Product> findByIdIn(List<Long> selectionList);
 }
 
 

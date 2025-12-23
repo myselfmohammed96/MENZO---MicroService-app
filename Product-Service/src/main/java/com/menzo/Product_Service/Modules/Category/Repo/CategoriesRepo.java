@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Modules.Category.Repo;
 
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -119,6 +120,12 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
 
     //  find all sub-categories by parent category ID
     public List<ProductCategory> findAllByParentCategoryId(Long parentCategoryId);          // TESTED
+
+//    //  returns the count of entities of the ids in the list
+//    public long countByIdIn(List<Long> selectionList);
+
+    //  returns list of available entities with provided idList
+    List<ProductCategory> findByIdIn(List<Long> selectionList);
 
 
 

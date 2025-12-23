@@ -1,12 +1,21 @@
 package com.menzo.Product_Service.Modules.Discount.Service;
 
+import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Modules.Category.Repo.CategoriesRepo;
 import com.menzo.Product_Service.Modules.Discount.Dto.CreateDiscountDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
 import com.menzo.Product_Service.Modules.Discount.Dto.UpdateDiscountDto;
 import com.menzo.Product_Service.Modules.Discount.Entity.Discount;
+import com.menzo.Product_Service.Modules.Discount.Entity.DiscountCategory;
 import com.menzo.Product_Service.Modules.Discount.Enum.CapType;
+import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountType;
 import com.menzo.Product_Service.Modules.Discount.Enum.PromotionStatus;
 import com.menzo.Product_Service.Modules.Discount.Repo.DiscountRepo;
+import com.menzo.Product_Service.Modules.Product.Entity.Product;
+import com.menzo.Product_Service.Modules.Product.Entity.ProductItem;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductItemsRepo;
+import com.menzo.Product_Service.Modules.Product.Repo.ProductsRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,8 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Locale;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +41,20 @@ public class DiscountService {
     @Autowired
     private DiscountRepo discountRepo;
 
+    @Autowired
+    private CategoriesRepo categoriesRepo;
 
-//    ********* ADD, UPDATE, DELETE method *********
+    @Autowired
+    private ProductsRepo productsRepo;
+
+    @Autowired
+    private ProductItemsRepo itemsRepo;
+
+
+    /// /    ********* GET methods *********
+
+
+    /// /    ********* ADD, UPDATE, DELETE methods *********
 
     //  Add new discount
     public UUID addNewDiscount(CreateDiscountDto dto) {
@@ -243,6 +266,84 @@ public class DiscountService {
 
         discountInDb.setIsDelete(true);
         discountRepo.save(discountInDb);
+    }
+
+
+    /// /    ********* Discount mapping methods *********
+
+    public UUID discountMapping(DiscountMappingDto mappingDto) {
+
+        //  ## better to use domain-level exception instead of IllegalArgumentException: BadRequestException || ValidationException
+        //  ## missing duplicate prevention: if same category/product is mapped twice - silently ignored by Set. check before add if needed.
+
+        Discount discountInDb = discountRepo.findById(mappingDto.getDiscountId())
+                .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + mappingDto.getDiscountId()));
+
+        if (discountInDb.getLevel() != mappingDto.getLevel()) {
+            throw new IllegalArgumentException("Discount level does not match");
+        }
+
+        if (mappingDto.getLevel() == DiscountLevel.CATEGORY
+                || mappingDto.getLevel() == DiscountLevel.SUB_CATEGORY) {
+            //  ------- Discount level - CATEGORY || SUB_CATEGORY -------
+            List<ProductCategory> categories = categoriesRepo.findByIdIn(mappingDto.getSelectionList());
+
+            if (categories.size() != mappingDto.getSelectionList().size()) {
+                throw new IllegalArgumentException("Some categories not found");
+            }
+
+            if (mappingDto.getLevel() == DiscountLevel.CATEGORY) {
+                if (categories.stream().anyMatch(c -> c.getParentCategoryId() != null)) {
+                    throw new IllegalArgumentException("Sub-category present in category list");
+                }
+            }
+
+            if (mappingDto.getLevel() == DiscountLevel.SUB_CATEGORY) {
+                if (categories.stream().anyMatch(c -> c.getParentCategoryId() == null)) {
+                    throw new IllegalArgumentException("Parent category present in sub-category list");
+                }
+            }
+
+            Set<DiscountCategory> mappedSet = categories.stream()
+                    .map(c -> DiscountCategory.builder()
+                            .discount(discountInDb)
+                            .category(c)
+                            .isSubCategory(mappingDto.getLevel() == DiscountLevel.SUB_CATEGORY)
+                            .build()
+                    ).collect(Collectors.toSet());
+
+            discountInDb.getDiscountCategories().addAll(mappedSet);
+            Discount mappedDiscount = discountRepo.save(discountInDb);
+
+            return !mappedDiscount.getDiscountCategories().isEmpty() ? mappedDiscount.getId() : null;
+
+        } else if (mappingDto.getLevel() == DiscountLevel.PRODUCT) {
+            //  ------- Discount level - PRODUCT -------
+            List<Product> products = productsRepo.findByIdIn(mappingDto.getSelectionList());
+
+            if (products.size() != mappingDto.getSelectionList().size()) {
+                throw new IllegalArgumentException("Some products not found");
+            }
+            discountInDb.getDiscountProducts().addAll(products);
+            Discount mappedDiscount = discountRepo.save(discountInDb);
+
+            return !mappedDiscount.getDiscountProducts().isEmpty() ? mappedDiscount.getId() : null;
+
+        } else if (mappingDto.getLevel() == DiscountLevel.VARIANT) {
+            //  ------- Discount level - VARIANT -------
+            List<ProductItem> items = itemsRepo.findByIdIn(mappingDto.getSelectionList());
+
+            if (items.size() != mappingDto.getSelectionList().size()) {
+                throw new IllegalArgumentException("Some product items not found");
+            }
+            discountInDb.getDiscountVariants().addAll(items);
+            Discount mappedDiscount = discountRepo.save(discountInDb);
+
+            return !mappedDiscount.getDiscountVariants().isEmpty() ? mappedDiscount.getId() : null;
+
+        } else {
+            return null;
+        }
     }
 
 }

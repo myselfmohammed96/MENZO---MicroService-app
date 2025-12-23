@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Modules.Product.Repo;
 
 import com.menzo.Product_Service.Modules.Product.Entity.ProductItem;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,6 +32,8 @@ public interface ProductItemsRepo extends JpaRepository<ProductItem, Long>, JpaS
             """)
     public String findSizeByItemId(String variationName, Long itemId);
 
+    //  returns list of available entities with provided idList
+    List<ProductItem> findByIdIn(List<Long> selectionList);
 
 
 //    ********* Fetching sequence *********

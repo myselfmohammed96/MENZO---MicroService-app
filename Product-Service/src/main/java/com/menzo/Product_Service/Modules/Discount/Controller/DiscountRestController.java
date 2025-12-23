@@ -1,8 +1,8 @@
 package com.menzo.Product_Service.Modules.Discount.Controller;
 
 import com.menzo.Product_Service.Modules.Discount.Dto.CreateDiscountDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
 import com.menzo.Product_Service.Modules.Discount.Dto.UpdateDiscountDto;
-import com.menzo.Product_Service.Modules.Discount.Entity.Discount;
 import com.menzo.Product_Service.Modules.Discount.Service.DiscountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Binding;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,14 +30,14 @@ public class DiscountRestController {
     private final DiscountService discountService;
 
 
-//    ********* GET methods *********
+    /// /    ********* GET methods *********
 
     @GetMapping()
     public void getDiscount() {
     }
 
 
-//    ********* POST, PUT, DELETE methods *********
+    /// /    ********* POST, PUT, DELETE methods *********
 
     //  Add new discount
     @PostMapping
@@ -54,7 +55,7 @@ public class DiscountRestController {
 
         Map<String, Object> responseBody = new HashMap<>();
         if (discountId != null) {
-            logger.info("Discount created successfully with ID: {}", 2);
+            logger.info("Discount created successfully with ID: {}", discountId);
             responseBody.put("message", "Discount created successfully");
             responseBody.put("discountId", discountId);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -107,7 +108,6 @@ public class DiscountRestController {
         if (roles == null || roles.isEmpty()) {
             throw new IllegalArgumentException("Invalid user roles");
         }
-
         discountService.softDeleteDiscount(discountId);
 
         logger.info("Discount deleted successfully");
@@ -115,6 +115,38 @@ public class DiscountRestController {
         responseBody.put("message", "Discount deleted successfully");
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseBody);
+    }
+
+
+    /// /   ********* Discount mapping methods *********
+
+    //  Discount mapping
+    @PostMapping
+    public ResponseEntity<?> discountMapping(@RequestHeader("roles") String roles,
+                                             @Valid @RequestBody DiscountMappingDto mappingDto,
+                                             BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors()
+                    .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            logger.warn("Validation failed for discount mapping: {}", errors);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        UUID mappedDiscountId = discountService.discountMapping(mappingDto);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        if (mappedDiscountId != null) {
+            logger.info("Discount mapped successfully");
+            responseBody.put("message", "Discount mapped successfully");
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseBody);
+        } else {
+            logger.warn("Discount mapping failed");
+            responseBody.put("message", "Discount mapping failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
+        }
     }
 
 }
