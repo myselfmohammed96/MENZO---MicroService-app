@@ -79,7 +79,6 @@ public class ProductsQueryService {
                                                                Integer size,
                                                                String sortRequest,
                                                                RequestDto filterRequest) {
-
         String sortParam = "";
         if (sortRequest != null && !sortRequest.isEmpty()) {
             sortParam = getSortValue(sortRequest);
@@ -644,7 +643,7 @@ public class ProductsQueryService {
 //                ));
 //    }
 
-
+///
 //  sort generator order
 //    private Sort.Order generateSortOrder(String sortRequest) {
 //
@@ -688,6 +687,7 @@ public class ProductsQueryService {
 //                : Sort.Direction.ASC;
 //        return new Sort.Order(direction, property);
 //    }
+///
 
 
 //  Product page - Dto converter
@@ -757,16 +757,16 @@ public class ProductsQueryService {
 //                                                        Long categoryId,
 //                                                        Integer page,
 //                                                        Integer size) {
-//        Page<Product> products;
-//        Pageable sortedPageable = PageRequest.of(
-//                page, size,
-//                Sort.by(Sort.Direction.DESC, "createdAt")
-//        );
-//        if (requestDto != null) {
-//            Specification<Product> productSpecs = productSpecService.getFilterSpecification(requestDto.getFilterRequestDtos());
-//            products = productsRepo.findAll(productSpecs, sortedPageable);
-//        } else if (requestDto == null) products = productsRepo.findAll(sortedPageable);
-//        else throw new IllegalArgumentException("Check the request dto");
+///        Page<Product> products;
+///        Pageable sortedPageable = PageRequest.of(
+///                page, size,
+///                Sort.by(Sort.Direction.DESC, "createdAt")
+///        );
+///        if (requestDto != null) {
+///            Specification<Product> productSpecs = productSpecService.getFilterSpecification(requestDto.getFilterRequestDtos());
+///            products = productsRepo.findAll(productSpecs, sortedPageable);
+///        } else if (requestDto == null) products = productsRepo.findAll(sortedPageable);
+///        else throw new IllegalArgumentException("Check the request dto");
 //
 //        List<AdminProductListingDto> productListingDtos = products.stream()
 //                .map(this::convertProductToProductListing)

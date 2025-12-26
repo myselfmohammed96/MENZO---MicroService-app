@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Modules.Category.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.menzo.Product_Service.Modules.Variation.Entity.Variation;
@@ -8,8 +9,10 @@ import lombok.*;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -96,9 +99,18 @@ public class ProductCategory {
     )
     private Instant createdAt;
 
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime updateAt;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updateAt = LocalDateTime.now();
     }
 
 }

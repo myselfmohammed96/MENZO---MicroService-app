@@ -106,7 +106,7 @@ public class DiscountService {
                 .startAt(dto.getStartAt())
                 .endAt(dto.getEndAt())
                 .discountStatus(status)
-                .isDelete(false)
+                .isDeleted(false)
                 .build();
 
         Discount savedDiscount = discountRepo.save(discount);
@@ -260,11 +260,11 @@ public class DiscountService {
         Discount discountInDb = discountRepo.findById(discountId)
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + discountId));
 
-        if (Boolean.TRUE.equals(discountInDb.getIsDelete())) {
+        if (Boolean.TRUE.equals(discountInDb.getIsDeleted())) {
             throw new IllegalArgumentException("Discount already deleted");     // ## or use IllegalStateException
         }
 
-        discountInDb.setIsDelete(true);
+        discountInDb.setIsDeleted(true);
         discountRepo.save(discountInDb);
     }
 

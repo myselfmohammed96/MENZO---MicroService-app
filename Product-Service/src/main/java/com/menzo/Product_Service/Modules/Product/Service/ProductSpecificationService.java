@@ -1,34 +1,41 @@
-//package com.menzo.Product_Service.Service;
-//
-//import com.menzo.Product_Service.Dto.FilterDtos.FilterRequestDto;
-//import com.menzo.Product_Service.Entity.*;
-//import jakarta.persistence.criteria.*;
-//import org.springframework.data.jpa.domain.Specification;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
+package com.menzo.Product_Service.Modules.Product.Service;
+
+import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.FilterRequestDto;
+import com.menzo.Product_Service.Modules.Product.Entity.*;
+import com.menzo.Product_Service.Modules.Variation.Entity.Variation;
+import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
+import jakarta.persistence.criteria.*;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 //@Service
 //public class ProductSpecificationService<T> {
-//
-//
-//
-//    //  generate 'Specification'
-//
+
+
+
+    //  generate 'Specification'
+
 //    public Specification<T> getFilterSpecification(List<FilterRequestDto> filterRequestDtos) {
 //        return (root, criteriaQuery, criteriaBuilder) -> {
 //
 //            //  building joins
-//            Map<String, Join<?, ?>> productJoins = productJoinBuilder(root);
+//         /**/   Map<String, Join<?, ?>> productJoins = productJoinBuilder(root);
 //
 //            //  building list of 'Predicates'
 //            List<Predicate> predicates = new ArrayList<>();
 //            for(FilterRequestDto requestDto : filterRequestDtos) {
 //                if ("price".equals(requestDto.getFilterType().toLowerCase())) {
-//                    Predicate pricePredicate = priceRangePredicate(productJoins.get("items"), criteriaBuilder, requestDto.getFilterType(), requestDto.getValues());
+//                    Predicate pricePredicate = priceRangePredicate(
+//                            productJoins.get("items"),
+//                            criteriaBuilder,
+//                            requestDto.getFilterType(),
+//                            requestDto.getValues()
+//                    );
 //                    predicates.add(pricePredicate);
 //                } else if ("colors".equals(requestDto.getFilterType().toLowerCase()) ||
 //                    "size".equals(requestDto.getFilterType().toLowerCase()) ||
@@ -63,7 +70,7 @@
 //
 //
 //
-//    //  ********* Utility methods *********
+    //  ********* Utility methods *********
 //
 //    //   Creates collective predicate for different price ranges
 //    private Predicate priceRangePredicate(Join<?, ?> itemsJoin, CriteriaBuilder criteriaBuilder, String filterType, String priceRanges) {
@@ -80,11 +87,11 @@
 //
 //        return criteriaBuilder.or(priceRangePredicates);
 //    }
-//
-//
-//
-//    //  Splits stringed list with regex ", "
-//
+
+
+
+    //  Splits stringed list with regex ", "
+
 //    private List<String> stringSplitter(String string) {
 //        String[] strings = string.split(",");
 //        List<String> stringsList = new ArrayList<>();
@@ -94,11 +101,11 @@
 //        }
 //        return stringsList;
 //    }
-//
-//
-//
-//    //  ******* Join builder *******
-//
+
+
+
+    //  ******* Join builder *******
+
 //    private Map<String, Join<?, ?>> productJoinBuilder(Root<?> root) {
 //        Class<?> entityType = root.getJavaType();
 //        return switch (entityType.getSimpleName()) {
@@ -122,7 +129,7 @@
 //            default -> throw new IllegalArgumentException("Unsupported entity type: " + entityType);
 //        };
 //    }
-//
+
 ////    private void generateSubQuery(CriteriaBuilder cb, CriteriaQuery cq, String purpose) {
 ////        switch (purpose) {
 ////            case "adminProductListingCategoryDetails" -> {

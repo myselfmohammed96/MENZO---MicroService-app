@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Modules.Discount.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.Product_Service.Modules.Discount.Enum.CapType;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountType;
@@ -8,19 +9,20 @@ import com.menzo.Product_Service.Modules.Product.Entity.Product;
 import com.menzo.Product_Service.Modules.Product.Entity.ProductItem;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,7 +38,7 @@ public class Discount {
             nullable = false,
             unique = true
     )
-    private String discountCode;
+    private String discountCode;    //  ## unique index (indexing) and other indexes
 
     @Column(
             name = "discount_name",
@@ -65,7 +67,7 @@ public class Discount {
             name = "discount_value",
             nullable = false
     )
-    private BigDecimal value;
+    private BigDecimal value;       //  ## precision/scale for price fields @Column(precision = 10, scale = 2)
 
     @Enumerated(EnumType.STRING)
     @Column(
@@ -140,9 +142,26 @@ public class Discount {
     private Set<ProductItem> discountVariants = new HashSet<>();
 
     @Column(
-            name = "is_delete",
+            name = "is_deleted",
             nullable = false
     )
-    private Boolean isDelete;
+    private Boolean isDeleted;
+
+    @CreationTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime updatedAt;
+
+    @PreUpdate
+    void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
 }

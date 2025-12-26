@@ -2,20 +2,19 @@ package com.menzo.Product_Service.Modules.Discount.Enum;
 
 public enum PromotionStatus {
 
-    ACTIVE,
+//  Lifecycle
     SCHEDULED,
-
-    INACTIVE,
+    ACTIVE,
     PAUSED,
+    EXPIRED,
+
+//  Manual/terminal
+    INACTIVE,
     CANCELLED,
 
+//  Coupon specific
     REDEEMED,
     USED,
+    LIMITED
 
-    EXPIRED
-
-
-
-//    coupon specific status
-//            REDEEMED, USED, LIMITED
 }

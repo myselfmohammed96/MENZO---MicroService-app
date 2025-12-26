@@ -49,6 +49,9 @@ public class CreateDiscountDto {
     @NotNull(message = "Discount type is required")
     private DiscountType type;
 
+    @NotNull(message = "Discount status is required")
+    private PromotionStatus discountStatus;
+
     @NotNull(message = "Discount value is required")
     @DecimalMin(
             value = "0.0",
@@ -78,8 +81,5 @@ public class CreateDiscountDto {
 
     @NotNull(message = "End date is required")
     private LocalDateTime endAt;
-
-    @NotNull(message = "Discount status is required")
-    private PromotionStatus discountStatus;
 
 }

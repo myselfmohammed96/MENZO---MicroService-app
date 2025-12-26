@@ -8,8 +8,10 @@ import com.menzo.Product_Service.Modules.Product.Dto.UserProductListingDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -133,5 +135,13 @@ public class Product {
     @CreationTimestamp
     private Date createdAt;
 
-}
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime updatedAt;
 
+    @PreUpdate
+    void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+}
