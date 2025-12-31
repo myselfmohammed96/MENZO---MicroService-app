@@ -77,6 +77,8 @@ public class ProductController {
     }
 
 
+    //  ********* DISCOUNT *********
+
     @GetMapping("/discounts")
     public String getDiscountManagement() {
         return "DiscountsAndCoupons/discount";

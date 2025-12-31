@@ -19,8 +19,12 @@ public class MappedContentDto {
 
 //    private DiscountLevel level;
 
+    private String size;
+
     private String color;
 
-    private String size;
+    private String hexCode;
+
+    private Integer exclusionCount;
 
 }

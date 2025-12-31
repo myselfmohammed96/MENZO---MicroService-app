@@ -2,8 +2,11 @@
 const getSummary = "";
 const getMappedContent = "";
 
+let mappedListWrapper;
+
 let discountId;
 let discountAddSuccess;
+
 
 
 
@@ -229,8 +232,192 @@ function populateSummary(summary) {
 }
 
 //  POPULATE - mapped content
-function populateMappedContent(content = []) {
+let itemCount = 1;
+function populateMappedContent(content = [], level) {
+    mappedListWrapper.innerHTML = '';
 
+    if (level === "GLOBAL") {
+        mappedListWrapper.innerHTML = `
+            <div class="empty-list-container">
+                <span>No mapping for global discount</span>
+            </div>
+        `;
+        return;
+    }
+
+    if (content.length === 0) {
+        const levelText = level.toLowerCase().replaceAll('_', '-');
+        mappedListWrapper.innerHTML = `
+            <div class="empty-list-container">
+                <span>No ${levelText} mapped yet</span>
+            </div>
+        `;
+        return;
+    }
+
+    content.forEach(c => {
+        const discountMapElement = document.createElement('div');
+        discountMapElement.classList.add("discount-map-element");
+        discountMapElement.setAttribute('data-mappingId', c.mappingId);
+
+        const listElementContent = document.createElement('div');
+        listElementContent.classList.add("list-element-content");
+
+        //  ------- counter & checkbox container -------
+        const counterCheckboxContainer = document.createElement('div');
+        counterCheckboxContainer.classList.add('counter-checkbox-container');
+
+        const ccSelect = document.createElement('label');
+        ccSelect.classList.add('cc-select');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        const counter = document.createElement('span');
+        counter.textContent = itemCount;
+        itemCount++;
+
+        ccSelect.append(
+            checkbox,
+            counter
+        );
+        counterCheckboxContainer.appendChild(ccSelect);
+
+        //  ------- text container -------
+        const listTextContainer = document.createElement('div');
+        listTextContainer.classList.add('list-text-container');
+
+        //  element text 1
+        const elementText1 = document.createElement('div');
+        elementText1.classList.add('element-text-1');
+
+        const textWrapper = document.createElement('div');
+        textWrapper.classList.add('element-text-wrapper');
+
+        const text = document.createElement('p');
+        text.textContent = c.textContent;
+
+        textWrapper.appendChild(text);
+        elementText1.appendChild(textWrapper);
+
+        //  element text 2
+        const elementText2 = document.createElement('div');
+        elementText2.classList.add('element-text-2');
+
+        const elementText2Row = document.createElement('div');
+        elementText2Row.classList.add('element-text-2-row');
+
+        const elementText2Wrapper = document.createElement('div');
+        elementText2Wrapper.classList.add('element-text-2-wrapper');
+
+        if (level === "VARIANT") {
+            const text2Key1 = document.createElement('p');
+            text2Key1.classList.add('element-text-2-key');
+            text2Key1.textContent = "Size: ";
+
+            const text2Value1 = document.createElement('p');
+            text2Value1.classList.add('element-text-2-value');
+            text2Value1.textContent = c.size + " |";
+            //  ## replace the " |" with a vertical short <hr>
+
+            const text2Key2 = document.createElement('p');
+            text2Key2.classList.add('element-text-2-key');
+            text2Key2.textContent = "Color: ";
+
+            const text2Value2 = document.createElement('p');
+            text2Value2.classList.add('element-text-2-value');
+            text2Value2.textContent = c.color;
+
+            const colorIcon = document.createElement('div');
+            colorIcon.classList.add('element-color-icon');
+            colorIcon.style.background = c.hexCode;
+
+            elementText2Wrapper.append(
+                text2Key1,
+                text2Value1,
+                text2Key2,
+                text2Value2,
+                colorIcon
+            );
+        }
+
+        if (level !== "VARIANT" && c.exclusionCount > 0) {
+            const text2Key = document.createElement('p');
+            text2Key.classList.add('element-text-2-key');
+            text2Key.textContent = "Exclusion: ";
+
+            const text2Value = document.createElement('p');
+            text2Value.classList.add('element-text-2-value');
+            text2Value.textContent = c.exclusionCount;
+
+            elementText2Wrapper.append(
+                text2Key,
+                text2Value
+            );
+        }
+
+        elementText2Row.appendChild(elementText2Wrapper);
+        elementText2.appendChild(elementText2Row);
+        listTextContainer.append(
+            elementText1,
+            elementText2
+        );
+
+        //  ------- button container -------
+        const listButtonContainer = document.createElement('div');
+        listButtonContainer.classList.add('list-button-container');
+
+        //  exclude button
+        if (level !== "VARIANT") {
+            const excludeButton = document.createElement('button');
+            excludeButton.classList.add('list-item-button', 'list-item-exclude-button');
+            excludeButton.title = 'Exclude';
+
+            const excludeButtonIcon = document.createElement('img');
+            excludeButtonIcon.src = '../media/traffic-signal.png';
+
+            excludeButton.appendChild(excludeButtonIcon);
+            excludeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                //  exclude logic
+            });
+
+            listButtonContainer.appendChild(excludeButton);
+        }
+
+        //  delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('list-item-button', 'list-item-delete-button');
+        deleteButton.title = 'Delete';
+
+        const deleteButtonIcon = document.createElement('img');
+        deleteButtonIcon.src = '../media/delete.png';
+
+        deleteButton.appendChild(deleteButtonIcon);
+        deleteButton.addEventListener('click', () => {
+            e.stopPropagation();
+            //  delete logic
+        });
+
+        listButtonContainer.appendChild(deleteButton);
+
+        //  ------- final append -------
+        listElementContent.append(
+            counterCheckboxContainer,
+            listTextContainer,
+            listButtonContainer
+        );
+        discountMapElement.appendChild(listElementContent);
+
+        discountMapElement.addEventListener('click', () => {
+            console.log("Propagating discount map element click event");
+        });
+
+        mappedListWrapper.appendChild(discountMapElement);
+    });
 }
 
 
@@ -254,7 +441,7 @@ async function loadDiscountDetails() {
             throw new Error("Invalid data format: mapped content should be array");
         }
         populateSummary(summary);
-        populateMappedContent(mappedContent);
+        populateMappedContent(mappedContent, summary.level);
     } catch (error) {
         console.error("Error loading discount details");
     }
@@ -262,7 +449,9 @@ async function loadDiscountDetails() {
 
 
 //  DOM Loading event
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+    mappedListWrapper = document.getElementById('list-wrapper-body');
 
     //  ------- Get - param data -------
     const params = new URLSearchParams(window.location.search);
