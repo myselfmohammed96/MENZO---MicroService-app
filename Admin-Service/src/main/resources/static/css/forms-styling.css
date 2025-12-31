@@ -85,6 +85,85 @@ legend {
   flex: 1;
 }
 
+/* add discount form structure */
+
+#discount-form-wrapper {
+  /* border: 1px solid pink; */
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 10px;
+}
+#discount-form {
+  /* border: 1px solid red; */
+  width: 70%;
+  /* border: 1px solid #8F8F8F;
+  padding: 20px 30px;
+  border-radius: 20px; */
+  border: 1px solid #d9d9d9;
+  padding: 20px 40px;
+  border-radius: 10px;
+}
+
+.form-direction-container {
+  /* border: 1px solid red; */
+  width: 70%;
+  border: 1px solid #d9d9d9;
+  padding: 16px 40px;
+  border-radius: 10px;
+  /* padding: 10px 30px; */
+  display: flex;
+  margin-bottom: 15px;
+  justify-content: flex-start;
+}
+
+#form-instruction,
+#required-field-instruction {
+  display: block;
+  /* color: #5c5c5c; */
+  color: rgb(32, 33, 36);
+  margin-bottom: 5px;
+  /* font-size: 0.9rem; */
+  /* text-align: center; */
+}
+
+#form-instruction {
+  font-size: 0.9rem;
+}
+
+#required-field-instruction {
+  /* color: red; */
+  color: rgba(255, 0, 0, 0.671);
+  font-size: 0.8rem;
+}
+
+#required-field-instruction span {
+  color: red;
+}
+
+.red-star {
+  color: rgba(255, 0, 0, 0.671);
+  margin-left: 5px;
+}
+
+#draft-button,
+#refresh-button {
+  padding: 3px 10px  !important;
+}
+
+#draft-button img {
+  width: 20px;
+  padding: 1px;
+  opacity: 0.7;
+}
+
+#refresh-button img {
+  width: 20px;
+  padding: 1px;
+  opacity: 0.65;
+}
+
 /* /////////////////////////////////// */
 
 
@@ -259,6 +338,20 @@ textarea {
   margin: 30px 0 50px 0;
 }
 
+#button-container-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 60px 0 50px 0;
+}
+
+#button-container-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 0 20px 0;
+}
+
 button[type="submit"] {
   display: block;
   align-items: center;
@@ -271,6 +364,10 @@ button[type="submit"] {
   font-size: 1em;
   cursor: pointer;
   transition: color 0.15s ease, transform 0.05s ease;
+}
+
+.submit-button-5 {
+  width: 40% !important;
 }
 
 button[type="submit"]:hover {

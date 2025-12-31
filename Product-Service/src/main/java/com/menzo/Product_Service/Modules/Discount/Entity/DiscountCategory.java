@@ -2,19 +2,25 @@ package com.menzo.Product_Service.Modules.Discount.Entity;
 
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "discount_category")
+@Table(
+        name = "discount_category",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_discount_category",
+                        columnNames = { "discount_id", "category_id" }
+                )
+        }
+)
 public class DiscountCategory {
 
     @Id

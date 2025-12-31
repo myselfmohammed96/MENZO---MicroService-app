@@ -27,13 +27,18 @@ public class DiscountStatusScheduler {
 
         try {
             //  SCHEDULED -> ACTIVE
-            discountRepo.activateScheduled(now);
+            int activated = discountRepo.activateScheduled(now);
 
             //  ACTIVE | INACTIVE | PAUSED -> EXPIRED
-            discountRepo.expireActive(now);
+            int expired = discountRepo.expireActive(now);
 
             //  PAUSED -> SCHEDULED | ACTIVE
-            discountRepo.resumePaused(now);
+            int resumed = discountRepo.resumePaused(now);
+
+            if (activated + expired + resumed > 0) {
+                logger.info(
+                        "Discount status updated -> activated={}, resumed={}, expired={}", activated, resumed, expired);
+            }
         } catch (Exception e) {
             logger.error("Discount status scheduler failed", e);
             //  ## add monitoring/alerts - logs, metrics, error tracking(Sentry, Prometheus)

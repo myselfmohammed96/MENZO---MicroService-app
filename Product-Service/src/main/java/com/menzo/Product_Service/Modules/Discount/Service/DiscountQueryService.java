@@ -1,10 +1,18 @@
 package com.menzo.Product_Service.Modules.Discount.Service;
 
+import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Modules.Discount.Dto.DiscountListingDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.DiscountSummaryDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.MappedContentDto;
 import com.menzo.Product_Service.Modules.Discount.Entity.Discount;
-import com.menzo.Product_Service.Modules.Discount.Enum.PromotionStatus;
+import com.menzo.Product_Service.Modules.Discount.Entity.DiscountCategory;
+import com.menzo.Product_Service.Modules.Discount.Entity.DiscountProduct;
+import com.menzo.Product_Service.Modules.Discount.Entity.DiscountVariant;
+import com.menzo.Product_Service.Modules.Discount.Enum.*;
 import com.menzo.Product_Service.Modules.Discount.Repo.DiscountRepo;
+import com.menzo.Product_Service.Modules.Product.Entity.ProductConfiguration;
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import jakarta.persistence.EntityNotFoundException;
 import org.aspectj.apache.bcel.generic.RET;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +25,9 @@ import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.text.ParsePosition;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class DiscountQueryService {
@@ -66,6 +75,128 @@ public class DiscountQueryService {
                 pageable,
                 pageContent.getTotalElements()
         );
+    }
+
+    //  Discount summary
+    public DiscountSummaryDto getDiscountSummary(UUID discountId) {
+        Discount discount = discountRepo.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + discountId));
+
+        String description = discount.getDiscountDescription() != null && !discount.getDiscountDescription().trim().isEmpty()
+                ? discount.getDiscountDescription()
+                : null;
+        return DiscountSummaryDto.builder()
+                .discountId(discount.getId())
+                .discountCode(discount.getDiscountCode())
+                .discountName(discount.getDiscountName())
+                .discountDescription(description)
+                .level(discount.getLevel())
+                .type(discount.getType())
+                .value(discount.getValue())
+                .capType(discount.getCapType())
+                .capValue(discount.getCapValue())
+                .priority(discount.getPriority())
+                .startAt(discount.getStartAt())
+                .endAt(discount.getEndAt())
+                .status(discount.getDiscountStatus())
+                .resumeAt(discount.getResumeAt())
+                .createdAt(discount.getCreatedAt())
+                .updatedAt(discount.getUpdatedAt())
+                .build();
+    }
+
+    //  Discount mapped content
+    //  ## have to provide exclusions, sorting and filtering for discount mapped content
+    public List<MappedContentDto> getDiscountMappedContent(UUID discountId,
+                                                           String sortRequest,
+                                                           RequestDto filterRequest) {
+        Discount discount = discountRepo.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + discountId));
+        return switch (discount.getLevel()) {
+            case GLOBAL -> List.of();
+            case CATEGORY -> discount.getDiscountCategories().stream()
+                    .filter(this::isParentCategory)
+                    .map(dc -> toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                    .toList();
+            case SUB_CATEGORY -> discount.getDiscountCategories().stream()
+                    .filter(this::isSubCategory)
+                    .map(dc -> toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                    .toList();
+            case PRODUCT -> discount.getDiscountProducts().stream()
+                    .map(dp -> toMappedContent(dp.getId(), dp.getProduct().getProductName()))
+                    .toList();
+            case VARIANT -> discount.getDiscountVariants().stream()
+                    .map(this::mapVariant)
+                    .toList();
+            default -> throw new RuntimeException("Invalid discount level");
+        };
+    }
+
+
+    /// /   ********* Dto data *********
+
+    //  get Discount level
+    public EnumDto getDiscountLevel() {
+        List<String> values = Arrays.stream(DiscountLevel.values())
+                .map(Enum::name)
+                .toList();
+
+        return EnumDto.builder()
+                .enumName(DiscountLevel.class.getSimpleName())
+                .enumValues(values)
+                .build();
+    }
+
+    //  get Discount type
+    public EnumDto getDiscountType() {
+        List<String> values = Arrays.stream(DiscountType.values())
+                .map(Enum::name)
+                .toList();
+
+        return EnumDto.builder()
+                .enumName(DiscountType.class.getSimpleName())
+                .enumValues(values)
+                .build();
+    }
+
+    //  get Cap type
+    public EnumDto getCapType() {
+        List<String> values = Arrays.stream(CapType.values())
+                .map(Enum::name)
+                .toList();
+
+        return EnumDto.builder()
+                .enumName(CapType.class.getSimpleName())
+                .enumValues(values)
+                .build();
+    }
+
+    //  get Discount status
+    public EnumDto getDiscountStatus(DiscountStatusTarget target) {
+        List<PromotionStatus> whiteList = switch (target) {
+            case FORM -> List.of(
+                    PromotionStatus.ACTIVE,
+                    PromotionStatus.INACTIVE
+            );
+            case SUMMARY -> List.of(
+                    PromotionStatus.ACTIVE,
+                    PromotionStatus.INACTIVE,
+                    PromotionStatus.PAUSED,
+                    PromotionStatus.CANCELLED
+            );
+            default -> throw new IllegalArgumentException(
+                    "Invalid target for DiscountStatus: " + target
+            );
+        };
+
+        List<String> values = whiteList.stream()
+                .map(Enum::name)
+                .toList();
+
+        return EnumDto.builder()
+                .enumName("DiscountStatus")
+                .enumValues(values)
+                .build();
     }
 
 
@@ -255,6 +386,59 @@ public class DiscountQueryService {
         } else {
             return discount.getDiscountStatus();
         }
+    }
+
+
+    //  ------- getDiscountMappedContent utility methods -------
+
+    //  check if mapped category is a parent category
+    private boolean isParentCategory(DiscountCategory dc) {
+        if (dc.getCategory().getParentCategoryId() != null) {
+            logger.error("Sub-category found in Category mapping with mapping ID: {}", dc.getId());
+            return false;
+        }
+        return true;
+    }
+
+    //  check if mapped category is a sub-category
+    private boolean isSubCategory(DiscountCategory dc) {
+        if (dc.getCategory().getParentCategoryId() == null) {
+            logger.error("Parent category found in Sub-category mapping with mapping ID: {}", dc.getId());
+            return false;
+        }
+        return true;
+    }
+
+    //  mappedContentDto for CATEGORY, SUB_CATEGORY & PRODUCT
+    private MappedContentDto mapVariant(DiscountVariant dv) {
+        Map<String, String> mm = dv.getProductItem().getConfigurations().stream()
+                .map(config -> Map.entry(
+                        config.getVariationOption()
+                                .getVariation()
+                                .getVariationName(),
+                        config.getVariationOption()
+                                .getOptionValue()
+                ))
+                .filter(e -> e.getKey().equals("colors") || e.getKey().equals("size"))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (a, b) -> a
+                ));
+        return MappedContentDto.builder()
+                .mappingId(dv.getId())
+                .textContent(dv.getProductItem().getSKU())
+                .color(mm.get("colors"))
+                .size(mm.get("size"))
+                .build();
+    }
+
+    //  mappedContentDto for VARIANT
+    private MappedContentDto toMappedContent(UUID id, String text) {
+        return MappedContentDto.builder()
+                .mappingId(id)
+                .textContent(text)
+                .build();
     }
 
 }

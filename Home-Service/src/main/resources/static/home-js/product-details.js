@@ -270,7 +270,8 @@ function populateSizes(sizes) {
 
 //  POPULATE - price details
 function populatePriceDetails(price, discount) {
-    document.querySelector('#mrp-price').textContent = "₹ " + Math.floor(price).toLocaleString('en-IN');
+    document.querySelector('#mrp-price').textContent =
+            "₹ " + Math.floor(price).toLocaleString('en-IN');
 }
 
 

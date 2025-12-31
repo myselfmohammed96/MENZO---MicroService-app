@@ -1,12 +1,11 @@
 package com.menzo.Product_Service.Modules.Discount.Controller;
 
-import com.menzo.Product_Service.Modules.Discount.Dto.CreateDiscountDto;
-import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
-import com.menzo.Product_Service.Modules.Discount.Dto.UpdateDiscountDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.*;
+import com.menzo.Product_Service.Modules.Discount.Enum.DiscountStatusTarget;
+import com.menzo.Product_Service.Modules.Discount.Enum.EnumDto;
 import com.menzo.Product_Service.Modules.Discount.Service.DiscountQueryService;
 import com.menzo.Product_Service.Modules.Discount.Service.DiscountService;
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,10 +41,11 @@ public class DiscountRestController {
 
     /// /    ********* FETCH data methods *********
 
+    //  discount listing
     @PostMapping("/listing")
-    public ResponseEntity<?> getDiscountListing(@RequestParam(defaultValue = "0") @Min(0) Integer page,
-                                                @RequestParam(defaultValue = "11") @Min(1) Integer size,
-                                                @RequestParam(required = false) String sortRequest,
+    public ResponseEntity<?> getDiscountListing(@RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
+                                                @RequestParam(name = "size", defaultValue = "11") @Min(1) Integer size,
+                                                @RequestParam(name = "sort", required = false) String sortRequest,
                                                 @RequestBody(required = false) RequestDto requestDto) {
 
         if (sortRequest != null && sortRequest.isEmpty()) {
@@ -58,22 +59,118 @@ public class DiscountRestController {
                 page,
                 size,
                 sortRequest != null ? sortRequest : "",
-                requestDto != null ? requestDto : null
+                requestDto
         );
 
         Map<String, Object> responseBody = new HashMap<>();
         if (pageContent.getContent() != null && !pageContent.getContent().isEmpty()) {
-            logger.info("Sending discount listing response successfully");
+            logger.info("Sending discount listing response");
             responseBody.put("message", "Discount listing response");
-            responseBody.put("pageContent", pageContent);
+        } else {
+            logger.warn("No discounts found.");
+            responseBody.put("message", "No discounts found");
+        }
+        responseBody.put("pageContent", pageContent);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responseBody);
+    }
+
+    //  discount summary
+    @GetMapping("/summary")
+    public ResponseEntity<?> getDiscountSummary(@RequestHeader("roles") String roles,
+                                                @RequestParam("id") UUID discountId) {
+        DiscountSummaryDto summary = discountQueryService.getDiscountSummary(discountId);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        if (summary != null) {
+            logger.info("Sending discount summary response");
+            responseBody.put("message", "Discount summary response");
+            responseBody.put("summary", summary);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseBody);
         } else {
-            logger.warn("Sending discount listing response failed");
-            responseBody.put("message", "Error getting discount listing");
+            logger.warn("Error sending discount summary for ID: {}", discountId);
+            responseBody.put("message", "Error fetching discount summary.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(responseBody);
         }
+    }
+
+    //  discount mapped content
+    @PostMapping("/mapped-content")
+    public ResponseEntity<?> getDiscountMappedContent(@RequestHeader("roles") String roles,
+                                                      @RequestParam("id") UUID discountId,
+                                                      @RequestParam(name = "sort", required = false) String sortRequest,
+                                                      @RequestBody(required = false) RequestDto requestDto) {
+        if (sortRequest != null && sortRequest.isEmpty()) {
+            throw new IllegalArgumentException("Sort request cannot be empty");
+        }
+        if (requestDto != null && requestDto.getFilterRequestDtos().isEmpty()) {
+            throw new IllegalArgumentException("Filter request cannot be empty");
+        }
+
+        List<MappedContentDto> content = discountQueryService.getDiscountMappedContent(
+                discountId,
+                sortRequest != null ? sortRequest : "",
+                requestDto
+        );
+
+        Map<String, Object> responseBody = new HashMap<>();
+        if (content != null) {
+            if (content.isEmpty()) {
+                logger.info("Sending discount mapped content response, with empty list.");
+                responseBody.put("message", "No mapped content found.");
+            } else {
+                logger.info("Sending discount mapped content response.");
+                responseBody.put("message", "Discount mapped content response.");
+            }
+            responseBody.put("content", content);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseBody);
+        } else {
+            logger.warn("Error sending discount mapped content for discount ID: {}", discountId);
+            responseBody.put("message", "Error fetching discount mapped content.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
+        }
+    }
+
+
+    /// /   ********* Enum data *********
+
+    //  get Discount level
+    @GetMapping("/level")
+    public ResponseEntity<EnumDto> getDiscountLevel() {
+        EnumDto levels = discountQueryService.getDiscountLevel();
+        return ResponseEntity.ok(levels);
+    }
+
+    //  get Discount type
+    @GetMapping("/type")
+    public ResponseEntity<EnumDto> getDiscountType() {
+        EnumDto types = discountQueryService.getDiscountType();
+        return ResponseEntity.ok(types);
+    }
+
+    //  get Cap type
+    @GetMapping("/cap-type")
+    public ResponseEntity<EnumDto> getCapType() {
+        EnumDto capType = discountQueryService.getCapType();
+        return ResponseEntity.ok(capType);
+    }
+
+    //  get Discount status for add Discount form
+    @GetMapping("/form-status")
+    public ResponseEntity<EnumDto> getDiscountFormStatus() {
+        EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.FORM);
+        return ResponseEntity.ok(status);
+    }
+
+    //  get Discount status for discount summary
+    @GetMapping("/summary-status")
+    public ResponseEntity<EnumDto> getDiscountSummaryStatus() {
+        EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.SUMMARY);
+        return ResponseEntity.ok(status);
     }
 
 

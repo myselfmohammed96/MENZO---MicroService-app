@@ -15,7 +15,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -113,33 +112,45 @@ public class Discount {
     )
     private Set<DiscountCategory> discountCategories = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "discount_products",
-            joinColumns = @JoinColumn(
-                    name = "discount_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "product_id",
-                    referencedColumnName = "id"
-            )
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "discount_products",
+//            joinColumns = @JoinColumn(
+//                    name = "discount_id",
+//                    referencedColumnName = "id"
+//            ),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "product_id",
+//                    referencedColumnName = "id"
+//            )
+//    )
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "discount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private Set<Product> discountProducts = new HashSet<>();
+    private Set<DiscountProduct> discountProducts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "discount_variants",
-            joinColumns = @JoinColumn(
-                    name = "discount_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "product_item_id",
-                    referencedColumnName = "id"
-            )
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "discount_variants",
+//            joinColumns = @JoinColumn(
+//                    name = "discount_id",
+//                    referencedColumnName = "id"
+//            ),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "product_item_id",
+//                    referencedColumnName = "id"
+//            )
+//    )
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "discount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private Set<ProductItem> discountVariants = new HashSet<>();
+    private Set<DiscountVariant> discountVariants = new HashSet<>();
 
     @Column(
             name = "is_deleted",

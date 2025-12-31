@@ -28,7 +28,7 @@ public interface DiscountRepo extends JpaRepository<Discount, UUID>, JpaSpecific
                 WHERE d.discountStatus = "SCHEDULED"
                     AND d.startAt <= :now
             """)
-    void activateScheduled(@Param("now") LocalDateTime now);
+    int activateScheduled(@Param("now") LocalDateTime now);
 
 
     //  status - ACTIVE | INACTIVE | PAUSED -> EXPIRED
@@ -39,7 +39,7 @@ public interface DiscountRepo extends JpaRepository<Discount, UUID>, JpaSpecific
                 WHERE d.discountStatus IN ("ACTIVE", "INACTIVE", "PAUSED")
                     AND d.endAt < :now
             """)
-    void expireActive(@Param("now") LocalDateTime now);
+    int expireActive(@Param("now") LocalDateTime now);
 
 
     //  status - PAUSED -> SCHEDULED | ACTIVE
@@ -51,9 +51,9 @@ public interface DiscountRepo extends JpaRepository<Discount, UUID>, JpaSpecific
                         WHEN d.startAt <= :now THEN "ACTIVE"
                         ELSE "SCHEDULED"
                     END
-                    WHERE d.discountStatus = "PAUSED"
-                        AND d.resumeAt IS NOT NULL 
-                        AND d.resumeAt <= :now
+                WHERE d.discountStatus = "PAUSED"
+                    AND d.resumeAt IS NOT NULL 
+                    AND d.resumeAt <= :now
             """)
-    void resumePaused(@Param("now") LocalDateTime now);
+    int resumePaused(@Param("now") LocalDateTime now);
 }

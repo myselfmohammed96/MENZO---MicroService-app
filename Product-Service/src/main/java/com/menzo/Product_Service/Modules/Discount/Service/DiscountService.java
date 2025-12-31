@@ -7,6 +7,8 @@ import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
 import com.menzo.Product_Service.Modules.Discount.Dto.UpdateDiscountDto;
 import com.menzo.Product_Service.Modules.Discount.Entity.Discount;
 import com.menzo.Product_Service.Modules.Discount.Entity.DiscountCategory;
+import com.menzo.Product_Service.Modules.Discount.Entity.DiscountProduct;
+import com.menzo.Product_Service.Modules.Discount.Entity.DiscountVariant;
 import com.menzo.Product_Service.Modules.Discount.Enum.CapType;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountType;
@@ -49,9 +51,6 @@ public class DiscountService {
 
     @Autowired
     private ProductItemsRepo itemsRepo;
-
-
-    /// /    ********* GET methods *********
 
 
     /// /    ********* ADD, UPDATE, DELETE methods *********
@@ -324,7 +323,14 @@ public class DiscountService {
             if (products.size() != mappingDto.getSelectionList().size()) {
                 throw new IllegalArgumentException("Some products not found");
             }
-            discountInDb.getDiscountProducts().addAll(products);
+
+            Set<DiscountProduct> mappedSet = products.stream()
+                            .map(p -> DiscountProduct.builder()
+                                    .discount(discountInDb)
+                                    .product(p)
+                                    .build()
+                            ).collect(Collectors.toSet());
+            discountInDb.getDiscountProducts().addAll(mappedSet);
             Discount mappedDiscount = discountRepo.save(discountInDb);
 
             return !mappedDiscount.getDiscountProducts().isEmpty() ? mappedDiscount.getId() : null;
@@ -336,7 +342,14 @@ public class DiscountService {
             if (items.size() != mappingDto.getSelectionList().size()) {
                 throw new IllegalArgumentException("Some product items not found");
             }
-            discountInDb.getDiscountVariants().addAll(items);
+
+            Set<DiscountVariant> mappedSet = items.stream()
+                            .map(i -> DiscountVariant.builder()
+                                    .discount(discountInDb)
+                                    .productItem(i)
+                                    .build()
+                            ).collect(Collectors.toSet());
+            discountInDb.getDiscountVariants().addAll(mappedSet);
             Discount mappedDiscount = discountRepo.save(discountInDb);
 
             return !mappedDiscount.getDiscountVariants().isEmpty() ? mappedDiscount.getId() : null;

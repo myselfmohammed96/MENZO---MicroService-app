@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <link rel="stylesheet" href="/admin panels/css/admin-table.css">
+    <link rel="stylesheet" href="/admin panels/css/admin-filter-menu.css">
+
+    <link rel="stylesheet" href="../css/navbar-footer-sidenav-styling.css">
+    <link rel="stylesheet" href="../css/navbar-footer-sidenav-theme-font-effects.css">
+
+    <link rel="stylesheet" href="../css/components-styling.css">
+    <link rel="stylesheet" href="../css/components-theme-fonts-effects.css">
+
+    <link rel="stylesheet" href="../css/forms-styling.css">
+    <link rel="stylesheet" href="../css/admin-details.css">
+
+    <title>MENZO | Admin-Discounts</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href=""><img src="../media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+            <span id="clear-search">&#10005;</span>
+            <img id="search-lens-btn" src="../media/search-icon-thin.png" alt="">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-profile">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="profile-icon" src="../media/profile_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p>sign in</p>
+                        </div>
+                        <div><strong>Account</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="hamBurger-searchIcon-container">
+                <div id="search-icon">
+                    <img id="search-icon-img" src="../media/search-v3.png" alt="">
+                </div>
+                <div id="hamBurger-icon">
+                    <img src="../media/hamburger-icon-v3.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="page-container">
+    <div class="side-menu-bar-container">
+        <h2 id="dashboard-option">Dashboard</h2>
+        <h2>Inventory</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Categories</a></li>
+            <li class="menu-item"><a href="">Variations</a></li>
+            <li class="menu-item" id="current-option"><a href="">Products</a></li>
+            <li class="menu-item"><a href="">Discount & offers</a></li>
+            <li class="menu-item"><a href="">Coupons</a></li>
+            <li class="menu-item"><a href="">Order management</a></li>
+            <li class="menu-item"><a href="">Return & cancellation</a></li>
+            <li class="menu-item"><a href="">Sales & revenue</a></li>
+        </ul>
+        <h2>Users</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">User management</a></li>
+            <li class="menu-item"><a href="">Blocked users</a></li>
+            <li class="menu-item"><a href="">Subscriptions</a></li>
+            <li class="menu-item"><a href="">News letters</a></li>
+            <li class="menu-item"><a href="">Contact requests</a></li>
+            <li class="menu-item"><a href="">Sent messages</a></li>
+        </ul>
+        <h2>Others</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Banners</a></li>
+            <li class="menu-item"><a href="">About Us</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content-container">
+        <div id="page-title-container">
+            <h1 id="page-title">Discount Summary</h1>
+            <div>
+                <div class="title-button-container">
+                    <button id="draft-button" class="title-option-button-1 title-option-button-3" title="Draft">
+                        <img src="../media/draft (1).png" alt="">
+                    </button>
+                    <button id="refresh-button" class="title-option-button-1" title="Refresh">
+                        <img src="../media/refresh.png" alt="">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr class="hr-line-11">
+
+
+        <div id="discount-form-wrapper">
+            <div class="form-direction-container">
+                <div>
+                    <span id="form-instruction">Fill the form to add new discount</span>
+                    <span id="required-field-instruction"><span>*</span> indicates required fields</span>
+                </div>
+            </div>
+
+            <form id="discount-form" th:action="@{/discount}" method="POST">
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Name<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <input type="text" class="modal-input-2" id="discount-name" placeholder="Enter name" />
+                        <p id="discount-name-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Description:</strong>
+                    <div class="modal-input-wrapper">
+                            <textarea type="text" class="modal-input-2" id="discount-description"
+                                      placeholder="Enter description"></textarea>
+                        <p id="discount-description-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Level<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <Select type="text" class="modal-input-2" id="discount-level">
+                            <option value="">Global</option>
+                            <option value="">CATEGORY</option>
+                            <option value="">Sub-category</option>
+                            <option value="">Product</option>
+                            <option value="">Variant</option>
+                        </Select>
+                        <p id="discount-level-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+<!--                ## add discount Code field-->
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Type<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <Select type="text" class="modal-input-2" id="discount-type">
+                            <option value="">PERCENTAGE</option>
+                            <option value="">FLAT</option>
+                        </Select>
+                        <p id="discount-type-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Value<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <input type="text" class="modal-input-2" id="discount-value" placeholder="Enter value" />
+                        <p id="discount-value-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Start Date<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <input type="datetime-local" class="modal-input-2" id="discount-start-date" name="discount-start-date"
+                               placeholder="Start date" />
+                        <p id="discount-start-date-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">End Date<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <input type="datetime-local" class="modal-input-2" id="discount-end-date" name="discount-end-date"
+                               placeholder="End date" />
+                        <p id="discount-end-date-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Cap type<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <Select type="text" class="modal-input-2" id="discount-cap-type">
+                            <option value="">PERCENT</option>
+                            <option value="">AMOUNT</option>
+                            <option value="">NONE</option>
+                        </Select>
+                        <p id="discount-cap-type-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Cap value:</strong>
+                    <div class="modal-input-wrapper">
+                        <input type="text" class="modal-input-2" id="discount-cap-value"
+                               placeholder="Enter cap value" />
+                        <p id="discount-cap-value-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Priority:</strong>
+                    <div class="modal-input-wrapper">
+                        <input type="text" class="modal-input-2" id="discount-priority"
+                               placeholder="Enter priority" />
+                        <p id="discount-priority-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container form-input">
+                    <strong class="modal-key">Status<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <Select type="text" class="modal-input-2" id="discount-status">
+                            <option value="">ACTIVE</option>
+                            <option value="">INACTIVE</option>
+                        </Select>
+                        <p id="discount-status-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div id="button-container-2">
+                    <button class="submit-button-5" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+
+<!-- Confirmation modal -->
+
+<div id="confirm-modal" class="modal hidden">
+    <div class="modal-container">
+        <h1 id="confirm-title" class="modal-heading">Are you sure?</h1>
+        <p id="confirm-message" class="modal-message">Do you really want to delete this discount? </p>
+        <div class="modal-button-container">
+            <button class="modal-button" id="confirm-yes">Yes</button>
+            <button class="modal-button" id="confirm-no">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!--    Toast notification-->
+
+<div class="toast" id="toast">
+    <div class="toast-icon" id="toast-icon"></div>
+    <div class="toast-success-message-container">
+        <h2 id="toast-title">Error!</h2>
+        <p id="toast-message">Blocked failed</p>
+    </div>
+</div>
+
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="../media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script src="../js/nav-bar-script.js"></script>
+<script src="../js/filter-menu-script.js"></script>
+<script src="../js/component-script/toaster-script.js"></script>
+
+<script src="../js/discount-coupon-script/add-discount.js"></script>
+</body>
+
+</html>

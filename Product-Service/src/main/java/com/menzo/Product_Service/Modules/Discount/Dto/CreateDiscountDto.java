@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Modules.Discount.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.Product_Service.Modules.Discount.Enum.CapType;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountType;
@@ -77,9 +78,11 @@ public class CreateDiscountDto {
     private Integer priority;
 
     @NotNull(message = "Start date is required")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startAt;
 
     @NotNull(message = "End date is required")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endAt;
 
 }

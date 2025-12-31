@@ -1,0 +1,676 @@
+/*
+*
+*   Contains UI Components like
+*       -List box
+*       -Toast
+*       -Modal
+*
+*/
+
+
+
+/* ********* List box ********* */
+
+#items-list-wrapper,
+#discount-mapping-list-wrapper {
+    border: 1px solid #c2c2c2;
+    width: 100%;
+    min-height: 80vh;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ------- Header ------- */
+#list-wrapper-header {
+    background-color: #f3f3f36d;
+    border-bottom: 1px solid #eaeaea;
+    width: 100%;
+    height: 90px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.list-header-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-heading-container {
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+.list-heading-container h2 {
+    color: #555;
+}
+
+.list-header-row p {
+    color: #8a8a8a;
+    font-size: 0.8rem;
+    padding: 0 21px;
+}
+
+/* Header buttons */
+.list-heading-buttons-container {
+    display: flex;
+    margin-right: 10px;
+}
+
+
+/* ------- Body ------- */
+#list-wrapper-body {
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 450px;
+}
+
+/* List element */
+.list-element {
+    border: 1px solid transparent;
+}
+
+.discount-map-element {
+    border-right: 4px solid transparent;
+}
+
+.list-element:hover,
+.discount-map-element:hover,
+.discount-map-element:hover .cc-select {
+    background-color: #f1f1f1c3;
+}
+
+.selected-element {
+    background-color: #fae9e5;
+}
+
+.selected-element:hover {
+    background-color: #fae9e5;
+}
+
+.list-element-content {
+    height: 80px;
+    cursor: pointer;
+    display: flex;
+}
+
+.element-counter-container {
+    width: 15px;
+    display: flex;
+    padding-left: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.counter-checkbox-container {
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cc-select {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background: #fff;
+    color: #000;
+}
+
+.cc-select input {
+    display: none;
+
+}
+
+.cc-select input:checked + span {
+    background: #000;
+    color: #fff;
+}
+.cc-select:has(input:checked) {
+    border-left-color: #000;
+}
+
+.discount-map-element:has(.cc-select input:checked) {
+    background-color: #fae9e5;
+    border-right: 4px solid #000;
+}
+
+.cc-select span {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.element-icon-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.element-icon-container img {
+    height: 70px;
+    width: 70px;
+    border: 1px solid #cfcfcf;
+    object-fit: cover;
+    object-position: top;
+}
+
+.element-text-container {
+    flex: 3;
+    padding-top: 5px;
+    /* border: 1px solid green; */
+}
+
+.element-text-1 {
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.element-sku-container {
+    font-weight: bold;
+    color: #3e3e3e;
+    flex: 1.3;
+    display: flex;
+    justify-content: left;
+}
+
+.element-sku-container p {
+    width: 100%;
+}
+
+.element-sku-container,
+.element-status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.element-status-container {
+    flex: 1;
+}
+
+.element-status {
+    padding: 3px 10px;
+    background-color: rgba(207, 58, 58, 0.63);
+    color: rgb(129, 5, 5);
+    border-radius: 5px;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+.element-text-2-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.element-color {
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    flex: 1.5;
+}
+
+.element-color-key {
+    font-size: 0.9rem;
+    color: #8a8a8a;
+    font-weight: bold;
+}
+
+.element-color-value {
+    font-size: 0.9rem;
+    color: #525252;
+    margin: 5px;
+}
+
+.element-color-icon {
+    border: 1px solid #ddd;
+    background-color: darkblue;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+}
+
+.color-icon {
+    background-color: #000000;
+    border: 1px solid #ddd;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.element-stock {
+    flex: 1;
+    color: green;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+
+/* ------- */
+
+.list-text-container {
+    flex: 2;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.list-button-container {
+    flex: 1;
+}
+
+.element-text-1 {
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.element-sku-container {
+    font-weight: bold;
+    color: #3e3e3e;
+    flex: 1.3;
+    display: flex;
+    justify-content: left;
+}
+
+.element-sku-container p {
+    width: 100%;
+}
+
+.element-sku-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.element-text-2-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.element-color {
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    flex: 1.5;
+}
+
+.element-color-key {
+    font-size: 0.9rem;
+    color: #8a8a8a;
+    font-weight: bold;
+}
+
+.element-color-value {
+    font-size: 0.9rem;
+    color: #525252;
+    margin: 5px;
+}
+
+.element-color-icon {
+    border: 1px solid #ddd;
+    background-color: darkblue;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+}
+
+/* .color-icon {
+    background-color: #000000;
+    border: 1px solid #ddd;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin-left: 10px;
+} */
+
+/* .element-stock {
+    flex: 1;
+    color: green;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+} */
+
+
+
+
+.element-option-button-container {
+    flex: 0.5;
+}
+
+
+
+/* discount mapping list buttons */
+
+.list-button-container {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.show-border {
+    opacity: 0.7;
+    border-color: #555;
+}
+
+/* ///////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+/* ******* Toast notification ******* */
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    min-width: 300px;
+    padding: 10px 10px 10px 20px;
+    display: flex;
+    z-index: 9999;
+    transform: translateX(-100%);
+    opacity: 0;
+    border: 1px solid #3e3e3e;
+}
+
+.toast-icon {
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    margin-right: 20px;
+}
+
+.toast-message-container {
+    flex: 1;
+}
+
+.toast-message-container p {
+    max-width: 300px;
+}
+
+.toast-close-container {
+    min-height: 100%;
+    max-width: 20px;
+    width: 20px;
+}
+
+.toast-close-container span {
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.0.7s ease;
+    user-select: none;
+}
+
+.toast-close-container span:active {
+    transform: scale(0.92);
+}
+
+.toast.show {
+    animation: slideInBounce 0.6s ease-out forwards;
+}
+
+.toast.hide {
+    animation: slideOut 0.6s ease-in forwards;
+}
+
+
+@keyframes slideInBounce {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    60% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* ///////////////////////////////////// */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* categories-accordion contains => *ca*, /*ca*/
+
+/* ******* Modal ******* */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-container,
+.modal-container-1,
+.modal-container-2,
+.modal-container-3 {
+    min-width: 200px;
+    /* width: 40%; */
+    max-width: 95%;
+    /* height: 92%; */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    max-height: 95vh;
+}
+
+.modal-container-2 {
+    /* .modal-container-3 { */
+    width: 40%;
+    height: 92%;
+}
+
+.modal-container-3 {
+    width: 40%;
+    min-height: 60%;
+}
+
+.modal-container,
+.modal-container-3 {
+    padding: 30px 50px
+}
+
+.modal-scroll {
+    height: 100%;
+    width: 100%;
+    padding: 20px 35px;
+    overflow-y: auto;
+}
+
+.modal-title {
+    margin-bottom: 15px;
+}
+
+.modal-title-1 {
+    margin-bottom: 10px;
+}
+
+#modal-body {
+    /*dep*/
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+#item-form-modal-body {
+    min-width: 900px;
+}
+
+.modal-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    /* border: 1px solid red; */
+}
+
+.modal-key-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-input-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-key {
+    color: #a1a1a1;
+    padding: 10px 0 5px 0;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.modal-input-wrapper {
+    flex: 3;
+    /* border: 1px solid red; */
+}
+
+.modal-value {
+    max-width: 300px;
+}
+
+.modal-input-container {
+    display: flex;
+    justify-content: space-between;
+    flex: 3;
+    /* border: 1px solid red; */
+    margin-bottom: 10px;
+}
+
+#item-form-modal-body {
+    min-width: 900px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.custom-select-wrapper {
+    margin-top: 0px !important;
+    height: auto;
+}
+
+div.choices {
+    margin-bottom: 0px;
+}
+
+.modal-button-container {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+.error-message {
+    /*dep*/
+    display: block;
+    margin: 0px !important;
+    padding-left: 15px;
+}
+
+.error-message-1 {
+    /*dep*/
+    display: block;
+    margin: 0px !important;
+    width: 100%;
+}
+
+.modal-button {
+    width: 35%;
+    padding: 7px 0px;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.05s ease;
+}
+
+.modal-button-1 {
+    width: 30% !important;
+    padding: 7px 0px;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.05s ease;
+}
+
+.modal-button:active,
+.modal-button-1:active {
+    transform: scale(0.95);
+}
+
+/* ///////////////////////////////////// */

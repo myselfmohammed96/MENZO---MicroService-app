@@ -104,25 +104,56 @@ td.center-text,
     color: #3480b2 !important;
 }
 
+
+
 .status-indicator {
     padding: 4px 10px;
     border-radius: 3px;
 }
 
+/* ACTIVE */
 .status-green {
     background-color: #5dc53a80;
     color: #046E00;
 }
 
+/* INACTIVE */
 .status-red {
     background-color: #FD616180;
     color: #A10000;
 }
 
+/* SCHEDULED (Blue – planned / upcoming) */
+.status-blue {
+    background-color: #4A90E280;
+    color: #0B3C6E;
+}
+
+/* PAUSED (Amber – attention / temporarily stopped) */
+.status-amber {
+    background-color: #F5A62380;
+    color: #8A4B00;
+}
+
+/* EXPIRED (Grey – neutral / inactive by time) */
+.status-grey {
+    background-color: #9B9B9B80;
+    color: #4A4A4A;
+}
+
+/* CANCELLED (Dark Red / Maroon – stronger than inactive) */
+.status-maroon {
+    background-color: #B0002080;
+    color: #6B0012;
+}
+
+/* PARTIAL ACTIVE */
 .status-yellow {
     background-color: #F8F00080;
     color: #AF990A;
 }
+
+
 
 .action-buttons-column button {
     padding: 3px 5px;
