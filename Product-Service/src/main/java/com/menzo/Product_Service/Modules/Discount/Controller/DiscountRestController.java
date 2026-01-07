@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Modules.Discount.Controller;
 
 import com.menzo.Product_Service.Modules.Discount.Dto.*;
+import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountStatusTarget;
 import com.menzo.Product_Service.Modules.Discount.Enum.EnumDto;
 import com.menzo.Product_Service.Modules.Discount.Service.DiscountQueryService;
@@ -136,6 +137,18 @@ public class DiscountRestController {
     }
 
 
+    //  level details
+    @GetMapping("/level-details")
+    public ResponseEntity<?> getLevelDetails(@RequestParam("cLevel") DiscountLevel currentLevel,
+                                             @RequestParam(name = "previousId", required = false) Long id) {
+
+        List<LevelDetailsDto> levelDetails = discountQueryService.getLevelDetails(
+                id,
+                currentLevel
+        );
+        return ResponseEntity.ok(levelDetails);
+    }
+
     /// /   ********* Enum data *********
 
     //  get Discount level
@@ -171,6 +184,14 @@ public class DiscountRestController {
     public ResponseEntity<EnumDto> getDiscountSummaryStatus() {
         EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.SUMMARY);
         return ResponseEntity.ok(status);
+    }
+
+    //  Discount code - existence check
+    @PostMapping("/check-code-exist")
+    public ResponseEntity<?> checkDiscountCodeExist(@RequestBody DiscountCodeDto code) {
+        boolean exists = discountQueryService.checkDiscountCodeExist(code);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("exists", exists));
     }
 
 

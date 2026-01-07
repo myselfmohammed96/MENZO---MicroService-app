@@ -1,7 +1,9 @@
 const getDiscounts = "http://localhost:8080/discount/listing";
+const discountSummaryPage = "http://localhost:8080/admin/discount-summary";
+
+const addDiscountForm = "http://localhost:8080/admin/add-discount";
 
 let tBody;
-//let modalForm;
 let paginationContainer;
 
 let currentSortParam;
@@ -30,6 +32,17 @@ async function fetchDiscounts(sortParam = null, requestDto = null, page) {
     }
 }
 
+function openDiscount(discountId) {
+//console.log("open Discount: " + discountId)
+    window.location.href = `${discountSummaryPage}?id=${encodeURIComponent(discountId)}`;
+}
+
+//  OPEN add discount form
+function openAddDiscountForm() {
+    window.location.href = addDiscountForm;
+}
+
+
 //  populate discounts
 function populateDiscounts(discounts) {
     tBody.innerHTML = '';
@@ -54,7 +67,7 @@ function populateDiscounts(discounts) {
         }
 
         const status = d.status.charAt(0).toUpperCase()
-                        + d.level.slice(1).toLowerCase().replace('_', ' ');
+                        + d.status.slice(1).toLowerCase().replaceAll('_', ' ');
 
         const tRow = `
             <tr>
@@ -66,7 +79,7 @@ function populateDiscounts(discounts) {
                     <span class="status-indicator ${statusColor}">${status}</span>
                 </td>
                 <td class="center-text action-buttons-column">
-                    <button class="action-view-btn">
+                    <button class="action-view-btn" onclick="openDiscount('${d.discountId}')">
                         <img src="../media/enter (1).png" alt="">
                     </button>
                     <button class="action-delete-btn">
@@ -107,28 +120,13 @@ function populatePagination(totalPages) {
 
 
 
-
-
-
-
-
-
-
-//function openModalForm() {
-//    modalForm.style.display = "flex";
-//}
-//
-//const closeModalForm = () => {
-//    modalForm.style.display = "none";
-//};
-
 //  load products
 async function loadDiscounts() {
     try {
         const result = await fetchDiscounts(currentSortParam, currentRequestDto, currentPage);
         if (!result) return;
-        populateDiscounts(result.content);
-        populatePagination(result.totalPages);
+        populateDiscounts(result.pageContent.content);
+        populatePagination(result.pageContent.totalPages);
     } catch (error) {
         console.error("Failed to load discounts: ", error);
         return;
@@ -137,22 +135,58 @@ async function loadDiscounts() {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     tBody = document.getElementById('discount-table');
     modalForm = document.getElementById('discount-form-modal');
     paginationContainer = document.querySelector('.pagination');
 
     await loadDiscounts();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//let modalForm;
+
+
+
+
 
 
 //    //  open form modal
-//    document.getElementById('add-button').addEventListener('click', () => {
-//         openModalForm();
-//    });
-//
-//    //  close form modal
-//    document.getElementById('close-form-modal-btn').addEventListener('click', () => {
-//        closeModalForm();
-//    });
-});
+   //    document.getElementById('add-button').addEventListener('click', () => {
+   //         openModalForm();
+   //    });
+   //
+   //    //  close form modal
+   //    document.getElementById('close-form-modal-btn').addEventListener('click', () => {
+   //        closeModalForm();
+   //    });
+
+
+
+
+
+
+   //function openModalForm() {
+   //    modalForm.style.display = "flex";
+   //}
+   //
+   //const closeModalForm = () => {
+   //    modalForm.style.display = "none";
+   //};
+
+

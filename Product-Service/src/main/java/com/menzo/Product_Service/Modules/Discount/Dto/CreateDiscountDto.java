@@ -78,11 +78,13 @@ public class CreateDiscountDto {
     private Integer priority;
 
     @NotNull(message = "Start date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    @JsonFormat(pattern = "dd-MM-yyyy hh:mm a")
     private LocalDateTime startAt;
 
     @NotNull(message = "End date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    @JsonFormat(pattern = "dd-MM-yyyy hh:mm a")
     private LocalDateTime endAt;
 
 }

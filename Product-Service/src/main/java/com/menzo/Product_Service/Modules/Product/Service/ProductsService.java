@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryService;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Modules.Product.Enum.ProductActiveStatus;
@@ -57,10 +57,10 @@ public class ProductsService {
     private ProductCountryOfOriginRepo countryOfOriginRepo;
 
     @Autowired
-    private CategoriesService categoriesService;
+    private CategoryService categoriesService;
 
     @Autowired
-    private CategoriesRetrievalService categoriesRetrievalService;
+    private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
     private VariationsQueryService variationsRetrievalService;

@@ -12,19 +12,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
     <link rel="stylesheet" href="../css/admin-style.css">
-    <link rel="stylesheet" href="/admin panels/css/admin-table.css">
-    <link rel="stylesheet" href="/admin panels/css/admin-filter-menu.css">
+<!--    <link rel="stylesheet" href="/admin panels/css/admin-table.css">-->
+<!--    <link rel="stylesheet" href="/admin panels/css/admin-filter-menu.css">-->
 
     <link rel="stylesheet" href="../css/navbar-footer-sidenav-styling.css">
     <link rel="stylesheet" href="../css/navbar-footer-sidenav-theme-font-effects.css">
 
-    <link rel="stylesheet" href="../css/components-styling.css">
-    <link rel="stylesheet" href="../css/components-theme-fonts-effects.css">
+    <link rel="stylesheet" href="../css/elements.css" />
+    <link rel="stylesheet" href="../css/text-content.css" />
+
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/components-theme-font-effects.css">
 
     <link rel="stylesheet" href="../css/forms-styling.css">
     <link rel="stylesheet" href="../css/admin-details.css">
 
-    <title>MENZO | Admin-Discounts</title>
+    <title>MENZO | Admin- Add Discount</title>
 </head>
 
 <body>
@@ -99,19 +102,19 @@
 
     <div class="main-content-container">
         <div id="page-title-container">
-            <h1 id="page-title">Discount Summary</h1>
+            <h1 id="page-title">Add Discount</h1>
             <div>
                 <div class="title-button-container">
-                    <button id="draft-button" class="title-option-button-1 title-option-button-3" title="Draft">
+                    <button id="draft-button" class="title-button draft-button" title="Draft">
                         <img src="../media/draft (1).png" alt="">
                     </button>
-                    <button id="refresh-button" class="title-option-button-1" title="Refresh">
+                    <button id="refresh-button" class="title-button refresh-button" title="Refresh">
                         <img src="../media/refresh.png" alt="">
                     </button>
                 </div>
             </div>
         </div>
-        <hr class="hr-line-11">
+        <hr class="line line-97">
 
 
         <div id="discount-form-wrapper">
@@ -123,120 +126,114 @@
             </div>
 
             <form id="discount-form" th:action="@{/discount}" method="POST">
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Name<span class="red-star">*</span>:</strong>
+
+                <div class="modal-input-container">
+                    <strong class="form-key">Name<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <input type="text" class="modal-input-2" id="discount-name" placeholder="Enter name" />
+                        <input type="text" class="input input-100" id="discount-name" placeholder="Enter name" />
                         <p id="discount-name-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Description:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Description:</strong>
                     <div class="modal-input-wrapper">
-                            <textarea type="text" class="modal-input-2" id="discount-description"
+                            <textarea type="text" class="input input-100" id="discount-description"
                                       placeholder="Enter description"></textarea>
                         <p id="discount-description-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Level<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Level<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <Select type="text" class="modal-input-2" id="discount-level">
-                            <option value="">Global</option>
-                            <option value="">CATEGORY</option>
-                            <option value="">Sub-category</option>
-                            <option value="">Product</option>
-                            <option value="">Variant</option>
-                        </Select>
+                        <Select type="text" class="input input-100" id="discount-level"></Select>
                         <p id="discount-level-error-message" class="error-message"></p>
                     </div>
                 </div>
 
 <!--                ## add discount Code field-->
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Type<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Type<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <Select type="text" class="modal-input-2" id="discount-type">
-                            <option value="">PERCENTAGE</option>
-                            <option value="">FLAT</option>
-                        </Select>
+                        <Select type="text" class="input input-100" id="discount-type"></Select>
                         <p id="discount-type-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Value<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Value<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <input type="text" class="modal-input-2" id="discount-value" placeholder="Enter value" />
+                        <input type="text" class="input input-100" id="discount-value" placeholder="Enter value" />
                         <p id="discount-value-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Start Date<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Start Date<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <input type="datetime-local" class="modal-input-2" id="discount-start-date" name="discount-start-date"
+                        <input type="datetime-local" class="input input-100" id="discount-start-date" name="discount-start-date"
                                placeholder="Start date" />
                         <p id="discount-start-date-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">End Date<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">End Date<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <input type="datetime-local" class="modal-input-2" id="discount-end-date" name="discount-end-date"
+                        <input type="datetime-local" class="input input-100" id="discount-end-date" name="discount-end-date"
                                placeholder="End date" />
                         <p id="discount-end-date-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Cap type<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Cap type<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <Select type="text" class="modal-input-2" id="discount-cap-type">
-                            <option value="">PERCENT</option>
-                            <option value="">AMOUNT</option>
-                            <option value="">NONE</option>
-                        </Select>
+                        <Select type="text" class="input input-100" id="discount-cap-type"></Select>
                         <p id="discount-cap-type-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Cap value:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Cap value:</strong>
                     <div class="modal-input-wrapper">
-                        <input type="text" class="modal-input-2" id="discount-cap-value"
+                        <input type="text" class="input input-100" id="discount-cap-value"
                                placeholder="Enter cap value" />
                         <p id="discount-cap-value-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Priority:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Priority:</strong>
                     <div class="modal-input-wrapper">
-                        <input type="text" class="modal-input-2" id="discount-priority"
+                        <input type="text" class="input input-100" id="discount-priority"
                                placeholder="Enter priority" />
                         <p id="discount-priority-error-message" class="error-message"></p>
                     </div>
                 </div>
 
-                <div class="modal-input-container form-input">
-                    <strong class="modal-key">Status<span class="red-star">*</span>:</strong>
+                <div class="modal-input-container">
+                    <strong class="form-key">Code<span class="red-star">*</span>:</strong>
                     <div class="modal-input-wrapper">
-                        <Select type="text" class="modal-input-2" id="discount-status">
-                            <option value="">ACTIVE</option>
-                            <option value="">INACTIVE</option>
-                        </Select>
+                        <Select type="text" class="input input-100" id="discount-code"></Select>
+                        <p id="discount-code-error-message" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="modal-input-container">
+                    <strong class="form-key">Status<span class="red-star">*</span>:</strong>
+                    <div class="modal-input-wrapper">
+                        <Select type="text" class="input input-100" id="discount-status"></Select>
                         <p id="discount-status-error-message" class="error-message"></p>
                     </div>
                 </div>
 
                 <div id="button-container-2">
-                    <button class="submit-button-5" type="submit">Save</button>
+                    <button class="grey-cta-button grey-submit-button-2" type="submit">Save</button>
                 </div>
+
             </form>
         </div>
 
@@ -247,7 +244,7 @@
 
 <!-- Confirmation modal -->
 
-<div id="confirm-modal" class="modal hidden">
+<div id="confirm-modal" class="modal">
     <div class="modal-container">
         <h1 id="confirm-title" class="modal-heading">Are you sure?</h1>
         <p id="confirm-message" class="modal-message">Do you really want to delete this discount? </p>
@@ -263,9 +260,12 @@
 
 <div class="toast" id="toast">
     <div class="toast-icon" id="toast-icon"></div>
-    <div class="toast-success-message-container">
-        <h2 id="toast-title">Error!</h2>
-        <p id="toast-message">Blocked failed</p>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
     </div>
 </div>
 
@@ -290,11 +290,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
-<script src="../js/nav-bar-script.js"></script>
-<script src="../js/filter-menu-script.js"></script>
+<script>
+    flatpickr("#discount-start-date", {
+        dateFormat: "d-m-Y",
+        maxDate: "today"
+    });
+    flatpickr("#discount-end-date", {
+        dateFormat: "d-m-Y"
+    });
+</script>
+
+<script src="../js/component-script/nav-bar-script.js"></script>
+<!--<script src="../js/filter-menu-script.js"></script>-->
 <script src="../js/component-script/toaster-script.js"></script>
 
 <script src="../js/discount-coupon-script/add-discount.js"></script>
+<script src="../js/discount-coupon-script/discount-code.js"></script>
 </body>
 
 </html>

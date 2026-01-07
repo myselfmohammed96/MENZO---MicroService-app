@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Modules.Category.Controller;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryService;
 import com.menzo.Product_Service.Modules.Category.Dto.*;
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import jakarta.validation.Valid;
@@ -23,10 +23,10 @@ import java.util.Map;
 public class CategoriesRestController {
 
     @Autowired
-    private CategoriesService categoriesService;
+    private CategoryService categoriesService;
 
     @Autowired
-    private CategoriesRetrievalService categoriesRetrievalService;
+    private CategoryQueryService categoriesRetrievalService;
 
     private static final Logger logger = LoggerFactory.getLogger(CategoriesRestController.class);
 

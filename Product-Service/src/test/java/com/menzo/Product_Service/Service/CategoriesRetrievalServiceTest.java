@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Modules.Category.Dto.NestedCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
@@ -16,7 +16,7 @@ import java.util.List;
 class CategoriesRetrievalServiceTest {
 
     @Autowired
-    private CategoriesRetrievalService categoriesRetrievalService;
+    private CategoryQueryService categoriesRetrievalService;
 
 
 

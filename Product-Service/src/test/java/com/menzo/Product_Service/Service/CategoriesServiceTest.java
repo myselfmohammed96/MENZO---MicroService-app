@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Service;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryService;
 import com.menzo.Product_Service.Modules.Category.Dto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 class CategoriesServiceTest {
 
     @Autowired
-    private CategoriesService categoriesService;
+    private CategoryService categoriesService;
 
 
 

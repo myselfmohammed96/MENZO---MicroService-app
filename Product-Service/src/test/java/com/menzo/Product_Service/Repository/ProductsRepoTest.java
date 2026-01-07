@@ -40,4 +40,12 @@ class ProductsRepoTest {
         System.out.println(allProducts.size());
     }
 
+    @Test
+    public void testFindByCategory() {
+        List<Product> byCategory = productsRepo.findByCategoryId(121L);
+        for (Product p : byCategory) {
+            System.out.println(p);
+        }
+    }
+
 }

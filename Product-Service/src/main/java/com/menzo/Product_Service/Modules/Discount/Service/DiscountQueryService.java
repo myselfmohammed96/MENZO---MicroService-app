@@ -1,19 +1,20 @@
 package com.menzo.Product_Service.Modules.Discount.Service;
 
-import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Modules.Discount.Dto.DiscountListingDto;
-import com.menzo.Product_Service.Modules.Discount.Dto.DiscountSummaryDto;
-import com.menzo.Product_Service.Modules.Discount.Dto.MappedContentDto;
+import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;
+import com.menzo.Product_Service.Modules.Category.Dto.SubCategoryDto;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
+import com.menzo.Product_Service.Modules.Discount.Dto.*;
 import com.menzo.Product_Service.Modules.Discount.Entity.Discount;
 import com.menzo.Product_Service.Modules.Discount.Entity.DiscountCategory;
-import com.menzo.Product_Service.Modules.Discount.Entity.DiscountProduct;
 import com.menzo.Product_Service.Modules.Discount.Entity.DiscountVariant;
 import com.menzo.Product_Service.Modules.Discount.Enum.*;
 import com.menzo.Product_Service.Modules.Discount.Repo.DiscountRepo;
-import com.menzo.Product_Service.Modules.Product.Entity.ProductConfiguration;
+import com.menzo.Product_Service.Modules.Product.Dto.ItemDto.ItemMinDto;
+import com.menzo.Product_Service.Modules.Product.Dto.ProductMinDto;
+import com.menzo.Product_Service.Modules.Product.Service.ProductsQueryService;
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
-import org.aspectj.apache.bcel.generic.RET;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,10 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
-import java.text.ParsePosition;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class DiscountQueryService {
@@ -39,6 +37,12 @@ public class DiscountQueryService {
 
     @Autowired
     private DiscountSpecService specService;
+
+    @Autowired
+    private CategoryQueryService categoryQueryService;
+
+    @Autowired
+    private ProductsQueryService productsQueryService;
 
 
     //  ## remove isDeleted fields
@@ -439,6 +443,60 @@ public class DiscountQueryService {
                 .mappingId(id)
                 .textContent(text)
                 .build();
+    }
+
+    public List<LevelDetailsDto> getLevelDetails(@Nullable Long id,
+                                                 DiscountLevel currentLevel) {
+//        if (targetLevel == currentLevel) {
+//        }
+        switch (currentLevel) {
+            case CATEGORY -> {
+                List<ParentCategoryDto> categories = categoryQueryService.getAllParents();
+                return categories.stream()
+                        .map(c -> LevelDetailsDto.builder()
+                                .id(c.getId())
+                                .text(c.getCategoryName())
+                                .build()
+                        ).toList();
+            }
+            case SUB_CATEGORY -> {
+                List<SubCategoryDto> subCategories = categoryQueryService.getAllSubOfParentId(id);
+                return subCategories.stream()
+                        .map(s -> LevelDetailsDto.builder()
+                                .id(s.getId())
+                                .text(s.getCategoryName())
+                                .build()
+                        ).toList();
+            }
+            case PRODUCT -> {
+                List<ProductMinDto> products = productsQueryService.getProductsBySubCategory(id);
+                return products.stream()
+                        .map(p -> LevelDetailsDto.builder()
+                                .id(p.getProductId())
+                                .text(p.getProductName())
+                                .imageIcon(p.getIconImage())
+                                .build()
+                        ).toList();
+            }
+            case VARIANT -> {
+                List<ItemMinDto> items = productsQueryService.getProductItemByProductId(id);
+                return items.stream()
+                        .map(i -> LevelDetailsDto.builder()
+                                .id(i.getItemId())
+                                .text(i.getSku())
+                                .imageIcon(i.getImageUrl())
+                                .size(i.getSize())
+                                .color(i.getColorName())
+                                .hexCode(i.getHexCode())
+                                .build()
+                        ).toList();
+            }
+            default -> throw new IllegalArgumentException("Invalid discount level: " + currentLevel);
+        }
+    }
+
+    public boolean checkDiscountCodeExist(DiscountCodeDto code) {
+        return discountRepo.existsByDiscountCode(code.getDiscountCode());
     }
 
 }

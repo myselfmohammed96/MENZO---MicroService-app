@@ -1,8 +1,9 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Modules.Product.Dto.ItemDto.ItemMinDto;
 import com.menzo.Product_Service.Modules.Product.Entity.*;
 import com.menzo.Product_Service.Modules.Product.Repo.ProductsRepo;
 import com.menzo.Product_Service.Modules.Product.Repo.ProductConfigurationRepo;
@@ -14,6 +15,8 @@ import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
 import com.menzo.Product_Service.Modules.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Modules.Product.Enum.StockStatus;
 import com.menzo.Product_Service.Modules.Product.Dto.*;
+import com.menzo.Product_Service.Modules.Variation.Dto.ColorInfo;
+import com.menzo.Product_Service.Modules.Variation.Entity.ColorCode;
 import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Modules.Variation.Repo.VariationsOptionsRepo;
 import com.menzo.Product_Service.Modules.Variation.Repo.VariationsRepo;
@@ -55,7 +58,7 @@ public class ProductsQueryService {
     private VariationsRepo variationsRepo;
 
     @Autowired
-    private CategoriesRetrievalService categoriesRetrievalService;
+    private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
     private ProductCountryOfOriginRepo countryOfOriginRepo;
@@ -249,7 +252,6 @@ public class ProductsQueryService {
 //                .collect(Collectors.toSet());
 
 
-
         //  other details
         String manufacturer = "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India";
         String packer = "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India";
@@ -273,7 +275,6 @@ public class ProductsQueryService {
                 .items(itemDetailsList)
                 .build();
     }
-
 
 
     public List<String> getProductImages(String superSku) {
@@ -445,7 +446,7 @@ public class ProductsQueryService {
             }
             return (List<T>) itemDetailsList;
         } else {
-            return  null;
+            return null;
         }
     }
 
@@ -542,6 +543,74 @@ public class ProductsQueryService {
     }
 
 
+    //  Get products by Sub-category ID
+    public List<ProductMinDto> getProductsBySubCategory(Long subCategoryId) {
+        return productsRepo.findByCategoryId(subCategoryId).stream()
+                .map(p -> {
+                    String imageUrl = p.getItems()
+                            .stream()
+                            .findFirst()
+                            .flatMap(i -> i.getImages().stream().findFirst())
+                            .map(ProductImage::getImageUrl)
+                            .orElse(null);
+
+                    return ProductMinDto.builder()
+                            .productId(p.getId())
+                            .productName(p.getProductName())
+                            .iconImage(imageUrl)
+                            .build();
+                }).toList();
+    }
+
+    public List<ItemMinDto> getProductItemByProductId(Long productId) {
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+        return product.getItems().stream()
+                .map(i -> {
+                    String imageUrl = i.getImages().stream()
+                            .findFirst()
+                            .map(ProductImage::getImageUrl)
+                            .orElse(null);
+
+                    String size = getSizeFromItem(i);
+                    ColorInfo color = getColorFromItem(i);
+
+                    return ItemMinDto.builder()
+                            .itemId(i.getId())
+                            .sku(i.getSKU())
+                            .imageUrl(imageUrl)
+                            .size(size)
+                            .colorName(color != null ? color.getColorName() : null)
+                            .hexCode(color != null ? color.getHexCode() : null)
+                            .build();
+                }).toList();
+    }
+
+    private String getSizeFromItem(ProductItem item) {
+        return item.getConfigurations().stream()
+                .filter(c -> c.getVariationOption()
+                        .getVariation()
+                        .getVariationName()
+                        .equalsIgnoreCase("size")
+                ).map(c -> c.getVariationOption().getOptionValue())
+                .findFirst()
+                .orElse(null);
+    }
+
+    private ColorInfo getColorFromItem(ProductItem item) {
+        return item.getConfigurations().stream()
+                .filter(c -> "colors".equalsIgnoreCase(
+                        c.getVariationOption()
+                                .getVariation()
+                                .getVariationName()
+                )).map(c -> ColorInfo.builder()
+                        .colorName(c.getVariationOption().getOptionValue())
+                        .hexCode(c.getVariationOption().getColorCode().getColorCode())
+                        .build()
+                ).findFirst()
+                .orElse(null);
+    }
+
 }
 
 
@@ -585,7 +654,7 @@ public class ProductsQueryService {
 //                    }
 //                    imageUrl.add(p.getImageUrl());
 //                }
-////            }
+/// /            }
 //            return imageUrl;
 //        } catch (Exception e) {
 //            logger.error("Error fetching images");
@@ -665,15 +734,15 @@ public class ProductsQueryService {
 //            case "price,desc":
 //                sort = "price,desc";
 //                break;
-////            case "featured":
-////                sort = "";
-////                break;
-////            case "reviews":
-////                sort = "";
-////                break;
-////            case "bestSelling":
-////                sort = "";
-////                break;
+/// /            case "featured":
+/// /                sort = "";
+/// /                break;
+/// /            case "reviews":
+/// /                sort = "";
+/// /                break;
+/// /            case "bestSelling":
+/// /                sort = "";
+/// /                break;
 //            default:
 //                sort = "createdAt,desc";
 //        }

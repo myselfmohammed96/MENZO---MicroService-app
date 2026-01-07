@@ -18,9 +18,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoriesRetrievalService {
+public class CategoryQueryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoriesRetrievalService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryQueryService.class);
 
     @Autowired
     private CategoriesRepo categoriesRepo;

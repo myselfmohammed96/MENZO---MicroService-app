@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="/css/components-styling.css">
     <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
+    <link rel="stylesheet" href="/css/elements.css" />
+
     <link rel="stylesheet" href="/css/forms-styling.css">
     <link rel="stylesheet" href="/css/admin-details.css">
 
@@ -110,13 +112,13 @@
                     </div>
                 </div>
                 <div class="title-button-container">
-                    <button id="add-button-1" class="title-option-button-1 title-option-button-3">
+                    <button onclick="openAddDiscountForm()" id="add-button" class="title-button add-button">
                         <span class="add-icon">+</span>
                     </button>
-                    <button id="filter-button-1" class="title-option-button-1">
+                    <button id="filter-button" class="title-button filter-button">
                         <span class="filter-icon">⏚</span>
                     </button>
-                    <button id="sort-button-1" class="title-option-button-1">
+                    <button id="sort-button" class="title-button sort-button">
                         <span class="sort-icon">⇅</span>
                     </button>
                 </div>
@@ -412,7 +414,7 @@
 </div>
 
 <!-- form Modal -->
-<div id="discount-form-modal" class="modal">
+<div id="discount-modal" class="modal" style="display:none;">
     <div id="discount-form-modal-container" class=" modal-container-3">
         <h1 id="discount-form-modal-title" class="modal-title">Add Discount</h1>
 
@@ -490,11 +492,11 @@
             <button class="modal-button" id="close-form-modal-btn">Cancel</button>
         </div>
     </div>
-</div>
+</div >
 
 
 <!-- details modal -->
-<div id="discount-details-modal" class="modal">
+<div id="discount-details-modal" class="modal" style="display:none;">
     <div id="discount-details-modal-container" class="modal-container">
         <h1 id="discount-details-modal-title" class="modal-title">Discount details</h1>
         <div class="modal-dynamic-details">
@@ -699,7 +701,7 @@
 
 <script src="/js/nav-bar-script.js"></script>
 <script src="/js/filter-menu-script.js"></script>
-<script src="/js/discount.js"></script>
+<script src="/js/discount-coupon-script/discount.js"></script>
 <script>
     const input = document.querySelector('.page-search-bar-input');
     const clearBtn = document.querySelector('.page-search-bar-input-clear');

@@ -1,9 +1,9 @@
 /*
 *
 *   Contains UI Components like
-*       -List box
-*       -Toast
-*       -Modal
+*       - List box
+*       - Toast
+*       - Modal
 *
 */
 
@@ -690,3 +690,71 @@ div.choices {
 }
 
 /* ///////////////////////////////////// */
+
+
+/* add discount mapping modal */
+
+.modal-title-container {
+    /* border: 1px solid red; */
+    width: 100%;
+}
+
+.modal-message-container {
+    /* border: 1px solid blue; */
+    width: 100%;
+    text-shadow: 0.9rem;
+    color: #525252;
+    padding: 0 50px;
+}
+
+#add-discount-mapping-modal-container {
+    /* min-width: 700px;
+    min-height: 600px; */
+    /* border: 1px solid pink; */
+    padding: 30px 0px;
+}
+
+.modal-options-container {
+    /* border: 1px solid red; */
+    width: 100%;
+    min-height: 400px;
+    max-height: 400px;
+    overflow-y: auto;
+    /* padding: 0 50px; */
+}
+
+#add-discount-mapping-modal-button-container {
+    padding: 0 50px;
+}
+
+.list-options {
+    padding: 0 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    /* border: 1px solid red; */
+}
+
+.cc-select span::after {
+    content: "✓";
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+}
+
+.cc-select input:checked + span::after {
+    opacity: 1;
+}
+
+.list-option-image-container {
+    margin-right: 20px;
+    border: 1px solid #e7e7e7;
+}
+
+.list-option-image-container img {
+    width: 50px;
+    aspect-ratio: 1 / 1.2;
+    object-fit: cover;
+}
+

@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class CategoriesService {
+public class CategoryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoriesService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
     @Autowired
     private CategoriesRepo categoriesRepo;

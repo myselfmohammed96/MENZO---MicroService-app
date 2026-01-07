@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="../css/elements.css">
 
     <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/components-theme-fonts-effects.css">
+    <link rel="stylesheet" href="../css/components-theme-font-effects.css">
 
 
     <link rel="stylesheet" href="../css/admin-style.css">
@@ -106,7 +106,7 @@
 
     <div class="main-content-container">
         <div id="page-title-container">
-            <h1 id="page-title">Add Discount</h1>
+            <h1 id="page-title">Discount Summary</h1>
             <div>
                 <div class="title-button-container">
                     <button id="draft-button" class="title-button draft-button" title="Draft">
@@ -127,39 +127,39 @@
                     <h2 class="details-heading top-details-heading">General details</h2>
                     <div id="name" class="details-text">
                         <strong class="details-key">Name: </strong>
-                        <p class="details-value">New year sale</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="description" class="details-text">
                         <strong class="details-key">Description: </strong>
-                        <p class="details-value">New year sale for 2024</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="code" class="details-text">
                         <strong class="details-key">Code: </strong>
-                        <p class="details-value">NY24-PA-26746-20P</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="level" class="details-text">
                         <strong class="details-key">Level: </strong>
-                        <p class="details-value">Category</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="type" class="details-text">
                         <strong class="details-key">Type: </strong>
-                        <p class="details-value">Percent</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="value" class="details-text">
                         <strong class="details-key">Value: </strong>
-                        <p class="details-value">25%</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="cap-type" class="details-text">
                         <strong class="details-key">Cap Type: </strong>
-                        <p class="details-value">Percent</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="cap-value" class="details-text">
                         <strong class="details-key">Cap value: </strong>
-                        <p class="details-value">30%</p>
+                        <p class="details-value">abc</p>
                     </div>
                     <div id="priority" class="details-text">
                         <strong class="details-key">Priority: </strong>
-                        <p class="details-value">15</p>
+                        <p class="details-value">abc</p>
                     </div>
 
                     <h2 class="details-heading">Validity details</h2>
@@ -211,10 +211,10 @@
                         <div id="list-wrapper-header">
                             <div class="list-header-row">
                                 <div class="list-heading-container">
-                                    <h2>Sub-Categories</h2>
+                                    <h2 id="mapping-list-heading">Sub-Categories</h2>
                                 </div>
                                 <div class="list-heading-container list-heading-buttons-container">
-                                    <button id="add-elements-button" class="list-header-button list-add-button">+
+                                    <button id="add-mapping-button" class="list-header-button list-add-button">+
                                     </button>
                                     <button id="sort-elements-button" class="list-header-button list-sort-button">⇅
                                     </button>
@@ -374,9 +374,11 @@
     </div>
 </div>
 
-<!-- Modal -->
+
+<!-- ********* Modal ********* -->
 
 <!-- Confirmation modal -->
+
 <div id="confirm-modal" class="modal hidden">
     <div class="modal-container">
         <h1 id="confirm-title" class="modal-heading">Are you sure?</h1>
@@ -385,6 +387,235 @@
             <button class="modal-button" id="confirm-yes">Yes</button>
             <button class="modal-button" id="confirm-no">Cancel</button>
         </div>
+    </div>
+</div>
+
+<!-- Select modal -->
+
+<div id="add-discount-mapping-modal" class="modal">
+    <div id="add-discount-mapping-modal-container" class="modal-container-3">
+
+        <div class="modal-title-container">
+            <h1 class="modal-title">Add mapping</h1>
+        </div>
+
+        <div class="modal-message-container">
+            <span>Choose category</span>
+        </div>
+
+        <div class="modal-options-container">
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div class="list-option-image-container">
+                            <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                        </div>
+                        <div class="element-text-1">
+                            <div class="element-sku-container">
+                                <p>Solid Slim Fit Formal Shirt</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>Formal Shirts</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div class="list-option-image-container">
+                            <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                        </div>
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>FS-233-DBL-L</p>
+                                </div>
+                            </div>
+                            <div class="element-text-2">
+                                <div class="element-text-2-row">
+                                    <div class="element-color">
+                                        <p class="element-color-key">Size: </p>
+                                        <p class="element-color-value">L |</p>
+                                        <p class="element-color-key">Color: </p>
+                                        <p class="element-color-value">Dark blue</p>
+                                        <div class="element-color-icon"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>Solid Slim Fit Formal Shirt</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>Formal Shirts</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div class="list-option-image-container">
+                            <img src="/admin panels/media/51NW7DOyfEL._SY741_.jpg" alt="">
+                        </div>
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>FS-233-DBL-L</p>
+                                </div>
+                            </div>
+                            <div class="element-text-2">
+                                <div class="element-text-2-row">
+                                    <div class="element-color">
+                                        <p class="element-color-key">Size: </p>
+                                        <p class="element-color-value">L |</p>
+                                        <p class="element-color-key">Color: </p>
+                                        <p class="element-color-value">Dark blue</p>
+                                        <div class="element-color-icon"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>Solid Slim Fit Formal Shirt</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+            <div class="discount-map-element">
+                <div class="list-element-content">
+                    <div class="counter-checkbox-container">
+                        <label class="cc-select">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="list-text-container list-options">
+                        <div>
+                            <div class="element-text-1">
+                                <div class="element-sku-container">
+                                    <p>Formal Shirts</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="line line-86">
+            </div>
+
+        </div>
+
+        <div id="add-discount-mapping-modal-button-container" class="modal-button-container" style="">
+            <button class="modal-button grey-cta-button" id="save-mapping-button">Save</button>
+            <button id="close-discount-mapping-modal" class="modal-button">Close</button>
+        </div>
+
     </div>
 </div>
 
@@ -431,6 +662,19 @@
 
 <script src="../js/component-script/toaster-script.js"></script>
 <script src="../js/discount-coupon-script/discount-summary.js"></script>
+<script src="../js/discount-coupon-script/add-discount-mapping.js"></script>
+<!--<script>
+    document.querySelectorAll('.discount-map-element').forEach(row => {
+        row.addEventListener('click', () => {
+            const checkbox = row.querySelector('.cc-select input');
+            checkbox.checked = !checkbox.checked;
+        });
+    });
+
+    document.querySelectorAll('.cc-select').forEach(label => {
+        label.addEventListener('click', e => e.stopPropagation());
+    });
+</script>-->
 </body>
 
 </html>

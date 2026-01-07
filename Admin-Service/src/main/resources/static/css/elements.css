@@ -305,6 +305,20 @@
     transform: scale(0.95);
 }
 
+.grey-cta-button:disabled {
+    cursor: not-allowed;
+    background-color: #2f2f2f;
+    color: #9a9a9a;
+    box-shadow: none;
+    opacity: 0.7;
+    filter: grayscale(30%);
+    transform: none !important;
+}
+
+.grey-cta-button:disabled:hover {
+    background-color: #2f2f2f;
+    color: #9a9a9a;
+}
 
 /* Grey submit button */
 .grey-submit-button-1 {
@@ -504,6 +518,11 @@ textarea {
     height: 1px;
     background-color: #d9d9d9;
     border: none;
+}
+
+.line-86 {
+    width: 86%;
+    margin-left: 8%;
 }
 
 .line-94 {

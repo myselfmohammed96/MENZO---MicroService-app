@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Service;
 
 //import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
-import com.menzo.Product_Service.Modules.Category.Service.CategoriesRetrievalService;
+import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Modules.Product.Entity.Product;
 import com.menzo.Product_Service.Modules.Product.Entity.ProductConfiguration;
@@ -35,7 +35,7 @@ class ProductsServiceTest {
     private ProductConfigurationRepo productConfigurationRepo;
 
     @Autowired
-    private CategoriesRetrievalService categoriesRetrievalService;
+    private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
     private VariationsOptionsRepo optionsRepo;
