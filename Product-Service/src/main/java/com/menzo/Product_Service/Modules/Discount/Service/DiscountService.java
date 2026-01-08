@@ -4,6 +4,7 @@ import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Modules.Category.Repo.CategoriesRepo;
 import com.menzo.Product_Service.Modules.Discount.Dto.CreateDiscountDto;
 import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.MappedContentDto;
 import com.menzo.Product_Service.Modules.Discount.Dto.UpdateDiscountDto;
 import com.menzo.Product_Service.Modules.Discount.Entity.Discount;
 import com.menzo.Product_Service.Modules.Discount.Entity.DiscountCategory;
@@ -270,10 +271,10 @@ public class DiscountService {
 
     /// /    ********* Discount mapping methods *********
 
-    public UUID discountMapping(DiscountMappingDto mappingDto) {
+    public List<MappedContentDto> addDiscountMapping(DiscountMappingDto mappingDto) {
 
         //  ## better to use domain-level exception instead of IllegalArgumentException: BadRequestException || ValidationException
-        //  ## missing duplicate prevention: if same category/product is mapped twice - silently ignored by Set. check before add if needed.
+        //  ## missing duplicate prevention: if same category/product (which is already mapped) is mapped twice - silently ignored by Set. check before add if needed.
 
         Discount discountInDb = discountRepo.findById(mappingDto.getDiscountId())
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + mappingDto.getDiscountId()));
@@ -312,9 +313,21 @@ public class DiscountService {
                     ).collect(Collectors.toSet());
 
             discountInDb.getDiscountCategories().addAll(mappedSet);
-            Discount mappedDiscount = discountRepo.save(discountInDb);
+//            Discount mappedDiscount = discountRepo.save(discountInDb);
 
-            return !mappedDiscount.getDiscountCategories().isEmpty() ? mappedDiscount.getId() : null;
+            Set<DiscountCategory> discountCategories = discountInDb.getDiscountCategories();
+            if (mappingDto.getLevel() == DiscountLevel.CATEGORY) {
+                return discountCategories.stream()
+                        .filter(DiscountQueryService::isParentCategory)
+                        .map(dc -> DiscountQueryService.toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                        .toList();
+            } else {
+                return discountCategories.stream()
+                        .filter(DiscountQueryService::isSubCategory)
+                        .map(dc -> DiscountQueryService.toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                        .toList();
+            }
+//            return !mappedDiscount.getDiscountCategories().isEmpty() ? mappedDiscount.getId() : null;
 
         } else if (mappingDto.getLevel() == DiscountLevel.PRODUCT) {
             //  ------- Discount level - PRODUCT -------
@@ -331,9 +344,13 @@ public class DiscountService {
                                     .build()
                             ).collect(Collectors.toSet());
             discountInDb.getDiscountProducts().addAll(mappedSet);
-            Discount mappedDiscount = discountRepo.save(discountInDb);
+//            Discount mappedDiscount = discountRepo.save(discountInDb);
 
-            return !mappedDiscount.getDiscountProducts().isEmpty() ? mappedDiscount.getId() : null;
+            return discountInDb.getDiscountProducts().stream()
+                    .map(dp -> DiscountQueryService.toMappedContent(dp.getId(), dp.getProduct().getProductName()))
+                    .toList();
+
+//            return !mappedDiscount.getDiscountProducts().isEmpty() ? mappedDiscount.getId() : null;
 
         } else if (mappingDto.getLevel() == DiscountLevel.VARIANT) {
             //  ------- Discount level - VARIANT -------
@@ -350,9 +367,12 @@ public class DiscountService {
                                     .build()
                             ).collect(Collectors.toSet());
             discountInDb.getDiscountVariants().addAll(mappedSet);
-            Discount mappedDiscount = discountRepo.save(discountInDb);
+//            Discount mappedDiscount = discountRepo.save(discountInDb);
 
-            return !mappedDiscount.getDiscountVariants().isEmpty() ? mappedDiscount.getId() : null;
+            return discountInDb.getDiscountVariants().stream()
+                    .map(DiscountQueryService::mapVariant)
+                    .toList();
+//            return !mappedDiscount.getDiscountVariants().isEmpty() ? mappedDiscount.getId() : null;
 
         } else {
             return null;

@@ -2,6 +2,7 @@ package com.menzo.Product_Service.Modules.Discount.Service;
 
 import com.menzo.Product_Service.Modules.Discount.Dto.CreateDiscountDto;
 import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
+import com.menzo.Product_Service.Modules.Discount.Dto.MappedContentDto;
 import com.menzo.Product_Service.Modules.Discount.Enum.CapType;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Modules.Discount.Enum.DiscountType;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -63,8 +65,8 @@ class DiscountServiceTest {
                     .level(DiscountLevel.SUB_CATEGORY)
                     .selectionList(Arrays.asList(121L, 122L, 123L))
                     .build();
-            UUID uuid = discountService.discountMapping(mappingDto);
-            System.out.println("Mapped discount ID: " + uuid);
+            List<MappedContentDto> mappedContent = discountService.addDiscountMapping(mappingDto);
+            System.out.println("Mapped content: " + mappedContent);
         } catch (Exception e) {
             System.out.println("Discount mapping failure message: " + e.getMessage());
         }
@@ -79,8 +81,8 @@ class DiscountServiceTest {
                     .level(DiscountLevel.CATEGORY)
                     .selectionList(Arrays.asList(121L, 122L, 123L))
                     .build();
-            UUID uuid = discountService.discountMapping(mappingDto);
-            System.out.println("Mapped discount ID: " + uuid);
+            List<MappedContentDto> mappedContent = discountService.addDiscountMapping(mappingDto);
+            System.out.println("Mapped content: " + mappedContent);
         } catch (Exception e) {
             System.out.println("Discount mapping failure message: " + e.getMessage());
         }
@@ -95,8 +97,8 @@ class DiscountServiceTest {
                     .level(DiscountLevel.CATEGORY)
                     .selectionList(Arrays.asList(2L))
                     .build();
-            UUID uuid = discountService.discountMapping(mappingDto);
-            System.out.println("Mapped discount ID: " + uuid);
+            List<MappedContentDto> mappedContent = discountService.addDiscountMapping(mappingDto);
+            System.out.println("Mapped content: " + mappedContent);
         } catch (Exception e) {
             System.out.println("Discount mapping failure message: " + e.getMessage());
         }

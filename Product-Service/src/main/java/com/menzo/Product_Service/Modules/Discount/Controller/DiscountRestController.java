@@ -40,6 +40,12 @@ public class DiscountRestController {
     private final DiscountQueryService discountQueryService;
 
 
+    /*
+     *   --------------------------------------
+     *   ********* Discount endpoints *********
+     *   --------------------------------------
+     */
+
     /// /    ********* FETCH data methods *********
 
     //  discount listing
@@ -95,103 +101,6 @@ public class DiscountRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(responseBody);
         }
-    }
-
-    //  discount mapped content
-    @PostMapping("/mapped-content")
-    public ResponseEntity<?> getDiscountMappedContent(@RequestHeader("roles") String roles,
-                                                      @RequestParam("id") UUID discountId,
-                                                      @RequestParam(name = "sort", required = false) String sortRequest,
-                                                      @RequestBody(required = false) RequestDto requestDto) {
-        if (sortRequest != null && sortRequest.isEmpty()) {
-            throw new IllegalArgumentException("Sort request cannot be empty");
-        }
-        if (requestDto != null && requestDto.getFilterRequestDtos().isEmpty()) {
-            throw new IllegalArgumentException("Filter request cannot be empty");
-        }
-
-        List<MappedContentDto> content = discountQueryService.getDiscountMappedContent(
-                discountId,
-                sortRequest != null ? sortRequest : "",
-                requestDto
-        );
-
-        Map<String, Object> responseBody = new HashMap<>();
-        if (content != null) {
-            if (content.isEmpty()) {
-                logger.info("Sending discount mapped content response, with empty list.");
-                responseBody.put("message", "No mapped content found.");
-            } else {
-                logger.info("Sending discount mapped content response.");
-                responseBody.put("message", "Discount mapped content response.");
-            }
-            responseBody.put("content", content);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(responseBody);
-        } else {
-            logger.warn("Error sending discount mapped content for discount ID: {}", discountId);
-            responseBody.put("message", "Error fetching discount mapped content.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(responseBody);
-        }
-    }
-
-
-    //  level details
-    @GetMapping("/level-details")
-    public ResponseEntity<?> getLevelDetails(@RequestParam("cLevel") DiscountLevel currentLevel,
-                                             @RequestParam(name = "previousId", required = false) Long id) {
-
-        List<LevelDetailsDto> levelDetails = discountQueryService.getLevelDetails(
-                id,
-                currentLevel
-        );
-        return ResponseEntity.ok(levelDetails);
-    }
-
-    /// /   ********* Enum data *********
-
-    //  get Discount level
-    @GetMapping("/level")
-    public ResponseEntity<EnumDto> getDiscountLevel() {
-        EnumDto levels = discountQueryService.getDiscountLevel();
-        return ResponseEntity.ok(levels);
-    }
-
-    //  get Discount type
-    @GetMapping("/type")
-    public ResponseEntity<EnumDto> getDiscountType() {
-        EnumDto types = discountQueryService.getDiscountType();
-        return ResponseEntity.ok(types);
-    }
-
-    //  get Cap type
-    @GetMapping("/cap-type")
-    public ResponseEntity<EnumDto> getCapType() {
-        EnumDto capType = discountQueryService.getCapType();
-        return ResponseEntity.ok(capType);
-    }
-
-    //  get Discount status for add Discount form
-    @GetMapping("/form-status")
-    public ResponseEntity<EnumDto> getDiscountFormStatus() {
-        EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.FORM);
-        return ResponseEntity.ok(status);
-    }
-
-    //  get Discount status for discount summary
-    @GetMapping("/summary-status")
-    public ResponseEntity<EnumDto> getDiscountSummaryStatus() {
-        EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.SUMMARY);
-        return ResponseEntity.ok(status);
-    }
-
-    //  Discount code - existence check
-    @PostMapping("/check-code-exist")
-    public ResponseEntity<?> checkDiscountCodeExist(@RequestBody DiscountCodeDto code) {
-        boolean exists = discountQueryService.checkDiscountCodeExist(code);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("exists", exists));
     }
 
 
@@ -276,13 +185,85 @@ public class DiscountRestController {
     }
 
 
-    /// /   ********* Discount mapping methods *********
+    /// /    ********* Existence check methods *********
+
+    //  Discount code - existence check (while generating new codes for add discount form)
+    @PostMapping("/check-code-exist")
+    public ResponseEntity<?> checkDiscountCodeExist(@RequestBody DiscountCodeDto code) {
+        boolean exists = discountQueryService.checkDiscountCodeExist(code);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("exists", exists));
+    }
+
+
+    /*
+     *   -------------------------------------
+     *   ********* Mapping endpoints *********
+     *   -------------------------------------
+     */
+
+    /// /    ********* FETCH data methods *********
+
+    //  discount mapped content
+    @PostMapping("/mapped-content")
+    public ResponseEntity<?> getDiscountMappedContent(@RequestHeader("roles") String roles,
+                                                      @RequestParam("id") UUID discountId,
+                                                      @RequestParam(name = "sort", required = false) String sortRequest,
+                                                      @RequestBody(required = false) RequestDto requestDto) {
+        if (sortRequest != null && sortRequest.isEmpty()) {
+            throw new IllegalArgumentException("Sort request cannot be empty");
+        }
+        if (requestDto != null && requestDto.getFilterRequestDtos().isEmpty()) {
+            throw new IllegalArgumentException("Filter request cannot be empty");
+        }
+
+        List<MappedContentDto> content = discountQueryService.getDiscountMappedContent(
+                discountId,
+                sortRequest != null ? sortRequest : "",
+                requestDto
+        );
+
+        Map<String, Object> responseBody = new HashMap<>();
+        if (content != null) {
+            if (content.isEmpty()) {
+                logger.info("Sending discount mapped content response, with empty list.");
+                responseBody.put("message", "No mapped content found.");
+            } else {
+                logger.info("Sending discount mapped content response.");
+                responseBody.put("message", "Discount mapped content response.");
+            }
+            responseBody.put("content", content);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseBody);
+        } else {
+            logger.warn("Error sending discount mapped content for discount ID: {}", discountId);
+            responseBody.put("message", "Error fetching discount mapped content.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
+        }
+    }
+
+
+    //  mapping level elements
+    @GetMapping("/level-elements")
+    public ResponseEntity<?> getMappingLevelElements(@RequestParam("cLevel") DiscountLevel currentLevel,
+                                             @RequestParam(name = "previousId", required = false) Long id) {
+
+        List<LevelDetailsDto> levelDetails = discountQueryService.getLevelDetails(
+                id,
+                currentLevel
+        );
+        return ResponseEntity.ok(levelDetails);
+    }
+
+
+    /// /   ********* POST, PUT, DELETE methods *********
 
     //  Discount mapping
     @PostMapping("/mapping")
-    public ResponseEntity<?> discountMapping(@RequestHeader("roles") String roles,
-                                             @Valid @RequestBody DiscountMappingDto mappingDto,
-                                             BindingResult result) {
+    public ResponseEntity<?> addDiscountMapping(@RequestHeader("roles") String roles,
+                                                @Valid @RequestBody DiscountMappingDto mappingDto,
+                                                BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             result.getFieldErrors()
@@ -291,12 +272,27 @@ public class DiscountRestController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        UUID mappedDiscountId = discountService.discountMapping(mappingDto);
+//        UUID mappedDiscountId = discountService.discountMapping(mappingDto);
+        List<MappedContentDto> mappedContent = discountService.addDiscountMapping(mappingDto);
+
+        //  ## return newly mapped elements with MappedContentDto
 
         Map<String, Object> responseBody = new HashMap<>();
-        if (mappedDiscountId != null) {
+//        if (mappedDiscountId != null) {
+//            logger.info("Discount mapped successfully");
+//            responseBody.put("message", "Discount mapped successfully");
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(responseBody);
+//        } else {
+//            logger.warn("Discount mapping failed");
+//            responseBody.put("message", "Discount mapping failed");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(responseBody);
+//        }
+        if (mappedContent != null) {
             logger.info("Discount mapped successfully");
             responseBody.put("message", "Discount mapped successfully");
+            responseBody.put("mappedContent", mappedContent);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseBody);
         } else {
@@ -306,5 +302,48 @@ public class DiscountRestController {
                     .body(responseBody);
         }
     }
+
+
+    /*
+     *   ---------------------------------------
+     *   ********* Enum data endpoints *********
+     *   ---------------------------------------
+     */
+
+    //  get Discount level
+    @GetMapping("/level")
+    public ResponseEntity<EnumDto> getDiscountLevel() {
+        EnumDto levels = discountQueryService.getDiscountLevel();
+        return ResponseEntity.ok(levels);
+    }
+
+    //  get Discount type
+    @GetMapping("/type")
+    public ResponseEntity<EnumDto> getDiscountType() {
+        EnumDto types = discountQueryService.getDiscountType();
+        return ResponseEntity.ok(types);
+    }
+
+    //  get Cap type
+    @GetMapping("/cap-type")
+    public ResponseEntity<EnumDto> getCapType() {
+        EnumDto capType = discountQueryService.getCapType();
+        return ResponseEntity.ok(capType);
+    }
+
+    //  get Discount status for add Discount form
+    @GetMapping("/form-status")
+    public ResponseEntity<EnumDto> getDiscountFormStatus() {
+        EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.FORM);
+        return ResponseEntity.ok(status);
+    }
+
+    //  get Discount status for discount summary
+    @GetMapping("/summary-status")
+    public ResponseEntity<EnumDto> getDiscountSummaryStatus() {
+        EnumDto status = discountQueryService.getDiscountStatus(DiscountStatusTarget.SUMMARY);
+        return ResponseEntity.ok(status);
+    }
+
 
 }

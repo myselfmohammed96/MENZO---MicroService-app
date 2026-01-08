@@ -231,8 +231,9 @@ function populateSummary(summary) {
 }
 
 //  POPULATE - mapped content
+//  ## take care of itemCount.. make it local if necessary.. populate or repopulate design stuff
 let itemCount = 1;
-function populateMappedContent(content = [], level) {
+window.populateMappedContent = function (content = [], level, rePopulate = false) {
     try {
         const heading = level.split('_')
                             .filter(Boolean)
@@ -246,6 +247,10 @@ function populateMappedContent(content = [], level) {
     }
     try {
         mappedListWrapper.innerHTML = '';
+
+        if (rePopulate) {
+            itemCount = 1;
+        }
 
         if (level === "GLOBAL") {
             mappedListWrapper.innerHTML = `

@@ -119,18 +119,18 @@ public class DiscountQueryService {
         return switch (discount.getLevel()) {
             case GLOBAL -> List.of();
             case CATEGORY -> discount.getDiscountCategories().stream()
-                    .filter(this::isParentCategory)
+                    .filter(DiscountQueryService::isParentCategory)
                     .map(dc -> toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
                     .toList();
             case SUB_CATEGORY -> discount.getDiscountCategories().stream()
-                    .filter(this::isSubCategory)
+                    .filter(DiscountQueryService::isSubCategory)
                     .map(dc -> toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
                     .toList();
             case PRODUCT -> discount.getDiscountProducts().stream()
                     .map(dp -> toMappedContent(dp.getId(), dp.getProduct().getProductName()))
                     .toList();
             case VARIANT -> discount.getDiscountVariants().stream()
-                    .map(this::mapVariant)
+                    .map(DiscountQueryService::mapVariant)
                     .toList();
             default -> throw new RuntimeException("Invalid discount level");
         };
@@ -394,9 +394,10 @@ public class DiscountQueryService {
 
 
     //  ------- getDiscountMappedContent utility methods -------
+// ## make these public static methods into a dedicated class.
 
     //  check if mapped category is a parent category
-    private boolean isParentCategory(DiscountCategory dc) {
+    public static boolean isParentCategory(DiscountCategory dc) {
         if (dc.getCategory().getParentCategoryId() != null) {
             logger.error("Sub-category found in Category mapping with mapping ID: {}", dc.getId());
             return false;
@@ -405,7 +406,7 @@ public class DiscountQueryService {
     }
 
     //  check if mapped category is a sub-category
-    private boolean isSubCategory(DiscountCategory dc) {
+    public static boolean isSubCategory(DiscountCategory dc) {
         if (dc.getCategory().getParentCategoryId() == null) {
             logger.error("Parent category found in Sub-category mapping with mapping ID: {}", dc.getId());
             return false;
@@ -414,7 +415,7 @@ public class DiscountQueryService {
     }
 
     //  mappedContentDto for CATEGORY, SUB_CATEGORY & PRODUCT
-    private MappedContentDto mapVariant(DiscountVariant dv) {
+    public static MappedContentDto mapVariant(DiscountVariant dv) {
         Map<String, String> mm = dv.getProductItem().getConfigurations().stream()
                 .map(config -> Map.entry(
                         config.getVariationOption()
@@ -438,7 +439,7 @@ public class DiscountQueryService {
     }
 
     //  mappedContentDto for VARIANT
-    private MappedContentDto toMappedContent(UUID id, String text) {
+    public static MappedContentDto toMappedContent(UUID id, String text) {
         return MappedContentDto.builder()
                 .mappingId(id)
                 .textContent(text)
