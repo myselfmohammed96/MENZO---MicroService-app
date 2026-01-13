@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -247,9 +248,10 @@ public class ProductsService {
         );
 
         //  --------- saving PRODUCT ITEMS ---------
-        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
-        AtomicInteger statusFlag = new AtomicInteger(0);
-        AtomicInteger stockSum = new AtomicInteger(0);
+        BigDecimal baseMrp = BigDecimal.valueOf(Float.MAX_VALUE);
+        BigDecimal baseSellingPrice = BigDecimal.valueOf(Float.MAX_VALUE);
+        int statusFlag = 0;
+        int stockSum = 0;
 
         List<ProductItem> savedItems = new ArrayList<>();
         List<ItemSizeDto> sizeDetailDtos = new ArrayList<>();
@@ -266,13 +268,16 @@ public class ProductsService {
             );
             savedItems.add(savedItem);
 
-            if (savedItem.getPrice() < startingPrice.get()) {
-                startingPrice.set(savedItem.getPrice());
+            if (savedItem.getMrp().compareTo(baseMrp) < 0) {
+                baseMrp = savedItem.getMrp();
+            }
+            if (savedItem.getSellingPrice().compareTo(baseSellingPrice) < 0) {
+                baseSellingPrice = savedItem.getSellingPrice();
             }
             if (savedItem.getIsActive()) {
-                statusFlag.incrementAndGet();
+                statusFlag++;
             }
-            stockSum.addAndGet(savedItem.getQtyInStock());
+            stockSum += savedItem.getQtyInStock();
 
             ItemSizeDto sizeDto = ItemSizeDto.builder()
                     .itemId(savedItem.getId())
@@ -292,12 +297,12 @@ public class ProductsService {
         long itemCount = savedItems.size();
         StockStatus stockStatus = productsRetrievalService.getStockStatus(
                 til,
-                stockSum.get() / itemCount
+                stockSum / itemCount
         );
 
-        ProductActiveStatus activeStatus = statusFlag.get() == itemCount
+        ProductActiveStatus activeStatus = statusFlag == itemCount
                 ? ProductActiveStatus.ACTIVE
-                : statusFlag.get() == 0 ? ProductActiveStatus.INACTIVE
+                : statusFlag == 0 ? ProductActiveStatus.INACTIVE
                 : ProductActiveStatus.PARTIAL;
 
         List<ProductImage> savedImages = saveImages(
@@ -315,7 +320,8 @@ public class ProductsService {
 
         logger.info("Returning item details for super SKU: {}", superSku);
         return ItemDetailsDto.builder()
-                .startingPrice(startingPrice.get())
+                .baseMrp(baseMrp)
+                .baseSellingPrice(baseSellingPrice)
                 .imageUrls(imageUrls)
                 .sizeDetails(sizeDetailDtos)
                 .superSku(superSku)
@@ -330,9 +336,8 @@ public class ProductsService {
     ////    ********* Save methods *********
 
     //  Save new PRODUCT to DB - TESTED - ### PENDING ###
-    private Product saveNewProduct(
-            NewProductDto productDetails,
-            ProductCategory subCategory) {
+    private Product saveNewProduct(NewProductDto productDetails,
+                                   ProductCategory subCategory) {
 
         //  duplicate product name - validation
         if (productsRepo.existsByProductName(productDetails.getProductName())) {
@@ -393,8 +398,9 @@ public class ProductsService {
                 .product(product)
                 .superSku(superSku)
                 .SKU(sku)
-                .price(sizeDetail.getSizePrice())
                 .qtyInStock(sizeDetail.getSizeStock())
+                .mrp(sizeDetail.getSizeMrp())
+                .sellingPrice(sizeDetail.getSizeSellingPrice())
                 .isActive(isActive)
                 .build();
 

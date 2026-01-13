@@ -10,7 +10,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
     <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
+    <link rel="stylesheet"
+          href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
 
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css"/>
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css"/>
@@ -18,7 +19,10 @@
     <link rel="stylesheet" href="/css/forms-styling.css">
     <link rel="stylesheet" href="/css/forms-theme-font-effects.css">
 
-    <link rel="stylesheet" href="/css/components-styling.css">
+    <link rel="stylesheet" href="/css/elements.css"/>
+    <link rel="stylesheet" href="/css/text-content.css"/>
+
+    <link rel="stylesheet" href="/css/components.css">
     <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
     <link rel="stylesheet" href="/css/admin-side-menu.css"/>
@@ -104,11 +108,19 @@
     <!-- Main page content -->
 
     <div class="main-content-container">
+
         <div id="page-title-container">
             <h1 id="page-title">Add product</h1>
-            <button id="add-button">Save Draft</button>
+            <div class="title-button-container">
+                <button id="draft-button" class="title-button draft-button" title="Draft">
+                    <img src="/media/draft (1).png" alt="">
+                </button>
+                <button id="refresh-button" class="title-button refresh-button" title="Refresh">
+                    <img src="/media/refresh.png" alt="">
+                </button>
+            </div>
         </div>
-        <hr class="custom-line-1"/>
+        <hr class="line line-100"/>
 
         <form id="add-product-form" enctype="multipart/form-data" th:action="@{/products/add-product}"
               th:object="${newProduct}" method="POST">
@@ -120,16 +132,37 @@
                     <fieldset>
                         <legend>General Information</legend>
 
-                        <!-- Product image input -->
+                        <label class="general-info-label">Category:
+                            <div class="custom-select-wrapper">
+                                <select id="category-select"
+                                        class="input input-100 product-form-input"
+                                        name="categoryId"></select>
+                                <p id="category-error-message" class="error-message"></p>
+                                <!--                                    <option value="">Category</option>-->
+                            </div>
+                        </label>
+
+                        <label class="general-info-label">Sub Category:
+                            <div class="custom-select-wrapper">
+                                <select th:field="*{subCategoryId}"
+                                        id="sub-category-select"
+                                        name="subCategoryId"
+                                        class="input input-100 product-form-input"></select>
+                                <p id="sub-category-error-message" class="error-message"></p>
+                                <!--                                    <option value="">Sub-category</option>-->
+                                <!--                                </select>-->
+                            </div>
+                        </label>
+
                         <label class="general-info-label">Product Name:
                             <div style="position: relative;">
                                 <input type="text"
-                                       class="text-input-1"
+                                       class="input input-100 product-form-input"
                                        th:field="*{productName}"
                                        name="productName"
                                        id="product-name"
-                                       placeholder="Product Name"
-                                       required/>
+                                       placeholder="Product Name" />
+                                <p id="product-name-error-message" class="error-message"></p>
                                 <ul class="suggestion-box" id="suggestions"></ul>
                             </div>
                         </label>
@@ -138,300 +171,170 @@
                         <label class="general-info-label">Description:
                             <textarea
                                     th:field="*{description}"
+                                    class="input input-100 product-form-input"
                                     name="description"
                                     id="product-description"
-                                    placeholder="Description"
-                                    required></textarea>
+                                    placeholder="Description"></textarea>
+                            <p id="product-description-error-message" class="error-message"></p>
                         </label>
+                    </fieldset>
 
-                        <!-- Product size & color options -->
-                        <div id="info-options-container">
-                            <div id="info-opt-container-col1">
+                    <!-- Size, Prices & Stock -->
+                    <fieldset>
+                        <legend>Pricing and Stock</legend>
 
-                                <!-- Size options -->
-                                <div id="sizes">
-                                    <label class="general-info-label">Size Details</label>
-                                    <p class="option-description">Pick Available Sizes</p>
+                        <!-- Size options -->
+                        <div id="sizes">
+                            <label class="general-info-label">Size</label>
+                            <p class="option-description">Pick Available Sizes</p>
 
-                                    <div id="size-options-container">
-                                        <div id="size-wrapper-col-1">
-                                            <div class="size-column-heading">
-                                                <label class="general-info-label">Size</label>
-                                            </div>
-
-                                            <div id="size-container" class="size-column-body-1">
-<!--                                                <div class="size-element">-->
-<!--                                                    <label class="size-option">-->
-<!--                                                        <input type="checkbox" name="sizes">-->
-<!--                                                        <span>XS</span>-->
-<!--                                                    </label>-->
-<!--                                                </div>-->
-<!--                                                <div class="size-element">-->
-<!--                                                    <label class="size-option">-->
-<!--                                                        <input type="checkbox" name="sizes">-->
-<!--                                                        <span>XS</span>-->
-<!--                                                    </label>-->
-<!--                                                </div>-->
-<!--                                                <div class="size-element">-->
-<!--                                                    <label class="size-option">-->
-<!--                                                        <input type="checkbox" name="sizes">-->
-<!--                                                        <span>XS</span>-->
-<!--                                                    </label>-->
-<!--                                                </div>-->
-<!--                                                <div class="size-element">-->
-<!--                                                    <label class="size-option">-->
-<!--                                                        <input type="checkbox" name="sizes">-->
-<!--                                                        <span>XS</span>-->
-<!--                                                    </label>-->
-<!--                                                </div>-->
-<!--                                                <div class="size-element">-->
-<!--                                                    <label class="size-option">-->
-<!--                                                        <input type="checkbox" name="sizes">-->
-<!--                                                        <span>XS</span>-->
-<!--                                                    </label>-->
-<!--                                                </div>-->
-                                            </div>
-                                        </div>
-                                        <div id="size-wrapper-col-2">
-                                            <div id="size-stock-column">
-                                                <div class="size-column-heading">
-                                                    <label class="general-info-label">Stock</label>
-                                                </div>
-                                                <div id="stock-container" class="size-column-body-2">
-<!--                                                    <div class="size-stock-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter stock" required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-stock-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter stock" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-stock-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter stock" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-stock-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter stock" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-stock-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter stock" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-                                                </div>
-                                            </div>
-                                            <div id="size-price-column">
-                                                <div class="size-column-heading">
-                                                    <label class="general-info-label">Price</label>
-                                                </div>
-                                                <div id="price-container" class="size-column-body-2">
-<!--                                                    <div class="size-price-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter price" required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-price-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter price" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-price-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter price" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-price-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter price" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-<!--                                                    <div class="size-price-element">-->
-<!--                                                        <input class="text-input-3 size-option-text-input"-->
-<!--                                                               type="text" placeholder="Enter price" disabled-->
-<!--                                                               required />-->
-<!--                                                    </div>-->
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div id="size-options-container">
+                                <div id="size-wrapper-col-1">
+                                    <div class="size-column-heading">
+                                        <label class="general-info-label">Size</label>
                                     </div>
-                                </div>
-<!--                                <div id="sizes">-->
-<!--                                    <label class="general-info-label">Size</label>-->
-<!--                                    <p class="option-description">Pick Available Sizes</p>-->
-<!--                                    <div id="size-options-container">-->
-<!--                                        <div th:each="size : ${sizesList}" class="size-wrapper">-->
-<!--                                            <label class="size-option">-->
-<!--                                                <input th:value="${size.optionId}" type="checkbox" class="size-checkbox"-->
-<!--                                                       name="size">-->
-<!--                                                <span th:text="${size.optionValue}"></span>-->
-<!--                                            </label>-->
-<!--                                            <input th:name="${'sizeStockMap[' + size.optionId + ']'}" class="text-input-2"-->
-<!--                                                   type="number" placeholder="Enter stock" disabled required/>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-                            </div>
+                                    <div id="size-container" class="size-column-body-1">
 
-                            <div id="info-opt-container-col2">
+                                        <div class="size-element">
+                                            <label class="size-option">
+                                                <input type="checkbox" name="sizes">
+                                                <span>XS</span>
+                                            </label>
+                                        </div>
 
-                                <!-- Color options -->
-                                <div id="color-options-container">
-                                    <label class="general-info-label">Color</label>
-                                    <p class="option-description">Pick Available Colors</p>
-                                    <div class="custom-select-wrapper">
-                                        <select id="color-select"
-                                                class="custom-select"
-                                                name="colors"
-                                                required>
-<!--                                                th:field="*{color}"-->
-<!--                                                required>-->
-<!--                                            <option value="" hidden disabled selected>Colors</option>-->
-<!--                                            <option th:each="color : ${colorsList}"-->
-<!--                                                    th:value="${color.optionId}"-->
-<!--                                                    th:text="${color.optionValue}"></option>-->
-                                        </select>
                                     </div>
                                 </div>
 
-                                <!-- Pay on delivery options -->
-                                <div id="pod-options-container">
-                                    <label class="general-info-label">Active Status</label>
-                                    <p class="option-description">Pick an option</p>
-                                    <label class="status-option">
-                                        <input th:field="*{status}" type="radio" name="status" value="active" checked>
-                                        <span>Active</span>
-                                    </label>
-                                    <label class="status-option">
-                                        <input th:field="*{status}" type="radio" name="status" value="inactive">
-                                        <span>Inactive</span>
-                                    </label>
-                                </div>
+                                <div id="size-wrapper-col-2">
 
-                                <!-- Product active status -->
-                                <div id="active-options-container">
-                                    <label class="general-info-label">Pay On Delivery</label>
-                                    <p class="option-description">Pick an option</p>
-                                    <label class="status-option">
-                                        <input th:field="*{pod}" type="radio" name="pod" value="available" checked>
-                                        <span>Available</span>
-                                    </label>
-                                    <label class="status-option">
-                                        <input th:field="*{pod}" type="radio" name="pod" value="unavailable">
-                                        <span>Unavailable</span>
-                                    </label>
+                                    <!-- Stock fields -->
+                                    <div id="size-stock-column">
+                                        <div class="size-column-heading">
+                                            <label class="general-info-label">Stock</label>
+                                        </div>
+                                        <div id="stock-container" class="size-column-body-2">
+
+                                            <div class="size-stock-element">
+                                                <input class="input input-100 product-form-input"
+                                                       type="text" placeholder="Enter stock" required/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- MRP fields -->
+                                    <div id="size-mrp-column">
+                                        <div class="size-column-heading">
+                                            <label class="general-info-label">MRP</label>
+                                        </div>
+                                        <div id="mrp-container" class="size-column-body-2">
+
+                                            <div class="size-price-element">
+                                                <input class="input input-100 product-form-input"
+                                                       type="text" placeholder="Enter price" required/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Selling price fields -->
+                                    <div id="size-selling-price-column">
+                                        <div class="size-column-heading">
+                                            <label class="general-info-label">Selling price</label>
+                                        </div>
+                                        <div id="selling-price-container" class="size-column-body-2">
+
+                                            <div class="size-price-element">
+                                                <input class="input input-100 product-form-input"
+                                                       type="text" placeholder="Enter selling price" required/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
+                        <div id="sizes-error-message-container">
+                            <p class="error-message" id="size-details-error-message"></p>
+                        </div>
                     </fieldset>
-
-
-                    <!-- Price & Stock fieldset -->
-<!--                    <fieldset id="price-stock-fieldset">-->
-<!--                        <legend>Pricing and Stock</legend>-->
-<!--                        <label class="general-info-label">Base Price:-->
-<!--                            <input th:field="*{price}" type="number" name="price" class="text-input-1" id="price"-->
-<!--                                   placeholder="Base Price" required/>-->
-<!--                        </label>-->
-
-<!--                    </fieldset>-->
-
 
                     <!-- Additional information -->
                     <fieldset id="additional-info-fieldset">
                         <legend>Additional Information</legend>
+
                         <label class="general-info-label">Discount (in %):
                             <input type="text"
                                    name="discount"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="discount"
-                                   placeholder="Discount"
-                                   required/>
+                                   placeholder="Discount"/>
+                            <p id="discount-error-message" class="error-message"></p>
                         </label>
+
                         <label class="general-info-label">Discount Type:
                             <input type="text"
                                    name="discount-type"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="discount-type"
-                                   placeholder="Discount Type"
-                                   required/>
+                                   placeholder="Discount Type"/>
+                            <p id="discount-type-error-message" class="error-message"></p>
                         </label>
+
                         <label class="general-info-label">Item Weight:
                             <input type="number"
                                    th:field="*{itemWeight}"
                                    name="itemWeight"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="item-weight"
-                                   placeholder="Item Weight"
-                                   required/>
+                                   placeholder="Item Weight"/>
+                            <p id="item-weight-error-message" class="error-message"></p>
                         </label>
+
                         <label class="general-info-label">Generic Name:
                             <input type="text"
                                    th:field="*{genericName}"
                                    name="genericName"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="generic-name"
-                                   placeholder="Generic Name"
-                                   required/>
+                                   placeholder="Generic Name"/>
+                            <p id="generic-name-error-message" class="error-message"></p>
                         </label>
+
                         <label class="general-info-label">Country of Origin:
                             <input type="text"
                                    th:field="*{countryOfOrigin}"
                                    name="countryOfOrigin"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="country-of-origin"
-                                   placeholder="Country of Origin"
-                                   required/>
+                                   placeholder="Country of Origin"/>
+                            <p id="country-of-origin-error-message" class="error-message"></p>
                         </label>
+
                         <label class="general-info-label">Manufacturer:
                             <input type="text"
                                    th:field="*{manufacturer}"
                                    name="manufacturer"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="manufacturer"
-                                   placeholder="Manufacturer"
-                                   required/>
+                                   placeholder="Manufacturer"/>
+                            <p id="manufacturer-error-message" class="error-message"></p>
                         </label>
+
                         <label class="general-info-label">Packer:
                             <input type="text"
                                    th:field="*{packer}"
                                    name="packer"
-                                   class="text-input-1"
+                                   class="input input-100 product-form-input"
                                    id="packer"
-                                   placeholder="Packer"
-                                   required/>
+                                   placeholder="Packer"/>
+                            <p id="packer-error-message" class="error-message"></p>
                         </label>
                     </fieldset>
                 </div>
 
-
                 <div id="product-info-col-2">
-
-                    <fieldset>
-                        <legend>Category</legend>
-                        <label class="general-info-label">Category:
-                            <div class="custom-select-wrapper">
-                                <select th:field="*{categoryId}"
-                                        id="category-select"
-                                        class="custom-select"
-                                        name="categoryId"
-                                        required></select>
-                            </div>
-                        </label>
-                        <label class="general-info-label">Sub Category:
-                            <div class="custom-select-wrapper">
-                                <select th:field="*{subCategoryId}"
-                                        id="sub-category-select"
-                                        class="custom-select"
-                                        name="subCategoryId"
-                                        required>
-                                    <option value="">Sub-category</option>
-                                </select>
-                            </div>
-                        </label>
-                    </fieldset>
 
                     <!-- Image upload field -->
                     <fieldset>
@@ -450,23 +353,106 @@
                         </div>
                     </fieldset>
 
-                    <!-- Variations -->
-                    <div id="variations-space"></div>
+                    <!-- Color & Status -->
+                    <fieldset>
+                        <legend>Color and Status</legend>
 
+                        <!-- Color options -->
+                        <div id="color-options-container">
+                            <label class="general-info-label">Color</label>
+                            <p class="option-description">Pick Available Colors</p>
+                            <div class="custom-select-wrapper">
+                                <select id="color-select"
+                                        class="input input-100 product-form-input"
+                                        name="colors"></select>
+                                <p id="color-error-message" class="error-message"></p>
+                            </div>
+                        </div>
+
+                        <!-- Pay on delivery options -->
+                        <div id="pod-options-container">
+                            <label class="general-info-label">Active Status</label>
+                            <p class="option-description">Pick an option</p>
+                            <div class="status-option-container">
+                                <label class="form-radio-button">
+                                    <input type="radio"
+                                           name="status"
+                                           value="active"
+                                           checked required/>
+                                    <span>Active</span>
+                                </label>
+                                <label class="form-radio-button">
+                                    <input type="radio"
+                                           name="status"
+                                           value="inactive"/>
+                                    <span>Inactive</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Product active status -->
+                        <div id="active-options-container">
+                            <label class="general-info-label">Pay On Delivery</label>
+                            <p class="option-description">Pick an option</p>
+                            <div class="status-option-container">
+                                <label class="form-radio-button">
+                                    <input type="radio"
+                                           name="pod"
+                                           value="available"
+                                           checked required />
+                                    <span>Available</span>
+                                </label>
+                                <label class="form-radio-button">
+                                    <input type="radio"
+                                           name="pod"
+                                           value="unavailable" />
+                                    <span>Unavailable</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Free delivery options -->
+                        <div id="free-del-options-container">
+                            <label class="general-info-label">Free Delivery</label>
+                            <p class="option-description">Pick an option</p>
+                            <div class="status-option-container">
+                                <label class="form-radio-button status-option">
+                                    <input type="radio"
+                                           name="freeDel"
+                                           value="available"
+                                           checked required />
+                                    <span>Available</span>
+                                </label>
+                                <label class="form-radio-button">
+                                    <input type="radio"
+                                           name="freeDel"
+                                           value="unavailable"/>
+                                    <span>Unavailable</span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                    <!-- Variation fields -->
+                    <div id="variations-space"></div>
 
                 </div>
             </div>
 
-            <!-- Image Upload -->
+            <!-- Temporary Image Upload -->
             <fieldset>
                 <legend>Upload Images (max 9)</legend>
-                <input type="file" name="images" id="product-images" multiple/>
+                <input type="file"
+                       name="images"
+                       id="product-images"
+                       multiple/>
                 <div id="image-stats"></div>
             </fieldset>
 
             <!-- Submit Button -->
             <div id="button-container">
-                <button type="submit">Add Product</button>
+                <button type="submit" class="grey-cta-button grey-submit-button-1">Add Product</button>
             </div>
 
         </form>
@@ -475,7 +461,7 @@
 
 <!-- Toast notification -->
 
-<div class="toast show" id="toast">
+<div class="toast" id="toast">
     <div class="toast-icon toast-success-icon" id="toast-icon"></div>
     <div class="toast-message-container">
         <h3 id="toast-title">Success!</h3>
@@ -503,10 +489,10 @@
     </div>
 </div>
 
-<script src="/js/nav-bar-script.js"></script>
-<script src="/js/product-form-config.js"></script>
-<script src="/js/product-form-submit.js"></script>
-<script src="/js/toaster-script.js"></script>
+<script src="/js/component-script/nav-bar-script.js"></script>
+<script src="/js/product-script/product-form-config.js"></script>
+<script src="/js/product-script/product-form-submit.js"></script>
+<script src="/js/component-script/toaster-script.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
@@ -568,3 +554,67 @@
 <!--          </label>-->
 
 <!--        </fieldset>-->
+
+
+<!--                    <fieldset>-->
+<!--                        <legend>Category</legend>-->
+<!--                        <label class="general-info-label">Category:-->
+<!--                            <div class="custom-select-wrapper">-->
+<!--                                <select th:field="*{categoryId}"-->
+<!--                                        id="category-select"-->
+<!--                                        class="custom-select"-->
+<!--                                        name="categoryId"-->
+<!--                                        required></select>-->
+<!--                            </div>-->
+<!--                        </label>-->
+<!--                        <label class="general-info-label">Sub Category:-->
+<!--                            <div class="custom-select-wrapper">-->
+<!--                                <select th:field="*{subCategoryId}"-->
+<!--                                        id="sub-category-select"-->
+<!--                                        class="custom-select"-->
+<!--                                        name="subCategoryId"-->
+<!--                                        required>-->
+<!--                                    <option value="">Sub-category</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                        </label>-->
+<!--                    </fieldset>-->
+
+
+<!--                                                th:field="*{color}"-->
+<!--                                                required>-->
+<!--                                            <option value="" hidden disabled selected>Colors</option>-->
+<!--                                            <option th:each="color : ${colorsList}"-->
+<!--                                                    th:value="${color.optionId}"-->
+<!--                                                    th:text="${color.optionValue}"></option>-->
+
+
+<!--                <div id="info-opt-container-col2">-->
+
+<!-- Color options -->
+
+
+<!--                </div>-->
+<!--            </div>-->
+<!--            </fieldset>-->
+
+
+<!-- Price & Stock fieldset -->
+<!--                    <fieldset id="price-stock-fieldset">-->
+<!--                        <legend>Pricing and Stock</legend>-->
+<!--                        <label class="general-info-label">Base Price:-->
+<!--                            <input th:field="*{price}" type="number" name="price" class="text-input-1" id="price"-->
+<!--                                   placeholder="Base Price" required/>-->
+<!--                        </label>-->
+
+<!--                    </fieldset>-->
+
+
+<!--    </div>-->
+
+
+<!--</div>-->
+
+
+
+

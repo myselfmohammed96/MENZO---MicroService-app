@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -315,7 +316,7 @@ public class ProductsQueryService {
         List<ProductItem> items = product.getItems();
 
 
-        //  getting unique 'super SKUs'
+        //  getting set of 'super SKUs'
         Set<String> superSkus = items.stream()
                 .map(ProductItem::getSuperSku)
                 .collect(Collectors.toSet());
@@ -327,7 +328,7 @@ public class ProductsQueryService {
             //  building item Dto for every super SKU
             for (String superSku : superSkus) {
 
-                //  Aggregating for collective 'status' & 'stock' values & color details
+                //  Aggregating 'status' & 'stock' values & color details
                 StringBuilder color = new StringBuilder();
                 StringBuilder hexCode = new StringBuilder();
 
@@ -439,7 +440,9 @@ public class ProductsQueryService {
                         .superSku(ssku)
                         .colorName(colorName)
                         .iconImage(iconImage)
-                        .price(productItem.getPrice())
+                        .mrp(productItem.getMrp())
+                        .sellingPrice(productItem.getSellingPrice())
+//                        .price(productItem.getPrice())
                         .sizes(sizes)
                         .build();
                 itemDetailsList.add(itemDetails);
@@ -474,13 +477,21 @@ public class ProductsQueryService {
 
         List<ProductItem> items = itemsRepo.findAllBySuperSku(superSku);
 
-        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
+//        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
+        AtomicReference<BigDecimal> baseMrp = new AtomicReference<>(BigDecimal.valueOf(Float.MAX_VALUE));
+        AtomicReference<BigDecimal> baseSelling = new AtomicReference<>(BigDecimal.valueOf(Float.MAX_VALUE));
 
         List<ItemSizeDto> sizeDetails = items.stream()
                 .map(item -> {
-                    if (item.getPrice() < startingPrice.get()) {
-                        startingPrice.set(item.getPrice());
+                    if (item.getMrp().compareTo(baseMrp.get()) < 0) {
+                        baseMrp.set(item.getMrp());
                     }
+                    if (item.getSellingPrice().compareTo(baseSelling.get()) < 0) {
+                        baseSelling.set(item.getSellingPrice());
+                    }
+//                    if (item.getPrice() < startingPrice.get()) {
+//                        startingPrice.set(item.getPrice());
+//                    }
                     return ItemSizeDto.builder()
                             .itemId(item.getId())
                             .size(itemsRepo.findSizeByItemId("Size", item.getId()))
@@ -496,7 +507,9 @@ public class ProductsQueryService {
                 .toList();
 
         return ItemDetailsDto.builder()
-                .startingPrice(startingPrice.get() != Float.MAX_VALUE ? startingPrice.get() : null)
+                .baseMrp(baseMrp.get() != BigDecimal.valueOf(Float.MAX_VALUE) ? baseMrp.get() : null)
+                .baseSellingPrice(baseSelling.get() != BigDecimal.valueOf(Float.MAX_VALUE) ? baseSelling.get() : null)
+//                .startingPrice(startingPrice.get() != Float.MAX_VALUE ? startingPrice.get() : null)
                 .imageUrls(imageUrls)
                 .sizeDetails(sizeDetails)
 
@@ -522,25 +535,25 @@ public class ProductsQueryService {
                 product.getCategory().getCategoryName());
     }
 
-    public ProductItemDetailsDto getProductItemDetailsById(Long itemId) {
-        ProductItem p = itemsRepo.findById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("ProductItem not found with ID: " + itemId));
-        return new ProductItemDetailsDto(
-                p.getId(),
-                p.getProduct().getProductName(),
-                null,
-                p.getProduct().getCategory().getCategoryName(),
-                p.getProduct().getProductDescription(),
-                p.getProduct().getPodAvailable(),
-                p.getProduct().getCreatedAt(),
-                p.getSKU(),
-                p.getQtyInStock(),
-                p.getPrice(),
-                null,
-                null,
-                p.getIsActive()
-        );
-    }
+//    public ProductItemDetailsDto getProductItemDetailsById(Long itemId) {
+//        ProductItem p = itemsRepo.findById(itemId)
+//                .orElseThrow(() -> new EntityNotFoundException("ProductItem not found with ID: " + itemId));
+//        return new ProductItemDetailsDto(
+//                p.getId(),
+//                p.getProduct().getProductName(),
+//                null,
+//                p.getProduct().getCategory().getCategoryName(),
+//                p.getProduct().getProductDescription(),
+//                p.getProduct().getPodAvailable(),
+//                p.getProduct().getCreatedAt(),
+//                p.getSKU(),
+//                p.getQtyInStock(),
+//                p.getPrice(),
+//                null,
+//                null,
+//                p.getIsActive()
+//        );
+//    }
 
 
     //  Get products by Sub-category ID

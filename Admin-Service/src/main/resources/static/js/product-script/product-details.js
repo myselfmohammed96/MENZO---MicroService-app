@@ -2,7 +2,7 @@ const productDetailsAndItems = "http://localhost:8080/products/items";
 const getItem = "http://localhost:8080/products/item";
 
 let productId;
-let itemsListWrapper;
+let listWrapperBody;
 
 const itemsMap = new Map();
 window.itemDetailsMap = new Map();
@@ -161,106 +161,106 @@ const populateProductDetails = (productDetails) => {
 //  POPULATE - items list
 let itemCount = 1;
 const populateItemsList = (item, itemSelected = false) => {
-    const itemList = document.createElement('div');
-    itemList.classList.add('item-list');
+    const listElement = document.createElement('div');
+    listElement.classList.add('list-element');
     if(itemCount === 1) {
-        itemList.classList.add('selected-item');
+        listElement.classList.add('selected-element');
     }
 
-    const itemListContent = document.createElement('div');
-    itemListContent.classList.add('item-list-content');
+    const listElementContent = document.createElement('div');
+    listElementContent.classList.add('list-element-content');
 
     //  ------- item count number -------
-    const itemCounterContainer = document.createElement('div');
-    itemCounterContainer.classList.add('item-counter-container');
+    const elementCounterContainer = document.createElement('div');
+    elementCounterContainer.classList.add('element-counter-container');
 
-    const itemCountText = document.createElement('p');
-    itemCountText.textContent = itemCount;
+    const elementCountText = document.createElement('p');
+    elementCountText.textContent = itemCount;
     itemCount++;
 
-    itemCounterContainer.appendChild(itemCountText);
+    elementCounterContainer.appendChild(elementCountText);
 
     //  ------- item icon image -------
-    const itemIconContainer = document.createElement('div');
-    itemIconContainer.classList.add('item-icon-container');
+    const elementIconContainer = document.createElement('div');
+    elementIconContainer.classList.add('element-icon-container');
 
-    const itemIcon = document.createElement('img');
-    itemIcon.src = "/" + item.iconImage;
+    const elementIcon = document.createElement('img');
+    elementIcon.src = "/" + item.iconImage;
 
-    itemIconContainer.appendChild(itemIcon);
+    elementIconContainer.appendChild(elementIcon);
 
-    //  ------- item text content -------
-    const itemTextContainer = document.createElement('div');
-    itemTextContainer.classList.add('item-text-container');
+    //  ------- element text content -------
+    const elementTextContainer = document.createElement('div');
+    elementTextContainer.classList.add('element-text-container');
 
-    //  ------- item text content - row 1 -------
-    const itemText1 = document.createElement('div');
-    itemText1.classList.add('item-text-1');
+    //  element text content - row 1
+    const elementText1 = document.createElement('div');
+    elementText1.classList.add('element-text-1');
 
-    //  ------- item text content - row 1 - super SKU -------
-    const itemSkuContainer = document.createElement('div');
-    itemSkuContainer.classList.add('item-sku-container');
+    //  element text content - row 1 - super SKU
+    const elementSkuContainer = document.createElement('div');
+    elementSkuContainer.classList.add('element-sku-container');
 
-    const itemSku = document.createElement('p');
-    itemSku.textContent = item.superSku;
+    const elementSku = document.createElement('p');
+    elementSku.textContent = item.superSku;
 
-    itemSkuContainer.appendChild(itemSku);
+    elementSkuContainer.appendChild(elementSku);
 
-    //  ------- item text content - row 1 - item status -------
-    const itemStatusContainer = document.createElement('div');
-    itemStatusContainer.classList.add('item-status-container');
+    //  element text content - row 1 - element status
+    const elementStatusContainer = document.createElement('div');
+    elementStatusContainer.classList.add('element-status-container');
 
-    const itemStatus = document.createElement('span');
+    const elementStatus = document.createElement('span');
     let colorClass = {
         ACTIVE: 'status-green',
         INACTIVE: 'status-red',
         PARTIAL: 'status-yellow'
     };
     let statusColor = colorClass[item.activeStatus];
-    itemStatus.classList.add('item-status');
+    elementStatus.classList.add('element-status');
 //        if(item.activeStatus === "ACTIVE" || item.activeStatus === "INACTIVE" || item.activeStatus === "PARTIAL") {
-    itemStatus.classList.add(statusColor);
+    elementStatus.classList.add(statusColor);
 //        }
 
-    itemStatus.textContent = item.activeStatus.charAt(0).toUpperCase() + item.activeStatus.slice(1).toLowerCase();
+    elementStatus.textContent = item.activeStatus.charAt(0).toUpperCase() + item.activeStatus.slice(1).toLowerCase();
 
-    itemStatusContainer.appendChild(itemStatus);
-    itemText1.append(itemSkuContainer, itemStatusContainer);
+    elementStatusContainer.appendChild(elementStatus);
+    elementText1.append(elementSkuContainer, elementStatusContainer);
 
-    //  ------- item text content - row 2 -------
-    const itemText2 = document.createElement('div');
-    itemText2.classList.add('item-text-2');
+    //  ------- element text content - row 2 -------
+    const elementText2 = document.createElement('div');
+    elementText2.classList.add('element-text-2');
 
-    const itemText2Row = document.createElement('div');
-    itemText2Row.classList.add('item-text-2-row');
+    const elementText2Row = document.createElement('div');
+    elementText2Row.classList.add('element-text-2-row');
 
-    //  ------- item text content - row 2 - color details -------
-    const itemColor = document.createElement('div');
-    itemColor.classList.add('item-color');
+    //  ------- element text content - row 2 - color details -------
+    const elementColor = document.createElement('div');
+    elementColor.classList.add('element-color');
 
-    const itemColorKey = document.createElement('p');
-    itemColorKey.classList.add('item-color-key');
-    itemColorKey.textContent = 'Color:';
+    const elementColorKey = document.createElement('p');
+    elementColorKey.classList.add('element-color-key');
+    elementColorKey.textContent = 'Color:';
 
-    const itemColorValue = document.createElement('p');
-    itemColorValue.classList.add('item-color-value');
-    itemColorValue.textContent = item.color;
+    const elementColorValue = document.createElement('p');
+    elementColorValue.classList.add('element-color-value');
+    elementColorValue.textContent = item.color;
 
-    const itemColorIcon = document.createElement('div');
-    itemColorIcon.classList.add('item-color-icon');
-    itemColorIcon.style.backgroundColor = item.hexCode;
+    const elementColorIcon = document.createElement('div');
+    elementColorIcon.classList.add('element-color-icon');
+    elementColorIcon.style.backgroundColor = item.hexCode;
 
-    itemColor.append(
-        itemColorKey,
-        itemColorValue,
-        itemColorIcon
+    elementColor.append(
+        elementColorKey,
+        elementColorValue,
+        elementColorIcon
     );
 
-    //  ------- item text content - row 2 - stock details -------
-    const itemStock = document.createElement('div');
-    itemStock.classList.add('item-stock');
+    //  ------- element text content - row 2 - stock details -------
+    const elementStock = document.createElement('div');
+    elementStock.classList.add('element-stock');
 
-    const itemStockText = document.createElement('p');
+    const elementStockText = document.createElement('p');
 
     let stockStatusWords = item.stockStatus.split("_");
     let finalText = "";
@@ -271,53 +271,56 @@ const populateItemsList = (item, itemSelected = false) => {
             finalText += word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() + " ";
         }
     });
-    itemStockText.textContent = finalText;
+    elementStockText.textContent = finalText;
 
-    itemStock.appendChild(itemStockText);
-    itemText2Row.append(
-        itemColor,
-        itemStock
+    elementStock.appendChild(elementStockText);
+    elementText2Row.append(
+        elementColor,
+        elementStock
     );
-    itemText2.appendChild(itemText2Row);
-    itemTextContainer.append(
-        itemText1,
-        itemText2
+    elementText2.appendChild(elementText2Row);
+    elementTextContainer.append(
+        elementText1,
+        elementText2
     );
 
     //  ------- item options button -------
-    const itemOptionButtonContainer = document.createElement('div');
-    itemOptionButtonContainer.classList.add('item-option-button-container');
+    const elementOptionButtonContainer = document.createElement('div');
+    elementOptionButtonContainer.classList.add('element-option-button-container');
 
-    const itemOptionButton = document.createElement('img');
-    itemOptionButton.src = "/media/menu-icon.png";
+    const elementOptionButton = document.createElement('img');
+    elementOptionButton.src = "/media/menu-icon.png";
 
-    itemOptionButtonContainer.appendChild(itemOptionButton);
-    itemListContent.append(
-        itemCounterContainer,
-        itemIconContainer,
-        itemTextContainer,
-        itemOptionButtonContainer
+    elementOptionButtonContainer.appendChild(elementOptionButton);
+    listElementContent.append(
+        elementCounterContainer,
+        elementIconContainer,
+        elementTextContainer,
+        elementOptionButtonContainer
     );
-    itemList.appendChild(itemListContent);
-    itemList.addEventListener('click', () => {
-        document.querySelectorAll('.item-list').forEach(item => {
-            item.classList.remove('selected-item');
+    listElement.appendChild(listElementContent);
+    listElement.addEventListener('click', () => {
+        document.querySelectorAll('.list-element').forEach(item => {
+            item.classList.remove('selected-element');
         });
-        itemList.classList.add('selected-item');
-        changeItemDetails(item.superSku);
+        listElement.classList.add('selected-element');
+        changeElementDetails(item.superSku);
     });
     if (itemSelected) {
         document.querySelectorAll('.item-list').forEach(item => {
-            item.classList.remove('selected-item');
+            item.classList.remove('selected-element');
         });
-        itemList.classList.add('selected-item');
+        listElement.classList.add('selected-element');
     }
-    itemsListWrapper.appendChild(itemList);
+    listWrapperBody.appendChild(listElement);
 }
+
 
 //  POPULATE - item details - with images & size details
 const populateItemDetails = (itemDetails) => {
-    document.getElementById('starting-price').textContent = itemDetails.startingPrice ? itemDetails.startingPrice + "/-" : "-";
+//    document.getElementById('starting-price').textContent = itemDetails.startingPrice ? itemDetails.startingPrice + "/-" : "-";
+    document.getElementById('base-mrp').textContent = itemDetails.baseMrp ? itemDetails.baseMrp + '/-' : '-';
+    document.getElementById('base-selling-price').textContent = itemDetails.baseSellingPrice ? itemDetails.baseSellingPrice + '/-' : '-';
     document.getElementById('color').textContent = itemDetails.color ? itemDetails.color : "-";
     document.getElementById('color-icon').style.backgroundColor = itemDetails.hexCode ? itemDetails.hexCode : "none";
     document.getElementById('super-sku').textContent = itemDetails.superSku ? itemDetails.superSku : "-";
@@ -373,7 +376,7 @@ const populateSizeDetails = (sizeDetails) => {
         status.classList.add('center-text');
 
         const statusSpan = document.createElement('span');
-        statusSpan.classList.add("item-status", sDetails.active ? "status-green" : "status-red");
+        statusSpan.classList.add("element-status", sDetails.active ? "status-green" : "status-red");
         statusSpan.textContent = sDetails.active ? 'Active' : 'Inactive';
 
         status.appendChild(statusSpan);
@@ -390,11 +393,18 @@ const populateSizeDetails = (sizeDetails) => {
         itemUpdated.textContent = "22 Jul 24"
 
         const buttons = document.createElement('td');
-        buttons.classList.add('center-text');
+        buttons.classList.add(
+            'center-text',
+            'action-buttons-column',
+            'table-buttons-container'
+        );
 
         //  ------- adding edit button -------
         const editBtn = document.createElement('button');
-        editBtn.classList.add("edit-button");
+        editBtn.classList.add(
+            'table-button',
+            'edit-button'
+        );
 
         const editBtnIcon = document.createElement('img');
         editBtnIcon.src = "/media/edit.png";
@@ -406,7 +416,10 @@ const populateSizeDetails = (sizeDetails) => {
 
         //  ------- adding delete button -------
         const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('delete-button');
+        deleteBtn.classList.add(
+            'table-button',
+            'table-delete-button'
+        );
 
         const deleteBtnIcon = document.createElement('img');
         deleteBtnIcon.src = "/media/delete.png";
@@ -426,7 +439,8 @@ const populateSizeDetails = (sizeDetails) => {
             td(sDetails.sku),
             status,
             td(sDetails.qtyInStock + " units"),
-            td(sDetails.price + "/-"),
+            sDetails.mrp ? td(sDetails.mrp + "/-") : td('-'),
+            sDetails.sellingPrice ? td(sDetails.sellingPrice + "/-") : td('-'),
             td(createdDateFormat),
             itemUpdated,
             buttons
@@ -454,7 +468,7 @@ const deleteItem = async (itemId) => {
 //  ********* other methods *********
 
 //  CHANGE - item details (by selecting from the 'items list')
-const changeItemDetails = async (superSku) => {
+const changeElementDetails = async (superSku) => {
     //  ------- check if present in 'itemDetailsMap' -------
     if (itemDetailsMap.has(superSku)) {
         populateItemDetails(itemDetailsMap.get(superSku));
@@ -499,7 +513,7 @@ window.handleSavedItemData = (savedItem) => {
     populateItemsList(itemListData, true);
 
     itemDetailsMap.set(savedItem.superSku, savedItem);
-    changeItemDetails(savedItem.superSku);
+    changeElementDetails(savedItem.superSku);
     return;
 }
 
@@ -510,7 +524,7 @@ window.handleSavedItemData = (savedItem) => {
 // initial data loader
 const loadInitialData = async () => {
     let firstItem;
-    itemsListWrapper.innerHTML = '';
+    listWrapperBody.innerHTML = '';
 
     let details;
     let itemDetails;
@@ -565,7 +579,7 @@ const loadInitialData = async () => {
 //  DOM Loading event listener
 document.addEventListener("DOMContentLoaded", async () => {
     productId = document.getElementById('product-id').value;
-    itemsListWrapper = document.getElementById('list-wrapper-body');
+    listWrapperBody = document.getElementById('list-wrapper-body');
 
 
 //    //  product item form modal - toggle events
@@ -579,3 +593,196 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     loadInitialData();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//const populateItemsList = (item, itemSelected = false) => {
+//    const itemList = document.createElement('div');
+//    itemList.classList.add('item-list');
+//    if(itemCount === 1) {
+//        itemList.classList.add('selected-item');
+//    }
+//
+//    const itemListContent = document.createElement('div');
+//    itemListContent.classList.add('item-list-content');
+//
+//    //  ------- item count number -------
+//    const itemCounterContainer = document.createElement('div');
+//    itemCounterContainer.classList.add('item-counter-container');
+//
+//    const itemCountText = document.createElement('p');
+//    itemCountText.textContent = itemCount;
+//    itemCount++;
+//
+//    itemCounterContainer.appendChild(itemCountText);
+//
+//    //  ------- item icon image -------
+//    const itemIconContainer = document.createElement('div');
+//    itemIconContainer.classList.add('item-icon-container');
+//
+//    const itemIcon = document.createElement('img');
+//    itemIcon.src = "/" + item.iconImage;
+//
+//    itemIconContainer.appendChild(itemIcon);
+//
+//    //  ------- item text content -------
+//    const itemTextContainer = document.createElement('div');
+//    itemTextContainer.classList.add('item-text-container');
+//
+//    //  ------- item text content - row 1 -------
+//    const itemText1 = document.createElement('div');
+//    itemText1.classList.add('item-text-1');
+//
+//    //  ------- item text content - row 1 - super SKU -------
+//    const itemSkuContainer = document.createElement('div');
+//    itemSkuContainer.classList.add('item-sku-container');
+//
+//    const itemSku = document.createElement('p');
+//    itemSku.textContent = item.superSku;
+//
+//    itemSkuContainer.appendChild(itemSku);
+//
+//    //  ------- item text content - row 1 - item status -------
+//    const itemStatusContainer = document.createElement('div');
+//    itemStatusContainer.classList.add('item-status-container');
+//
+//    const itemStatus = document.createElement('span');
+//    let colorClass = {
+//        ACTIVE: 'status-green',
+//        INACTIVE: 'status-red',
+//        PARTIAL: 'status-yellow'
+//    };
+//    let statusColor = colorClass[item.activeStatus];
+//    itemStatus.classList.add('item-status');
+////        if(item.activeStatus === "ACTIVE" || item.activeStatus === "INACTIVE" || item.activeStatus === "PARTIAL") {
+//    itemStatus.classList.add(statusColor);
+////        }
+//
+//    itemStatus.textContent = item.activeStatus.charAt(0).toUpperCase() + item.activeStatus.slice(1).toLowerCase();
+//
+//    itemStatusContainer.appendChild(itemStatus);
+//    itemText1.append(itemSkuContainer, itemStatusContainer);
+//
+//    //  ------- item text content - row 2 -------
+//    const itemText2 = document.createElement('div');
+//    itemText2.classList.add('item-text-2');
+//
+//    const itemText2Row = document.createElement('div');
+//    itemText2Row.classList.add('item-text-2-row');
+//
+//    //  ------- item text content - row 2 - color details -------
+//    const itemColor = document.createElement('div');
+//    itemColor.classList.add('item-color');
+//
+//    const itemColorKey = document.createElement('p');
+//    itemColorKey.classList.add('item-color-key');
+//    itemColorKey.textContent = 'Color:';
+//
+//    const itemColorValue = document.createElement('p');
+//    itemColorValue.classList.add('item-color-value');
+//    itemColorValue.textContent = item.color;
+//
+//    const itemColorIcon = document.createElement('div');
+//    itemColorIcon.classList.add('item-color-icon');
+//    itemColorIcon.style.backgroundColor = item.hexCode;
+//
+//    itemColor.append(
+//        itemColorKey,
+//        itemColorValue,
+//        itemColorIcon
+//    );
+//
+//    //  ------- item text content - row 2 - stock details -------
+//    const itemStock = document.createElement('div');
+//    itemStock.classList.add('item-stock');
+//
+//    const itemStockText = document.createElement('p');
+//
+//    let stockStatusWords = item.stockStatus.split("_");
+//    let finalText = "";
+//    stockStatusWords.forEach(word => {
+//        if(word === "OF") {
+//            finalText += word.toLowerCase() + " ";
+//        } else {
+//            finalText += word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() + " ";
+//        }
+//    });
+//    itemStockText.textContent = finalText;
+//
+//    itemStock.appendChild(itemStockText);
+//    itemText2Row.append(
+//        itemColor,
+//        itemStock
+//    );
+//    itemText2.appendChild(itemText2Row);
+//    itemTextContainer.append(
+//        itemText1,
+//        itemText2
+//    );
+//
+//    //  ------- item options button -------
+//    const itemOptionButtonContainer = document.createElement('div');
+//    itemOptionButtonContainer.classList.add('item-option-button-container');
+//
+//    const itemOptionButton = document.createElement('img');
+//    itemOptionButton.src = "/media/menu-icon.png";
+//
+//    itemOptionButtonContainer.appendChild(itemOptionButton);
+//    itemListContent.append(
+//        itemCounterContainer,
+//        itemIconContainer,
+//        itemTextContainer,
+//        itemOptionButtonContainer
+//    );
+//    itemList.appendChild(itemListContent);
+//    itemList.addEventListener('click', () => {
+//        document.querySelectorAll('.item-list').forEach(item => {
+//            item.classList.remove('selected-item');
+//        });
+//        itemList.classList.add('selected-item');
+//        changeItemDetails(item.superSku);
+//    });
+//    if (itemSelected) {
+//        document.querySelectorAll('.item-list').forEach(item => {
+//            item.classList.remove('selected-item');
+//        });
+//        itemList.classList.add('selected-item');
+//    }
+//    itemsListWrapper.appendChild(itemList);
+//}

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +19,8 @@ public class SizeDetailsDto {
 
     private Integer sizeStock;
 
-    private Float sizePrice;
+    private BigDecimal sizeMrp;
+
+    private BigDecimal sizeSellingPrice;
 
 }

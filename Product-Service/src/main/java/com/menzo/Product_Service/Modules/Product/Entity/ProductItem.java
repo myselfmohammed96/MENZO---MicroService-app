@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,9 +77,15 @@ public class ProductItem {
 
     @Column(
             nullable = false,
-            name = "price"
+            name = "mrp"
     )
-    private Float price;
+    private BigDecimal mrp;
+
+    @Column(
+            nullable = false,
+            name = "selling_price"
+    )
+    private BigDecimal sellingPrice;
 
     @OneToMany(
             mappedBy = "productItem",

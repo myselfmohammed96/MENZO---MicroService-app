@@ -13,17 +13,20 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
+    <link rel="stylesheet"
+          href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
 
-    <link rel="stylesheet" href="/css/admin-style.css">
-<!--    <link rel="stylesheet" href="/admin panels/css/admin-table.css">-->
-<!--    <link rel="stylesheet" href="/admin panels/css/admin-filter-menu.css">-->
+    <!--    <link rel="stylesheet" href="/admin panels/css/admin-table.css">-->
+    <!--    <link rel="stylesheet" href="/admin panels/css/admin-filter-menu.css">-->
 
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css">
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css">
 
-    <link rel="stylesheet" href="/css/components-styling.css">
+    <link rel="stylesheet" href="/css/elements.css"/>
+    <link rel="stylesheet" href="/css/text-content.css"/>
+
+    <link rel="stylesheet" href="/css/components.css">
     <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
     <link rel="stylesheet" href="/css/forms-styling.css">
@@ -104,8 +107,8 @@
     </div>
 
     <div class="main-content-container">
-        <h1>Product details</h1>
-        <hr class="user-title-custom-line"/>
+        <h1 id="page-title">Product details</h1>
+        <hr class="line line-97"/>
 
         <!-- Product details -->
 
@@ -170,6 +173,9 @@
                 <div id="product-details-col-1">
                     <input type="hidden" id="product-id" name="productId" th:value="${productId}"/>
 
+
+                    <!-- Product details -->
+
                     <h2 class="details-heading top-details-heading">Product details</h2>
                     <div class="details-text">
                         <strong class="details-key">Product name:</strong>
@@ -202,11 +208,22 @@
                         <p class="details-value" id="product-updated">23 Jun 2025</p>
                     </div>
 
+
+                    <!-- Item details -->
+
                     <h2 class="details-heading">Item details</h2>
                     <div class="details-text">
-                        <strong class="details-key">Starting price: </strong>
-                        <p class="details-value">₹ <strong id="starting-price">1499/-</strong></p>
+                        <strong class="details-key">Base MRP: </strong>
+                        <p class="details-value">₹ <strong id="base-mrp">1499/-</strong></p>
                     </div>
+                    <div class="details-text">
+                        <strong class="details-key">Base selling-price: </strong>
+                        <p class="details-value">₹ <strong id="base-selling-price">1499/-</strong></p>
+                    </div>
+                    <!--                    <div class="details-text">
+                                            <strong class="details-key">Starting price: </strong>
+                                            <p class="details-value">₹ <strong id="starting-price">1499/-</strong></p>
+                                        </div>-->
                     <div class="details-text">
                         <strong class="details-key">Color: </strong>
                         <div class="details-value">
@@ -218,14 +235,17 @@
                         <strong class="details-key">Super SKU: </strong>
                         <p class="details-value" id="super-sku">FS-23-BK</p>
                     </div>
-                    <!--                    <div class="details-text">-->
-                    <!--                        <strong class="details-key">Item Created: </strong>-->
-                    <!--                        <p class="details-value" id="item-created">23 Jun 2024</p>-->
-                    <!--                    </div>-->
-                    <!--                    <div class="details-text">-->
-                    <!--                        <strong class="details-key">Item Updated: </strong>-->
-                    <!--                        <p class="details-value" id="item-updated">23 Jun 2025</p>-->
-                    <!--                    </div>-->
+                    <!--                    <div class="details-text">
+                                            <strong class="details-key">Item Created: </strong>
+                                            <p class="details-value" id="item-created">23 Jun 2024</p>
+                                        </div>
+                                        <div class="details-text">
+                                            <strong class="details-key">Item Updated: </strong>
+                                            <p class="details-value" id="item-updated">23 Jun 2025</p>
+                                        </div>-->
+
+
+                    <!-- Other details -->
 
                     <h2 class="details-heading">Other details</h2>
                     <div class="details-text">
@@ -259,15 +279,282 @@
                                     <h2>Product Items</h2>
                                 </div>
                                 <div class="list-heading-container list-heading-buttons-container">
-                                    <button id="add-item-button">+</button>
-                                    <button id="sort-items-button">⇅</button>
+                                    <button id="add-item-button" class="list-header-button list-add-button">+</button>
+                                    <button id="sort-items-button" class="list-header-button list-sort-button">⇅</button>
                                 </div>
                             </div>
                             <div class="list-header-row">
                                 <p>Selected item - 1 / 22</p>
                             </div>
                         </div>
-                        <div id="list-wrapper-body">
+                        <div id="list-wrapper-body"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-details-container-2">
+                <div>
+
+                    <!-- size details - table -->
+                    <h2 class="details-heading">Size details</h2>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="center-text">Sizes</th>
+                            <th class="center-text">SKU</th>
+                            <th class="center-text">Status</th>
+                            <th class="center-text">Stock qty</th>
+                            <th class="center-text">MRP</th>
+                            <th class="center-text">Selling-price</th>
+                            <th class="center-text">Item Created</th>
+                            <th class="center-text">Item Updated</th>
+                            <th class="center-text"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="size-table-body">
+                        <!--                            <tr>-->
+                        <!--                                <td class="center-text">L</td>-->
+                        <!--                                <td class="center-text">FS-23-DBL-L</td>-->
+                        <!--                                <td class="center-text">-->
+                        <!--                                    <span>Active</span>-->
+                        <!--                                </td>-->
+                        <!--                                <td class="center-text">233 units</td>-->
+                        <!--                                <td class="center-text">23 Jun 24</td>-->
+                        <!--                                <td class="center-text">22 Jul 24</td>-->
+                        <!--                                <td class="center-text action-buttons-column table-buttons-container">-->
+                        <!--                                    <button class="table-button edit-button">✎</button>-->
+                        <!--                                    <button class="table-button edit-button">🗑︎</button>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        </tbody>
+                    </table>
+
+                    <h2 class="details-heading">Analytics</h2>
+                    <div class="details-text">
+                        <strong class="details-key">Sales: </strong>
+                        <p class="details-value">223 units</p>
+                    </div>
+                    <div class="details-text">
+                        <strong class="details-key">Review: </strong>
+                        <p class="details-value">4.5 stars</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--  modal  -->
+
+<div id="confirm-modal" class="modal hidden">
+    <div class="modal-container">
+        <h1 id="confirm-title" class="modal-title">Are you sure?</h1>
+        <p class="confirm-message modal-message">Do you really want to block this user?</p>
+        <div class="modal-button-container">
+            <button class="modal-button" id="confirm-yes">Yes</button>
+            <button class="modal-button" id="confirm-no">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal - add item form -->
+<div class="modal" id="add-item-form-modal">
+    <div class="modal-container-1">
+        <div class="modal-scroll">
+            <h1 class="modal-title-1">Add new Item</h1>
+            <form id="add-item-form" enctype="multipart/form-data" th:action="@{/products/add-item}"
+                  th:object="${newItem}" method="POST">
+
+                <div id="item-form-modal-body">
+
+                    <!-- Product item form -->
+                    <div id="item-info">
+                        <div id="item-info-col1">
+
+                            <!-- Image upload field -->
+
+                            <div class="item-info-blocks">
+                                <div id="modal-image-heading">
+                                    <label class="general-info-label">Upload images</label>
+                                    <p class="option-description">Add min 3 to max 9 images</p>
+                                </div>
+                                <div id="image-preview-container"></div>
+                                <div id="image-icons-container">
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                    <div class="image-icon"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="item-info-col2">
+
+                            <!-- color & active status th:field="*{categoryId}" -->
+
+                            <div class="item-info-blocks">
+
+                                <!-- Color options -->
+
+                                <div id="color-options-container">
+                                    <label class="general-info-label">Color</label>
+                                    <p class="option-description">Pick Available Colors</p>
+                                    <div class="custom-select-wrapper">
+                                        <select th:field="*{colorId}" id="color-select" class="custom-select"
+                                                name="colorId" required></select>
+                                    </div>
+                                </div>
+
+                                <!-- Product active status -->
+                                <div id="pod-options-container">
+                                    <label class="general-info-label">Active Status</label>
+                                    <p class="option-description">Pick an option</p>
+                                    <label class="status-option">
+                                        <input type="radio" name="status" value="active" checked>
+                                        <span>Active</span>
+                                    </label>
+                                    <label class="status-option">
+                                        <input type="radio" name="status" value="inactive">
+                                        <span>Inactive</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Size options -->
+                            <div class="item-info-blocks" id="sizes">
+                                <label class="general-info-label">Size Details</label>
+                                <p class="option-description">Pick Available Sizes</p>
+
+                                <div id="size-options-container">
+                                    <div id="size-wrapper-col-1">
+                                        <div class="size-column-heading">
+                                            <label class="general-info-label">Size</label>
+                                        </div>
+
+                                        <div id="size-container" class="size-column-body-1"></div>
+                                    </div>
+
+                                    <div id="size-wrapper-col-2">
+                                        <div id="size-stock-column">
+                                            <div class="size-column-heading">
+                                                <label class="general-info-label">Stock</label>
+                                            </div>
+
+                                            <div id="stock-container" class="size-column-body-2"></div>
+                                        </div>
+
+                                        <div id="size-price-column">
+                                            <div class="size-column-heading">
+                                                <label class="general-info-label">Price</label>
+                                            </div>
+                                            <div id="price-container" class="size-column-body-2"></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- temporary image upload -->
+                    <div class="item-info-blocks">
+                        <input type="file" name="images" id="product-images" multiple/>
+                        <div id="image-stats"></div>
+                    </div>
+                </div>
+
+                <div class="modal-button-container">
+                    <button class="modal-button-1" id="save-btn" type="submit">Save</button>
+                    <button class="modal-button-1" type="button">Draft</button>
+                    <button class="modal-button-1" id="modal-form-close" type="button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // document.querySelectorAll('.item-option-button-container img').forEach(el => {
+    //     el.addEventListener('mouseup', () => {
+    //         el.classList.add('show-border');
+    //         //  remove after 300ms and remove focus so it doesn't stick
+    //         setTimeout(() => {
+    //             el.classList.remove('show-border');
+    //             // el.blur();
+    //         }, 300);
+    //     });
+    //     //  clean up if cursor leaves before mouseup
+    //     el.addEventListener('mouseleave', () => el.classList.remove('show-border'));
+    // });
+</script>
+<script src="/js/component-script/nav-bar-script.js"></script>
+<!--<script src="/js/product-details-script-v2.js"></script>-->
+<script src="/js/product-script/product-details.js"></script>
+<script src="/js/product-script/product-details-add-item.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!--                            <div class="item-list">-->
 <!--                                <div class="item-list-content">-->
 <!--                                    <div class="item-counter-container">-->
@@ -535,241 +822,3 @@
 <!--                                </div>-->
 <!--                                &lt;!&ndash; <hr> &ndash;&gt;-->
 <!--                            </div>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-details-container-2">
-                <div>
-
-                    <!-- size details - table -->
-                    <h2 class="details-heading">Size details</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="center-text">Sizes</th>
-                                <th class="center-text">SKU</th>
-                                <th class="center-text">Status</th>
-                                <th class="center-text">Stock qty</th>
-                                <th class="center-text">Price</th>
-                                <th class="center-text">Item Created</th>
-                                <th class="center-text">Item Updated</th>
-                                <th class="center-text"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="size-table-body">
-<!--                            <tr>-->
-<!--                                <td class="center-text">L</td>-->
-<!--                                <td class="center-text">FS-23-DBL-L</td>-->
-<!--                                <td class="center-text">-->
-<!--                                    <span>Active</span>-->
-<!--                                </td>-->
-<!--                                <td class="center-text">233 units</td>-->
-<!--                                <td class="center-text">23 Jun 24</td>-->
-<!--                                <td class="center-text">22 Jul 24</td>-->
-<!--                                <td class="center-text">-->
-<!--                                    <button>✎</button>-->
-<!--                                    <button>🗑︎</button>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-                        </tbody>
-                    </table>
-
-                    <h2 class="details-heading">Analytics</h2>
-                    <div class="details-text">
-                        <strong class="details-key">Sales: </strong>
-                        <p class="details-value">223 units</p>
-                    </div>
-                    <div class="details-text">
-                        <strong class="details-key">Review: </strong>
-                        <p class="details-value">4.5 stars</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!--  modal  -->
-
-<div id="confirm-modal" class="modal hidden">
-    <div class="modal-container">
-        <h1 id="confirm-title" class="modal-title">Are you sure?</h1>
-        <p class="confirm-message modal-message">Do you really want to block this user?</p>
-        <div class="modal-button-container">
-            <button class="modal-button" id="confirm-yes">Yes</button>
-            <button class="modal-button" id="confirm-no">Cancel</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal - add item form -->
-<div class="modal" id="add-item-form-modal">
-    <div class="modal-container-1">
-        <div class="modal-scroll">
-            <h1 class="modal-title-1">Add new Item</h1>
-            <form id="add-item-form" enctype="multipart/form-data" th:action="@{/products/add-item}"
-                th:object="${newItem}" method="POST">
-
-                <div id="item-form-modal-body">
-
-                    <!-- Product item form -->
-                    <div id="item-info">
-                        <div id="item-info-col1">
-
-                            <!-- Image upload field -->
-
-                            <div class="item-info-blocks">
-                                <div id="modal-image-heading">
-                                    <label class="general-info-label">Upload images</label>
-                                    <p class="option-description">Add min 3 to max 9 images</p>
-                                </div>
-                                <div id="image-preview-container"></div>
-                                <div id="image-icons-container">
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                    <div class="image-icon"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="item-info-col2">
-
-                            <!-- color & active status th:field="*{categoryId}" -->
-
-                            <div class="item-info-blocks">
-
-                                <!-- Color options -->
-
-                                <div id="color-options-container">
-                                <label class="general-info-label">Color</label>
-                                <p class="option-description">Pick Available Colors</p>
-                                <div class="custom-select-wrapper">
-                                    <select th:field="*{colorId}" id="color-select" class="custom-select"
-                                            name="colorId" required></select>
-                                </div>
-                            </div>
-
-                                <!-- Product active status -->
-                                <div id="pod-options-container">
-                                    <label class="general-info-label">Active Status</label>
-                                    <p class="option-description">Pick an option</p>
-                                    <label class="status-option">
-                                        <input type="radio" name="status" value="active" checked>
-                                        <span>Active</span>
-                                    </label>
-                                    <label class="status-option">
-                                        <input type="radio" name="status" value="inactive">
-                                        <span>Inactive</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Size options -->
-                            <div class="item-info-blocks" id="sizes">
-                                <label class="general-info-label">Size Details</label>
-                                <p class="option-description">Pick Available Sizes</p>
-
-                                <div id="size-options-container">
-                                    <div id="size-wrapper-col-1">
-                                        <div class="size-column-heading">
-                                            <label class="general-info-label">Size</label>
-                                        </div>
-
-                                        <div id="size-container" class="size-column-body-1"></div>
-                                    </div>
-
-                                    <div id="size-wrapper-col-2">
-                                        <div id="size-stock-column">
-                                            <div class="size-column-heading">
-                                                <label class="general-info-label">Stock</label>
-                                            </div>
-
-                                            <div id="stock-container" class="size-column-body-2"></div>
-                                        </div>
-
-                                        <div id="size-price-column">
-                                            <div class="size-column-heading">
-                                                <label class="general-info-label">Price</label>
-                                            </div>
-                                            <div id="price-container" class="size-column-body-2"></div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- temporary image upload -->
-                    <div class="item-info-blocks">
-                        <input type="file" name="images" id="product-images" multiple />
-                        <div id="image-stats"></div>
-                    </div>
-                </div>
-
-                <div class="modal-button-container">
-                    <button class="modal-button-1" id="save-btn" type="submit">Save</button>
-                    <button class="modal-button-1" type="button">Draft</button>
-                    <button class="modal-button-1" id="modal-form-close" type="button">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!-- Footer menu -->
-
-<div class="footer-menu-container">
-    <div class="footer-options-container">
-        <div class="footer-options footer-contact-wrapper">
-            <img src="/media/MENZO_logo.jpg" alt="">
-        </div>
-    </div>
-
-    <div class="end-footer">
-        <div id="copy-right-container">
-            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
-        </div>
-    </div>
-</div>
-
-<script>
-    // document.querySelectorAll('.item-option-button-container img').forEach(el => {
-    //     el.addEventListener('mouseup', () => {
-    //         el.classList.add('show-border');
-    //         //  remove after 300ms and remove focus so it doesn't stick
-    //         setTimeout(() => {
-    //             el.classList.remove('show-border');
-    //             // el.blur();
-    //         }, 300);
-    //     });
-    //     //  clean up if cursor leaves before mouseup
-    //     el.addEventListener('mouseleave', () => el.classList.remove('show-border'));
-    // });
-</script>
-<script src="/js/nav-bar-script.js"></script>
-<!--<script src="/js/product-details-script-v2.js"></script>-->
-<script src="/js/product-details.js"></script>
-<script src="/js/product-details-add-item.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-
-<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
-<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
-<script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
-<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
-</body>
-
-</html>

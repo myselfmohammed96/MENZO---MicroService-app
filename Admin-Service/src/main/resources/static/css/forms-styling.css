@@ -32,7 +32,7 @@ fieldset {
   margin-bottom: 20px;
 }
 
-legend {
+/* legend {
   font-size: 1.45rem;
   font-weight: bold;
   padding: 0 10px;
@@ -54,7 +54,7 @@ legend {
   font-size: 0.75rem;
   color: #666666;
   margin-bottom: 5px;
-}
+} */
 
 #price-stock-fieldset,
 #additional-info-fieldset {
@@ -141,7 +141,7 @@ legend {
 #required-field-instruction span {
   color: red;
 }
-
+/*
 .red-star {
   color: rgba(255, 0, 0, 0.671);
   margin-left: 5px;
@@ -163,6 +163,7 @@ legend {
   padding: 1px;
   opacity: 0.65;
 }
+*/
 
 /* /////////////////////////////////// */
 
@@ -174,7 +175,7 @@ legend {
 
 
 /* ******* Input fields ******* */
-
+/*
 .text-input-1,
 textarea,
 select {
@@ -199,22 +200,22 @@ select {
   background-color: transparent;
   cursor: no-drop;
 }
-
-.text-input-1,
-.text-input-2,
+*/
+/*.text-input-1,
+.text-input-2,*/
 /* input[type="text"], */
-input[type="number"],
+/*input[type="number"],
 input[type="file"],
 select,
-textarea {
+textarea {*/
   /* width: 100%; */
-  padding: 10px 12px;
+  /*padding: 10px 12px;
   margin-top: 6px;
   margin-bottom: 10px;
   border: none;
   border-bottom: 1.5px solid #8F8F8F;
   font-size: 0.95rem;
-}
+} */
 
 /* ------------------------
 input[type="number"]:disabled {
@@ -240,13 +241,13 @@ input[type="number"]:disabled::placeholder {
 } */
 
 /* Textarea height */
-textarea {
+/*textarea {
   min-height: 80px;
   resize: vertical;
-}
+}*/
 
 /* Custom check button */
-.size-option {
+/*.size-option {
   font-family: sans-serif;
   display: inline-block;
   font-weight: 600;
@@ -276,11 +277,11 @@ textarea {
   color: #474747;
   border-radius: 4px;
   border: 1.5px solid #ccc;
-}
+} */
 
 /* custom radio buttons */
 
-.status-option {
+/* .status-option {
   display: inline-block;
   margin-top: 10px;
   margin-right: 10px;
@@ -309,14 +310,14 @@ textarea {
 .status-option input[value="inactive"]:checked + span {
   background-color: #ac1524;
   border-color: transparent;
-}
+}*/
 
 /* ------------------- */
-.size-option-text-input {
+/*.size-option-text-input {
   margin-right: 10px;
   max-width: 150px;
   margin: 3px 0px !important;
-}
+}*/
 /* ------------------- */
 
 /* /////////////////////////////////// */
@@ -352,7 +353,7 @@ textarea {
   margin: 50px 0 20px 0;
 }
 
-button[type="submit"] {
+/*button[type="submit"] {
   display: block;
   align-items: center;
   width: 20%;
@@ -376,7 +377,7 @@ button[type="submit"]:hover {
 
 button[type="submit"]:active {
   transform: scale(0.95);
-}
+}*/
 
 /* /////////////////////////////////// */
 
@@ -492,10 +493,10 @@ button[type="submit"]:active {
 
 /* Choice select - overriding */
 
-div.choices {
-  /* width: 95%;
-  width: 100%; */
-}
+/* div.choices {
+  width: 95%;
+  width: 100%;
+}*/
 
 .choices__inner {
   border: none !important;
@@ -550,24 +551,22 @@ div.choices__list--dropdown {
   display: flex;
 }
 
-#sizes,
-#color-options-container {
-  flex: 1;
-  padding: 10px;
-}
-
+/* #sizes,*/
+#color-options-container,
+.variation-options-container,
 #pod-options-container,
-#active-options-container {
+#active-options-container,
+#free-del-options-container {
   flex: 1;
   padding: 10px;
   /* margin: 10px 0; */
 }
 
-#size-options-container {
-  display: flex;
+/*#size-options-container {
+  display: flex;*/
   /* flex-direction: column; */
-  margin-top: 15px;
-}
+  /*margin-top: 15px;
+}*/
 
 /* .size-wrapper {
   display: flex;
@@ -576,7 +575,7 @@ div.choices__list--dropdown {
   align-items: center;
 } */
 
-#size-wrapper-col-1 {
+/*#size-wrapper-col-1 {
   border: 1px solid #d9d9d9;
   flex: 1;
   border-radius: 5px;
@@ -626,11 +625,88 @@ div.choices__list--dropdown {
 
 .size-price-element {
   margin-bottom: 4px;
+} */
+
+
+
+
+
+
+
+/* ******* Size & details fields styling ******* */
+
+#sizes
+/* #color-options-container  */
+{
+  flex: 1;
+  padding: 10px;
+}
+
+#sizes-error-message-container {
+    text-align: center;
+}
+
+#size-options-container {
+  display: flex;
+  gap: 5%;
+  margin-top: 15px;
+}
+
+#size-wrapper-col-1 {
+  border: 1px solid #d9d9d9;
+  flex: 1;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 
 
+.size-column-heading {
+  text-align: center;
+  padding-top: 7px;
+  padding-bottom: 10px;
+  background-color: #f3f3f36d;
+  border-bottom: 1px solid #eaeaea;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.size-column-body-1 {
+  padding: 5px 3px 10px 3px;
+}
+
+.size-element {
+  display: flex;
+  justify-content: center;
+}
 
 
+/* Mrp, Selling price, Stock */
 
+#size-wrapper-col-2 {
+  flex: 8;
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+  padding-left: 40px;
+}
 
+#size-stock-column,
+#size-mrp-column,
+#size-selling-price-column {
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  width: 100%;
+}
 
+.size-column-body-2 {
+  padding: 5px 7px 10px 7px;
+}
+
+.size-stock-element {
+  width: fit-content;
+  padding: 0 5px 2.2px;
+}
+
+.size-price-element {
+  padding: 0 5px 2.2px ;
+}

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -19,7 +20,11 @@ public class UserItemListingDto {
 
     private String iconImage;
 
-    private Float price;
+//    private Float price;
+
+    private BigDecimal mrp;
+
+    private BigDecimal sellingPrice;
 
     private List<String> sizes;
 

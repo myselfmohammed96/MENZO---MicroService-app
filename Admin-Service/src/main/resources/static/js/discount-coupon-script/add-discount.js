@@ -297,7 +297,7 @@ window.submitForm = async function () {
         const data = await response.json().catch(() => ({}));
 
         if (response.ok) {
-            window.location.replace(`${discountSummaryRedirect}?id=${data.discountId}&success=true`)
+            window.location.replace(`${discountSummaryRedirect}?id=${data.discountId}&success=true`);
 //            window.location.replace(`/discount/summary?id=${data.discountId}&success=true`);
         } else if (response.status >= 500) {
             console.error("Server error: ", data.message);

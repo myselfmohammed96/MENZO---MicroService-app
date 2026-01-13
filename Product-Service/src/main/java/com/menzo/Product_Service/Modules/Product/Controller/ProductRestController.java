@@ -32,7 +32,15 @@ public class ProductRestController {
     private ProductsQueryService productsRetrievalService;
 
 
-    //  ********* ADMIN side APIs *********
+    /*
+     *  ----------------------------------------
+     *  ********* Admin side endpoints *********
+     *  ----------------------------------------
+     */
+
+    /// /   ********* GET APIs *********
+
+    //  Get - product listing with filters, sort
     @PostMapping("all-products")
     public ResponseEntity<?> getAdminProductListing(@RequestParam(defaultValue = "0") Integer page,
                                                     @RequestParam(defaultValue = "10") Integer size,
@@ -49,6 +57,7 @@ public class ProductRestController {
     }
 
 
+    //  Get - all product items with product ID
     @GetMapping("/items")
     public ResponseEntity<?> getAllItems(@RequestParam("id") Long productId) {
         AdminProductDetailsDto productDetails = productsRetrievalService.getProductDetailsWithAllItems(productId);
@@ -56,6 +65,7 @@ public class ProductRestController {
     }
 
 
+    //  Get - product item details with super SKU
     @GetMapping("/item")
     public ResponseEntity<?> getItem(@RequestParam("ssku") String superSku) {
         ItemDetailsDto itemDetails = productsRetrievalService.getItemDetails(superSku);
@@ -63,32 +73,56 @@ public class ProductRestController {
     }
 
 
-    //  ********* 'POST' APIs *********
+    /// /  ********* POST, PUT, PATCH, DELETE APIs *********
 
-    //  Add PRODUCT
+    //  add new product
     @PostMapping(
             value = "/add-product",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<?> addProduct(@RequestPart("productDetails") NewProductDto productDetails,
+    public ResponseEntity<?> addNewProduct(@RequestPart("productDetails") NewProductDto productDetails,
                                         @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
                                         @RequestPart("variationDetails") Map<String, String> variationDetailsMap,
                                         @RequestPart("images") List<MultipartFile> images) throws IOException {
+        //  product details validation
+        if (productDetails == null) {
+            throw new IllegalArgumentException("Product details not found.");
+        }
+
+        //  size details validation
+        if (sizeDetails == null || sizeDetails.isEmpty()) {
+            throw new IllegalArgumentException("Size details required.");
+        }
+
+        //  variation details map validation
+        if (variationDetailsMap == null || variationDetailsMap.isEmpty()) {
+            throw new IllegalArgumentException("Variation details required.");
+        }
+        if (variationDetailsMap.values().stream().anyMatch(v -> v == null || v.trim().isEmpty())) {
+            throw new IllegalArgumentException("Invalid variation value");
+        }
+
+        //  images validation
+        if (images.size() < 3) {
+            throw new IllegalArgumentException("Minimum 3 images required.");
+        }
         if (images.size() > 9) {
             throw new IllegalArgumentException("You can upload a maximum of 9 images.");
         }
+
         System.out.println(productDetails);
         System.out.println(sizeDetails);
         System.out.println(variationDetailsMap);
-
         images.stream().forEach(image -> System.out.println(image.getOriginalFilename()));
 
-        Long savedProductId = productsService.addNewProduct(
-                productDetails,
-                sizeDetails,
-                variationDetailsMap,
-                images
-        );
+//        Long savedProductId = productsService.addNewProduct(
+//                productDetails,
+//                sizeDetails,
+//                variationDetailsMap,
+//                images
+//        );
+        Long savedProductId = 82L;
+
         System.out.println("saved Product ID: " + savedProductId);
 
         //  building response
@@ -97,14 +131,12 @@ public class ProductRestController {
             logger.info("Product saved successfully with ID: {}", savedProductId);
             responseBody.put("message", "Product saved successfully");
             responseBody.put("productId", savedProductId);
-            System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(responseBody);
         } else {
             logger.warn("Product saving failed");
             responseBody.put("message", "Product saving failed");
-            System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(responseBody);
@@ -157,8 +189,13 @@ public class ProductRestController {
     }
 
 
-    //  ********* CLIENT side APIs *********
+    /*
+     *  -----------------------------------------
+     *  ********* CLIENT side endpoints *********
+     *  -----------------------------------------
+     */
 
+    //  product listing with filter, sort
     @PostMapping("/user-listing")
     public ResponseEntity<?> getClientProductListing(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                                      @RequestParam(name = "size", defaultValue = "10") Integer size,
@@ -178,12 +215,12 @@ public class ProductRestController {
     }
 
 
+    //  get product details
     @GetMapping("/get-user-product-details")
     public ResponseEntity<?> getProductDetails(@RequestParam("ssku") String superSku) {
         UserProductDetailsDto productDetails = productsRetrievalService.getUserProductDetails(superSku);
         return ResponseEntity.ok(productDetails);
     }
-
 
 
     /// /   ********* IMAGES *********
@@ -195,19 +232,6 @@ public class ProductRestController {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /// / ******* /upload & partial search APIs *******

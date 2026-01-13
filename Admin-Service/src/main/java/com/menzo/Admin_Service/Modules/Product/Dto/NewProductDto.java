@@ -19,6 +19,7 @@ public class NewProductDto {
     private Long color;
     private String status;
     private String pod;
+    private String freeDel;
 
     private Float price;
     //    discount

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -16,7 +17,9 @@ import java.util.List;
 public class ItemDetailsDto {
 
 
-    private Float startingPrice;
+    private BigDecimal baseMrp;
+
+    private BigDecimal baseSellingPrice;
 
     private List<String> imageUrls;
 

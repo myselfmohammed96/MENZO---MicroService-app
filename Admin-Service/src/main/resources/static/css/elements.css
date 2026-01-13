@@ -363,7 +363,8 @@
     box-sizing: border-box;
     margin-bottom: 5px;
     /**/
-    padding: 10px 25px 5px 15px;
+    /* padding: 10px 25px 5px 15px; */
+    padding: 9px 12px;
     outline: none;
     border: none;
     border-bottom: 2px solid #cacaca;
@@ -386,8 +387,18 @@ textarea {
 }
 
 .product-form-input {
+    margin: 3px 0px;
+}
+
+/* -----------------*** SIZE ***-------------------- */
+.size-details-input {
     margin-top: 6px;
     margin-bottom: 10px;
+}
+.size-option-text-input {
+  margin-right: 10px;
+  max-width: 150px;
+  margin: 3px 0px !important;
 }
 
 /* Local search bar */

@@ -104,6 +104,17 @@ function populateCategories(categories = []) {
             throw new Error("Invalid data: categories should not be empty");
         }
         const categorySelect = document.getElementById('category-select');
+        categorySelect.innerHTML = '';
+
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = '';
+        placeholderOption.text = '';
+        placeholderOption.selected = true;
+        placeholderOption.disabled = true;
+        placeholderOption.hidden = true;
+
+        categorySelect.appendChild(placeholderOption);
+
         categories.forEach(cat => {
             if (cat && cat.id !== undefined && cat.categoryName) {
                 const categoryOption = document.createElement('option');
@@ -138,11 +149,21 @@ function populateSubCategories(subCategories = []) {
 //        }
         const subCategorySelect = document.getElementById('sub-category-select');
         subCategorySelect.innerHTML = '';
+
         if(subCategoryChoices) {
             subCategoryChoices.removeActiveItems();
             subCategoryChoices.clearChoices();
             subCategoryChoices.disable();
         }
+
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = '';
+        placeholderOption.text = '';
+        placeholderOption.selected = true;
+        placeholderOption.disabled = true;
+        placeholderOption.hidden = true;
+
+        subCategorySelect.appendChild(placeholderOption);
 
         subCategories.forEach(sub => {
             if (sub && sub.id !== undefined && sub.categoryName) {
@@ -155,10 +176,18 @@ function populateSubCategories(subCategories = []) {
                 console.warn("Skipping invalid sub-categories: ", sub);
             }
         });
+
+        const choicesData = [...subCategorySelect.options].map(opt => ({
+            value: opt.value,
+            label: opt.text,
+            disabled: opt.disabled,
+            hidden: opt.hidden
+        }));
+
         subCategoryChoices.setChoices(
-            [...subCategorySelect.options],
+            choicesData,
             'value',
-            'text',
+            'label',
             true
         );
         subCategoryChoices.enable();
@@ -194,15 +223,27 @@ function populateVariations(variations = []) {
 
         variations.forEach(variation => {
             if (variation && variation.variationName && Array.isArray(variation.options)) {
+                const variationOptionsContainer = document.createElement('div');
+                variationOptionsContainer.classList.add('variation-options-container');
+
                 const label = document.createElement('label');
                 label.classList.add("general-info-label");
                 label.textContent = variation.variationName + ':';
 
                 //  create select for variation
                 const select = document.createElement('select');
-                select.classList.add('custom-select', 'variation-select');
+//                select.classList.add('custom-select', 'variation-select');
+                select.classList.add('input', 'input-100', 'product-form-input');
                 select.name = `variation.${variation.variationName}`
-                select.required = true;
+//                select.required = true;
+
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = '';
+                placeholderOption.selected = true;
+                placeholderOption.disabled = true;
+
+                select.appendChild(placeholderOption);
 
                 //  populating options
                 variation.options.forEach(option => {
@@ -211,8 +252,17 @@ function populateVariations(variations = []) {
                     optionElement.textContent = option.optionValue;
                     select.appendChild(optionElement);
                 });
-                label.appendChild(select);
-                variationsFieldSet.appendChild(label);
+
+                //  error message
+                const errorMessage = document.createElement('p');
+                errorMessage.classList.add('error-message');
+
+                label.append(
+                    select,
+                    errorMessage
+                );
+                variationOptionsContainer.appendChild(label);
+                variationsFieldSet.appendChild(variationOptionsContainer);
 
                 //  initialize Choices.js for variation select
                 new Choices(select, {
@@ -239,6 +289,18 @@ function populateColors(colorOptions) {
 
     if(!colorOptions || !Array.isArray(colorOptions)) return;
 
+    const placeholderOption = document.createElement('option');
+    placeholderOption.value = '';
+    placeholderOption.text = '';
+    placeholderOption.setAttribute(
+        "data-custom-properties",
+        JSON.stringify({ hex: '' })
+    );
+    placeholderOption.selected = true;
+    placeholderOption.disabled = true;
+
+    colorSelect.appendChild(placeholderOption);
+
     colorOptions.forEach(opt => {
         const option = document.createElement('option');
         option.value = opt.optionId;
@@ -255,70 +317,95 @@ function populateColors(colorOptions) {
 
 //  POPULATE - sizes
 function populateSizes(sizeOptions) {
-    const sizeContainer = document.getElementById('size-container');
-    const stockContainer = document.getElementById('stock-container');
-    const priceContainer = document.getElementById('price-container');
+    try {
+        const sizeContainer = document.getElementById('size-container');
+        const stockContainer = document.getElementById('stock-container');
+        const mrpContainer = document.getElementById('mrp-container');
+        const sellingPriceContainer = document.getElementById('selling-price-container');
 
-    sizeContainer.innerHTML = '';
-    stockContainer.innerHTML = '';
-    priceContainer.innerHTML = '';
+        sizeContainer.innerHTML = '';
+        stockContainer.innerHTML = '';
+        mrpContainer.innerHTML = '';
+        sellingPriceContainer.innerHTML = '';
 
-    sizeOptions.forEach(size => {
+        sizeOptions.forEach(size => {
 
-        //  ------- SIZE CHECKBOX -------
-        const sizeElement = document.createElement('div');
-        sizeElement.classList.add('size-element');
+            //  ------- SIZE CHECKBOX -------
+            const sizeElement = document.createElement('div');
+            sizeElement.classList.add('size-element');
 
-        const sizeOption = document.createElement('label');
-        sizeOption.classList.add('size-option');
+            const sizeOption = document.createElement('label');
+            sizeOption.classList.add('size-option');
 
-        const sizeInput = document.createElement('input');
-        sizeInput.type = 'checkbox';
-        sizeInput.name = 'sizes';
-        sizeInput.setAttribute("data-id", size.optionId);
+            const sizeInput = document.createElement('input');
+            sizeInput.type = 'checkbox';
+            sizeInput.name = 'sizes';
+            sizeInput.setAttribute("data-id", size.optionId);
 
-        const sizeSpan = document.createElement('span');
-        sizeSpan.textContent = size.optionValue;
+            const sizeSpan = document.createElement('span');
+            sizeSpan.textContent = size.optionValue;
 
-        sizeOption.append(sizeInput, sizeSpan);
-        sizeElement.appendChild(sizeOption);
-        sizeContainer.appendChild(sizeElement);
+            sizeOption.append(sizeInput, sizeSpan);
+            sizeElement.appendChild(sizeOption);
+            sizeContainer.appendChild(sizeElement);
 
-        //  ------- STOCK INPUT -------
-        const stockElement = document.createElement('div');
-        stockElement.classList.add('size-stock-element');
+            //  ------- STOCK INPUT -------
+            const stockElement = document.createElement('div');
+            stockElement.classList.add('size-stock-element');
 
-        const stockInput = document.createElement('input');
-        stockInput.classList.add('text-input-3', 'size-option-text-input');
-        stockInput.type = 'text';
-        stockInput.placeholder = "Enter stock";
-        stockInput.setAttribute('data-id', size.optionId);
-        stockInput.disabled = true;
+            const stockInput = document.createElement('input');
+    //        stockInput.classList.add('text-input-3', 'size-option-text-input');
+            stockInput.classList.add('input', 'input-100', 'product-form-input');
+            stockInput.type = 'text';
+            stockInput.placeholder = "Enter stock";
+            stockInput.setAttribute('data-id', size.optionId);
+            stockInput.disabled = true;
 
-        stockElement.appendChild(stockInput);
-        stockContainer.appendChild(stockElement);
+            stockElement.appendChild(stockInput);
+            stockContainer.appendChild(stockElement);
 
-        //  ------- PRICE INPUT -------
-        const priceElement = document.createElement('div');
-        priceElement.classList.add('size-price-element');
+            //  ------- MRP INPUT -------
+            const mrpElement = document.createElement('div');
+            mrpElement.classList.add('size-price-element');
 
-        const priceInput = document.createElement('input');
-        priceInput.classList.add('text-input-3', 'size-option-text-input');
-        priceInput.type = 'text';
-        priceInput.placeholder = "Enter price";
-        priceInput.setAttribute('data-id', size.optionId);
-        priceInput.disabled = true;
+            const mrpInput = document.createElement('input');
+    //        mrpInput.classList.add('text-input-3', 'size-option-text-input');
+            mrpInput.classList.add('input', 'input-100', 'product-form-input');
+            mrpInput.type = 'text';
+            mrpInput.placeholder = "Enter MRP";
+            mrpInput.setAttribute('data-id', size.optionId);
+            mrpInput.disabled = true;
 
-        priceElement.appendChild(priceInput);
-        priceContainer.appendChild(priceElement);
+            mrpElement.appendChild(mrpInput);
+            mrpContainer.appendChild(mrpElement);
 
-        //  ------- ENABLE / DISABLE ON CHECK -------
-        sizeInput.addEventListener('change', () => {
-            const isChecked = sizeInput.checked;
-            stockInput.disabled = !isChecked;
-            priceInput.disabled = !isChecked;
+            //  ------- SELLING PRICE INPUT -------
+            const sellingPriceElement = document.createElement('div');
+            sellingPriceElement.classList.add('size-price-element');
+
+            const sellingPriceInput = document.createElement('input');
+    //        sellingPriceInput.classList.add('text-input-3', 'size-option-text-input');
+            sellingPriceInput.classList.add('input', 'input-100', 'product-form-input');
+            sellingPriceInput.type = 'text';
+            sellingPriceInput.placeholder = "Enter price";
+            sellingPriceInput.setAttribute('data-id', size.optionId);
+            sellingPriceInput.disabled = true;
+
+            sellingPriceElement.appendChild(sellingPriceInput);
+            sellingPriceContainer.appendChild(sellingPriceElement);
+
+            //  ------- ENABLE / DISABLE ON CHECK -------
+            sizeInput.addEventListener('change', () => {
+                const isChecked = sizeInput.checked;
+                stockInput.disabled = !isChecked;
+                mrpInput.disabled = !isChecked;
+                sellingPriceInput.disabled = !isChecked;
+    //            priceInput.disabled = !isChecked;
+            });
         });
-    });
+    } catch (error) {
+        console.error("Error populating size detail fields: ", error);
+    }
 }
 
 
