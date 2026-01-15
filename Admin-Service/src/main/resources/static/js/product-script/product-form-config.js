@@ -1,12 +1,8 @@
 const getCategories = "http://localhost:8080/categories/get-all-parents";
 const getSubCategories = "http://localhost:8080/categories/get-all-sub";
 const getVariations = "http://localhost:8080/variations/get-variations";
-const getColors = "http://localhost:8080/variations/colors";
-const getSizes = "http://localhost:8080/variations/size";
 
 let subCategoryChoices;
-let colorChoices;
-
 let variationsSpace;
 
 
@@ -58,38 +54,6 @@ async function fetchVariations(subCategoryId) {
         return await response.json();
     } catch (error) {
         console.log("Fetching variations failed: ", error);
-    }
-}
-
-//  FETCH - colors
-async function fetchColors() {
-    try {
-        const response = await fetch(getColors, {
-            method: "GET",
-            credentials: "include"
-        });
-        if (!response.ok) {
-            throw new Error("Error fetching colors");
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Fetching colors failed: ", error);
-    }
-}
-
-//  FETCH - sizes
-async function fetchSizes() {
-    try {
-        const response = await fetch(getSizes, {
-            method: "GET",
-            credentials: "include"
-        });
-        if (!response.ok) {
-            throw new Error("Error fetching sizes");
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Fetching sizes failed: ", error);
     }
 }
 
@@ -232,10 +196,8 @@ function populateVariations(variations = []) {
 
                 //  create select for variation
                 const select = document.createElement('select');
-//                select.classList.add('custom-select', 'variation-select');
                 select.classList.add('input', 'input-100', 'product-form-input');
                 select.name = `variation.${variation.variationName}`
-//                select.required = true;
 
                 const placeholderOption = document.createElement('option');
                 placeholderOption.value = '';
@@ -282,132 +244,6 @@ function populateVariations(variations = []) {
     }
 }
 
-//  POPULATE - colors
-function populateColors(colorOptions) {
-    const colorSelect = document.getElementById('color-select');
-    colorSelect.innerHTML = '';
-
-    if(!colorOptions || !Array.isArray(colorOptions)) return;
-
-    const placeholderOption = document.createElement('option');
-    placeholderOption.value = '';
-    placeholderOption.text = '';
-    placeholderOption.setAttribute(
-        "data-custom-properties",
-        JSON.stringify({ hex: '' })
-    );
-    placeholderOption.selected = true;
-    placeholderOption.disabled = true;
-
-    colorSelect.appendChild(placeholderOption);
-
-    colorOptions.forEach(opt => {
-        const option = document.createElement('option');
-        option.value = opt.optionId;
-        option.textContent = opt.optionValue;
-        option.setAttribute(
-            "data-custom-properties",
-            JSON.stringify({ hex: opt.colorCode })
-        );
-        colorSelect.appendChild(option);
-    });
-
-    document.getElementById('color-select')._choicesInstance = initializeColorsChoices();
-}
-
-//  POPULATE - sizes
-function populateSizes(sizeOptions) {
-    try {
-        const sizeContainer = document.getElementById('size-container');
-        const stockContainer = document.getElementById('stock-container');
-        const mrpContainer = document.getElementById('mrp-container');
-        const sellingPriceContainer = document.getElementById('selling-price-container');
-
-        sizeContainer.innerHTML = '';
-        stockContainer.innerHTML = '';
-        mrpContainer.innerHTML = '';
-        sellingPriceContainer.innerHTML = '';
-
-        sizeOptions.forEach(size => {
-
-            //  ------- SIZE CHECKBOX -------
-            const sizeElement = document.createElement('div');
-            sizeElement.classList.add('size-element');
-
-            const sizeOption = document.createElement('label');
-            sizeOption.classList.add('size-option');
-
-            const sizeInput = document.createElement('input');
-            sizeInput.type = 'checkbox';
-            sizeInput.name = 'sizes';
-            sizeInput.setAttribute("data-id", size.optionId);
-
-            const sizeSpan = document.createElement('span');
-            sizeSpan.textContent = size.optionValue;
-
-            sizeOption.append(sizeInput, sizeSpan);
-            sizeElement.appendChild(sizeOption);
-            sizeContainer.appendChild(sizeElement);
-
-            //  ------- STOCK INPUT -------
-            const stockElement = document.createElement('div');
-            stockElement.classList.add('size-stock-element');
-
-            const stockInput = document.createElement('input');
-    //        stockInput.classList.add('text-input-3', 'size-option-text-input');
-            stockInput.classList.add('input', 'input-100', 'product-form-input');
-            stockInput.type = 'text';
-            stockInput.placeholder = "Enter stock";
-            stockInput.setAttribute('data-id', size.optionId);
-            stockInput.disabled = true;
-
-            stockElement.appendChild(stockInput);
-            stockContainer.appendChild(stockElement);
-
-            //  ------- MRP INPUT -------
-            const mrpElement = document.createElement('div');
-            mrpElement.classList.add('size-price-element');
-
-            const mrpInput = document.createElement('input');
-    //        mrpInput.classList.add('text-input-3', 'size-option-text-input');
-            mrpInput.classList.add('input', 'input-100', 'product-form-input');
-            mrpInput.type = 'text';
-            mrpInput.placeholder = "Enter MRP";
-            mrpInput.setAttribute('data-id', size.optionId);
-            mrpInput.disabled = true;
-
-            mrpElement.appendChild(mrpInput);
-            mrpContainer.appendChild(mrpElement);
-
-            //  ------- SELLING PRICE INPUT -------
-            const sellingPriceElement = document.createElement('div');
-            sellingPriceElement.classList.add('size-price-element');
-
-            const sellingPriceInput = document.createElement('input');
-    //        sellingPriceInput.classList.add('text-input-3', 'size-option-text-input');
-            sellingPriceInput.classList.add('input', 'input-100', 'product-form-input');
-            sellingPriceInput.type = 'text';
-            sellingPriceInput.placeholder = "Enter price";
-            sellingPriceInput.setAttribute('data-id', size.optionId);
-            sellingPriceInput.disabled = true;
-
-            sellingPriceElement.appendChild(sellingPriceInput);
-            sellingPriceContainer.appendChild(sellingPriceElement);
-
-            //  ------- ENABLE / DISABLE ON CHECK -------
-            sizeInput.addEventListener('change', () => {
-                const isChecked = sizeInput.checked;
-                stockInput.disabled = !isChecked;
-                mrpInput.disabled = !isChecked;
-                sellingPriceInput.disabled = !isChecked;
-    //            priceInput.disabled = !isChecked;
-            });
-        });
-    } catch (error) {
-        console.error("Error populating size detail fields: ", error);
-    }
-}
-
 
 
 //  ********* CHOICES.JS INITIALIZATION *********
@@ -445,52 +281,6 @@ function initializeSubCategoriesChoices() {
     } catch (error) {
         console.error("Sub-Category Choices Initialization Error: ", error);
         return;
-    }
-}
-
-//  INITIALIZE - 'color' variation select
-function initializeColorsChoices() {
-    if (!colorChoices) {
-        const choices = new Choices('#color-select', {
-            callbackOnCreateTemplates: function(template) {
-                return {
-//                    item: (classNames, data) => {
-//                        return template(`
-//                            <div class="${classNames.item}">
-//                                <span style="display:inline-block;width:12px;height:12px;background:${data.customProperties.hex};border-radius:3px;margin-right:6px;"></span>
-//                                ${data.label}
-//                            </div>
-//                        `);
-//                    },
-                    choice: (classNames, data) => {
-                        const hex = (data.customProperties && data.customProperties.hex) || 'transparent';
-                        const trimmedLabel = data.label.length > 15 ? data.label.slice(0, 15) + "..." : data.label;
-                        return template(`
-                            <div
-                                class="${classNames.item} ${classNames.choice} color-option"
-                                data-select-text="${this.config.itemSelectText || ''}"
-                                data-choice
-                                data-id="${data.id}"
-                                data-value="${data.value}"
-                                title="${data.label}"
-                            >
-                                <span class="color-icon" style="background:${hex};"></span>
-                                ${trimmedLabel}
-                            </div>
-                        `);
-                    }
-                };
-            },
-            removeItemButton: false,
-            placeholder: true,
-            placeholderValue: 'Color',
-            searchEnabled: true,
-            searchPlaceholderValue: 'Search color...',
-            shouldSort: true,
-            renderSelectedChoices: 'always'
-        });
-        colorChoices = choices;
-        return choices;
     }
 }
 
@@ -549,62 +339,24 @@ async function loadVariations(subCategoryId) {
     }
 }
 
-//  LOADER - colors & sizes
-async function loadColorAndSize() {
-
-    //  load colors
-    try {
-        const colors = await fetchColors();
-        if(!colors) {
-            console.error("Colors not found");
-            return;
-        }
-        if(!Array.isArray(colors.options)) {
-            throw new Error("Invalid data format: color options should be array");
-        }
-        populateColors(colors.options);
-    } catch (error) {
-        console.error("Error loading colors.", error);
-    }
-
-    //  load sizes
-    try {
-        const sizes = await fetchSizes();
-        if(!sizes) {
-            console.error("Sizes not found");
-            return;
-        }
-        if(!Array.isArray(sizes.options)) {
-            throw new Error("Invalid data format: size options should be array");
-        }
-        populateSizes(sizes.options);
-    } catch (error) {
-        console.error("Error loading sizes.", error);
-    }
-}
 
 
 //  DOM Loading event
 document.addEventListener('DOMContentLoaded', async () => {
 
     //  ------- Load - initial data -------
-
     await loadCategories();
-    await loadColorAndSize();
+    window.loadColorAndSize();
 
     variationsSpace = document.getElementById('variations-space');
 
 
     //  ------- Initialize - choices.js -------
-
     subCategoryChoices = initializeSubCategoriesChoices();
     subCategoryChoices.disable();
 
-//    initializeColorsChoices();
-
 
     //  ------- Image adding - FilePond -------
-
     FilePond.registerPlugin(
         FilePondPluginImagePreview,
         FilePondPluginImageValidateSize,
@@ -656,7 +408,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-//const getAllVariations = "http://localhost:8080/variations/get-variations";
 //const productPartialSearch = "http://localhost:8080/products/partial-search";
 //const getProductById = "http://localhost:8080/products/get-by-id";
 
@@ -731,14 +482,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 //    }
 
 //-------------
-
-
-//    subCategorySelect.addEventListener('change', async () => {
-//        const subCategoryId = subCategorySelect.value;
-//        variationsFieldSet.innerHTML = '';
-//        if (!subCategoryId) return;
-//        await loadVariations(subCategoryId);
-//    });
 
 
 

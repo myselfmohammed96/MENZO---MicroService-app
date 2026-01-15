@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+
     <link rel="stylesheet" href="https://unpkg.com/filepond@^4/dist/filepond.css"/>
-    <link rel="stylesheet"
-          href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"/>
 
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css"/>
     <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css"/>
@@ -19,14 +19,12 @@
     <link rel="stylesheet" href="/css/forms-styling.css">
     <link rel="stylesheet" href="/css/forms-theme-font-effects.css">
 
-    <link rel="stylesheet" href="/css/elements.css"/>
-    <link rel="stylesheet" href="/css/text-content.css"/>
-
     <link rel="stylesheet" href="/css/components.css">
     <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
+    <link rel="stylesheet" href="/css/elements.css"/>
+    <link rel="stylesheet" href="/css/text-content.css"/>
     <link rel="stylesheet" href="/css/admin-side-menu.css"/>
-
     <link rel="stylesheet" href="/css/admin-style.css"/>
 
     <title>MENZO | Admin-Add product</title>
@@ -35,17 +33,18 @@
 <body>
 
 <!-- Nav bar -->
-
 <nav id="nav-bar-container">
     <div id="top-nav-bar">
         <div class="top-nav-bar-elements" id="nav-bar-logo">
             <a href=""><img src="/media/MENZO_logo.jpg" alt=""></a>
         </div>
+
         <div class="top-nav-bar-elements" id="nav-bar-search-bar">
             <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
             <span id="clear-search">&#10005;</span>
             <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
         </div>
+
         <div class="top-nav-bar-elements" id="nav-bar-icons">
             <div id="nav-icon-profile">
                 <a href="">
@@ -72,11 +71,11 @@
     </div>
 </nav>
 
-<!-- All categories page content -->
-
+<!-- page content -->
 <div class="page-container">
     <div class="side-menu-bar-container">
         <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+
         <h2>Inventory</h2>
         <ul class="category-menu">
             <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
@@ -89,6 +88,7 @@
             <li class="menu-item"><a href="">Return & cancellation</a></li>
             <li class="menu-item"><a href="">Sales & revenue</a></li>
         </ul>
+
         <h2>Users</h2>
         <ul class="category-menu">
             <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
@@ -98,6 +98,7 @@
             <li class="menu-item"><a href="">Contact requests</a></li>
             <li class="menu-item"><a href="">Sent messages</a></li>
         </ul>
+
         <h2>Others</h2>
         <ul class="category-menu">
             <li class="menu-item"><a href="">Banners</a></li>
@@ -106,7 +107,6 @@
     </div>
 
     <!-- Main page content -->
-
     <div class="main-content-container">
 
         <div id="page-title-container">
@@ -115,6 +115,7 @@
                 <button id="draft-button" class="title-button draft-button" title="Draft">
                     <img src="/media/draft (1).png" alt="">
                 </button>
+
                 <button id="refresh-button" class="title-button refresh-button" title="Refresh">
                     <img src="/media/refresh.png" alt="">
                 </button>
@@ -128,20 +129,21 @@
             <div id="form-container">
                 <div id="product-info-col-1">
 
-                    <!-- Product General info fieldset -->
+                    <!-- Product General info -->
                     <fieldset>
                         <legend>General Information</legend>
 
+                        <!-- category input -->
                         <label class="general-info-label">Category:
                             <div class="custom-select-wrapper">
                                 <select id="category-select"
                                         class="input input-100 product-form-input"
                                         name="categoryId"></select>
                                 <p id="category-error-message" class="error-message"></p>
-                                <!--                                    <option value="">Category</option>-->
                             </div>
                         </label>
 
+                        <!-- sub-category input -->
                         <label class="general-info-label">Sub Category:
                             <div class="custom-select-wrapper">
                                 <select th:field="*{subCategoryId}"
@@ -149,11 +151,10 @@
                                         name="subCategoryId"
                                         class="input input-100 product-form-input"></select>
                                 <p id="sub-category-error-message" class="error-message"></p>
-                                <!--                                    <option value="">Sub-category</option>-->
-                                <!--                                </select>-->
                             </div>
                         </label>
 
+                        <!-- Product name input -->
                         <label class="general-info-label">Product Name:
                             <div style="position: relative;">
                                 <input type="text"
@@ -161,13 +162,13 @@
                                        th:field="*{productName}"
                                        name="productName"
                                        id="product-name"
-                                       placeholder="Product Name" />
+                                       placeholder="Product Name"/>
                                 <p id="product-name-error-message" class="error-message"></p>
                                 <ul class="suggestion-box" id="suggestions"></ul>
                             </div>
                         </label>
 
-                        <!-- Product description input -->
+                        <!-- description input -->
                         <label class="general-info-label">Description:
                             <textarea
                                     th:field="*{description}"
@@ -183,28 +184,20 @@
                     <fieldset>
                         <legend>Pricing and Stock</legend>
 
-                        <!-- Size options -->
                         <div id="sizes">
                             <label class="general-info-label">Size</label>
                             <p class="option-description">Pick Available Sizes</p>
-
                             <div id="size-options-container">
+
                                 <div id="size-wrapper-col-1">
+
+                                    <!-- Size options -->
                                     <div class="size-column-heading">
                                         <label class="general-info-label">Size</label>
                                     </div>
-                                    <div id="size-container" class="size-column-body-1">
+                                    <div id="size-container" class="size-column-body-1"></div>
 
-                                        <div class="size-element">
-                                            <label class="size-option">
-                                                <input type="checkbox" name="sizes">
-                                                <span>XS</span>
-                                            </label>
-                                        </div>
-
-                                    </div>
                                 </div>
-
                                 <div id="size-wrapper-col-2">
 
                                     <!-- Stock fields -->
@@ -212,14 +205,7 @@
                                         <div class="size-column-heading">
                                             <label class="general-info-label">Stock</label>
                                         </div>
-                                        <div id="stock-container" class="size-column-body-2">
-
-                                            <div class="size-stock-element">
-                                                <input class="input input-100 product-form-input"
-                                                       type="text" placeholder="Enter stock" required/>
-                                            </div>
-
-                                        </div>
+                                        <div id="stock-container" class="size-column-body-2"></div>
                                     </div>
 
                                     <!-- MRP fields -->
@@ -227,14 +213,7 @@
                                         <div class="size-column-heading">
                                             <label class="general-info-label">MRP</label>
                                         </div>
-                                        <div id="mrp-container" class="size-column-body-2">
-
-                                            <div class="size-price-element">
-                                                <input class="input input-100 product-form-input"
-                                                       type="text" placeholder="Enter price" required/>
-                                            </div>
-
-                                        </div>
+                                        <div id="mrp-container" class="size-column-body-2"></div>
                                     </div>
 
                                     <!-- Selling price fields -->
@@ -242,17 +221,11 @@
                                         <div class="size-column-heading">
                                             <label class="general-info-label">Selling price</label>
                                         </div>
-                                        <div id="selling-price-container" class="size-column-body-2">
-
-                                            <div class="size-price-element">
-                                                <input class="input input-100 product-form-input"
-                                                       type="text" placeholder="Enter selling price" required/>
-                                            </div>
-
-                                        </div>
+                                        <div id="selling-price-container" class="size-column-body-2"></div>
                                     </div>
 
                                 </div>
+
                             </div>
                         </div>
                         <div id="sizes-error-message-container">
@@ -332,6 +305,7 @@
                             <p id="packer-error-message" class="error-message"></p>
                         </label>
                     </fieldset>
+
                 </div>
 
                 <div id="product-info-col-2">
@@ -399,13 +373,13 @@
                                     <input type="radio"
                                            name="pod"
                                            value="available"
-                                           checked required />
+                                           checked required/>
                                     <span>Available</span>
                                 </label>
                                 <label class="form-radio-button">
                                     <input type="radio"
                                            name="pod"
-                                           value="unavailable" />
+                                           value="unavailable"/>
                                     <span>Unavailable</span>
                                 </label>
                             </div>
@@ -420,7 +394,7 @@
                                     <input type="radio"
                                            name="freeDel"
                                            value="available"
-                                           checked required />
+                                           checked required/>
                                     <span>Available</span>
                                 </label>
                                 <label class="form-radio-button">
@@ -460,7 +434,6 @@
 </div>
 
 <!-- Toast notification -->
-
 <div class="toast" id="toast">
     <div class="toast-icon toast-success-icon" id="toast-icon"></div>
     <div class="toast-message-container">
@@ -473,9 +446,7 @@
 </div>
 
 <!-- Footer menu -->
-
 <div class="footer-menu-container">
-
     <div class="footer-options-container">
         <div class="footer-options footer-contact-wrapper">
             <img src="/media/MENZO_logo.jpg" alt="">
@@ -490,9 +461,11 @@
 </div>
 
 <script src="/js/component-script/nav-bar-script.js"></script>
+<script src="/js/component-script/toaster-script.js"></script>
+
 <script src="/js/product-script/product-form-config.js"></script>
 <script src="/js/product-script/product-form-submit.js"></script>
-<script src="/js/component-script/toaster-script.js"></script>
+<script src="/js/product-script/color-size-config.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
@@ -501,33 +474,23 @@
 <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
 <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
+
 </body>
 
 
 </html>
 
 
-<!--        <label class="general-info-label">SKU:-->
-<!--          <input type="text" th:field="*{sku}" name="sku" placeholder="SKU" required />-->
-<!--        </label>-->
-<!--        <label class="general-info-label">Stock:-->
-<!--          <input type="number" th:field="*{stock}" name="stock" placeholder="Stock count" required />-->
-<!--        </label>-->
-<!--        <label class="general-info-label">Price:-->
-<!--          <input type="number" th:field="*{price}" name="price" placeholder="Price" required />-->
-<!--        </label>-->
 
 
-<!--        <label class="general-info-label">Status:-->
-<!--          <input type="radio" th:field="*{status}" name="status" value="active" checked /> Active-->
-<!--          <input type="radio" th:field="*{status}" name="status" value="inactive" /> Inactive-->
-<!--        </label>-->
 
 
-<!--      Product Variations-->
 
-<!--      <fieldSet id="variations-fieldset">-->
-<!--      </fieldSet>-->
+
+
+
+
+
 
 
 <!--          <label>Material Composition: <input type="text" name="materialComposition"></label>accept="image/*"-->
@@ -541,80 +504,8 @@
 <!--            <textarea name="aboutItem" placeholder="Use bullet points or separate lines"></textarea>-->
 <!--          </label>-->
 
-
-<!-- Additional Information -->
-<!--        <fieldset>-->
-<!--          <legend>Additional Information</legend>-->
-
-
 <!--          <label>Item Dimensions:-->
 <!--            <input type="number" name="length" placeholder="Length (cm)">-->
 <!--            <input type="number" name="width" placeholder="Width (cm)">-->
 <!--            <input type="number" name="height" placeholder="Height (cm)">-->
 <!--          </label>-->
-
-<!--        </fieldset>-->
-
-
-<!--                    <fieldset>-->
-<!--                        <legend>Category</legend>-->
-<!--                        <label class="general-info-label">Category:-->
-<!--                            <div class="custom-select-wrapper">-->
-<!--                                <select th:field="*{categoryId}"-->
-<!--                                        id="category-select"-->
-<!--                                        class="custom-select"-->
-<!--                                        name="categoryId"-->
-<!--                                        required></select>-->
-<!--                            </div>-->
-<!--                        </label>-->
-<!--                        <label class="general-info-label">Sub Category:-->
-<!--                            <div class="custom-select-wrapper">-->
-<!--                                <select th:field="*{subCategoryId}"-->
-<!--                                        id="sub-category-select"-->
-<!--                                        class="custom-select"-->
-<!--                                        name="subCategoryId"-->
-<!--                                        required>-->
-<!--                                    <option value="">Sub-category</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                        </label>-->
-<!--                    </fieldset>-->
-
-
-<!--                                                th:field="*{color}"-->
-<!--                                                required>-->
-<!--                                            <option value="" hidden disabled selected>Colors</option>-->
-<!--                                            <option th:each="color : ${colorsList}"-->
-<!--                                                    th:value="${color.optionId}"-->
-<!--                                                    th:text="${color.optionValue}"></option>-->
-
-
-<!--                <div id="info-opt-container-col2">-->
-
-<!-- Color options -->
-
-
-<!--                </div>-->
-<!--            </div>-->
-<!--            </fieldset>-->
-
-
-<!-- Price & Stock fieldset -->
-<!--                    <fieldset id="price-stock-fieldset">-->
-<!--                        <legend>Pricing and Stock</legend>-->
-<!--                        <label class="general-info-label">Base Price:-->
-<!--                            <input th:field="*{price}" type="number" name="price" class="text-input-1" id="price"-->
-<!--                                   placeholder="Base Price" required/>-->
-<!--                        </label>-->
-
-<!--                    </fieldset>-->
-
-
-<!--    </div>-->
-
-
-<!--</div>-->
-
-
-
-

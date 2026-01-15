@@ -534,9 +534,17 @@ public class ProductsService {
         logger.info("Saving images for super SKU: {}", superSku);
         for (MultipartFile image : images) {
             String contentType = image.getContentType();
+            String name = image.getOriginalFilename().toLowerCase();
+
+            boolean validType = "image/png".equals(contentType)
+                    || "image/jpeg".equals(contentType)
+                    || contentType == null;
+            boolean validExt = name.endsWith(".png")
+                    || name.endsWith(".jpg")
+                    || name.endsWith(".jpeg");
 
             //  image file - sanitizing with white listed formats
-            if (!List.of("image/png", "image/jpeg").contains(contentType)) {
+            if (!(validType && validExt)) {
                 throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
             }
             if (!image.isEmpty()) {

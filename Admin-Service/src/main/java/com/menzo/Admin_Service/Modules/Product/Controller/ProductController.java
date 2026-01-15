@@ -50,16 +50,12 @@ public class ProductController {
     //  Add product - form
     @GetMapping("/add-product")
     public String addProductFormV2(Model model) {
-//        VariationOptionsMinimalDto sizesDto = productRetrievalService.getSizes();
-//        VariationOptionsMinimalDto colorsDto = productRetrievalService.getColors();
 
         NewProductDto productDto = NewProductDto.builder()
                 .status("active")
                 .pod("available")
                 .freeDel("available")
                 .build();
-//        model.addAttribute("sizesList", sizesDto.getOptions());
-//        model.addAttribute("colorsList", colorsDto.getOptions());
         model.addAttribute("newProduct", productDto);
         return "Products/add-product-form";
     }

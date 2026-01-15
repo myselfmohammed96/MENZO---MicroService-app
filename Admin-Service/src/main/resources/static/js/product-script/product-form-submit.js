@@ -1,4 +1,4 @@
-const productSummaryRedirect = "";
+const productSummaryRedirect = "http://localhost:8080/admin/product";
 
 
 
@@ -19,9 +19,7 @@ let itemWeightValid = false;
 let countryOfOriginValid = false;
 let manufacturerValid = false;
 let packerValid = false;
-//let genericNameValid = false;
-//let discountValid = false;
-//let discountTypeValid = false;
+
 
 
 //  ------- General info validation -------
@@ -81,9 +79,9 @@ function validateCategoryId() {
 function validateSubCategoryId() {
     const input = document.getElementById('sub-category-select');
     const error = document.getElementById('sub-category-error-message');
-//console.log("Calling validate sub category Id");
+
     error.textContent = '';
-//console.log("cat value: " + input.value)
+
     if (!input.value) {
         error.textContent = '*Sub-category cannot be empty.';
         subCategoryIdValid = false;
@@ -181,14 +179,6 @@ function validatePacker() {
     packerValid = true;
 }
 
-////  generic name
-//function validateGenericName() {}
-//
-////  discount
-//function validateDiscount() {}
-//
-////  discount type
-//function validateDiscountType() {}
 
 
 /*
@@ -233,12 +223,6 @@ const getProductDetails = () => {
     };
 
     return productDetails;
-
-    //  ## country of origin - should be dynamic (admin should select from a list of countries.. if new country needed then he should be able to type and add new one)
-    //  ## also country of origin should have its own CRUD panel
-
-//    const discount = document.getElementById('discount').value.trim();
-//    const discountType = document.getElementById('discount-type').value.trim();
 };
 
 //  Get - size, stock & price details - returns array
@@ -319,7 +303,7 @@ const getSizeDetails = () => {
     } catch (error) {
         console.error("Error getting size details: ", error);
     }
-};
+}
 
 //  Get - variation details - returns map
 const getVariationDetails = () => {
@@ -355,17 +339,6 @@ const getVariationDetails = () => {
 
 
 /*
-*   ----------------------------------
-*   ********* SUBMIT methods *********
-*   ----------------------------------
-*/
-
-//  submit form to backend
-async function submitForm() {}
-
-
-
-/*
 *   --------------------------------
 *   ********* LOAD methods *********
 *   --------------------------------
@@ -375,14 +348,12 @@ async function submitForm() {}
 document.addEventListener("DOMContentLoaded", () => {
 
     //  ------- Form submit - event -------
-
     const form = document.querySelector('#add-product-form');
     form.addEventListener("submit", async(e) => {
         e.preventDefault();
 
         try {
             const formData = new FormData(form);
-//            console.log("product submit initiated");
 
             //  new product details
             const newProduct = getProductDetails();
@@ -398,7 +369,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 ),
                 "productDetails.json"
             );
-//            console.log("newProduct: " + newProduct);
 
             //  size details
             const selectedSizes = getSizeDetails();
@@ -419,7 +389,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     { type: "application/json" }
                 )
             );
-//            console.log("selectedSizes: " + selectedSizes);
 
             //  variation details
             const variationDetails = getVariationDetails();
@@ -433,10 +402,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     { type: "application/json" }
                 )
             );
-//            console.log("variationDetails: " + variationDetails);
 
             //  Form submit - POST
-            console.log("submitting");
             const response = await fetch(form.action, {
                 method: "POST",
                 credentials: "include",
@@ -446,8 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json().catch(() => ({}));
 
             if (response.ok) {
-//                window.location.replace(`${productSummaryRedirect}?id=${data.productId}&success=true`);
-window.location.replace("/index");
+                window.location.replace(`${productSummaryRedirect}?id=${data.productId}&success=true`);
             } else if (response.status >= 500) {
                 console.error("Server error: ", data.message);
                 window.showToast("Server error. Try again.", false);
@@ -455,17 +421,41 @@ window.location.replace("/index");
                 console.error("Client error: ", data.message);
                 window.showToast(data.message || "Invalid request.", false);
             }
-//            if (response.status !== 201) {
-//            if (!response.ok) {
-//                console.error("Error submitting form");
-//                alert("Error saving product");
-//                return;
-//            }
-//            const data = await response.json();
-//            window.location.href = "/admin/product?id=" + data.productId;
         } catch(error) {
             console.error("Failed to save product. ", error);
             window.showToast("Error saving product. Try again.", false);
         }
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//let genericNameValid = false;
+//let discountValid = false;
+//let discountTypeValid = false;
+
+////  generic name
+//function validateGenericName() {}
+//
+////  discount
+//function validateDiscount() {}
+//
+////  discount type
+//function validateDiscountType() {}
+
+//    const discount = document.getElementById('discount').value.trim();
+//    const discountType = document.getElementById('discount-type').value.trim();

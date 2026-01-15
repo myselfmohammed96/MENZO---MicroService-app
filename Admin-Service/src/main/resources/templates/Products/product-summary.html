@@ -363,22 +363,22 @@
     <div class="modal-container-1">
         <div class="modal-scroll">
             <h1 class="modal-title-1">Add new Item</h1>
+
+            <!-- Product item form -->
             <form id="add-item-form" enctype="multipart/form-data" th:action="@{/products/add-item}"
                   th:object="${newItem}" method="POST">
-
                 <div id="item-form-modal-body">
-
-                    <!-- Product item form -->
                     <div id="item-info">
+
                         <div id="item-info-col1">
 
                             <!-- Image upload field -->
-
                             <div class="item-info-blocks">
                                 <div id="modal-image-heading">
                                     <label class="general-info-label">Upload images</label>
                                     <p class="option-description">Add min 3 to max 9 images</p>
                                 </div>
+
                                 <div id="image-preview-container"></div>
                                 <div id="image-icons-container">
                                     <div class="image-icon"></div>
@@ -392,22 +392,20 @@
                                     <div class="image-icon"></div>
                                 </div>
                             </div>
+
                         </div>
-
                         <div id="item-info-col2">
-
-                            <!-- color & active status th:field="*{categoryId}" -->
-
                             <div class="item-info-blocks">
 
-                                <!-- Color options -->
-
+                                <!-- Color option -->
                                 <div id="color-options-container">
                                     <label class="general-info-label">Color</label>
                                     <p class="option-description">Pick Available Colors</p>
                                     <div class="custom-select-wrapper">
-                                        <select th:field="*{colorId}" id="color-select" class="custom-select"
-                                                name="colorId" required></select>
+                                        <select id="color-select"
+                                                class="input input-100 product-form-input"
+                                                name="colorId"></select>
+                                        <p id="color-error-message" class="error-message"></p>
                                     </div>
                                 </div>
 
@@ -415,52 +413,75 @@
                                 <div id="pod-options-container">
                                     <label class="general-info-label">Active Status</label>
                                     <p class="option-description">Pick an option</p>
-                                    <label class="status-option">
-                                        <input type="radio" name="status" value="active" checked>
-                                        <span>Active</span>
-                                    </label>
-                                    <label class="status-option">
-                                        <input type="radio" name="status" value="inactive">
-                                        <span>Inactive</span>
-                                    </label>
+                                    <div class="status-option-container">
+                                        <label class="form-radio-button">
+                                            <input type="radio"
+                                                   name="status"
+                                                   value="active"
+                                                   checked>
+                                            <span>Active</span>
+                                        </label>
+                                        <label class="form-radio-button">
+                                            <input type="radio"
+                                                   name="status"
+                                                   value="inactive">
+                                            <span>Inactive</span>
+                                        </label>
+                                    </div>
                                 </div>
+
                             </div>
 
                             <!-- Size options -->
                             <div class="item-info-blocks" id="sizes">
                                 <label class="general-info-label">Size Details</label>
                                 <p class="option-description">Pick Available Sizes</p>
-
                                 <div id="size-options-container">
+
                                     <div id="size-wrapper-col-1">
+
+                                        <!-- Size options -->
                                         <div class="size-column-heading">
                                             <label class="general-info-label">Size</label>
                                         </div>
-
                                         <div id="size-container" class="size-column-body-1"></div>
-                                    </div>
 
+                                    </div>
                                     <div id="size-wrapper-col-2">
+
+                                        <!-- Stock fields -->
                                         <div id="size-stock-column">
                                             <div class="size-column-heading">
                                                 <label class="general-info-label">Stock</label>
                                             </div>
-
                                             <div id="stock-container" class="size-column-body-2"></div>
                                         </div>
 
-                                        <div id="size-price-column">
+                                        <!-- MRP fields -->
+                                        <div id="size-mrp-column">
                                             <div class="size-column-heading">
-                                                <label class="general-info-label">Price</label>
+                                                <label class="general-info-label">MRP</label>
                                             </div>
-                                            <div id="price-container" class="size-column-body-2"></div>
-
+                                            <div id="mrp-container" class="size-column-body-2"></div>
                                         </div>
-                                    </div>
-                                </div>
 
+                                        <!-- Selling price fields -->
+                                        <div id="size-selling-price-column">
+                                            <div class="size-column-heading">
+                                                <label class="general-info-label">Selling price</label>
+                                            </div>
+                                            <div id="selling-price-container" class="size-column-body-2"></div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div id="sizes-error-message-container" style="padding-top: 10px;">
+                                    <p class="error-message" id="size-details-error-message"></p>
+                                </div>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- temporary image upload -->
@@ -481,6 +502,19 @@
 </div>
 
 
+<!-- Toast notification -->
+
+<div class="toast" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Password change failed abruptly.....</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
+    </div>
+</div>
+
 <!-- Footer menu -->
 
 <div class="footer-menu-container">
@@ -497,24 +531,12 @@
     </div>
 </div>
 
-<script>
-    // document.querySelectorAll('.item-option-button-container img').forEach(el => {
-    //     el.addEventListener('mouseup', () => {
-    //         el.classList.add('show-border');
-    //         //  remove after 300ms and remove focus so it doesn't stick
-    //         setTimeout(() => {
-    //             el.classList.remove('show-border');
-    //             // el.blur();
-    //         }, 300);
-    //     });
-    //     //  clean up if cursor leaves before mouseup
-    //     el.addEventListener('mouseleave', () => el.classList.remove('show-border'));
-    // });
-</script>
 <script src="/js/component-script/nav-bar-script.js"></script>
-<!--<script src="/js/product-details-script-v2.js"></script>-->
+<script src="/js/component-script/toaster-script.js"></script>
+
 <script src="/js/product-script/product-details.js"></script>
 <script src="/js/product-script/product-details-add-item.js"></script>
+<script src="/js/product-script/color-size-config.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
@@ -523,6 +545,7 @@
 <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
 <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
+
 </body>
 
 </html>
@@ -542,7 +565,20 @@
 
 
 
-
+<!--<script>-->
+<!--    // document.querySelectorAll('.item-option-button-container img').forEach(el => {-->
+<!--    //     el.addEventListener('mouseup', () => {-->
+<!--    //         el.classList.add('show-border');-->
+<!--    //         //  remove after 300ms and remove focus so it doesn't stick-->
+<!--    //         setTimeout(() => {-->
+<!--    //             el.classList.remove('show-border');-->
+<!--    //             // el.blur();-->
+<!--    //         }, 300);-->
+<!--    //     });-->
+<!--    //     //  clean up if cursor leaves before mouseup-->
+<!--    //     el.addEventListener('mouseleave', () => el.classList.remove('show-border'));-->
+<!--    // });-->
+<!--</script>-->
 
 
 

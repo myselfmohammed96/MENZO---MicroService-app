@@ -494,6 +494,10 @@
     max-height: 95vh;
 }
 
+.modal-container-1 {
+    max-width: 80%;
+}
+
 .modal-container-2 {
     /* .modal-container-3 { */
     width: 40%;

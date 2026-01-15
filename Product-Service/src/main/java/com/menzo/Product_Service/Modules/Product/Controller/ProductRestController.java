@@ -80,7 +80,7 @@ public class ProductRestController {
             value = "/add-product",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<?> addNewProduct(@RequestPart("productDetails") NewProductDto productDetails,
+    public ResponseEntity<Map<String, Object>> addNewProduct(@RequestPart("productDetails") NewProductDto productDetails,
                                         @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
                                         @RequestPart("variationDetails") Map<String, String> variationDetailsMap,
                                         @RequestPart("images") List<MultipartFile> images) throws IOException {
@@ -115,15 +115,15 @@ public class ProductRestController {
         System.out.println(variationDetailsMap);
         images.stream().forEach(image -> System.out.println(image.getOriginalFilename()));
 
-//        Long savedProductId = productsService.addNewProduct(
-//                productDetails,
-//                sizeDetails,
-//                variationDetailsMap,
-//                images
-//        );
-        Long savedProductId = 82L;
+        Long savedProductId = productsService.addNewProduct(
+                productDetails,
+                sizeDetails,
+                variationDetailsMap,
+                images
+        );
+//        Long savedProductId = 82L;
 
-        System.out.println("saved Product ID: " + savedProductId);
+//        System.out.println("saved Product ID: " + savedProductId);
 
         //  building response
         Map<String, Object> responseBody = new HashMap<>();
@@ -149,20 +149,35 @@ public class ProductRestController {
             value = "/add-item",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<Map<String, Object>> addProductItem(@RequestPart("newItem") NewProductItemDto newProductItem,
+    public ResponseEntity<Map<String, Object>> addProductItem(@RequestPart("newItem") NewProductItemDto itemDetails,
                                                               @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
                                                               @RequestPart("images") List<MultipartFile> images) throws IOException {
-        //  validations
+        //  product details validation
+        if (itemDetails == null) {
+            throw new IllegalArgumentException("Product item details not found.");
+        }
+
+        //  size details validation
+        if (sizeDetails == null || sizeDetails.isEmpty()) {
+            throw new IllegalArgumentException("Size details required.");
+        }
+
+        //  images validation
+        if (images.size() < 3) {
+            throw new IllegalArgumentException("Minimum 3 images required.");
+        }
         if (images.size() > 9) {
             throw new IllegalArgumentException("You can upload a maximum of 9 images.");
         }
-        System.out.println(newProductItem);
+
+        System.out.println(itemDetails);
         System.out.println(sizeDetails);
-        System.out.println(newProductItem.getColorId());
+        System.out.println("color id: " + itemDetails.getColorId());
+        images.stream().forEach(image -> System.out.println(image.getOriginalFilename()));
 
         //  forwarding to service layer
-        ItemDetailsDto itemDetails = productsService.addNewProductItem(
-                newProductItem,
+        ItemDetailsDto savedItemDetails = productsService.addNewProductItem(
+                itemDetails,
                 sizeDetails,
                 images
         );
@@ -171,9 +186,10 @@ public class ProductRestController {
         //  building response
         Map<String, Object> responseBody = new HashMap<>();
         if (itemDetails != null) {
-            logger.info("Product item saved successfully with super SKU: {}", itemDetails.getSuperSku());
+            logger.info("Product item saved successfully with super SKU: {}", savedItemDetails.getSuperSku());
+//            logger.info("Item adding successful.");
             responseBody.put("message", "Product item saved successfully");
-            responseBody.put("itemDetails", itemDetails);
+            responseBody.put("itemDetails", savedItemDetails);
             System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
