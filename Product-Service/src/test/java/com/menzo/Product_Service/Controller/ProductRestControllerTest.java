@@ -17,6 +17,7 @@ class ProductRestControllerTest {
         ResponseEntity<?> allProducts = productRestController.getAdminProductListing(
                 0,
                 15,
+                "",
                 null,
                 null
         );

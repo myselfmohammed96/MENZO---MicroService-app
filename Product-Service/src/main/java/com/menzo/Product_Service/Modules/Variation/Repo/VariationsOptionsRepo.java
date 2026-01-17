@@ -15,6 +15,7 @@ public interface VariationsOptionsRepo extends JpaRepository<VariationOption, Lo
 
     public List<VariationOption> findByVariationId(Long variationId);   // TESTED
 
+    List<VariationOption> findByOptionValueContainingIgnoreCase(String keyword);
 }
 
 

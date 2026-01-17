@@ -1,6 +1,5 @@
-package com.menzo.Product_Service.Service;
+package com.menzo.Product_Service.Modules.Category.Service;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Modules.Category.Dto.NestedCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;

@@ -1,8 +1,7 @@
-package com.menzo.Product_Service.Repository;
+package com.menzo.Product_Service.Modules.Variation.Repo;
 
 import com.menzo.Product_Service.Modules.Variation.Dto.OptionMinimalDto;
 import com.menzo.Product_Service.Modules.Variation.Entity.Variation;
-import com.menzo.Product_Service.Modules.Variation.Repo.VariationsRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

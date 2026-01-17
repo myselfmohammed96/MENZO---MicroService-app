@@ -57,13 +57,13 @@ public class ProductController {
                 .freeDel("available")
                 .build();
         model.addAttribute("newProduct", productDto);
-        return "Products/add-product-form";
+        return "Products/product-form";
     }
 
     //  Products listing - page
     @GetMapping("/all-products")
     public String getAllProductsListing() {
-        return "Products/all-products";
+        return "Products/product-listing";
     }
 
     //  Product summary - page

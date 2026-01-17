@@ -1,6 +1,5 @@
-package com.menzo.Product_Service.Service;
+package com.menzo.Product_Service.Modules.Category.Service;
 
-import com.menzo.Product_Service.Modules.Category.Service.CategoryService;
 import com.menzo.Product_Service.Modules.Category.Dto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryDto;

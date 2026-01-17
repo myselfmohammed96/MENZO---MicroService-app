@@ -92,6 +92,11 @@ public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecifica
     List<Product> findByIdIn(List<Long> selectionList);
 
     List<Product> findByCategoryId(Long categoryId);
+
+    List<Product> findByProductNameContainingIgnoreCaseOrGenericNameContainingIgnoreCase(
+            String productNameKeyword,
+            String genericNameKeyword
+    );
 }
 
 

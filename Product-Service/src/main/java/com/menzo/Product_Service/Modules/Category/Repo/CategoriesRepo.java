@@ -23,6 +23,8 @@ public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
     public boolean existsByCategoryNameAndParentCategoryId(String categoryName, Long parentCategoryId);     //  TESTED
 
 
+    List<ProductCategory> findByCategoryNameContainingIgnoreCase(String keyword);
+
     /*
      *  ********* find methods *********
      *  ********* Parent categories *********

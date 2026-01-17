@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.Service;
+package com.menzo.Product_Service.Modules.Variation.Service;
 
 import com.menzo.Product_Service.Modules.Variation.Dto.CreateVariationDto;
 import com.menzo.Product_Service.Modules.Variation.Dto.CreateVariationOptionDto;
@@ -6,7 +6,6 @@ import com.menzo.Product_Service.Modules.Variation.Dto.OptionDto;
 import com.menzo.Product_Service.Modules.Variation.Dto.VariationDto;
 import com.menzo.Product_Service.Modules.Variation.Entity.Variation;
 import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Modules.Variation.Service.VariationsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

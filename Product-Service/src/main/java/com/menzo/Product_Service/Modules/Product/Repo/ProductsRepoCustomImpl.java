@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Modules.Product.Repo;
 
+import com.menzo.Product_Service.Modules.Product.Entity.Product;
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.FilterRequestDto;
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.QueryDetailsDto;
 import com.menzo.Product_Service.Modules.Product.Dto.AdminProductListingDto;
@@ -33,25 +34,109 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
     private VariationsQueryService variationsRetrievalService;
 
 
-    /// /  ********* PRODUCT LISTING methods *********
+    /*
+     *  ---------------------------------------------
+     *  ********* Search processing methods *********
+     *  ---------------------------------------------
+     */
 
-    //  get product listing - for ADMIN side
+    //  Search product IDs - for given keywords
+    @Override
+    public List<Long> findProductsContaining(String[] keywords) {
+
+        if (keywords == null || keywords.length == 0) {
+            return Collections.emptyList();
+        }
+
+        String selectClause = "SELECT DISTINCT p.id FROM products p WHERE ";
+        List<String> whereClauses = new ArrayList<>();
+
+        //  building WHERE clauses dynamically - for each keyword
+        for (int i = 0; i < keywords.length; i++) {
+            String param = ":kw" + i;
+            String clause = String.format("""
+                    (p.product_name LIKE CONCAT('%%', %s, '%%')
+                    OR p.generic_name LIKE CONCAT('%%', %s, '%%')
+                    OR EXISTS (
+                        SELECT 1
+                        FROM product_items i
+                        JOIN product_configurations pc ON i.id = pc.product_item_id
+                        JOIN variation_options o ON pc.variation_option_id = o.id
+                        WHERE i.product_id = p.id
+                            AND o.option_value LIKE CONCAT('%%', %s, '%%')
+                    )
+                    OR EXISTS (
+                        SELECT 1
+                        FROM product_categories sc
+                        LEFT JOIN product_categories c ON sc.parent_category_id = c.id
+                        WHERE p.category_id = sc.id
+                            AND (sc.category_name LIKE CONCAT('%%', %s, '%%')
+                                OR c.category_name LIKE CONCAT('%%', %s, '%%'))
+                    ))""", param, param, param, param, param);
+            whereClauses.add(clause);
+        }
+
+        //  joining all clauses with 'AND'
+        String queryString = selectClause + String.join(" AND ", whereClauses);
+
+        Query query = entityManager.createNativeQuery(queryString);
+
+        for (int i = 0; i < keywords.length; i++) {
+            query.setParameter("kw" + i, keywords[i]);
+        }
+
+        List<Object> resultRows = query.getResultList();
+
+        List<Long> productIds = resultRows.stream()
+                .map(r -> ((Number) r).longValue())
+                .toList();
+
+        return productIds;
+    }
+
+
+    /*
+     *  -------------------------------------------
+     *  ********* Product Listing methods *********
+     *  -------------------------------------------
+     */
+
+    //  ADMIN product listing
     @Override
     public Page<AdminProductListingDto> findAdminProductListing(QueryDetailsDto queryDetails) {
 
-        //  generating WHERE Clause for given filter values
+        //  Predicates for filter values (price, quantity & variation filters)
         Map<String, String> predicatesMap = new HashMap<>();
         if (queryDetails.getFilterValues() != null && !queryDetails.getFilterValues().isEmpty()) {
             logger.info("generating filter predicates");
             predicatesMap = generatePredicates(queryDetails.getFilterValues());
         }
 
+        //  WHERE clause for product IDs (from search results)
+        String searchResultProductIds = queryDetails.getSearchResultProductIds() != null
+                && !queryDetails.getSearchResultProductIds().isEmpty()
+                ? productIdsPredicate(queryDetails.getSearchResultProductIds())
+                : "";
+
+        //  WHERE clause for category & sub-category filters
+        String categoryFilters = "";
+        if (queryDetails.getCategoryName() != null && !queryDetails.getCategoryName().isEmpty()) {
+            categoryFilters += "c.category_name = '" + queryDetails.getCategoryName().toLowerCase() + "' AND ";
+        }
+        if (queryDetails.getSubCategoryNames() != null && !queryDetails.getSubCategoryNames().isEmpty()) {
+            categoryFilters += "sc.category_name IN ('" + String.join("', '", queryDetails.getSubCategoryNames()) + "') AND";
+        }
+
+
+        //  SELECT clause
         String adminSelectClause = """
                 SELECT 
                         p.id AS productId, 
                         p.product_name AS productName, 
                         sc.category_name AS subCategoryName, 
                         c.category_name AS categoryName, 
+                        it.minMrp, 
+                        it.maxMrp, 
                         it.minPrice, 
                         it.maxPrice, 
                         it.minStockQty, 
@@ -62,6 +147,7 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                         it.activeStatus 
                 """;
 
+        //  WHERE clause for filter values
         StringBuilder innerWhereClause = new StringBuilder();
 
         if (predicatesMap.containsKey("variationFilterQuery")) {
@@ -69,7 +155,6 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                     .append(predicatesMap.get("variationFilterQuery"))
                     .append(") ");
         }
-
         if (predicatesMap.containsKey("priceAndStockFilterQuery")) {
             if (innerWhereClause.length() > 0) {
                 innerWhereClause.append("AND (")
@@ -82,11 +167,12 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
             }
         }
 
+        //  filtering ACTIVE & INACTIVE product items
         String productItemActiveFilter = queryDetails.isAllowInactiveProductItems()
                 ? ""
                 : "HAVING MAX(i.is_active) = 1";
 
-        // building base query
+        //  Base query
         String baseQuery = """
                 FROM products p 
                 INNER JOIN product_categories sc ON p.category_id = sc.id 
@@ -95,8 +181,10 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                     SELECT 
                             i.product_id AS productId, 
                             COUNT(DISTINCT i.super_sku) AS colorCount, 
-                            MIN(i.price) AS minPrice, 
-                            MAX(i.price) AS maxPrice, 
+                            MIN(i.mrp) AS minMrp, 
+                            MAX(i.mrp) AS maxMrp,
+                            MIN(i.selling_price) AS minPrice, 
+                            MAX(i.selling_price) AS maxPrice, 
                             MIN(i.qty_in_stock) AS minStockQty, 
                             MAX(i.qty_in_stock) AS maxStockQty, 
                             MIN(i.created_at) AS oldestCreatedAt, 
@@ -113,10 +201,16 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                 """ + innerWhereClause +
                 " GROUP BY i.product_id " + productItemActiveFilter + """
                 ) AS it ON p.id = it.productId 
-                WHERE sc.is_deleted = :isSubCategoryDeleted 
+                WHERE\s"""
+                + searchResultProductIds
+                + categoryFilters +
+                """
+                    sc.is_deleted = :isSubCategoryDeleted 
                     AND c.is_deleted = :isCategoryDeleted 
                     AND sc.is_active = :isSubCategoryActive 
                     AND c.is_active = :isCategoryActive 
+                    AND minMrp IS NOT NULL 
+                    AND maxMrp IS NOT NULL 
                     AND minPrice IS NOT NULL 
                     AND maxPrice IS NOT NULL 
                     AND minStockQty IS NOT NULL 
@@ -140,7 +234,6 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
 
 
         //  ***** main page query *****
-
         String mainPageQueryString = adminSelectClause + baseQuery;
 
         Query query = entityManager.createNativeQuery(mainPageQueryString, "AdminProductListingDtoMapping");
@@ -322,6 +415,13 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
 
 
     /// /  ********* Utility methods *********
+
+    private String productIdsPredicate(List<Long> productIds) {
+        String idString = productIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(", "));
+        return "p.id IN (" + String.join(", ", idString) + ") AND";
+    }
 
     private Map<String, String> generatePredicates(List<FilterRequestDto> filterValues) {
 

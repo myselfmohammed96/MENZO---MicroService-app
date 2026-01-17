@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-styling.css"/>
+    <link rel="stylesheet" href="/css/navbar-footer-sidenav-theme-font-effects.css"/>
+
+    <link rel="stylesheet" href="/css/elements.css"/>
+
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/components-theme-font-effects.css">
+
+    <link rel="stylesheet" href="/css/admin-style.css"/>
+    <link rel="stylesheet" href="/css/admin-side-menu.css"/>
+    <link rel="stylesheet" href="/css/admin-table.css"/>
+    <link rel="stylesheet" href="/css/admin-filter-menu.css"/>
+    <title>MENZO | Admin-All Products</title>
+</head>
+
+<body>
+
+<!-- Nav bar -->
+
+<nav id="nav-bar-container">
+    <div id="top-nav-bar">
+        <div class="top-nav-bar-elements" id="nav-bar-logo">
+            <a href="http://localhost:8080/index"><img src="/media/MENZO_logo.jpg" alt=""></a>
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-search-bar">
+            <input type="text" class="search-bar" id="search-bar" placeholder="What are you looking for...">
+            <span id="clear-search">&#10005;</span>
+            <img id="search-lens-btn" src="/media/search-icon-thin.png" alt="">
+        </div>
+        <div class="top-nav-bar-elements" id="nav-bar-icons">
+            <div id="nav-icon-profile">
+                <a href="">
+                    <div class="icon-image-container">
+                        <img id="profile-icon" src="/media/profile_icon.png" alt="">
+                    </div>
+                    <div class="icon-details-container">
+                        <div>
+                            <p>sign in</p>
+                        </div>
+                        <div><strong>Account</strong></div>
+                    </div>
+                </a>
+            </div>
+            <div id="hamBurger-searchIcon-container">
+                <div id="search-icon">
+                    <img id="search-icon-img" src="/media/search-v3.png" alt="">
+                </div>
+                <div id="hamBurger-icon">
+                    <img src="/media/hamburger-icon-v3.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- All categories page content -->
+
+<div class="page-container">
+    <div class="side-menu-bar-container">
+        <h2 id="dashboard-option"><a href="http://localhost:8080/admin/dashboard">Dashboard</a></h2>
+        <h2>Inventory</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/categories">Categories</a></li>
+            <li class="menu-item"><a href="http://localhost:8080/admin/variations">Variations</a></li>
+            <li class="menu-item" id="current-option"><a href="">Products</a></li>
+            <li class="menu-item"><a href="">Discount & offers</a></li>
+            <li class="menu-item"><a href="">Coupons</a></li>
+            <li class="menu-item"><a href="">Order management</a></li>
+            <li class="menu-item"><a href="">Return & cancellation</a></li>
+            <li class="menu-item"><a href="">Sales & revenue</a></li>
+        </ul>
+        <h2>Users</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="http://localhost:8080/admin/users">User management</a></li>
+            <li class="menu-item"><a href="">Blocked users</a></li>
+            <li class="menu-item"><a href="">Subscriptions</a></li>
+            <li class="menu-item"><a href="">News letters</a></li>
+            <li class="menu-item"><a href="">Contact requests</a></li>
+            <li class="menu-item"><a href="">Sent messages</a></li>
+        </ul>
+        <h2>Others</h2>
+        <ul class="category-menu">
+            <li class="menu-item"><a href="">Banners</a></li>
+            <li class="menu-item"><a href="">About Us</a></li>
+        </ul>
+    </div>
+
+
+    <!-- Products - Listing table -->
+
+    <div class="main-content-container">
+
+        <div id="page-title-container">
+            <h1 id="page-title">All products</h1>
+            <div id="page-actions-1">
+
+                <div class="page-search-bar">
+                    <div class="page-search-bar-input-space">
+                        <input class="page-search-bar-input" type="text" placeholder="Search products">
+                        <div class="page-search-bar-input-clear"><span>&#10005;</span></div>
+                    </div>
+                    <div class="page-search-bar-icon-space">
+                        <img src="../media/search.png" alt="">
+                    </div>
+                </div>
+
+                <div class="title-button-container">
+                    <button id="add-button" class="title-button add-button" title="Add new Product">
+                        <span class="add-icon">+</span>
+                    </button>
+                    <button class="title-button category-filter-button">
+                        <img src="../media/category.png" alt="">
+                    </button>
+                    <button id="filter-button" class="title-button filter-button">
+                        <span class="filter-icon">⏚</span>
+                    </button>
+                    <button id="sort-button" class="title-button sort-button">
+                        <span class="sort-icon">⇅</span>
+                    </button>
+                </div>
+
+                <!-- Floating filter panel -->
+                <div id="filter-panel" class="hidden">
+                    <div id="filter-container">
+                        <!--                        <h3 id="filter-heading">Filters</h3>-->
+                        <!--                        <hr class="filter-hr">-->
+
+                        <!--                        <div class="filter-section">-->
+                        <!--                            <p class="filter-title">Category</p>-->
+                        <!--                            <label>-->
+                        <!--                                <input type="checkbox" name="category" value="shirts">-->
+                        <!--                                <span class="checkmark"></span> Shirts-->
+                        <!--                            </label>-->
+                        <!--                            <label>-->
+                        <!--                                <input type="checkbox" name="category" value="tshirts">-->
+                        <!--                                <span class="checkmark"></span> T-Shirts-->
+                        <!--                            </label>-->
+                        <!--                            <label>-->
+                        <!--                                <input type="checkbox" name="category" value="jeans">-->
+                        <!--                                <span class="checkmark"></span> Jeans-->
+                        <!--                            </label>-->
+                        <!--                        </div>-->
+                        <!--                        <hr class="filter-hr">-->
+
+                        <!--                        <div class="filter-section">-->
+                        <!--                            <p class="filter-title">Status</p>-->
+                        <!--                            <label>-->
+                        <!--                                <input type="checkbox" name="status" value="in-stock">-->
+                        <!--                                <span class="checkmark"></span> In Stock-->
+                        <!--                            </label>-->
+                        <!--                            <label>-->
+                        <!--                                <input type="checkbox" name="status" value="out-of-stock">-->
+                        <!--                                <span class="checkmark"></span> Out of Stock-->
+                        <!--                            </label>-->
+                        <!--                        </div>-->
+                        <!--                        <button type="submit" class="apply-filter-btn">Apply Filters</button>-->
+                    </div>
+                </div>
+
+                <!-- Sorting menu -->
+                <div id="sort-panel" class="hidden">
+                    <div id="sort-container">
+                        <ul class="sort-menu">
+                            <li data-value="latest" class="sort-option">Newest Arrivals</li>
+                            <li data-value="name,asc" class="sort-option">Name: aA to zZ</li>
+                            <li data-value="name,desc" class="sort-option">Name: zZ to aA</li>
+                            <li data-value="price,asc" class="applied-sort sort-option">Price: Low to High</li>
+                            <li data-value="price,desc" class="sort-option">Price: High to Low</li>
+                            <!--                            <li data-value="featured" class="sort-option">Featured</li>-->
+                            <!--                            <li data-value="reviews" class="sort-option">Avg. Customer Review</li>-->
+                            <!--                            <li data-value="bestSelling" class="sort-option">Best Sellers</li>-->
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th class="first-table-heading">Product</th>
+                    <th class="center-text">Sub-category</th>
+                    <th class="center-text">Base MRP</th>
+                    <th class="center-text">Base Price</th>
+                    <th class="center-text">Colors</th>
+                    <th class="center-text">Status</th>
+                    <th class="center-text">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="product-table-body">
+                <!--                <tr>-->
+                <!--                    <td class="products-table-data">-->
+                <!--                        <div class="product-content-wrapper image-title-wrapper">-->
+                <!--                            <img class="product-icon-img image-icon" src="/admin panels/media/img7.jpg" alt="">-->
+                <!--                            <span class="title-text" tabindex="0">Shirts & T-Shirts and-->
+                <!--                                        what else? we can even add some-->
+                <!--                                        more text? lets add some more... and even more if possible.. is this-->
+                <!--                                        enough?</span>-->
+                <!--                        </div>-->
+                <!--                    </td>-->
+                <!--                    <td class="center-text">Polo t-shirt</td>-->
+                <!--                    <td class="center-text">₹ 2599</td>-->
+                <!--                    <td class="center-text">₹ 2599</td>-->
+                <!--                    <td class="center-text">225 units</td>-->
+                <!--                    <td class="center-text"><span class="status-indicator">In stock</span></td>-->
+                <!--                    <td class="center-text action-buttons-column">-->
+                <!--                        <button class="table-button view-button">-->
+                <!--                            <img src="/admin panels/media/enter (1).png" alt="">-->
+                <!--                        </button>-->
+                <!--                        <button class="table-button table-delete-button">-->
+                <!--                            <img src="/admin panels/media/delete.png" alt="">-->
+                <!--                        </button>-->
+                <!--                    </td>-->
+                <!--                </tr>-->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+
+        <div class="pagination"></div>
+    </div>
+</div>
+
+<!-- Footer menu -->
+
+<div class="footer-menu-container">
+
+    <div class="footer-options-container">
+        <div class="footer-options footer-contact-wrapper">
+            <img src="/media/MENZO_logo.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="end-footer">
+        <div id="copy-right-container">
+            <p>© 2025 - All rights reserved by <strong>MENZO</strong></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("click", e => {
+        const target = e.target.closest(".title-text");
+        if (!target) {
+            document.querySelectorAll(".title-text.expanded")
+                .forEach(el => el.classList.remove("expanded"));
+            return;
+        };
+        target.classList.toggle("expanded");
+        e.stopPropagation();
+    });
+</script>
+<script src="/js/component-script/nav-bar-script.js"></script>
+<script src="/js/component-script/filter-menu-script.js"></script>
+<script src="/js/product-script/product-listing.js"></script>
+</body>
+
+</html>

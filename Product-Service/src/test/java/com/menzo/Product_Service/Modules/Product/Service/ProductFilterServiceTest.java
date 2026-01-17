@@ -1,7 +1,6 @@
-package com.menzo.Product_Service.Service;
+package com.menzo.Product_Service.Modules.Product.Service;
 
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.FilterTypeDto;
-import com.menzo.Product_Service.Modules.Product.Service.ProductFilterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

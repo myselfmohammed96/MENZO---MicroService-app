@@ -33,6 +33,49 @@ public class ProductRestController {
 
 
     /*
+     *  -----------------------------------------
+     *  ********* CLIENT side endpoints *********
+     *  -----------------------------------------
+     */
+
+    //  product listing with filter, sort
+    @PostMapping
+    public ResponseEntity<?> getClientProductListing(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                     @RequestParam(name = "size", defaultValue = "10") Integer size,
+                                                     @RequestParam(name = "sort", required = false) String sortRequest,
+                                                     @RequestBody(required = false) RequestDto requestDto) {
+        System.out.println("page: " + page + "\tsize: " + size);
+        System.out.println("sort: " + sortRequest);
+        System.out.println("requestDto: " + requestDto);
+
+        Page<UserProductListingDto> pageContent = productsRetrievalService.getClientProductListing(
+                page,
+                size,
+                sortRequest != null ? sortRequest : "",
+                requestDto != null ? requestDto : new RequestDto()
+        );
+        return ResponseEntity.ok(pageContent);
+    }
+
+
+    //  get product details
+    @GetMapping("/get-user-product-details")
+    public ResponseEntity<?> getProductDetails(@RequestParam("ssku") String superSku) {
+        UserProductDetailsDto productDetails = productsRetrievalService.getUserProductDetails(superSku);
+        return ResponseEntity.ok(productDetails);
+    }
+
+
+    /// /   ********* IMAGES *********
+
+    @GetMapping("/image-urls")
+    public ResponseEntity<?> getProductImages(@RequestParam("ssku") String superSku) {
+        List<String> productImages = productsRetrievalService.getProductImages(superSku);
+        return ResponseEntity.ok(productImages);
+    }
+
+
+    /*
      *  ----------------------------------------
      *  ********* Admin side endpoints *********
      *  ----------------------------------------
@@ -41,19 +84,41 @@ public class ProductRestController {
     /// /   ********* GET APIs *********
 
     //  Get - product listing with filters, sort
-    @PostMapping("all-products")
+    @PostMapping("/all-products")
     public ResponseEntity<?> getAdminProductListing(@RequestParam(defaultValue = "0") Integer page,
                                                     @RequestParam(defaultValue = "10") Integer size,
+                                                    @RequestParam(required = false) String searchRequest,
                                                     @RequestParam(required = false) String sortRequest,
                                                     @RequestBody(required = false) RequestDto requestDto) {
+        //  validations
+        if (page < 0) {
+            throw new IllegalArgumentException("Page cannot be less than 0.");
+        }
+        if (size <= 0 || size > 100) {
+            throw new IllegalArgumentException("Page size must be 0 to 100");
+        }
+        if (searchRequest != null && !searchRequest.isEmpty() && searchRequest.length() > 120) {
+            throw new IllegalArgumentException("Search text too long.");
+        }
+        //  ## whitelist the allowable sort requests
 
+        //  get page content
         Page<AdminProductListingDto> pageContent = productsRetrievalService.getAdminProductListing(
                 page,
                 size,
-                sortRequest != null ? sortRequest : "",
-                requestDto != null ? requestDto : new RequestDto()
+                searchRequest == null ? "" : searchRequest,
+                sortRequest == null ? "" : sortRequest,
+                requestDto == null ? new RequestDto() : requestDto
         );
-        return ResponseEntity.ok(pageContent);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        if (pageContent != null) {
+            responseBody.put("message", "");
+            responseBody.put("pageContent", pageContent);
+        } else {
+            responseBody.put("message", "");
+        }
+        return ResponseEntity.ok(responseBody);
     }
 
 
@@ -205,47 +270,7 @@ public class ProductRestController {
     }
 
 
-    /*
-     *  -----------------------------------------
-     *  ********* CLIENT side endpoints *********
-     *  -----------------------------------------
-     */
 
-    //  product listing with filter, sort
-    @PostMapping("/user-listing")
-    public ResponseEntity<?> getClientProductListing(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                     @RequestParam(name = "size", defaultValue = "10") Integer size,
-                                                     @RequestParam(name = "sort", required = false) String sortRequest,
-                                                     @RequestBody(required = false) RequestDto requestDto) {
-        System.out.println("page: " + page + "\tsize: " + size);
-        System.out.println("sort: " + sortRequest);
-        System.out.println("requestDto: " + requestDto);
-
-        Page<UserProductListingDto> pageContent = productsRetrievalService.getClientProductListing(
-                page,
-                size,
-                sortRequest != null ? sortRequest : "",
-                requestDto != null ? requestDto : new RequestDto()
-        );
-        return ResponseEntity.ok(pageContent);
-    }
-
-
-    //  get product details
-    @GetMapping("/get-user-product-details")
-    public ResponseEntity<?> getProductDetails(@RequestParam("ssku") String superSku) {
-        UserProductDetailsDto productDetails = productsRetrievalService.getUserProductDetails(superSku);
-        return ResponseEntity.ok(productDetails);
-    }
-
-
-    /// /   ********* IMAGES *********
-
-    @GetMapping("/image-urls")
-    public ResponseEntity<?> getProductImages(@RequestParam("ssku") String superSku) {
-        List<String> productImages = productsRetrievalService.getProductImages(superSku);
-        return ResponseEntity.ok(productImages);
-    }
 
 }
 

@@ -22,7 +22,7 @@ public class QueryDetailsDto {
 
     private String categoryName;
     //  only one category at a time
-    //  check for existance in product retrieval servie
+    //  check for existence in product retrieval service
 
     private List<String> subCategoryNames;
     //  can be multiple at a time
@@ -32,5 +32,7 @@ public class QueryDetailsDto {
     private List<FilterRequestDto> filterValues;
 
     private Map<String, Integer> statusFlags;
+
+    private List<Long> searchResultProductIds;
 
 }

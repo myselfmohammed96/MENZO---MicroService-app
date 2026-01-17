@@ -1,6 +1,5 @@
-package com.menzo.Product_Service.Repository;
+package com.menzo.Product_Service.Modules.Category.Repo;
 
-import com.menzo.Product_Service.Modules.Category.Repo.CategoriesRepo;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Modules.Product.Service.UtilityService;

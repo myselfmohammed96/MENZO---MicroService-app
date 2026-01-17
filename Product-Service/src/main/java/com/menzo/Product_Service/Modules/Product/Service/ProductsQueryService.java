@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
+import com.menzo.Product_Service.Modules.Category.Repo.CategoriesRepo;
 import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Modules.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
@@ -59,13 +60,17 @@ public class ProductsQueryService {
     private VariationsRepo variationsRepo;
 
     @Autowired
+    private VariationsOptionsRepo variationsOptionsRepo;
+
+    @Autowired
+    private CategoriesRepo categoriesRepo;
+
+    @Autowired
     private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
     private ProductCountryOfOriginRepo countryOfOriginRepo;
 
-    @Autowired
-    private VariationsOptionsRepo variationsOptionsRepo;
 
     //  assuming this til as the average til of every product item with common superSku
     private static Long til;
@@ -76,18 +81,28 @@ public class ProductsQueryService {
     }
 
 
-    /// /   ********* Product listing methods - with PAGINATION & FILTERING *********
+    /*
+     *   -------------------------------------------------------------------------
+     *   ********* Product listing methods - with PAGINATION & FILTERING *********
+     *   -------------------------------------------------------------------------
+     */
 
     //  ADMIN side - product listing
     public Page<AdminProductListingDto> getAdminProductListing(Integer page,
                                                                Integer size,
+                                                               String searchRequest,
                                                                String sortRequest,
                                                                RequestDto filterRequest) {
-        String sortParam = "";
-        if (sortRequest != null && !sortRequest.isEmpty()) {
-            sortParam = getSortValue(sortRequest);
-        }
-//        Map<String, List<?>> filterValues = getFilterValues(filterRequest.getFilterRequestDtos());
+
+        //  validation
+        // ## validate the sort request.. check if the provided sort is white listed.
+        // ## same for filter request
+
+        //  processing search results - getting matched product IDs
+        List<Long> searchResults = processSearchRequest(searchRequest.trim());
+
+        //  data pre-processing
+        String sortParam = getSortValue(sortRequest);
 
         Map<String, Integer> statusFlags = new HashMap<>();
         statusFlags.put("isSubCategoryDeleted", 0);
@@ -101,8 +116,10 @@ public class ProductsQueryService {
                 .sortRequest(sortParam)
                 .filterValues(filterRequest.getFilterRequestDtos())
                 .statusFlags(statusFlags)
+                .searchResultProductIds(searchResults)
                 .build();
 
+        //  getting page content - repo call
         Page<AdminProductListingDto> pageContent = productsRepo.findAdminProductListing(queryDetails);
 
         for (AdminProductListingDto p : pageContent.getContent()) {
@@ -125,9 +142,12 @@ public class ProductsQueryService {
 //        Page<Product> products = productsRepo.findAll(sortedPageable);
 //        return convertToDto(products);
 //        return null;
+
+
+        //        Map<String, List<?>> filterValues = getFilterValues(filterRequest.getFilterRequestDtos());
     }
 
-    //  USER side - product listing
+    //  CLIENT side - product listing
     public Page<UserProductListingDto> getClientProductListing(Integer page,
                                                                Integer size,
                                                                String sortRequest,
@@ -305,9 +325,29 @@ public class ProductsQueryService {
             case "price,desc" -> {
                 yield "maxPrice,desc";
             }
+            case "" -> {
+                yield "";
+            }
             //  ## STOCK sorting
             default -> throw new IllegalArgumentException("Invalid sortRequest: " + sortRequest);
         };
+    }
+
+    private List<Long> processSearchRequest(String searchRequest) {
+        if (searchRequest == null || searchRequest.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        //  sanitize & get search keywords
+        String sanitized = searchRequest.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", " ")
+                .substring(0, Math.min(searchRequest.length(), 120));
+
+        String[] keywords = sanitized.split("\\s");
+
+        //  return product ids for search keywords
+        return productsRepo.findProductsContaining(keywords);
     }
 
     //  get ITEMs - minimal details
