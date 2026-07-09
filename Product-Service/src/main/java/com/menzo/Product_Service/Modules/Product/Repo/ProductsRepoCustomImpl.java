@@ -105,29 +105,6 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
     @Override
     public Page<AdminProductListingDto> findAdminProductListing(QueryDetailsDto queryDetails) {
 
-        //  Predicates for filter values (price, quantity & variation filters)
-        Map<String, String> predicatesMap = new HashMap<>();
-        if (queryDetails.getFilterValues() != null && !queryDetails.getFilterValues().isEmpty()) {
-            logger.info("generating filter predicates");
-            predicatesMap = generatePredicates(queryDetails.getFilterValues());
-        }
-
-        //  WHERE clause for product IDs (from search results)
-        String searchResultProductIds = queryDetails.getSearchResultProductIds() != null
-                && !queryDetails.getSearchResultProductIds().isEmpty()
-                ? productIdsPredicate(queryDetails.getSearchResultProductIds())
-                : "";
-
-        //  WHERE clause for category & sub-category filters
-        String categoryFilters = "";
-        if (queryDetails.getCategoryName() != null && !queryDetails.getCategoryName().isEmpty()) {
-            categoryFilters += "c.category_name = '" + queryDetails.getCategoryName().toLowerCase() + "' AND ";
-        }
-        if (queryDetails.getSubCategoryNames() != null && !queryDetails.getSubCategoryNames().isEmpty()) {
-            categoryFilters += "sc.category_name IN ('" + String.join("', '", queryDetails.getSubCategoryNames()) + "') AND";
-        }
-
-
         //  SELECT clause
         String adminSelectClause = """
                 SELECT 
@@ -146,6 +123,28 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
                         it.colorCount, 
                         it.activeStatus 
                 """;
+
+        //  Predicates for filter values (price, quantity & variation filters)
+        Map<String, String> predicatesMap = new HashMap<>();
+        if (queryDetails.getFilterValues() != null && !queryDetails.getFilterValues().isEmpty()) {
+            logger.info("generating admin filter predicates");
+            predicatesMap = generatePredicates(queryDetails.getFilterValues());
+        }
+
+        //  WHERE clause for product IDs (search results)
+        String searchResultProductIds = queryDetails.getSearchResultProductIds() != null
+                && !queryDetails.getSearchResultProductIds().isEmpty()
+                ? productIdsPredicate(queryDetails.getSearchResultProductIds())
+                : "";
+
+        //  WHERE clause for category & sub-category filters
+        String categoryFilters = "";
+        if (queryDetails.getCategoryName() != null && !queryDetails.getCategoryName().isEmpty()) {
+            categoryFilters += "c.category_name = '" + queryDetails.getCategoryName().toLowerCase() + "' AND ";
+        }
+        if (queryDetails.getSubCategoryNames() != null && !queryDetails.getSubCategoryNames().isEmpty()) {
+            categoryFilters += "sc.category_name IN ('" + String.join("', '", queryDetails.getSubCategoryNames()) + "') AND";
+        }
 
         //  WHERE clause for filter values
         StringBuilder innerWhereClause = new StringBuilder();
@@ -262,11 +261,14 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
     @Override
     public Page<UserProductListingDto> findUserProductListing(QueryDetailsDto queryDetails) {
 
+        //  SELECT clause
         String userSelectClause = """
                         SELECT 
                                 p.id AS productId, 
                                 p.product_name as productName, 
                                 it.superSku, 
+                                it.minMrp, 
+                                it.maxMrp, 
                                 it.minPrice, 
                                 it.maxPrice, 
                                 it.minStockQty, 
@@ -276,9 +278,15 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
         //  generating WHERE clause for given FILTER VALUES
         Map<String, String> predicatesMap = new HashMap<>();
         if (queryDetails.getFilterValues() != null && !queryDetails.getFilterValues().isEmpty()) {
-            logger.info("generating filter predicates");
+            logger.info("generating user filter predicates");
             predicatesMap = generatePredicates(queryDetails.getFilterValues());
         }
+
+        //  WHERE clause for product IDs (search results)
+
+        //  WHERE clause for category & sub-category filters
+
+        //  WHERE clause for filter values
         StringBuilder variationAndPriceFilters = new StringBuilder();
 
         if (predicatesMap.containsKey("variationFilterQuery")) {
@@ -327,31 +335,26 @@ public class ProductsRepoCustomImpl implements ProductsRepoCustom {
         //  Building Base query
         String baseQuery = """                       
                 FROM products p 
-                INNER JOIN product_categories sc
-                    ON p.category_id = sc.id 
-                INNER JOIN product_categories c 
-                    ON sc.parent_category_id = c.id 
+                INNER JOIN product_categories sc ON p.category_id = sc.id 
+                INNER JOIN product_categories c ON sc.parent_category_id = c.id 
                 LEFT JOIN ( 
                     SELECT 
                             i.product_id AS productId, 
                             i.super_sku AS superSku,
-                            MIN(i.price) AS minPrice, 
-                            MAX(i.price) AS maxPrice, 
+                            MIN(i.mrp) AS minMrp, 
+                            MAX(i.mrp) AS maxMrp, 
+                            MIN(i.selling_price) AS minPrice, 
+                            MAX(i.selling_price) AS maxPrice, 
                             MIN(i.created_at) AS oldestCreatedAt, 
                             MAX(i.created_at) AS latestCreatedAt, 
                             MIN(i.qty_in_stock) AS minStockQty, 
                             im.image_url AS iconImage 
                         FROM product_items i 
-                        JOIN product_configurations pc 
-                            ON i.id = pc.product_item_id 
-                        JOIN variation_options o 
-                            ON pc.variation_option_id = o.id 
-                        JOIN variations v 
-                            ON o.variation_id = v.id 
-                        JOIN item_image_configuration iic 
-                            ON i.id = iic.item_id 
-                        JOIN product_images im 
-                            ON iic.image_id = im.id 
+                        JOIN product_configurations pc ON i.id = pc.product_item_id 
+                        JOIN variation_options o ON pc.variation_option_id = o.id 
+                        JOIN variations v ON o.variation_id = v.id 
+                        JOIN item_image_configuration iic ON i.id = iic.item_id 
+                        JOIN product_images im ON iic.image_id = im.id 
                         WHERE 
                             i.is_active = :isItemActive 
                 """ + variationAndPriceFilters + """

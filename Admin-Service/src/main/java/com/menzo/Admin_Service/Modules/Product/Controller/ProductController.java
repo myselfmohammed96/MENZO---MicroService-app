@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     //  Products listing - page
-    @GetMapping("/all-products")
+    @GetMapping("/product-listing")
     public String getAllProductsListing() {
         return "Products/product-listing";
     }

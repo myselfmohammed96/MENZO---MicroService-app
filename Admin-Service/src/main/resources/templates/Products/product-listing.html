@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="/css/components-theme-font-effects.css">
 
     <link rel="stylesheet" href="/css/admin-style.css"/>
-    <link rel="stylesheet" href="/css/admin-side-menu.css"/>
+    <!--    <link rel="stylesheet" href="/css/admin-side-menu.css"/>-->
     <link rel="stylesheet" href="/css/admin-table.css"/>
-    <link rel="stylesheet" href="/css/admin-filter-menu.css"/>
+    <!--    <link rel="stylesheet" href="/css/admin-filter-menu.css"/>-->
     <title>MENZO | Admin-All Products</title>
 </head>
 
@@ -102,7 +102,7 @@
 
         <div id="page-title-container">
             <h1 id="page-title">All products</h1>
-            <div id="page-actions-1">
+            <div class="page-actions-1">
 
                 <div class="page-search-bar">
                     <div class="page-search-bar-input-space">
@@ -118,7 +118,7 @@
                     <button id="add-button" class="title-button add-button" title="Add new Product">
                         <span class="add-icon">+</span>
                     </button>
-                    <button class="title-button category-filter-button">
+                    <button id="category-button" class="title-button category-filter-button">
                         <img src="../media/category.png" alt="">
                     </button>
                     <button id="filter-button" class="title-button filter-button">
@@ -129,46 +129,86 @@
                     </button>
                 </div>
 
-                <!-- Floating filter panel -->
-                <div id="filter-panel" class="hidden">
-                    <div id="filter-container">
-                        <!--                        <h3 id="filter-heading">Filters</h3>-->
-                        <!--                        <hr class="filter-hr">-->
+                <!-- Category options - collapsible -->
+                <div id="category-panel" class="hidden dropdown-menu">
+                    <h3 id="category-heading">Category</h3>
+                    <hr class="category-hr">
 
-                        <!--                        <div class="filter-section">-->
-                        <!--                            <p class="filter-title">Category</p>-->
-                        <!--                            <label>-->
-                        <!--                                <input type="checkbox" name="category" value="shirts">-->
-                        <!--                                <span class="checkmark"></span> Shirts-->
-                        <!--                            </label>-->
-                        <!--                            <label>-->
-                        <!--                                <input type="checkbox" name="category" value="tshirts">-->
-                        <!--                                <span class="checkmark"></span> T-Shirts-->
-                        <!--                            </label>-->
-                        <!--                            <label>-->
-                        <!--                                <input type="checkbox" name="category" value="jeans">-->
-                        <!--                                <span class="checkmark"></span> Jeans-->
-                        <!--                            </label>-->
-                        <!--                        </div>-->
-                        <!--                        <hr class="filter-hr">-->
-
-                        <!--                        <div class="filter-section">-->
-                        <!--                            <p class="filter-title">Status</p>-->
-                        <!--                            <label>-->
-                        <!--                                <input type="checkbox" name="status" value="in-stock">-->
-                        <!--                                <span class="checkmark"></span> In Stock-->
-                        <!--                            </label>-->
-                        <!--                            <label>-->
-                        <!--                                <input type="checkbox" name="status" value="out-of-stock">-->
-                        <!--                                <span class="checkmark"></span> Out of Stock-->
-                        <!--                            </label>-->
-                        <!--                        </div>-->
-                        <!--                        <button type="submit" class="apply-filter-btn">Apply Filters</button>-->
+                    <div id="category-container">
+                        <div class="category-section">
+                            <p class="category-title">Category</p>
+                            <label>
+                                <input type="radio" name="category" value="shirts">
+                                <span class="checkmark"></span> Shirts
+                            </label>
+                            <label>
+                                <input type="radio" name="category" value="tshirts">
+                                <span class="checkmark"></span> T-Shirts
+                            </label>
+                            <label>
+                                <input type="radio" name="category" value="jeans">
+                                <span class="checkmark"></span> Jeans
+                            </label>
+                        </div>
                     </div>
+
+                    <div id="sub-category-container">
+                        <hr class="category-hr">
+                        <div class="category-section">
+                            <p class="category-title">Sub-category</p>
+                            <label>
+                                <input type="checkbox" name="sub-cat" value="in-stock">
+                                <span class="checkmark"></span> In Stock
+                            </label>
+                            <label>
+                                <input type="checkbox" name="sub-cat" value="out-of-stock">
+                                <span class="checkmark"></span> Out of Stock
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="apply-category-btn">Apply Categories</button>
+                </div>
+
+                <!-- Floating filter panel -->
+                <div id="filter-panel" class="hidden dropdown-menu">
+                    <h3 id="filter-heading">Filters</h3>
+                    <hr class="filter-hr">
+
+                    <div id="filter-container">
+                        <div class="filter-section">
+                            <p class="filter-title">Category</p>
+                            <label>
+                                <input type="checkbox" name="category" value="shirts">
+                                <span class="checkmark"></span> Shirts
+                            </label>
+                            <label>
+                                <input type="checkbox" name="category" value="tshirts">
+                                <span class="checkmark"></span> T-Shirts
+                            </label>
+                            <label>
+                                <input type="checkbox" name="category" value="jeans">
+                                <span class="checkmark"></span> Jeans
+                            </label>
+                        </div>
+                        <hr class="filter-hr">
+
+                        <div class="filter-section">
+                            <p class="filter-title">Status</p>
+                            <label>
+                                <input type="checkbox" name="status" value="in-stock">
+                                <span class="checkmark"></span> In Stock
+                            </label>
+                            <label>
+                                <input type="checkbox" name="status" value="out-of-stock">
+                                <span class="checkmark"></span> Out of Stock
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="apply-filter-btn">Apply Filters</button>
                 </div>
 
                 <!-- Sorting menu -->
-                <div id="sort-panel" class="hidden">
+                <div id="sort-panel" class="hidden dropdown-menu">
                     <div id="sort-container">
                         <ul class="sort-menu">
                             <li data-value="latest" class="sort-option">Newest Arrivals</li>
@@ -264,8 +304,10 @@
     });
 </script>
 <script src="/js/component-script/nav-bar-script.js"></script>
-<script src="/js/component-script/filter-menu-script.js"></script>
+<!--<script src="/js/component-script/filter-menu-script.js"></script>-->
 <script src="/js/product-script/product-listing.js"></script>
+
+<script src="/js/product-script/title-bar-script.js"></script>
 </body>
 
 </html>

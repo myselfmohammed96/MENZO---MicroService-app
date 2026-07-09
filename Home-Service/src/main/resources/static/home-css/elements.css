@@ -1,0 +1,198 @@
+/* ******* Buttons ******* */
+
+/* ------- TITLE Buttons ------- */
+
+/* Title button (base) */
+.title-button {
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.2, transform 0.1s ease;
+    background-color: rgba(189, 189, 189, 0.5);
+    color: #696969;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.title-button:hover {
+    background-color: rgba(158, 158, 158, 0.5);
+    color: #575757;
+}
+
+.title-button:active {
+    transform: scale(0.95);
+}
+
+
+/* Add button */
+.add-button {
+    font-size: 15px;
+    padding: 6px 11px 5px 11px;
+    margin-right: 8px;
+}
+
+.add-icon {
+    line-height: 0;
+    height: 100%;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+
+/* Sort & Filter button */
+.sort-button,
+.filter-button {
+    /* background-color: transparent; */
+    font-size: 15px;
+    text-decoration: none;
+    padding: 6px 10px 5px 12px;
+    margin-right: 7px;
+}
+
+.filter-icon,
+.sort-icon {
+    font-size: 1.3em;
+    line-height: 0.8;
+    margin-right: 4px;
+}
+
+
+/* Draft & Refresh button */
+.draft-button,
+.refresh-button {
+    padding: 3px 10px;
+    margin-right: 7px;
+}
+
+#draft-button img {
+    width: 20px;
+    padding: 1px;
+    opacity: 0.7;
+}
+
+#refresh-button img {
+    width: 20px;
+    padding: 1px;
+    opacity: 0.65;
+}
+
+
+/* Category filter button */
+.category-filter-button {
+    padding: 7px 11px 4px 11px;
+    margin-right: 7px;
+}
+
+.category-filter-button img {
+    width: 14.5px;
+}
+
+
+/* Delete button */
+.title-delete-button {
+    padding: 6px 11px 4px 11px;
+    margin-right: 7px;
+}
+
+.title-delete-button img {
+    width: 17px;
+}
+
+
+/* Contact-button */
+.contact-button {
+    padding: 4px 9.5px 2px 7.5px;
+    margin-right: 7px;
+}
+
+.contact-button img {
+    width: 21px;
+}
+
+
+
+/* ********* title bar menu ********* */
+
+.title-bar-menu-wrapper {
+    border: 2px solid transparent;
+    margin-right: 10px;
+    padding: 1.5px;
+    border-radius: 19px;
+}
+
+.title-bar-menu {
+    border: 1px solid #d3d3d3;
+    min-width: 110px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 15px;
+    transition: transform 0.1s ease;
+}
+
+.title-bar-menu:hover {
+    background-color: rgb(237, 237, 237);
+    border: 1px solid #c0c0c0;
+}
+
+.title-bar-menu:active {
+    transform: scale(0.98);
+}
+
+.title-bar-focused {
+    border: 2px solid #1a6dc697;
+}
+
+.title-menu-icon-wrapper {
+    flex: 1.2;
+}
+
+.title-menu-icon {
+
+}
+
+.category-icon-1 {
+    display: flex;
+    opacity: 0.6;
+}
+
+.category-icon-1 img {
+    width: 15px;
+    margin-left: 3px;
+}
+
+.filter-icon-1 {
+    font-size: 1.2rem;
+    line-height: 2;
+    margin-left: 2px;
+    opacity: 0.5;
+}
+
+.sort-icon-1 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+    margin-left: 1px;
+    opacity: 0.5;
+}
+
+.title-menu-text-wrapper {
+    flex: 5;
+    color: #575757;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.title-menu-text {}
+
+.title-menu-arrow-wrapper {
+    flex: 0.7;
+    font-size: 0.6rem;
+}
+
+.title-menu-arrow {
+    line-height: 1;
+    margin-top: 5px;
+    opacity: 0.6;
+}

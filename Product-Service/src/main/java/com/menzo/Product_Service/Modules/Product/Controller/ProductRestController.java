@@ -42,19 +42,39 @@ public class ProductRestController {
     @PostMapping
     public ResponseEntity<?> getClientProductListing(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                                      @RequestParam(name = "size", defaultValue = "10") Integer size,
+                                                     @RequestParam(name = "search", required = false) String searchRequest,
                                                      @RequestParam(name = "sort", required = false) String sortRequest,
                                                      @RequestBody(required = false) RequestDto requestDto) {
-        System.out.println("page: " + page + "\tsize: " + size);
-        System.out.println("sort: " + sortRequest);
-        System.out.println("requestDto: " + requestDto);
+        //  validations
+        if (page < 0) {
+            throw new IllegalArgumentException("Page cannot be less than 0.");
+        }
+        if (size <= 0 || size > 100) {
+            throw new IllegalArgumentException("Page size must be 0 to 100");
+        }
+        if (searchRequest != null && !searchRequest.isEmpty() && searchRequest.length() > 120) {
+            throw new IllegalArgumentException("Search text too long.");
+        }
 
         Page<UserProductListingDto> pageContent = productsRetrievalService.getClientProductListing(
                 page,
                 size,
-                sortRequest != null ? sortRequest : "",
-                requestDto != null ? requestDto : new RequestDto()
+                searchRequest == null ? "" : searchRequest,
+                sortRequest == null ? "" : sortRequest,
+                requestDto == null ? new RequestDto() : requestDto
         );
-        return ResponseEntity.ok(pageContent);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        if (pageContent != null) {
+            responseBody.put("message", "");
+            responseBody.put("pageContent", pageContent);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseBody);
+        } else {
+            responseBody.put("message", "");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
+        }
     }
 
 
@@ -87,8 +107,8 @@ public class ProductRestController {
     @PostMapping("/all-products")
     public ResponseEntity<?> getAdminProductListing(@RequestParam(defaultValue = "0") Integer page,
                                                     @RequestParam(defaultValue = "10") Integer size,
-                                                    @RequestParam(required = false) String searchRequest,
-                                                    @RequestParam(required = false) String sortRequest,
+                                                    @RequestParam(name = "search", required = false) String searchRequest,
+                                                    @RequestParam(name = "sort", required = false) String sortRequest,
                                                     @RequestBody(required = false) RequestDto requestDto) {
         //  validations
         if (page < 0) {
@@ -115,10 +135,13 @@ public class ProductRestController {
         if (pageContent != null) {
             responseBody.put("message", "");
             responseBody.put("pageContent", pageContent);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseBody);
         } else {
             responseBody.put("message", "");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseBody);
         }
-        return ResponseEntity.ok(responseBody);
     }
 
 

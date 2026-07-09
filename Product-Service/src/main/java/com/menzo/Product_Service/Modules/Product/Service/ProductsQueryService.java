@@ -93,15 +93,16 @@ public class ProductsQueryService {
                                                                String searchRequest,
                                                                String sortRequest,
                                                                RequestDto filterRequest) {
-
-        //  validation
-        // ## validate the sort request.. check if the provided sort is white listed.
+        //  ------- validation -------
+        // ## validate the sort request... check if the provided sort is whitelisted.
         // ## same for filter request
+
+        //  ------- data pre-processing -------
 
         //  processing search results - getting matched product IDs
         List<Long> searchResults = processSearchRequest(searchRequest.trim());
 
-        //  data pre-processing
+        //  processing sort request
         String sortParam = getSortValue(sortRequest);
 
         Map<String, Integer> statusFlags = new HashMap<>();
@@ -113,10 +114,10 @@ public class ProductsQueryService {
         QueryDetailsDto queryDetails = QueryDetailsDto.builder()
                 .page(page)
                 .size(size)
+                .searchResultProductIds(searchResults)
                 .sortRequest(sortParam)
                 .filterValues(filterRequest.getFilterRequestDtos())
                 .statusFlags(statusFlags)
-                .searchResultProductIds(searchResults)
                 .build();
 
         //  getting page content - repo call
@@ -150,12 +151,18 @@ public class ProductsQueryService {
     //  CLIENT side - product listing
     public Page<UserProductListingDto> getClientProductListing(Integer page,
                                                                Integer size,
+                                                               String searchRequest,
                                                                String sortRequest,
                                                                RequestDto filterRequest) {
-        String sortParam = "";
-        if (sortRequest != null && !sortRequest.isEmpty()) {
-            sortParam = getSortValue(sortRequest);
-        }
+        //  ------- validation -------
+
+        //  ------- data pre-processing -------
+
+        //  processing search results - getting matched product IDs
+        List<Long> searchResults = processSearchRequest(searchRequest.trim());
+
+        //  processing sort request
+        String sortParam = getSortValue(sortRequest);
 
         Map<String, Integer> statusFlags = new HashMap<>();
         statusFlags.put("isItemActive", 1);
@@ -168,11 +175,13 @@ public class ProductsQueryService {
         QueryDetailsDto queryDetails = QueryDetailsDto.builder()
                 .page(page)
                 .size(size)
+                .searchResultProductIds(searchResults)
                 .sortRequest(sortParam)
                 .filterValues(filterRequest.getFilterRequestDtos())
                 .statusFlags(statusFlags)
                 .build();
 
+        //  getting page content - repo call
         Page<UserProductListingDto> pageContent = productsRepo.findUserProductListing(queryDetails);
 
         for (UserProductListingDto p : pageContent.getContent()) {
