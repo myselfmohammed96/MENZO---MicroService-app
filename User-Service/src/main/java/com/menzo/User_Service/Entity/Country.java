@@ -1,8 +1,16 @@
 package com.menzo.User_Service.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "countries")
 public class Country {
 
@@ -13,30 +21,10 @@ public class Country {
     @Column(nullable = false, name = "country_name")
     private String countryName;
 
-    public Country() {}
-
-    public Country(Integer id, String countryName) {
-        this.id = id;
-        this.countryName = countryName;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
+    ////////////////////////////////////
 
     public String toString() {
-        return "Country:\nid: " + id + "\ncountryName: " + countryName + "\n";
+        return "Country:\nid: " + id +
+                "\ncountryName: " + countryName + "\n";
     }
 }

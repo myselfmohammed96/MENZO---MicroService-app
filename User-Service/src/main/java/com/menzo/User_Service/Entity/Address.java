@@ -2,11 +2,20 @@ package com.menzo.User_Service.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "addresses")
 public class Address {
 
@@ -14,35 +23,37 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "unit_address")
+    @Column(nullable = false)
     private String unitAddress;
 
-    @Column(nullable = false, name = "street")
+    @Column(nullable = false)
     private String street;
 
-    @Column(name = "landmark")
-    private String landmark;
-
-    @Column(nullable = false, name = "city")
+    @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false, name = "state")
+    @Column(nullable = false)
     private String state;
 
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @Column(nullable = false, name = "pincode")
+    @Column(nullable = false)
     private String pincode;
 
-    @Column(nullable = false, name = "created_at")
+    private String landmark;
+
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @CreationTimestamp
     private LocalDateTime createdAt;
-    ////////////////////////////////////////////////////////////////////
 
-    public Address() {}
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    ////////////////////////////////////////////////////////////////////
 
     public Address(String unitAddress, String street, String landmark,
                    String city, String state, Country country, String pincode) {
@@ -68,82 +79,16 @@ public class Address {
         this.pincode = pincode;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUnitAddress() {
-        return unitAddress;
-    }
-
-    public void setUnitAddress(String unitAddress) {
-        this.unitAddress = unitAddress;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getLandmark() {
-        return landmark;
-    }
-
-    public void setLandmark(String landmark) {
-        this.landmark = landmark;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public String getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public String toString() {
-        return "\nUserAddressDto:\nid: " + id + "\nunitAddress: " + unitAddress +
-                "\nstreet: " + street + "\nlandmark: " + landmark + "\ncity: " +
-                city + "\nstate: " + state + "\ncountry: " + country + "\npincode: " +
-                pincode + "\ncreatedAt: " + createdAt + "\n";
+        return "\nUserAddressDto:\nid: " + id +
+                "\nunitAddress: " + unitAddress +
+                "\nstreet: " + street +
+                "\nlandmark: " + landmark +
+                "\ncity: " + city +
+                "\nstate: " + state +
+                "\ncountry: " + country +
+                "\npincode: " + pincode +
+                "\ncreatedAt: " + createdAt +
+                "\nupdatedAt: " + updatedAt + "\n";
     }
 }

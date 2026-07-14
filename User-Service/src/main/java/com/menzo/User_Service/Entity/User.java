@@ -5,12 +5,21 @@ import com.menzo.User_Service.Dto.OAuthUserDto;
 import com.menzo.User_Service.Enums.Gender;
 import com.menzo.User_Service.Enums.Roles;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -18,46 +27,46 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "first_name")
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
     private String lastName;
 
-    @Column(nullable = false, name = "email")
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "date_of_birth")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Roles userType;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
-    @Column(name = "user_password")
+    @Column(name = "password_hash")
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
-    private Gender gender;
 
     @Column(name = "profile_pic")
     private String profileUrl;
 
-    @Column(nullable = false, name = "created_at")
+    @Column(nullable = false)
+    private boolean isActive;
+
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "user_role")
-    private Roles roles;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
-    @Column(name = "is_active")
-    private boolean isActive;
     ///////////////////////////////////////////////
-
-    public User(){}
 
     public User(OAuthUserDto user) {
         this.firstName = user.getUserName();
@@ -77,105 +86,15 @@ public class User {
         this.password = userPassword;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public String getProfileUrl() {
-        return profileUrl;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Roles getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Roles roles) {
-        this.roles = roles;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
     public String toString() {
-        return "User:\nid: " + id + "\nfirstName: " + firstName + "\nlastName: " + lastName +
-                "\nemail: " + email + "\nphoneNumber: " + phoneNumber + "\ndateOfBirth: " + dateOfBirth +
-                "\ngender: " + gender + "\nroles: " + roles + "\nisActive: " + isActive + "\n";
+        return "User:\nid: " + id +
+                "\nfirstName: " + firstName +
+                "\nlastName: " + lastName +
+                "\nemail: " + email +
+                "\nphoneNumber: " + phoneNumber +
+                "\ndateOfBirth: " + dateOfBirth +
+                "\ngender: " + gender +
+                "\nroles: " + userType +
+                "\nisActive: " + isActive + "\n";
     }
 }
