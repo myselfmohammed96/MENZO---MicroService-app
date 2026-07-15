@@ -47,7 +47,6 @@ public class UserAddress {
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isDeleted = false;
 
-    // define it in the db
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDateTime deletedAt;
 

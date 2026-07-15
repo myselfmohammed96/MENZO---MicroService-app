@@ -1,9 +1,9 @@
 package com.menzo.User_Service.Enums;
 
-public enum Roles {
+public enum UserTypes {
 
     CUSTOMER,
-    STAFF,
-    MANAGER,
-    ADMIN
+    ADMIN,
+    STAFF
+
 }

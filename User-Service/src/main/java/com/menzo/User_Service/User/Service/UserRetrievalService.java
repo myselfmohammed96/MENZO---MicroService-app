@@ -4,8 +4,7 @@ import com.menzo.User_Service.Dto.*;
 import com.menzo.User_Service.Entity.User;
 import com.menzo.User_Service.Entity.UserAddress;
 import com.menzo.User_Service.Enums.ActiveStatus;
-import com.menzo.User_Service.Enums.Gender;
-import com.menzo.User_Service.Enums.Roles;
+import com.menzo.User_Service.Enums.UserTypes;
 import com.menzo.User_Service.Repository.AddressRepository;
 import com.menzo.User_Service.Repository.UserAddressRepository;
 import com.menzo.User_Service.Repository.UserRepository;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +80,7 @@ public class UserRetrievalService {
             List<UserListingDto> usersDto = new ArrayList<>();
 
             for (User user : users.getContent()) {
-                if (user.getRoles() == Roles.ADMIN) continue;
+                if (user.getRoles() == UserTypes.ADMIN) continue;
                 ActiveStatus activeStatus = user.isActive() ? ActiveStatus.ACTIVE : ActiveStatus.INACTIVE;
                 usersDto.add(new UserListingDto(
                         user.getId(),
@@ -106,7 +104,7 @@ public class UserRetrievalService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
         logger.info("User found for ID: {}", user.getId());
 
-        if (user.getRoles().equals(Roles.ADMIN)) {
+        if (user.getRoles().equals(UserTypes.ADMIN)) {
             logger.warn("No user with 'USER' role found for ID: {}", user.getId());
             return null;
         }

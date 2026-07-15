@@ -3,7 +3,7 @@ package com.menzo.User_Service.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.User_Service.Dto.OAuthUserDto;
 import com.menzo.User_Service.Enums.Gender;
-import com.menzo.User_Service.Enums.Roles;
+import com.menzo.User_Service.Enums.UserTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,7 +43,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Roles userType;
+    private UserTypes userType;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;

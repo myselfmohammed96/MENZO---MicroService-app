@@ -5,7 +5,7 @@ import com.menzo.User_Service.Entity.Address;
 import com.menzo.User_Service.Entity.Country;
 import com.menzo.User_Service.Entity.User;
 import com.menzo.User_Service.Entity.UserAddress;
-import com.menzo.User_Service.Enums.Roles;
+import com.menzo.User_Service.Enums.UserTypes;
 import com.menzo.User_Service.Exceptions.AuthFeignException;
 import com.menzo.User_Service.Exceptions.DuplicateAddressException;
 import com.menzo.User_Service.Exceptions.PasswordMismatchException;
@@ -16,7 +16,6 @@ import com.menzo.User_Service.Repository.UserAddressRepository;
 import com.menzo.User_Service.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
-import jdk.jshell.spi.ExecutionControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class UserService {
             User user = new User(newUser.getFirstName(), newUser.getLastName(),
                     newUser.getPhoneNumber(), newUser.getEmail(),
                     newUser.getDateOfBirth(), newUser.getGender(), encodedPassword);
-            user.setRoles(Roles.USER);
+            user.setRoles(UserTypes.USER);
             user.setActive(true);
 
             User savedUser = userRepo.save(user);
@@ -226,7 +225,7 @@ public class UserService {
                     })
                     .orElseGet(() -> {
                         User newUser = new User(googleUser);
-                        newUser.setRoles(Roles.USER);
+                        newUser.setRoles(UserTypes.USER);
                         newUser.setActive(true);
                         User savedUser = userRepo.save(newUser);
                         logger.info("New Google OAuth user saved: {}", savedUser.getEmail());
