@@ -1,9 +1,9 @@
-package com.menzo.User_Service.Entity;
+package com.menzo.User_Service.User.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.User_Service.Dto.OAuthUserDto;
-import com.menzo.User_Service.Enums.Gender;
-import com.menzo.User_Service.Enums.UserTypes;
+import com.menzo.User_Service.User.Enum.Gender;
+import com.menzo.User_Service.User.Enum.UserTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,7 +55,7 @@ public class User {
     private String profileUrl;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean isActive = true;
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -74,16 +74,22 @@ public class User {
         this.profileUrl = user.getProfileUrl();
     }
 
-    public User(String firstName, String lastName, String phoneNumber,
-         String email, LocalDate dateOfBirth, Gender gender,
-         String userPassword){
+    public User(String firstName,
+                String lastName,
+                String email,
+                String phoneNumber,
+                Gender gender,
+                UserTypes userType,
+                LocalDate dateOfBirth,
+                String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
         this.email = email;
-        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.password = userPassword;
+        this.userType = userType;
+        this.dateOfBirth = dateOfBirth;
+        this.password = password;
     }
 
     public String toString() {
@@ -92,9 +98,9 @@ public class User {
                 "\nlastName: " + lastName +
                 "\nemail: " + email +
                 "\nphoneNumber: " + phoneNumber +
-                "\ndateOfBirth: " + dateOfBirth +
                 "\ngender: " + gender +
-                "\nroles: " + userType +
+                "\nuserType: " + userType +
+                "\ndateOfBirth: " + dateOfBirth +
                 "\nisActive: " + isActive + "\n";
     }
 }
