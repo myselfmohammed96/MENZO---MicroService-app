@@ -27,7 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         logger.info("Fetching user credentials for email: {}", userEmail);
         User credential = authUserFeign.getUserbyUserEmail(new EmailDto(userEmail));
-        credential.display();   // *** check ***
         if (credential == null){
             throw new UsernameNotFoundException("User not found with Email: " + userEmail);
         }
