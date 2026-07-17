@@ -1,4 +1,4 @@
-package com.menzo.User_Service.Enums;
+package com.menzo.User_Service.User.Enum;
 
 public enum Gender {
 

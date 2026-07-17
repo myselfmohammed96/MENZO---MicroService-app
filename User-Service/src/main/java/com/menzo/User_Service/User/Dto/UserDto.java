@@ -42,24 +42,6 @@ public class UserDto {
 
     ///////////////////////////////////////////
 
-    public UserDto(Long id,
-                   String firstName,
-                   String lastName,
-                   String email,
-                   String phoneNumber,
-                   String password,
-                   UserTypes roles,
-                   boolean isActive) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.userTypes = roles;
-        this.isActive = isActive;
-    }
-
     public UserDto(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();

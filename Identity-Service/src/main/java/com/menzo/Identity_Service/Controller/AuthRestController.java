@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController {
@@ -51,18 +49,6 @@ public class AuthRestController {
         Cookie cookie = authService.loginUser(loginCred);
         response.addCookie(cookie);
         return ResponseEntity.ok("Authentication successful");
-    }
-
-    //  OAuth redirect url
-    @GetMapping("/grantcode")
-    public void grantCode(@RequestParam("code") String code,
-//                            @RequestParam("scope") String scope,
-//                            @RequestParam("authuser") String authUser,
-//                            @RequestParam("prompt") String prompt) { - throws IOException
-                          HttpServletResponse response) throws IOException {
-        Cookie cookie = oAuthService.processGrantCode(code);
-        response.addCookie(cookie);
-        response.sendRedirect("http://localhost:8080/index");
     }
 
     @PostMapping("/get-token")

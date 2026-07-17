@@ -1,8 +1,16 @@
 package com.menzo.Identity_Service.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "tokens")
 public class Token {
 
@@ -20,50 +28,11 @@ public class Token {
     @Column(name = "user_id")
     private Long userId;
 
-    public Token(){}
+    //////////////////////////////////////
 
     public Token(String token, boolean loggedOut, Long userId){
         this.token = token;
         this.loggedOut = loggedOut;
-        this.userId = userId;
-    }
-
-    public Token(Long tokenId, String token, boolean loggedOut, Long userId) {
-        this.tokenId = tokenId;
-        this.token = token;
-        this.loggedOut = loggedOut;
-        this.userId = userId;
-    }
-
-    public Long getTokenId() {
-        return tokenId;
-    }
-
-    public void setTokenId(Long tokenId) {
-        this.tokenId = tokenId;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public boolean isLoggedOut() {
-        return loggedOut;
-    }
-
-    public void setLoggedOut(boolean loggedOut) {
-        this.loggedOut = loggedOut;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

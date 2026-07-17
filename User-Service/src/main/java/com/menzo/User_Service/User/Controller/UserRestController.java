@@ -1,7 +1,9 @@
 package com.menzo.User_Service.User.Controller;
 
+import com.menzo.User_Service.User.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.Dto.RegNewUser;
 //import com.menzo.User_Service.User.Service.UserRetrievalService;
+import com.menzo.User_Service.User.Dto.UserDto;
 import com.menzo.User_Service.User.Service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +26,12 @@ public class UserRestController {
 //    @Autowired
 //    UserRetrievalService userRetrievalService;
 
+    /*
+    *
+    *   Register new user (Customer)
+    *   Form registration
+    *
+    */
     @PostMapping("user-signin")
     public ResponseEntity<?> createNewUser(@RequestBody RegNewUser newUser,
                                                 HttpServletResponse response){
@@ -33,6 +41,14 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("User created successfully.");
     }
+
+    //  Google OAuth user
+    @PostMapping("/google-oauth-access")
+    public ResponseEntity<UserDto> googleOAuthUser(@RequestBody OAuthUserDto googleUser) {
+        UserDto user = userService.saveGoogleOAuthUser(googleUser);
+        return ResponseEntity.ok(user);
+    }
+//
 //
 //
 //
@@ -157,14 +173,7 @@ public class UserRestController {
 //    }
 //
 //
-////    ********* Google OAuth user *********
-//
-//    @PostMapping("/google-oauth-access")
-//    public ResponseEntity<UserDto> googleOAuthUser(@RequestBody OAuthUserDto googleUser) {
-//        UserDto user = userService.saveGoogleOAuthUser(googleUser);
-//        return ResponseEntity.ok(user);
-//    }
-//
+
 
 
 

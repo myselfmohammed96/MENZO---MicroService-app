@@ -13,6 +13,7 @@ import jakarta.servlet.http.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -119,6 +120,36 @@ public class UserService {
     }
 
 
+    //    ********* Google OAuth *********
+
+    public UserDto saveGoogleOAuthUser(OAuthUserDto googleUser) {
+        if (googleUser == null || googleUser.getEmail() == null) {
+            logger.error("Google OAuth user or email is null");
+            throw new IllegalArgumentException("Invalid Google OAuth user data");
+        }
+        try {
+            return userRepo.findByEmail(googleUser.getEmail())
+                    .map(user -> {
+                        logger.info("User already exists with email: {}", googleUser.getEmail());
+                        return new UserDto(user);
+                    })
+                    .orElseGet(() -> {
+                        User newUser = new User(googleUser);
+                        newUser.setUserType(UserTypes.CUSTOMER);
+                        User savedUser = userRepo.save(newUser);
+                        logger.info("New Google OAuth user saved: {}", savedUser.getEmail());
+                        return new UserDto(savedUser);
+                    });
+        } catch (DataAccessException e) {
+            logger.error("Database error while saving/fetching Google OAuth user: {}", googleUser.getEmail(), e);
+            throw new RuntimeException("Database error while processing OAuth login", e);
+        } catch (Exception e) {
+            logger.error("Unexpected error during Google OAuth user save: {}", googleUser.getEmail(), e);
+            throw new RuntimeException("Unexpected error during OAuth login", e);
+        }
+    }
+
+
 //    public User updateUserActiveStatus(UpdateUserActiveStatusDto statusDto) {
 //        try {
 //            User user = userRepo.findById(statusDto.getUserId())
@@ -209,36 +240,8 @@ public class UserService {
 //        return emailExists;
 //    }
 //
-////    ********* Google OAuth *********
-//
-//    public UserDto saveGoogleOAuthUser(OAuthUserDto googleUser) {
-//        if (googleUser == null || googleUser.getEmail() == null) {
-//            logger.error("Google OAuth user or email is null");
-//            throw new IllegalArgumentException("Invalid Google OAuth user data");
-//        }
-//        try {
-//            return userRepo.findByEmail(googleUser.getEmail())
-//                    .map(user -> {
-//                        logger.info("User already exists with email: {}", googleUser.getEmail());
-//                        return new UserDto(user);
-//                    })
-//                    .orElseGet(() -> {
-//                        User newUser = new User(googleUser);
-//                        newUser.setRoles(UserTypes.USER);
-//                        newUser.setActive(true);
-//                        User savedUser = userRepo.save(newUser);
-//                        logger.info("New Google OAuth user saved: {}", savedUser.getEmail());
-//                        return new UserDto(savedUser);
-//                    });
-//        } catch (DataAccessException e) {
-//            logger.error("Database error while saving/fetching Google OAuth user: {}", googleUser.getEmail(), e);
-//            throw new RuntimeException("Database error while processing OAuth login", e);
-//        } catch (Exception e) {
-//            logger.error("Unexpected error during Google OAuth user save: {}", googleUser.getEmail(), e);
-//            throw new RuntimeException("Unexpected error during OAuth login", e);
-//        }
-//    }
-//
+
+
 ////    ********* User Address *********
 //
 //    public Long addUserAddress(String userEmail, UserAddressDto userAddress) {

@@ -1,7 +1,7 @@
 package com.menzo.User_Service.User.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.menzo.User_Service.Dto.OAuthUserDto;
+import com.menzo.User_Service.User.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.Enum.Gender;
 import com.menzo.User_Service.User.Enum.UserTypes;
 import jakarta.persistence.*;
@@ -68,10 +68,10 @@ public class User {
 
     ///////////////////////////////////////////////
 
-    public User(OAuthUserDto user) {
-        this.firstName = user.getUserName();
-        this.email = user.getEmail();
-        this.profileUrl = user.getProfileUrl();
+    public User(OAuthUserDto googleUser) {
+        this.firstName = googleUser.getUserName();
+        this.email = googleUser.getEmail();
+        this.profileUrl = googleUser.getProfileUrl();
     }
 
     public User(String firstName,

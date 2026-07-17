@@ -51,14 +51,20 @@ public class OAuthService {
     @Autowired
     private AuthService authService;
 
-    //    OAuth config
 
+
+    /*
+     *
+     *   Google OAuth - redirect URL
+     *   Google redirects on user authorization,
+     *   with authorization code
+     *
+     */
     public Cookie processGrantCode(String code) {
         String accessToken = getOauthAccessTokenGoogle(code);
-        OAuthUserDto googleUser = getProfileDetailsGoogle(accessToken);
+        OAuthUserDto googleUserDetails = getProfileDetailsGoogle(accessToken);
 
-//        System.out.println(accessToken + "\n" + googleUser.getEmail() + "\n" + googleUser.getUserName() + "\n" + googleUser.getProfileUrl());
-        User user = userFeign.googleOAuthUser(googleUser);
+        User user = userFeign.googleOAuthUser(googleUserDetails);
 
         String token = authService.generateToken(user.getEmail());
         logger.info("JWT token created for google oauth user: {}", user.getEmail());
@@ -66,6 +72,14 @@ public class OAuthService {
         return authService.createCookie(token);
     }
 
+
+
+    /*
+    *
+    *   Get Oauth access token
+    *   by sending the authorization code
+    *
+    */
     private String getOauthAccessTokenGoogle(String code) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -90,6 +104,15 @@ public class OAuthService {
         return jsonObject.get("access_token").toString().replace("\"", "");
     }
 
+
+
+    /*
+     *
+     *   Get Google user's user details
+     *   (name, email, profile pic)
+     *   by sending the access token
+     *
+     */
     private OAuthUserDto getProfileDetailsGoogle(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -101,12 +124,12 @@ public class OAuthService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
         JsonObject jsonObject = new Gson().fromJson(response.getBody(), JsonObject.class);
 
-        OAuthUserDto user = new OAuthUserDto(
+        OAuthUserDto userDetails = new OAuthUserDto(
                 jsonObject.get("email").toString().replace("\"", ""),
                 jsonObject.get("name").toString().replace("\"", ""),
                 jsonObject.get("picture").toString().replace("\"", "")
         );
 
-        return user;
+        return userDetails;
     }
 }
