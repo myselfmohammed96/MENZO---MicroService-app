@@ -1,8 +1,8 @@
 //package com.menzo.Identity_Service.Controller;
 //
-//import com.menzo.Identity_Service.Dto.LoginCredentials;
+//import com.menzo.Identity_Service.Authentication.Dto.LoginCredentials;
 //import com.menzo.Identity_Service.Service.AuthService;
-//import com.menzo.Identity_Service.Service.OAuthService;
+//import com.menzo.Identity_Service.OAuth.Service.OAuthService;
 //import jakarta.servlet.http.Cookie;
 //import jakarta.servlet.http.HttpServletResponse;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +21,18 @@
 //    @Autowired
 //    OAuthService oAuthService;
 //
+//
+//
 //    //    End point for submitting the login form
-////    @PostMapping("/login")
-////    public String loginUser(@ModelAttribute LoginCredentials loginCred, HttpServletResponse response) throws Exception{
-////        System.out.println(loginCred.getEmail() + " #.# " + loginCred.getPassword());
-////        Cookie cookie = authService.loginUser(loginCred);
-////        response.addCookie(cookie);
-////        String redirectUrl = UriComponentsBuilder
-////                .fromUriString("http://localhost:8080")
-////                .pathSegment("index")
-////                .toUriString();
-////        return "redirect:" + redirectUrl;
-////    }
-//
-//
-//
-//
-//
-//
+//    @PostMapping("/login")
+//    public String loginUser(@ModelAttribute LoginCredentials loginCred, HttpServletResponse response) throws Exception{
+//        System.out.println(loginCred.getEmail() + " #.# " + loginCred.getPassword());
+//        Cookie cookie = authService.loginUser(loginCred);
+//        response.addCookie(cookie);
+//        String redirectUrl = UriComponentsBuilder
+//                .fromUriString("http://localhost:8080")
+//                .pathSegment("index")
+//                .toUriString();
+//        return "redirect:" + redirectUrl;
+//    }
 //}

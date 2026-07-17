@@ -1,4 +1,4 @@
-package com.menzo.Identity_Service.Entity;
+package com.menzo.Identity_Service.JWT.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

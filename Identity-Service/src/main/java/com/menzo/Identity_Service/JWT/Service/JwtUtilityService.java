@@ -1,4 +1,4 @@
-package com.menzo.Identity_Service.Service;
+package com.menzo.Identity_Service.JWT.Service;
 
 import com.menzo.Identity_Service.Dto.EmailDto;
 import com.menzo.Identity_Service.Dto.User;
@@ -15,30 +15,41 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-public class JwtService {
+public class JwtUtilityService {
 
     @Autowired
     private UserFeign userFeign;
 
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
-    public void validateToken(final String token){
-        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
-    }
 
+
+    /*
+    *
+    *   Generate JWT
+    *
+    */
     public String generateToken(String userEmail){
         User user = userFeign.getUserbyUserEmail(new EmailDto(userEmail));
         Map<String, Object> claims = Map.of("roles", user.getRoles());
         return createToken(claims, userEmail);
     }
 
-    private String createToken(Map<String, Object> claims, String userEmail){
+
+
+    /*
+    *
+    *   Create JWT
+    *
+    */
+    private String createToken(Map<String, Object> claims,
+                               String userEmail){
         Date now = new Date();
         Date expiry = new Date(now.getTime() + 1000L * 60 * 60 * 24 * 10);
 
-        System.out.println("Token generation time: " + now);
-        System.out.println("Token expiry time: " + expiry);
-        System.out.println("Current server time: " + new Date());
+//        System.out.println("Token generation time: " + now);
+//        System.out.println("Token expiry time: " + expiry);
+//        System.out.println("Current server time: " + new Date());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userEmail)
@@ -47,6 +58,27 @@ public class JwtService {
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
+
+
+    /*
+    *
+    *   Validate JWT
+    *
+    */
+    public void validateToken(final String token){
+        Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token);
+    }
+
+
+
+    /*
+    *
+    *   Get sign key
+    *
+    */
     private Key getSignKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);

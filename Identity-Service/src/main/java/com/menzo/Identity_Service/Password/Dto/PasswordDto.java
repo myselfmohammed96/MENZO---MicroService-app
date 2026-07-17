@@ -1,4 +1,4 @@
-package com.menzo.Identity_Service.Dto;
+package com.menzo.Identity_Service.Password.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenMinimalDto {
+public class PasswordDto {
 
-    private String token;
+    private String password;
 
 }

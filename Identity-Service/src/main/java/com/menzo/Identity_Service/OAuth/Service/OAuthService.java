@@ -1,6 +1,8 @@
-package com.menzo.Identity_Service.Service;
+package com.menzo.Identity_Service.OAuth.Service;
 
-import com.menzo.Identity_Service.Dto.OAuthUserDto;
+import com.menzo.Identity_Service.Authentication.Service.AuthService;
+import com.menzo.Identity_Service.JWT.Service.JwtService;
+import com.menzo.Identity_Service.OAuth.Dto.OAuthUserDto;
 import com.menzo.Identity_Service.Dto.User;
 import com.menzo.Identity_Service.Feign.UserFeign;
 import com.nimbusds.jose.shaded.gson.Gson;
@@ -19,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class OAuthService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+    private static final Logger logger = LoggerFactory.getLogger(OAuthService.class);
 
     @Value("${google.client.id}")
     private String clientId;
@@ -49,6 +51,9 @@ public class OAuthService {
     private UserFeign userFeign;
 
     @Autowired
+    private JwtService jwtService;
+
+    @Autowired
     private AuthService authService;
 
 
@@ -66,7 +71,7 @@ public class OAuthService {
 
         User user = userFeign.googleOAuthUser(googleUserDetails);
 
-        String token = authService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail());
         logger.info("JWT token created for google oauth user: {}", user.getEmail());
 
         return authService.createCookie(token);

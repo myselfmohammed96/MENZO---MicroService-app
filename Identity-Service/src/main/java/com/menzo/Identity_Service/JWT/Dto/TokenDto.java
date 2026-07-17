@@ -1,4 +1,4 @@
-package com.menzo.Identity_Service.Dto;
+package com.menzo.Identity_Service.JWT.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

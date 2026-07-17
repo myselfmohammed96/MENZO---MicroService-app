@@ -1,4 +1,4 @@
-package com.menzo.Identity_Service.Dto;
+package com.menzo.Identity_Service.OAuth.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,9 @@ public class OAuthUserDto {
 
     /////////////////////////////////
 
-    public OAuthUserDto(String email, String userName, String profileUrl) {
+    public OAuthUserDto(String email,
+                        String userName,
+                        String profileUrl) {
         this.email = email;
         this.userName = userName;
         this.profileUrl = profileUrl;

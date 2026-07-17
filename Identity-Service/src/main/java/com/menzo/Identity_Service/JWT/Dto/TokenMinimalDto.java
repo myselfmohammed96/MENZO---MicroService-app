@@ -1,4 +1,4 @@
-package com.menzo.Identity_Service.Dto;
+package com.menzo.Identity_Service.JWT.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VerifyPasswordDto {
+public class TokenMinimalDto {
 
-    private String currentPassword;
-
-    private String passwordInDB;
+    private String token;
 
 }

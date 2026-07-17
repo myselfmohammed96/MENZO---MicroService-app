@@ -1,6 +1,6 @@
 //package com.menzo.Identity_Service.Config;
 //
-//import com.menzo.Identity_Service.Service.JwtService;
+//import com.menzo.Identity_Service.JWT.Service.JwtService;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

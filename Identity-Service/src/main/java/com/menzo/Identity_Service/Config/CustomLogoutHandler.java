@@ -1,7 +1,6 @@
 package com.menzo.Identity_Service.Config;
 
-import com.menzo.Identity_Service.Entity.Token;
-import com.menzo.Identity_Service.Repository.TokenRepository;
+import com.menzo.Identity_Service.JWT.Repository.TokenRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +12,6 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class CustomLogoutHandler implements LogoutHandler {
