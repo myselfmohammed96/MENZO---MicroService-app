@@ -1,6 +1,7 @@
-package com.menzo.User_Service.User.Entity;
+package com.menzo.User_Service.User.Address.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.menzo.User_Service.User.Address.Entity.Country;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,30 +55,6 @@ public class Address {
     private LocalDateTime updatedAt;
 
     ////////////////////////////////////////////////////////////////////
-
-    public Address(String unitAddress, String street, String landmark,
-                   String city, String state, Country country, String pincode) {
-        this.unitAddress = unitAddress;
-        this.street = street;
-        this.landmark = landmark;
-        this.city = city;
-        this.state = state;
-        this.country = country;
-        this.decode = pincode;
-    }
-
-    public Address(Long id, String unitAddress, String street,
-                          String landmark, String city, String state,
-                          Country country, String pincode) {
-        this.id = id;
-        this.unitAddress = unitAddress;
-        this.street = street;
-        this.landmark = landmark;
-        this.city = city;
-        this.state = state;
-        this.country = country;
-        this.decode = pincode;
-    }
 
     public String toString() {
         return "\nUserAddressDto:\nid: " + id +
