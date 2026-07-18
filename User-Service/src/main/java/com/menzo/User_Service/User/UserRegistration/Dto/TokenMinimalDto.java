@@ -1,4 +1,4 @@
-package com.menzo.User_Service.User.Dto;
+package com.menzo.User_Service.User.UserRegistration.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

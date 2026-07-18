@@ -1,7 +1,7 @@
-package com.menzo.User_Service.User.Dto;
+package com.menzo.User_Service.User.UserRegistration.Dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.menzo.User_Service.User.Enum.Gender;
+import com.menzo.User_Service.User.Profile.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

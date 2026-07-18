@@ -1,12 +1,13 @@
 package com.menzo.User_Service.User.Credentials.Service;
 
+import com.menzo.User_Service.Exceptions.AuthFeignException;
 import com.menzo.User_Service.Exceptions.PasswordMismatchException;
 import com.menzo.User_Service.Feign.AuthFeign;
 import com.menzo.User_Service.User.Credentials.Dto.ChangePasswordDto;
+import com.menzo.User_Service.User.Credentials.Dto.PasswordDto;
 import com.menzo.User_Service.User.Credentials.Dto.VerifyPasswordDto;
 import com.menzo.User_Service.User.Profile.Entity.User;
 import com.menzo.User_Service.User.Profile.Repository.UserRepository;
-import com.menzo.User_Service.User.UserRegistration.Service.UserRegistrationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,33 @@ public class CredentialsService {
     @Autowired
     private UserRepository userRepo;
 
-    @Autowired
-    private UserRegistrationService userRegistrationService;
+
+
+    /*
+    *
+    *   Encode password
+    *
+    */
+    public String encodePassword(String userPassword) {
+        try {
+            PasswordDto encodedPassword = null;
+            logger.info("Password encoded");
+            try {
+                encodedPassword = authFeign.encodePassword(new PasswordDto(userPassword));
+            } catch (AuthFeignException ex) {
+                logger.error("Feign error while encoding password: status = {}, message = {}", ex.getStatus(), ex.getMessage());
+                throw new RuntimeException("Identity service failed to encode password", ex);
+            }
+            if (encodedPassword == null || encodedPassword.getPassword() == null) {
+                logger.error("Encoded password is null");
+                throw new RuntimeException("Encoded password is null");
+            }
+            return encodedPassword.getPassword();
+        } catch (Exception e) {
+            logger.error("Password encoding failed: {}", e.getMessage(), e);
+            throw new RuntimeException("Password encoding failed", e);
+        }
+    }
 
 
 
@@ -66,7 +92,7 @@ public class CredentialsService {
     // Change password
     private User changePassword(User user, String newPassword) {
         try {
-            String encodedPassword = userRegistrationService.encodePassword(newPassword);
+            String encodedPassword = encodePassword(newPassword);
             user.setPassword(encodedPassword);
             return userRepo.save(user);
         } catch (Exception e) {

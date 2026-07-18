@@ -1,4 +1,4 @@
-package com.menzo.User_Service.User.Dto;
+package com.menzo.User_Service.User.UserRegistration.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,14 +22,6 @@ public class OAuthUserDto {
     private boolean isActive;
 
     /////////////////////////////////
-
-    public OAuthUserDto(String email,
-                        String userName,
-                        String profileUrl) {
-        this.email = email;
-        this.userName = userName;
-        this.profileUrl = profileUrl;
-    }
 
     public String toString() {
         return "OAuthUserDto:\nid: " + id +

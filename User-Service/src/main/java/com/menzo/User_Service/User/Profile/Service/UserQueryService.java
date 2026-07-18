@@ -26,13 +26,12 @@ public class UserQueryService {
     private UserRepository userRepo;
 
 
-
     /*
-    *
-    *   Get user details
-    *   User identified by user email
-    *
-    */
+     *
+     *   Get user details
+     *   User identified by user email
+     *
+     */
     public UserDto getUserbyEmail(EmailDto userEmail) {
         try {
             logger.info("Fetching user by email: {}", userEmail.getEmail());
@@ -46,13 +45,12 @@ public class UserQueryService {
     }
 
 
-
     /*
-    *
-    *   Get user status
-    *   User identified by user ID
-    *
-    */
+     *
+     *   Get user status
+     *   User identified by user ID
+     *
+     */
     public UserStatusDto getUserStatusByUserId(Long userId) {
         try {
             logger.info("Fetching user by ID: {}", userId);
@@ -66,14 +64,13 @@ public class UserQueryService {
     }
 
 
-
     /*
-    *
-    *   get user details
-    *   User identified by user email
-    *   for client side
-    *
-    */
+     *
+     *   get user details
+     *   User identified by user email
+     *   for client side
+     *
+     */
     public ClientSideUserDetailsDto getUserDetailsForClientSide(EmailDto userEmail) {
         try {
             User user = userRepo.findByEmail(userEmail.getEmail())
@@ -86,12 +83,11 @@ public class UserQueryService {
     }
 
 
-
     /*
-    *
-    *   Get users list with pagination
-    *
-    */
+     *
+     *   Get users list with pagination
+     *
+     */
     public Page<UserListingDto> getUsersListWithPagination(Integer page, Integer size) {
         try {
             Pageable pageable = PageRequest.of(
@@ -122,14 +118,13 @@ public class UserQueryService {
     }
 
 
-
     /*
-    *
-    *   Get user details
-    *   User identified by user ID
-    *   for Admin side
-    *
-    */
+     *
+     *   Get user details
+     *   User identified by user ID
+     *   for Admin side
+     *
+     */
     public UserDetailsDto getUserDetailsByIdForAdminSide(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
@@ -154,14 +149,13 @@ public class UserQueryService {
     }
 
 
-
     /*
-    *
-    *   Get user details
-    *   User identified by user email
-    *   Used for UserCommandController
-    *
-    */
+     *
+     *   Get user details
+     *   User identified by user email
+     *   Used for UserCommandController
+     *
+     */
     public UserDetailsDto getUserDetailsByEmail(String userEmail) {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("No user found with Email: " + userEmail));
@@ -180,9 +174,12 @@ public class UserQueryService {
     }
 
 
-
-    //    public boolean isUserEmailExists(EmailDto emailDto) {
-//        boolean emailExists = userRepo.existsByEmail(emailDto.getEmail());
-//        return emailExists;
-//    }
+    /*
+     *
+     *   User email existence check
+     *
+     */
+    public boolean isUserEmailExists(EmailDto emailDto) {
+        return userRepo.existsByEmail(emailDto.getEmail());
+    }
 }
