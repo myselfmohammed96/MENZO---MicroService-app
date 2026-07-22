@@ -1,8 +1,7 @@
 package com.menzo.User_Service.User.Address.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.menzo.User_Service.User.Address.Entity.Address;
-import com.menzo.User_Service.User.Profile.Entity.User;
+import com.menzo.User_Service.User.UserProfile.Entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +13,7 @@ import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_address")
+@Table(name = "user_addresses")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +24,7 @@ public class UserAddress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userAddressId;
 
     @Column(nullable = false)
     private String firstName;
@@ -36,11 +35,11 @@ public class UserAddress {
     private String phoneNumber;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
@@ -55,7 +54,7 @@ public class UserAddress {
     //////////////////////////////////////////////////////////
 
     public String toString() {
-        return "\nUserAddress:\nid: " + id +
+        return "\nUserAddress:\nuserAddressId: " + userAddressId +
                 "\nfirstName: " + firstName +
                 "\nlastName: " + lastName +
                 "\nphoneNumber: " + phoneNumber +

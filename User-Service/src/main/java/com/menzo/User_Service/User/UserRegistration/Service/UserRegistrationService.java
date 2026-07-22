@@ -4,10 +4,10 @@ import com.menzo.User_Service.Exceptions.AuthFeignException;
 import com.menzo.User_Service.Feign.AuthFeign;
 import com.menzo.User_Service.User.Credentials.Dto.EmailDto;
 import com.menzo.User_Service.User.Credentials.Service.CredentialsService;
-import com.menzo.User_Service.User.Profile.Dto.UserDto;
-import com.menzo.User_Service.User.Profile.Entity.User;
-import com.menzo.User_Service.User.Profile.Enum.UserTypes;
-import com.menzo.User_Service.User.Profile.Repository.UserRepository;
+import com.menzo.User_Service.User.UserProfile.Dto.UserDto;
+import com.menzo.User_Service.User.UserProfile.Entity.User;
+import com.menzo.User_Service.User.UserProfile.Enum.UserTypes;
+import com.menzo.User_Service.User.UserProfile.Repository.UserRepository;
 import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.UserRegistration.Dto.RegNewUser;
 import com.menzo.User_Service.User.UserRegistration.Dto.TokenMinimalDto;
@@ -75,7 +75,7 @@ public class UserRegistrationService {
                     encodedPassword
             );
             User savedUser = userRepo.save(user);
-            if (savedUser.getId() == null) {
+            if (savedUser.getUserId() == null) {
                 throw new RuntimeException("Failed to save user");
             }
             logger.info("User registered: {}", user.getEmail());

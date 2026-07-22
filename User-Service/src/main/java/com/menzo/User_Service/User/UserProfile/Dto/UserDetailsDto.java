@@ -1,6 +1,5 @@
-package com.menzo.User_Service.User.UserRegistration.Dto;
+package com.menzo.User_Service.User.UserProfile.Dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.User_Service.User.UserProfile.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,12 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegNewUser {
+public class UserDetailsDto {
+
+    private Long id;
 
     private String firstName;
 
@@ -23,25 +25,27 @@ public class RegNewUser {
 
     private String phoneNumber;
 
-    private Gender gender;
-
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
-    private String password;
+    private Gender gender;
 
-    private String confirmPassword;
+    private boolean passwordPresent;
 
-    private String profilePic;
+    private LocalDateTime createdAt;
 
-    /////////////////////////////////////////////////
+    private boolean isActive;
 
-    public String toStringy() {
-        return "RegNewUser:\nfirstName: " + firstName +
+    ////////////////////////////////////////
+
+    public String toString() {
+        return "User:\nid: " + id +
+                "\nfirstName: " + firstName +
                 "\nlastName: " + lastName +
                 "\nemail: " + email +
                 "\nphoneNumber: " + phoneNumber +
+                "\ndateOfBirth: " + dateOfBirth +
                 "\ngender: " + gender +
-                "\ndateOfBirth: " + dateOfBirth + "\n";
+                "\ncreatedAt: " + createdAt +
+                "\nisActive: " + isActive + "\n";
     }
 }

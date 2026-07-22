@@ -8,8 +8,8 @@ import com.menzo.User_Service.User.Address.Entity.UserAddress;
 import com.menzo.User_Service.User.Address.Repository.AddressRepository;
 import com.menzo.User_Service.User.Address.Repository.CountryRepository;
 import com.menzo.User_Service.User.Address.Repository.UserAddressRepository;
-import com.menzo.User_Service.User.Profile.Entity.User;
-import com.menzo.User_Service.User.Profile.Repository.UserRepository;
+import com.menzo.User_Service.User.UserProfile.Entity.User;
+import com.menzo.User_Service.User.UserProfile.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +82,7 @@ public class UserAddressCommandService {
                 .isDefault(userAddress.isDefault())
                 .build()
         );
-        return savedUserAddress.getId();
+        return savedUserAddress.getUserAddressId();
     }
 
 
@@ -101,7 +101,7 @@ public class UserAddressCommandService {
             throw new EntityNotFoundException("User has no addresses.");
         }
         UserAddress matchedUserAddress = userAddresses.stream()
-                .filter((userAddress) -> Objects.equals(userAddress.getId(), addressId))
+                .filter((userAddress) -> Objects.equals(userAddress.getUserAddressId(), addressId))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Address doesn't exist with user: " + user.getEmail()));
 
@@ -135,7 +135,7 @@ public class UserAddressCommandService {
         if (updatedUserAddress == null) {
             throw new RuntimeException("Update User address failed");
         }
-        return updatedUserAddress.getId();
+        return updatedUserAddress.getUserAddressId();
     }
 
 
@@ -154,10 +154,10 @@ public class UserAddressCommandService {
             throw new EntityNotFoundException("User has no addresses");
         }
         UserAddress matchedUserAddress = userAddresses.stream()
-                .filter((userAddress) -> userAddress.getId().equals(addressId))
+                .filter((userAddress) -> userAddress.getUserAddressId().equals(addressId))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Address doesn't exist with user: " + user.getEmail()));
 
-        addressRepo.deleteById(matchedUserAddress.getId());
+        addressRepo.deleteById(matchedUserAddress.getUserAddressId());
     }
 }

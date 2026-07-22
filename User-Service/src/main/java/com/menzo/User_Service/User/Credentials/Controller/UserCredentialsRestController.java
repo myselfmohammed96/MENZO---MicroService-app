@@ -3,7 +3,7 @@ package com.menzo.User_Service.User.Credentials.Controller;
 import com.menzo.User_Service.User.Credentials.Dto.ChangePasswordDto;
 import com.menzo.User_Service.User.Credentials.Dto.EmailDto;
 import com.menzo.User_Service.User.Credentials.Service.CredentialsService;
-import com.menzo.User_Service.User.Profile.Service.UserQueryService;
+import com.menzo.User_Service.User.UserProfile.Service.UserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

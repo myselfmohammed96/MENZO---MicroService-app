@@ -1,7 +1,6 @@
 package com.menzo.User_Service.User.Address.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.menzo.User_Service.User.Address.Entity.Country;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +21,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long addressId;
 
     @Column(nullable = false)
     private String unitAddress;
@@ -37,11 +36,11 @@ public class Address {
     private String state;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     @Column(nullable = false)
-    private String decode;
+    private String pincode;
 
     private String landmark;
 
@@ -57,14 +56,14 @@ public class Address {
     ////////////////////////////////////////////////////////////////////
 
     public String toString() {
-        return "\nUserAddressDto:\nid: " + id +
+        return "\nUserAddressDto:\naddressId: " + addressId +
                 "\nunitAddress: " + unitAddress +
                 "\nstreet: " + street +
                 "\nlandmark: " + landmark +
                 "\ncity: " + city +
                 "\nstate: " + state +
                 "\ncountry: " + country +
-                "\ndecode: " + decode +
+                "\npincode: " + pincode +
                 "\ncreatedAt: " + createdAt +
                 "\nupdatedAt: " + updatedAt + "\n";
     }

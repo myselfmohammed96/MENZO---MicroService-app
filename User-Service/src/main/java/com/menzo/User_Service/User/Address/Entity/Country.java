@@ -16,15 +16,15 @@ public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer countryId;
 
-    @Column(nullable = false, name = "country_name")
+    @Column(nullable = false, unique = false)
     private String countryName;
 
     ////////////////////////////////////
 
     public String toString() {
-        return "Country:\nid: " + id +
+        return "Country:\ncountryId: " + countryId +
                 "\ncountryName: " + countryName + "\n";
     }
 }

@@ -2,7 +2,7 @@ package com.menzo.User_Service.User.UserRegistration.Controller;
 
 import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.UserRegistration.Dto.RegNewUser;
-import com.menzo.User_Service.User.Profile.Dto.UserDto;
+import com.menzo.User_Service.User.UserProfile.Dto.UserDto;
 import com.menzo.User_Service.User.UserRegistration.Service.UserRegistrationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

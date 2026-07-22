@@ -3,8 +3,8 @@ package com.menzo.User_Service.User.Address.Service;
 import com.menzo.User_Service.User.Address.Dto.UserAddressDto;
 import com.menzo.User_Service.User.Address.Entity.UserAddress;
 import com.menzo.User_Service.User.Address.Repository.UserAddressRepository;
-import com.menzo.User_Service.User.Profile.Entity.User;
-import com.menzo.User_Service.User.Profile.Repository.UserRepository;
+import com.menzo.User_Service.User.UserProfile.Entity.User;
+import com.menzo.User_Service.User.UserProfile.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class UserAddressQueryService {
         List<UserAddressDto> userAddressDtos = userAddresses.stream()
                 .map(userAddress -> {
                     return UserAddressDto.builder()
-                            .id(userAddress.getId())
+                            .id(userAddress.getUserAddressId())
                             .firstName(userAddress.getFirstName())
                             .lastName(userAddress.getLastName())
                             .phoneNumber(userAddress.getPhoneNumber())
@@ -76,7 +76,7 @@ public class UserAddressQueryService {
                 .orElseThrow(() -> new RuntimeException("User doesn't have default address"));
 
         return UserAddressDto.builder()
-                .id(defaultAddress.getId())
+                .id(defaultAddress.getUserAddressId())
                 .firstName(defaultAddress.getFirstName())
                 .lastName(defaultAddress.getLastName())
                 .phoneNumber(defaultAddress.getPhoneNumber())
