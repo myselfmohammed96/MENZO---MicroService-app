@@ -57,6 +57,8 @@ public class CategoryService {
         return categoriesRepo.save(newProductCategory);
     }
 
+
+
     //    Update parent category by ID - TESTED
     public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
 

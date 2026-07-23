@@ -206,7 +206,7 @@ public class CategoriesRestController {
             } else {
                 logger.error("Parent update failed for ID {}", parentCategoryId);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Parent category updation failed"));
+                        .body(Map.of("message", "Parent category update failed"));
             }
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);

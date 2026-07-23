@@ -30,6 +30,7 @@ public class Department {
     @Column(nullable = false, unique = true)
     private String departmentCode;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne
@@ -38,6 +39,16 @@ public class Department {
 
     @Column(nullable = false)
     private boolean isActive = true;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    @ManyToOne
+    @JoinColumn(name = "deleted_by")
+    private Staff deletedBy;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDateTime deletedAt;
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -51,11 +62,14 @@ public class Department {
     ////////////////////////////////////////////
 
     public String toString() {
+        String head = departmentHead != null
+                ? departmentHead.getUser().getFirstName() + " " + departmentHead.getUser().getLastName()
+                : "N/A";
+
         return "Department:\ndepartmentId: " + departmentId +
                 "\ndepartmentName: " + departmentName +
                 "\ndepartmentCode: " + departmentCode +
-                "\ndepartmentHead: " + departmentHead.getUser().getFirstName() + " " + departmentHead.getUser().getLastName() +
+                "\ndepartmentHead: " + head +
                 "\nisActive: " + isActive + "\n";
     }
-
 }

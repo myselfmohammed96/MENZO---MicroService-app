@@ -1,6 +1,6 @@
 package com.menzo.User_Service.User.Address.Service;
 
-import com.menzo.User_Service.Exceptions.DuplicateAddressException;
+import com.menzo.User_Service.Exceptions.DuplicateEntityException;
 import com.menzo.User_Service.User.Address.Dto.UserAddressDto;
 import com.menzo.User_Service.User.Address.Entity.Address;
 import com.menzo.User_Service.User.Address.Entity.Country;
@@ -45,25 +45,25 @@ public class UserAddressCommandService {
                 .orElseThrow(() -> new EntityNotFoundException("Country not found with name: " + userAddress.getCountry()));
 
         Address address = addressRepo.findByUnitAddressIgnoreCaseAndStreetIgnoreCaseAndLandmarkIgnoreCaseAndCityIgnoreCaseAndStateIgnoreCaseAndCountryAndPincode(
-                        userAddress.getUnitAddress(),
-                        userAddress.getStreet(),
-                        userAddress.getLandmark(),
-                        userAddress.getCity(),
-                        userAddress.getState(),
-                        country,
-                        userAddress.getPincode()
-                ).orElseGet(() -> {
-                    return addressRepo.save(Address.builder()
-                            .unitAddress(userAddress.getUnitAddress())
-                            .street(userAddress.getStreet())
-                            .city(userAddress.getCity())
-                            .state(userAddress.getState())
-                            .country(country)
-                            .decode(userAddress.getPincode())
-                            .landmark(userAddress.getLandmark())
-                            .build()
-                    );
-                });
+                userAddress.getUnitAddress(),
+                userAddress.getStreet(),
+                userAddress.getLandmark(),
+                userAddress.getCity(),
+                userAddress.getState(),
+                country,
+                userAddress.getPincode()
+        ).orElseGet(() -> {
+            return addressRepo.save(Address.builder()
+                    .unitAddress(userAddress.getUnitAddress())
+                    .street(userAddress.getStreet())
+                    .city(userAddress.getCity())
+                    .state(userAddress.getState())
+                    .country(country)
+                    .pincode(userAddress.getPincode())
+                    .landmark(userAddress.getLandmark())
+                    .build()
+            );
+        });
         if (userAddressRepo.existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndPhoneNumberAndUserAndAddress(
                 userAddress.getFirstName(),
                 userAddress.getLastName(),
@@ -71,7 +71,7 @@ public class UserAddressCommandService {
                 user,
                 address
         )) {
-            throw new DuplicateAddressException("User Address already exists.");
+            throw new DuplicateEntityException("User Address already exists.");
         }
         UserAddress savedUserAddress = userAddressRepo.save(UserAddress.builder()
                 .firstName(userAddress.getFirstName())
@@ -86,12 +86,11 @@ public class UserAddressCommandService {
     }
 
 
-
     /*
-    *
-    *   Update user address
-    *
-    */
+     *
+     *   Update user address
+     *
+     */
     public Long updateUserAddress(String userEmail, Long addressId, UserAddressDto latestUserAddress) {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
@@ -112,7 +111,7 @@ public class UserAddressCommandService {
         matchedAddress.setLandmark(latestUserAddress.getLandmark() != null && !latestUserAddress.getLandmark().isEmpty() ? latestUserAddress.getLandmark() : matchedAddress.getLandmark());
         matchedAddress.setCity(latestUserAddress.getCity() != null && !latestUserAddress.getCity().isEmpty() ? latestUserAddress.getCity() : matchedAddress.getCity());
         matchedAddress.setState(latestUserAddress.getState() != null && !latestUserAddress.getState().isEmpty() ? latestUserAddress.getState() : matchedAddress.getState());
-        matchedAddress.setDecode(latestUserAddress.getPincode() != null && !latestUserAddress.getPincode().isEmpty() ? latestUserAddress.getPincode() : matchedAddress.getDecode());
+        matchedAddress.setPincode(latestUserAddress.getPincode() != null && !latestUserAddress.getPincode().isEmpty() ? latestUserAddress.getPincode() : matchedAddress.getPincode());
 
         Address updatedAddress = addressRepo.save(matchedAddress);
 
@@ -139,13 +138,12 @@ public class UserAddressCommandService {
     }
 
 
-
     /*
-    *
-    *   Delete user address
-    *   (soft delete)
-    *
-    */
+     *
+     *   Delete user address
+     *   (soft delete)
+     *
+     */
     public void deleteUserAddress(String userEmail, Long addressId) {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));

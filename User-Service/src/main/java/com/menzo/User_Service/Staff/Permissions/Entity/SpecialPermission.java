@@ -48,7 +48,7 @@ public class SpecialPermission {
     private String reason;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Staff grantedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -70,7 +70,7 @@ public class SpecialPermission {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Staff revokedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")

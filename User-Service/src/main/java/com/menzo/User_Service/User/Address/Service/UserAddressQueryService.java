@@ -48,7 +48,7 @@ public class UserAddressQueryService {
                             .city(userAddress.getAddress().getCity())
                             .state(userAddress.getAddress().getState())
                             .country(userAddress.getAddress().getCountry().getCountryName())
-                            .pincode(userAddress.getAddress().getDecode())
+                            .pincode(userAddress.getAddress().getPincode())
                             .isDefault(userAddress.isDefault())
                             .build();
                 }).collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class UserAddressQueryService {
                 .city(defaultAddress.getAddress().getCity())
                 .state(defaultAddress.getAddress().getState())
                 .country(defaultAddress.getAddress().getCountry().getCountryName())
-                .pincode(defaultAddress.getAddress().getDecode())
+                .pincode(defaultAddress.getAddress().getPincode())
                 .isDefault(defaultAddress.isDefault())
                 .build();
     }
