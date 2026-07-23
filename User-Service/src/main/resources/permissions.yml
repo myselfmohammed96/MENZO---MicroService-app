@@ -1,0 +1,31 @@
+permissions:
+  modules:
+    PRODUCT_HANDLING:
+      actions:
+        - code: ADD_PRODUCT
+          description: Add new product
+        - code: EDIT_PRODUCT
+          description: Edit existing product
+        - code: APPROVE_PRODUCT
+          description: Approve product
+
+    ORDER_HANDLING:
+      actions:
+        - code: VIEW_ORDER
+          description: View orders
+        - code: CANCEL_ORDER
+          description: Cancel orders
+
+    FINANCE:
+      actions:
+        - code: VIEW_REPORTS
+          description: View financial reports
+
+
+
+#  config file does not automatically avoid restart.
+#  In a normal Sring Boot app, changes to .yml/.properties require a reload/restart
+#  unless you use something like Spring Cloud Config with refresh support.
+#  The main advantage over enums is easier management and cleaner structure, not zero restart.
+
+#  Spring Boot can load this using @ConfigurationProperties, then your sync service reads it and upserts into the DB.
