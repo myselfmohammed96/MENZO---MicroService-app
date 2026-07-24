@@ -1,25 +1,45 @@
-permissions:
+system-access:
   modules:
     PRODUCT_HANDLING:
+      name: Product handling
+      description: Product handling actions
       actions:
         - code: ADD_PRODUCT
+          name: Add product
           description: Add new product
         - code: EDIT_PRODUCT
+          name: Edit product
           description: Edit existing product
         - code: APPROVE_PRODUCT
+          name: Approve product
           description: Approve product
 
     ORDER_HANDLING:
+      name: Order handling
+      description: Order handling actions
       actions:
         - code: VIEW_ORDER
+          name: View order
           description: View orders
         - code: CANCEL_ORDER
+          name: Cancel order
           description: Cancel orders
 
     FINANCE:
+      name: Finance
+      description: Finance related actions
       actions:
         - code: VIEW_REPORTS
+          name: View reports
           description: View financial reports
+
+designations:
+  core:
+    - ADMIN
+    - ADMIN_PROXY
+    - MANAGER
+    - EXECUTIVE
+    - STAFF
 
 
 

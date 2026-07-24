@@ -29,6 +29,9 @@ public class Module {
     @Column(nullable = false)
     private String moduleName;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     //  revise
     private Integer displayOrder;
 

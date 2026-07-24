@@ -35,6 +35,9 @@ public class Designation {
     private boolean isActive = true;
 
     @Column(nullable = false)
+    private boolean isCoreDesignation;
+
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @CreationTimestamp
     private LocalDateTime createdAt;
