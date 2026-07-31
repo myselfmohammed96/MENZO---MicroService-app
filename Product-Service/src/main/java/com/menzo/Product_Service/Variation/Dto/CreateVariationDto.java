@@ -14,11 +14,7 @@ import java.util.Date;
 @Builder
 public class CreateVariationDto {
 
-    private Long id;
-
     @NotBlank(message = "Variation name is required")
     private String variationName;
-
-    private Date createdAt;
 
 }

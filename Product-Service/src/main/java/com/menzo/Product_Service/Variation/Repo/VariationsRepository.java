@@ -1,7 +1,6 @@
 package com.menzo.Product_Service.Variation.Repo;
 
 import com.menzo.Product_Service.Variation.Entity.Variation;
-import com.menzo.Product_Service.Variation.Dto.OptionMinimalDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

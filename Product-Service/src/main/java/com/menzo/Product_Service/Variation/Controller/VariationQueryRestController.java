@@ -2,13 +2,11 @@ package com.menzo.Product_Service.Variation.Controller;
 
 import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.Variation.Dto.VariationDto;
-import com.menzo.Product_Service.Variation.Dto.VariationOptionsMinimalDto;
-import com.menzo.Product_Service.Variation.Dto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Variation.Dto.VariationOptionsDto;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +33,7 @@ public class VariationQueryRestController {
      */
     @GetMapping("/get-all")
     public ResponseEntity<?> getAllVariationsWithOptions() {
-        List<VariationWithOptionsDto> variations = variationQueryService.getAllVariationsWithOptions();
+        List<VariationOptionsDto> variations = variationQueryService.getAllVariationsWithOptions();
         return ResponseEntity.ok(variations);
     }
 
@@ -61,8 +59,8 @@ public class VariationQueryRestController {
      *
      */
     @GetMapping("get-variations")
-    public ResponseEntity<List<VariationWithOptionsDto>> getAllVariationsWithOptionsBySub(@RequestParam("id") Long subCategoryId) {
-        List<VariationWithOptionsDto> variations = variationQueryService.getAllVariationsWithOptionsBySub(
+    public ResponseEntity<List<VariationOptionsDto>> getAllVariationsWithOptionsBySub(@RequestParam("id") Long subCategoryId) {
+        List<VariationOptionsDto> variations = variationQueryService.getAllVariationsWithOptionsBySub(
                 Components.SUB_CATEGORY,
                 subCategoryId
         );
@@ -76,8 +74,8 @@ public class VariationQueryRestController {
      *
      */
     @GetMapping("/sizes")
-    public ResponseEntity<VariationOptionsMinimalDto> getSizes() {
-        VariationOptionsMinimalDto variationOptions = variationQueryService
+    public ResponseEntity<VariationOptionsDto> getSizes() {
+        VariationOptionsDto variationOptions = variationQueryService
                 .getVariationWithOptionsByVariationName("Size");
         return ResponseEntity.ok(variationOptions);
     }
@@ -89,8 +87,8 @@ public class VariationQueryRestController {
      *
      */
     @GetMapping("/colors")
-    public ResponseEntity<VariationOptionsMinimalDto> getColors() {
-        VariationOptionsMinimalDto variationOptions = variationQueryService
+    public ResponseEntity<VariationOptionsDto> getColors() {
+        VariationOptionsDto variationOptions = variationQueryService
                 .getVariationWithOptionsByVariationName("Colors");
         return ResponseEntity.ok(variationOptions);
     }

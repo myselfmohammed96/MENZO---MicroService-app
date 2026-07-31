@@ -2,10 +2,8 @@ package com.menzo.Product_Service.Modules.Variation.Service;
 
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Enum.Components;
-import com.menzo.Product_Service.Variation.Dto.OptionDto;
 import com.menzo.Product_Service.Variation.Dto.VariationDto;
-import com.menzo.Product_Service.Variation.Dto.VariationOptionsMinimalDto;
-import com.menzo.Product_Service.Variation.Dto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Variation.Dto.VariationOptionsDto;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +21,13 @@ class VariationsRetrievalServiceTest {
 
     @Test
     public void testGetAllVariationsWithOptions() {
-        List<VariationWithOptionsDto> variations = variationsRetrievalService.getAllVariationsWithOptions();
+        List<VariationOptionsDto> variations = variationsRetrievalService.getAllVariationsWithOptions();
         System.out.println(variations);
     }
 
     @Test
     public void testGetAllVariationsWithOptionsBySub() {
-        List<VariationWithOptionsDto> data = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+        List<VariationOptionsDto> data = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
                 Components.CATEGORY,
                 2L
         );
@@ -52,12 +50,12 @@ class VariationsRetrievalServiceTest {
         System.out.println(options);
     }
 
-    @Test
-    public void testGetSizes() {
-        VariationOptionsMinimalDto sizes = variationsRetrievalService
-                .getVariationWithOptionsByVariationName("Size");
-        System.out.println(sizes);
-    }
+//    @Test
+//    public void testGetSizes() {
+//        VariationOptionsMinimalDto sizes = variationsRetrievalService
+//                .getVariationWithOptionsByVariationName("Size");
+//        System.out.println(sizes);
+//    }
 
     @Test
     @Transactional

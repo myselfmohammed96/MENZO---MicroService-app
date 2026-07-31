@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Product.Service;
 
 import com.menzo.Product_Service.SearchAndFilter.Dto.FilterTypeDto;
-import com.menzo.Product_Service.Variation.Dto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Variation.Dto.VariationOptionsDto;
 import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +93,7 @@ public class ProductFilterService {
         if (listingType != null && !listingType.isEmpty()) {
 
             // listing type contains listing type (category or sub-category) with ID (eg): cat,1 or sub,121
-            List<VariationWithOptionsDto> variations;
+            List<VariationOptionsDto> variations;
             String[] typeParams = listingType.split(",");
             if (typeParams[0].toLowerCase().equals("cat")) {
                 variations = variationsRetrievalService.getAllVariationsWithOptionsByCategory(

@@ -2,7 +2,7 @@ package com.menzo.Product_Service.Variation.Service;
 
 import com.menzo.Product_Service.Exception.DuplicateVariationOptionException;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
-import com.menzo.Product_Service.Variation.Dto.CreateVariationOptionDto;
+import com.menzo.Product_Service.Variation.Dto.CreateOptionDto;
 import com.menzo.Product_Service.Variation.Dto.OptionDto;
 import com.menzo.Product_Service.Variation.Entity.ColorCode;
 import com.menzo.Product_Service.Variation.Entity.Variation;
@@ -39,7 +39,7 @@ public class OptionCommandService {
     *
     */
     @Transactional
-    public VariationOption addNewOption(CreateVariationOptionDto newOption) {
+    public VariationOption addNewOption(CreateOptionDto newOption) {
 
         // duplicate existence validation
         if (optionsRepo.existsByOptionValueAndVariationId(
@@ -106,9 +106,9 @@ public class OptionCommandService {
         if (option.getVariation().getVariationName().equals("Colors")) {
             ColorCode colorCode = option.getColorCode();
             colorCode.setColorHexCode(
-                    latestOption.getColorHexCode() != null
-                            && !latestOption.getColorHexCode().isEmpty()
-                            ? latestOption.getColorHexCode()
+                    latestOption.getColorCodeHex() != null
+                            && !latestOption.getColorCodeHex().isEmpty()
+                            ? latestOption.getColorCodeHex()
                             : colorCode.getColorHexCode()
             );
             colorCode.setColorAbbreviation(

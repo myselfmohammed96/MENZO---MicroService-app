@@ -3,13 +3,13 @@ package com.menzo.Product_Service.Variation.Service;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableOptionFilter;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableVariationFilter;
 import com.menzo.Product_Service.Variation.Dto.OptionDto;
+import com.menzo.Product_Service.Variation.Dto.VariationOptionsDto;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
 import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,7 +107,7 @@ public class OptionQueryService {
     @Transactional
     @EnableVariationFilter
     @EnableOptionFilter
-    public List<OptionDto> getOptionsByVariationId(Long variationId) {
+    public VariationOptionsDto getOptionsByVariationId(Long variationId) {
 
         //  fetching variation
         Variation variation = variationsRepo.findById(variationId)
@@ -120,22 +121,31 @@ public class OptionQueryService {
         //  fetching options
         List<VariationOption> options = optionsRepo.findByVariationId(variationId);
         if (variation.getVariationName().equals("Colors")) {
-            return options.stream().map(opt ->
+            Set<OptionDto> optionDtos = options.stream().map(opt ->
                     OptionDto.builder()
                             .optionId(opt.getOptionId())
                             .optionValue(opt.getOptionValue())
-                            .colorHexCode(opt.getColorCode().getColorHexCode())
-                            .variationName(variation.getVariationName())
+                            .colorCodeHex(opt.getColorCode().getColorHexCode())
                             .build()
-            ).collect(Collectors.toList());
+            ).collect(Collectors.toSet());
+
+            return VariationOptionsDto.builder()
+                    .variationName(variation.getVariationName())
+                    .options(optionDtos)
+                    .build();
+
         } else {
-            return options.stream().map(opt ->
-                    OptionDto.builder()
-                            .optionId(opt.getOptionId())
-                            .optionValue(opt.getOptionValue())
-                            .variationName(variation.getVariationName())
-                            .build()
-            ).collect(Collectors.toList());
+            Set<OptionDto> optionDtos = options.stream().map(opt ->
+                            OptionDto.builder()
+                                    .optionId(opt.getOptionId())
+                                    .optionValue(opt.getOptionValue())
+                                    .build()
+            ).collect(Collectors.toSet());
+
+            return VariationOptionsDto.builder()
+                    .variationName(variation.getVariationName())
+                    .options(optionDtos)
+                    .build();
         }
     }
 

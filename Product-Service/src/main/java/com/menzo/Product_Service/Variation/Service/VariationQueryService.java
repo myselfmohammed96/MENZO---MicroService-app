@@ -44,7 +44,7 @@ public class VariationQueryService {
     @Transactional
     @EnableVariationFilter
     @EnableOptionFilter
-    public List<VariationWithOptionsDto> getAllVariationsWithOptions() {
+    public List<VariationOptionsDto> getAllVariationsWithOptions() {
 
         //  fetch all variations
         List<Variation> variations = variationsRepo.findAll();
@@ -55,18 +55,18 @@ public class VariationQueryService {
 //                .setParameter("isDeleted", false);
 
         //  build variations list with options
-        List<VariationWithOptionsDto> variationsList = new ArrayList<>();
+        List<VariationOptionsDto> variationsList = new ArrayList<>();
         for (Variation v : variations) {
-            Set<OptionMinimalDto> options = new HashSet<>();
+            Set<OptionDto> options = new HashSet<>();
             for (VariationOption option : v.getOptions()) {
-                OptionMinimalDto optionDto = OptionMinimalDto.builder()
+                OptionDto optionDto = OptionDto.builder()
                         .optionId(option.getOptionId())
                         .optionValue(option.getOptionValue())
                         .build();
                 options.add(optionDto);
             }
-            VariationWithOptionsDto variationDto = VariationWithOptionsDto.builder()
-                    .id(v.getVariationId())
+            VariationOptionsDto variationDto = VariationOptionsDto.builder()
+                    .variationId(v.getVariationId())
                     .variationName(v.getVariationName())
                     .options(options)
                     .build();
@@ -110,9 +110,9 @@ public class VariationQueryService {
      *
      */
     @Transactional
-    public List<VariationWithOptionsDto> getAllVariationsWithOptionsBySub(Components componentType,
-                                                                          Long componentId) {
-        Map<Long, VariationWithOptionsDto> variationMap = new HashMap<>();
+    public List<VariationOptionsDto> getAllVariationsWithOptionsBySub(Components componentType,
+                                                                      Long componentId) {
+        Map<Long, VariationOptionsDto> variationMap = new HashMap<>();
 
         //  fetching data with sub-category ID
         List<Object[]> rows;
@@ -136,20 +136,20 @@ public class VariationQueryService {
                     Long optionId = ((Number) row[2]).longValue();
                     String optionValue = (String) row[3];
 
-                    VariationWithOptionsDto variation = variationMap.computeIfAbsent(variationId, id -> {
-                        VariationWithOptionsDto v = VariationWithOptionsDto.builder()
-                                .id(id)
+                    VariationOptionsDto variation = variationMap.computeIfAbsent(variationId, id -> {
+                        VariationOptionsDto v = VariationOptionsDto.builder()
+                                .variationId(id)
                                 .variationName(variationName)
                                 .build();
                         return v;
                     });
-                    OptionMinimalDto option = OptionMinimalDto.builder()
+                    OptionDto option = OptionDto.builder()
                             .optionId(optionId)
                             .optionValue(optionValue)
                             .build();
-                    Set<OptionMinimalDto> opt = variation.getOptions() != null
+                    Set<OptionDto> opt = variation.getOptions() != null
                             ? variation.getOptions()
-                            : new HashSet<OptionMinimalDto>();
+                            : new HashSet<OptionDto>();
                     opt.add(option);
                     variation.setOptions(opt);
                 });
@@ -167,35 +167,35 @@ public class VariationQueryService {
     @Transactional
     @EnableVariationFilter
     @EnableOptionFilter
-    public VariationOptionsMinimalDto getVariationWithOptionsByVariationName(String variationName) {
+    public VariationOptionsDto getVariationWithOptionsByVariationName(String variationName) {
 
         //  fetching variation by variation name
         Variation variation = variationsRepo.findByVariationName(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
 
         //  building nested object for variation & the options
-        VariationOptionsMinimalDto variationWithSizeList = VariationOptionsMinimalDto.builder()
+        VariationOptionsDto variationWithSizeList = VariationOptionsDto.builder()
                 .variationId(variation.getVariationId())
                 .variationName(variation.getVariationName())
                 .build();
 
         //  extracting options
         if (variation.getVariationName().equals("Colors")) {
-            List<OptionMinimalDto> options = variation.getOptions().stream()
-                    .map(opt -> OptionMinimalDto.builder()
+            Set<OptionDto> options = variation.getOptions().stream()
+                    .map(opt -> OptionDto.builder()
                             .optionId(opt.getOptionId())
                             .optionValue(opt.getOptionValue())
                             .colorCodeHex(opt.getColorCode().getColorHexCode())
                             .build()
-                    ).collect(Collectors.toList());
+                    ).collect(Collectors.toSet());
             variationWithSizeList.setOptions(options);
         } else {
-            List<OptionMinimalDto> options = variation.getOptions().stream()
-                    .map(opt -> OptionMinimalDto.builder()
+            Set<OptionDto> options = variation.getOptions().stream()
+                    .map(opt -> OptionDto.builder()
                             .optionId(opt.getOptionId())
                             .optionValue(opt.getOptionValue())
                             .build()
-                    ).collect(Collectors.toList());
+                    ).collect(Collectors.toSet());
             variationWithSizeList.setOptions(options);
         }
         return variationWithSizeList;

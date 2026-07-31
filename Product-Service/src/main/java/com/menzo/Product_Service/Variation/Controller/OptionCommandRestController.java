@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Variation.Controller;
 
-import com.menzo.Product_Service.Variation.Dto.CreateVariationOptionDto;
+import com.menzo.Product_Service.Variation.Dto.CreateOptionDto;
 import com.menzo.Product_Service.Variation.Dto.OptionDto;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionCommandService;
@@ -33,7 +33,7 @@ public class OptionCommandRestController {
      *
      */
     @PostMapping("/add")
-    public ResponseEntity<?> addOption(@Valid @RequestBody CreateVariationOptionDto newOption,
+    public ResponseEntity<?> addOption(@Valid @RequestBody CreateOptionDto newOption,
                                        BindingResult result) {
 
         // input validation

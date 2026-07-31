@@ -1,6 +1,5 @@
 package com.menzo.Product_Service.Modules.Variation.Repo;
 
-import com.menzo.Product_Service.Variation.Dto.OptionMinimalDto;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
 import org.junit.jupiter.api.Test;

@@ -13,9 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateVariationOptionDto {
-
-    private Long id;
+public class CreateOptionDto {
 
     @NotBlank(message = "Variation option value is required")
     private String optionValue;
@@ -24,7 +22,5 @@ public class CreateVariationOptionDto {
     private Long variationId;
 
     private String hexCode;
-
-    private Date createdAt;
 
 }
