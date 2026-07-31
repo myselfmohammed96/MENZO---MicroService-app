@@ -1,16 +1,17 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
 //import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
-import com.menzo.Product_Service.Modules.Category.Service.CategoryQueryService;
-import com.menzo.Product_Service.Modules.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Modules.Product.Entity.Product;
-import com.menzo.Product_Service.Modules.Product.Entity.ProductConfiguration;
-import com.menzo.Product_Service.Modules.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Modules.Product.Repo.ProductConfigurationRepo;
-import com.menzo.Product_Service.Modules.Product.Repo.ProductItemsRepo;
-import com.menzo.Product_Service.Modules.Product.Repo.ProductsRepo;
-import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Modules.Variation.Repo.VariationsOptionsRepo;
+import com.menzo.Product_Service.Category.Service.CategoryQueryService;
+import com.menzo.Product_Service.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Product.Entity.Product;
+import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
+import com.menzo.Product_Service.Product.Entity.ProductItem;
+import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepo;
+import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
+import com.menzo.Product_Service.Product.Service.ProductsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ class ProductsServiceTest {
     private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
-    private VariationsOptionsRepo optionsRepo;
+    private VariationsOptionRepo optionsRepo;
 
     @Autowired
     private ProductsRepo productsRepo;

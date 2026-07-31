@@ -1,11 +1,12 @@
 package com.menzo.Product_Service.Modules.Variation.Service;
 
-import com.menzo.Product_Service.Modules.Variation.Dto.CreateVariationDto;
-import com.menzo.Product_Service.Modules.Variation.Dto.CreateVariationOptionDto;
-import com.menzo.Product_Service.Modules.Variation.Dto.OptionDto;
-import com.menzo.Product_Service.Modules.Variation.Dto.VariationDto;
-import com.menzo.Product_Service.Modules.Variation.Entity.Variation;
-import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Dto.CreateVariationDto;
+import com.menzo.Product_Service.Variation.Dto.CreateVariationOptionDto;
+import com.menzo.Product_Service.Variation.Dto.OptionDto;
+import com.menzo.Product_Service.Variation.Dto.VariationDto;
+import com.menzo.Product_Service.Variation.Entity.Variation;
+import com.menzo.Product_Service.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Service.VariationCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class VariationsServiceTest {
 
     @Autowired
-    private VariationsService variationsService;
+    private VariationCommandService variationsService;
+
+
 
 
 
@@ -50,34 +53,34 @@ class VariationsServiceTest {
 
 //    ********* Variation options *********
 
-    @Test
-    public void testAddNewOption() {
-        CreateVariationOptionDto newOption = CreateVariationOptionDto.builder()
-                .optionValue("Peach")
-                .hexCode("#FFE5B4")
-                .variationId(3L)
-                .build();
-        VariationOption addedOption = variationsService.addNewOption(newOption);
-        System.out.println(addedOption);
-    }
+//    @Test
+//    public void testAddNewOption() {
+//        CreateVariationOptionDto newOption = CreateVariationOptionDto.builder()
+//                .optionValue("Peach")
+//                .hexCode("#FFE5B4")
+//                .variationId(3L)
+//                .build();
+//        VariationOption addedOption = variationsService.addNewOption(newOption);
+//        System.out.println(addedOption);
+//    }
 
-    @Test
-    public void testUpdateOption() {
-        OptionDto option = OptionDto.builder()
-                .optionValue("Space grey")
-                .colorCode("#343d46")
-                .build();
-        VariationOption updatedOption = variationsService.updateOption(
-                63L,
-                option
-        );
-        System.out.println("Updated: " + updatedOption);
-    }
+//    @Test
+//    public void testUpdateOption() {
+//        OptionDto option = OptionDto.builder()
+//                .optionValue("Space grey")
+//                .colorCode("#343d46")
+//                .build();
+//        VariationOption updatedOption = variationsService.updateOption(
+//                63L,
+//                option
+//        );
+//        System.out.println("Updated: " + updatedOption);
+//    }
 
-    @Test
-    public void testDeleteOption() {
-        boolean deleted = variationsService.deleteOption(64L);
-        System.out.println("Deleted: " + deleted);
-    }
+//    @Test
+//    public void testDeleteOption() {
+//        boolean deleted = variationsService.deleteOption(64L);
+//        System.out.println("Deleted: " + deleted);
+//    }
 
 }

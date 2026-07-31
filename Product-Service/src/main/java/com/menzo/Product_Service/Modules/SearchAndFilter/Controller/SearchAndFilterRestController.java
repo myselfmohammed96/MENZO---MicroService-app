@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Modules.SearchAndFilter.Controller;
 
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.FilterTypeDto;
-import com.menzo.Product_Service.Modules.Product.Service.ProductFilterService;
+import com.menzo.Product_Service.Product.Service.ProductFilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

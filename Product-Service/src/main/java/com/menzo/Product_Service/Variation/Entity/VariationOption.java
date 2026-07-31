@@ -1,0 +1,87 @@
+package com.menzo.Product_Service.Variation.Entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
+import lombok.*;
+import org.hibernate.annotations.*;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+//@ToString(exclude = {"variation", "colorCode"})
+@Table(
+        name = "variation_options",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {
+                                "variation_id",
+                                "option_value"
+                        }
+                )
+})
+//@FilterDef(
+//        name = "optionActiveFilter",
+//        parameters = @ParamDef(
+//                name = "isDeleted",
+//                type = Boolean.class
+//        )
+//)
+//@Filter(
+//        name = "optionActiveFilter",
+//        condition = "is_deleted = :isDeleted"
+//)
+public class VariationOption {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long optionId;
+
+    @Column(nullable = false)
+    private String optionValue;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variation_id", referencedColumnName = "variationId", nullable = false)
+    private Variation variation;
+
+    @OneToOne(mappedBy = "colorOption", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private ColorCode colorCode;
+
+    @Column(nullable = false)
+    private boolean isActive = true;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime deletedAt;
+
+    @Column(nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+}
+
+
+
+
+
+
+
+//    @OneToMany(mappedBy = "variationOption", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<ProductConfiguration> configurations = new ArrayList<>();

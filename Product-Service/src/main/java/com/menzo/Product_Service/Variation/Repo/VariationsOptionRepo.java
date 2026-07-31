@@ -1,0 +1,37 @@
+package com.menzo.Product_Service.Variation.Repo;
+
+import com.menzo.Product_Service.Variation.Entity.VariationOption;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface VariationsOptionRepo extends JpaRepository<VariationOption, Long> {
+
+    public boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);     // TESTED
+
+    public List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
+
+    public List<VariationOption> findByVariationId(Long variationId);   // TESTED
+
+    List<VariationOption> findByOptionValueContainingIgnoreCase(String keyword);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    public List<VariationOption> findAllById(List<Long> idList);

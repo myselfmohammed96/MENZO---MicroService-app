@@ -1,6 +1,7 @@
 package com.menzo.Product_Service.Modules.Variation.Repo;
 
-import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,7 @@ import java.util.List;
 class VariationsOptionsRepoTest {
 
     @Autowired
-    private VariationsOptionsRepo optionsRepo;
+    private VariationsOptionRepo optionsRepo;
 
     @Test
     public void testExistsByOptionValueAndVariationId() {

@@ -5,15 +5,13 @@ import com.menzo.User_Service.Staff.Departments.Entity.Department;
 import com.menzo.User_Service.Staff.Departments.Entity.Designation;
 import com.menzo.User_Service.User.UserProfile.Entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

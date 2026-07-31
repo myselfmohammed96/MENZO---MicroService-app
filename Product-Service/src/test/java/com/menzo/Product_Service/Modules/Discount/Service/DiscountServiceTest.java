@@ -1,12 +1,13 @@
 package com.menzo.Product_Service.Modules.Discount.Service;
 
-import com.menzo.Product_Service.Modules.Discount.Dto.CreateDiscountDto;
-import com.menzo.Product_Service.Modules.Discount.Dto.DiscountMappingDto;
-import com.menzo.Product_Service.Modules.Discount.Dto.MappedContentDto;
-import com.menzo.Product_Service.Modules.Discount.Enum.CapType;
-import com.menzo.Product_Service.Modules.Discount.Enum.DiscountLevel;
-import com.menzo.Product_Service.Modules.Discount.Enum.DiscountType;
-import com.menzo.Product_Service.Modules.Discount.Enum.PromotionStatus;
+import com.menzo.Product_Service.Discount.Dto.CreateDiscountDto;
+import com.menzo.Product_Service.Discount.Dto.DiscountMappingDto;
+import com.menzo.Product_Service.Discount.Dto.MappedContentDto;
+import com.menzo.Product_Service.Discount.Enum.CapType;
+import com.menzo.Product_Service.Discount.Enum.DiscountLevel;
+import com.menzo.Product_Service.Discount.Enum.DiscountType;
+import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
+import com.menzo.Product_Service.Discount.Service.DiscountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

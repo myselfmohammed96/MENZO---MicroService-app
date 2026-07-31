@@ -1,7 +1,8 @@
 package com.menzo.Product_Service.Modules.Variation.Repo;
 
-import com.menzo.Product_Service.Modules.Variation.Dto.OptionMinimalDto;
-import com.menzo.Product_Service.Modules.Variation.Entity.Variation;
+import com.menzo.Product_Service.Variation.Dto.OptionMinimalDto;
+import com.menzo.Product_Service.Variation.Entity.Variation;
+import com.menzo.Product_Service.Variation.Repo.VariationRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,7 @@ import java.util.Optional;
 class VariationsRepoTest {
 
     @Autowired
-    private VariationsRepo variationsRepo;
+    private VariationRepo variationsRepo;
 
 
 

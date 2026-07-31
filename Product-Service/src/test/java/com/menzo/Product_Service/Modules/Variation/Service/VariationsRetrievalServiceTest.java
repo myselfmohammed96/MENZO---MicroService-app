@@ -1,11 +1,12 @@
 package com.menzo.Product_Service.Modules.Variation.Service;
 
-import com.menzo.Product_Service.Modules.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Enum.Components;
-import com.menzo.Product_Service.Modules.Variation.Dto.OptionDto;
-import com.menzo.Product_Service.Modules.Variation.Dto.VariationDto;
-import com.menzo.Product_Service.Modules.Variation.Dto.VariationOptionsMinimalDto;
-import com.menzo.Product_Service.Modules.Variation.Dto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Variation.Dto.OptionDto;
+import com.menzo.Product_Service.Variation.Dto.VariationDto;
+import com.menzo.Product_Service.Variation.Dto.VariationOptionsMinimalDto;
+import com.menzo.Product_Service.Variation.Dto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ import java.util.List;
 class VariationsRetrievalServiceTest {
 
     @Autowired
-    private VariationsQueryService variationsRetrievalService;
+    private VariationQueryService variationsRetrievalService;
 
     @Test
     public void testGetAllVariationsWithOptions() {

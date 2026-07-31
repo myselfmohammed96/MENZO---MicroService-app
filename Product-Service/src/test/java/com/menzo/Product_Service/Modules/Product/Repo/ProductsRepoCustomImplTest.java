@@ -1,8 +1,9 @@
 package com.menzo.Product_Service.Modules.Product.Repo;
 
 import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.QueryDetailsDto;
-import com.menzo.Product_Service.Modules.Product.Dto.AdminProductListingDto;
-import com.menzo.Product_Service.Modules.Product.Dto.UserProductListingDto;
+import com.menzo.Product_Service.Product.Dto.AdminProductListingDto;
+import com.menzo.Product_Service.Product.Dto.UserProductListingDto;
+import com.menzo.Product_Service.Product.Repo.ProductsRepoCustomImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

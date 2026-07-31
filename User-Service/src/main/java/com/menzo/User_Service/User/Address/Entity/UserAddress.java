@@ -3,10 +3,7 @@ package com.menzo.User_Service.User.Address.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.User_Service.User.UserProfile.Entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -14,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_addresses")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -48,7 +46,7 @@ public class UserAddress {
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isDeleted = false;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
 
     //////////////////////////////////////////////////////////
