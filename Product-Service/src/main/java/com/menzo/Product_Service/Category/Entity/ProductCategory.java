@@ -45,7 +45,7 @@ public class ProductCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private ProductCategory parentCategory;
 
@@ -64,11 +64,11 @@ public class ProductCategory {
             name = "category_variation_configuration",
             joinColumns = @JoinColumn(
                     name = "category_id",
-                    referencedColumnName = "id"
+                    referencedColumnName = "category_id"
             ),
             inverseJoinColumns = @JoinColumn(
                     name = "variation_id",
-                    referencedColumnName = "id"
+                    referencedColumnName = "variation_id"
             )
     )
     private Set<Variation> variations = new HashSet<>();
