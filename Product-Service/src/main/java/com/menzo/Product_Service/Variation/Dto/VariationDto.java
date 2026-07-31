@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +17,6 @@ public class VariationDto {
 
     private String variationName;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
 }

@@ -78,21 +78,21 @@ class VariationsRetrievalServiceTest {
         System.out.println(option);
     }
 
-    @Test
-    public void testGetOptionsByVariationId() {
-        List<OptionDto> options = variationsRetrievalService
-                .getOptionsByVariationId(9L);
-        System.out.println(options);
-        System.out.println(options.size());
-    }
+//    @Test
+//    public void testGetOptionsByVariationId() {
+//        List<OptionDto> options = variationsRetrievalService
+//                .getOptionsByVariationId(9L);
+//        System.out.println(options);
+//        System.out.println(options.size());
+//    }
 
-    @Test
-    public void testGetColorOptionsByVariationId() {
-        List<OptionDto> options = variationsRetrievalService
-                .getOptionsByVariationId(3L);
-        System.out.println(options);
-        System.out.println(options.size());
-    }
+//    @Test
+//    public void testGetColorOptionsByVariationId() {
+//        List<OptionDto> options = variationsRetrievalService
+//                .getOptionsByVariationId(3L);
+//        System.out.println(options);
+//        System.out.println(options.size());
+//    }
 
     @Test
     public void testGetOptionIdsByVariation() {

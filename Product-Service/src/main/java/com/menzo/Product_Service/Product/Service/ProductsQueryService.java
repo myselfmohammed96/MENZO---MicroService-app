@@ -13,15 +13,15 @@ import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepo;
 import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepo;
 import com.menzo.Product_Service.Product.Repo.ProductImagesRepo;
 import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.QueryDetailsDto;
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.QueryDetailsDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;
 import com.menzo.Product_Service.Modules.Product.Dto.*;
 import com.menzo.Product_Service.Variation.Dto.ColorInfo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
-import com.menzo.Product_Service.Variation.Repo.VariationRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
+import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,10 +58,10 @@ public class ProductsQueryService {
     private ProductConfigurationRepo productConfigurationRepo;
 
     @Autowired
-    private VariationRepo variationsRepo;
+    private VariationsRepository variationsRepo;
 
     @Autowired
-    private VariationsOptionRepo variationsOptionsRepo;
+    private VariationOptionsRepository variationsOptionsRepo;
 
     @Autowired
     private CategoriesRepo categoriesRepo;

@@ -3,7 +3,7 @@ package com.menzo.Product_Service.Product.Controller;
 import com.menzo.Product_Service.Product.Dto.*;
 import com.menzo.Product_Service.Product.Service.ProductsQueryService;
 import com.menzo.Product_Service.Product.Service.ProductsService;
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import com.menzo.Product_Service.Modules.Product.Dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

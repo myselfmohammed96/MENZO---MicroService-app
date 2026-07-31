@@ -18,7 +18,7 @@ import com.menzo.Product_Service.Product.Repo.ProductImagesRepo;
 import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.io.FilenameUtils;
@@ -53,7 +53,7 @@ public class ProductsService {
     private ProductImagesRepo productImagesRepo;
 
     @Autowired
-    private VariationsOptionRepo variationsOptionsRepo;
+    private VariationOptionsRepository variationsOptionsRepo;
 
     @Autowired
     private ProductCountryOfOriginRepo countryOfOriginRepo;

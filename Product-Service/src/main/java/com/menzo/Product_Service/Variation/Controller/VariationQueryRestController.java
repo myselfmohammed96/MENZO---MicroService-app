@@ -1,11 +1,14 @@
 package com.menzo.Product_Service.Variation.Controller;
 
 import com.menzo.Product_Service.Enum.Components;
-import com.menzo.Product_Service.Variation.Dto.OptionDto;
+import com.menzo.Product_Service.Variation.Dto.VariationDto;
 import com.menzo.Product_Service.Variation.Dto.VariationOptionsMinimalDto;
 import com.menzo.Product_Service.Variation.Dto.VariationWithOptionsDto;
+import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,72 +23,87 @@ public class VariationQueryRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(VariationQueryRestController.class);
 
+    @Autowired
+    private VariationQueryService variationQueryService;
 
-//    ********* GET - Controllers *********
-    ///    ********* Variation *********
 
-    //  Get all Variation with their options
-    //  TESTED - with Postman
-//    @GetMapping("/get-all")
-//    public List<?> getAllVariations() {
-//        return variationsRetrievalService.getAllVariationsWithOptions();
-//    }
+    /*
+     *
+     *   Get all variations
+     *   With variation options
+     *
+     */
+    @GetMapping("/get-all")
+    public ResponseEntity<?> getAllVariationsWithOptions() {
+        List<VariationWithOptionsDto> variations = variationQueryService.getAllVariationsWithOptions();
+        return ResponseEntity.ok(variations);
+    }
 
-    //  Get all variations and options by sub-category id
-    //  TESTED - with Postman
 
+    /*
+     *
+     *   Get all variations
+     *   Without variation options
+     *
+     */
+    @GetMapping("get-all-variations")
+    public ResponseEntity<List<?>> getAllVariationWithoutOptions() {
+        List<VariationDto> variations = variationQueryService.getAllVariationsWithoutOptions();
+        return ResponseEntity.ok(variations);
+    }
+
+
+    /*
+     *
+     *   Get all variations and options
+     *   Associated with sub-category
+     *   Identified by sub-category ID
+     *
+     */
     @GetMapping("get-variations")
-    public List<VariationWithOptionsDto> getAllVariationsBySub(@RequestParam("id") Long subCategoryId) {
-        return variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+    public ResponseEntity<List<VariationWithOptionsDto>> getAllVariationsWithOptionsBySub(@RequestParam("id") Long subCategoryId) {
+        List<VariationWithOptionsDto> variations = variationQueryService.getAllVariationsWithOptionsBySub(
                 Components.SUB_CATEGORY,
                 subCategoryId
         );
-    }
-
-    //  get all variations without options
-    //  TESTED - with Postman
-    //  used - admin-service
-    @GetMapping("get-all-variations")
-    public List<?> getAllVariation(){
-        return variationsRetrievalService.getAllVariations();
+        return ResponseEntity.ok(variations);
     }
 
 
-
-//    ********* Options *********
-
-    //  get options by variation id - admin-service
-    @GetMapping("get-options")
-    public List<OptionDto> getOptionsByVariationId(@RequestParam("id") Long variationId) {
-        return variationsRetrievalService.getOptionsByVariationId(variationId);
-    }
-
-
-
-    /*  used in
-     * admin-service - product-details-add-item.js
+    /*
+     *
+     *  Get all sizes
      *
      */
-    @GetMapping("/size")
+    @GetMapping("/sizes")
     public ResponseEntity<VariationOptionsMinimalDto> getSizes() {
-        VariationOptionsMinimalDto variationOptions = variationsRetrievalService
+        VariationOptionsMinimalDto variationOptions = variationQueryService
                 .getVariationWithOptionsByVariationName("Size");
         return ResponseEntity.ok(variationOptions);
     }
 
-    /*  used in
-     * admin-service - product-details-add-item.js
+
+    /*
+     *
+     *  Get all colors
      *
      */
     @GetMapping("/colors")
     public ResponseEntity<VariationOptionsMinimalDto> getColors() {
-        VariationOptionsMinimalDto variationOptions = variationsRetrievalService
+        VariationOptionsMinimalDto variationOptions = variationQueryService
                 .getVariationWithOptionsByVariationName("Colors");
         return ResponseEntity.ok(variationOptions);
     }
+
+}
+
+
+
+
+
+
 
 //    @GetMapping("/color-opts")
 //    public void getColorOpts() {
 //        return;
 //    }
-}

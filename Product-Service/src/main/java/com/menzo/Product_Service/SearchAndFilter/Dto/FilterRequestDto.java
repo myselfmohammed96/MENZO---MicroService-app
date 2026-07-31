@@ -1,21 +1,18 @@
-package com.menzo.Product_Service.Modules.SearchAndFilter.Dto;
+package com.menzo.Product_Service.SearchAndFilter.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FilterTypeDto {
+public class FilterRequestDto {
 
     private String filterType;
 
-    private String typeValue;
+    private String values;
 
-    private List<String> filterOptions;
 }

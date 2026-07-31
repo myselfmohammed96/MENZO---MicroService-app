@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Product.Repo;
 
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.QueryDetailsDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.QueryDetailsDto;
 import com.menzo.Product_Service.Product.Dto.AdminProductListingDto;
 import com.menzo.Product_Service.Product.Dto.UserProductListingDto;
 import org.springframework.data.domain.Page;

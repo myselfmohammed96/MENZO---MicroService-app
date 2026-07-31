@@ -1,16 +1,16 @@
 package com.menzo.Product_Service.Variation.Service;
 
 import com.menzo.Product_Service.Enum.Components;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableOptionFilter;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableVariationFilter;
 import com.menzo.Product_Service.Variation.Dto.*;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
-import com.menzo.Product_Service.Modules.Variation.Dto.*;
-import com.menzo.Product_Service.Variation.Repo.VariationRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
+import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,55 +26,100 @@ public class VariationQueryService {
     private static final Logger logger = LoggerFactory.getLogger(VariationQueryService.class);
 
     @Autowired
-    private VariationRepo variationsRepo;
+    private VariationsRepository variationsRepo;
 
     @Autowired
-    private VariationsOptionRepo optionsRepo;
+    private VariationOptionsRepository optionsRepo;
 
     @PersistenceContext
     private EntityManager entityManager;
 
 
-
-    // Variation
-
-    //  get all variations with their options - TESTED
+    /*
+     *
+     *   Get all variations
+     *   With variation options
+     *
+     */
     @Transactional
+    @EnableVariationFilter
+    @EnableOptionFilter
     public List<VariationWithOptionsDto> getAllVariationsWithOptions() {
-        List<Variation> allVariations = variationsRepo.findAll();
-        List<VariationWithOptionsDto> variationsList = new ArrayList<>();
 
-        for (Variation variation : allVariations) {
+        //  fetch all variations
+        List<Variation> variations = variationsRepo.findAll();
+
+        //  enabling filter to exclude soft deleted options
+//        Session session = entityManager.unwrap(Session.class);
+//        session.enableFilter("optionActiveFilter")
+//                .setParameter("isDeleted", false);
+
+        //  build variations list with options
+        List<VariationWithOptionsDto> variationsList = new ArrayList<>();
+        for (Variation v : variations) {
             Set<OptionMinimalDto> options = new HashSet<>();
-            for (VariationOption option : variation.getOptions()) {
+            for (VariationOption option : v.getOptions()) {
                 OptionMinimalDto optionDto = OptionMinimalDto.builder()
-                        .optionId(option.getId())
+                        .optionId(option.getOptionId())
                         .optionValue(option.getOptionValue())
                         .build();
                 options.add(optionDto);
             }
-            VariationWithOptionsDto variationDto = new VariationWithOptionsDto(
-                    variation.getId(),
-                    variation.getVariationName(),
-                    options
-            );
+            VariationWithOptionsDto variationDto = VariationWithOptionsDto.builder()
+                    .id(v.getVariationId())
+                    .variationName(v.getVariationName())
+                    .options(options)
+                    .build();
             variationsList.add(variationDto);
         }
         return variationsList;
     }
 
 
-    //  get all variations associated with sub-category with options - by sub-category ID - TESTED
-    public List<VariationWithOptionsDto> getAllVariationsWithOptionsByCategory(Components componentType,
+    /*
+     *
+     *   Get all variations
+     *   Without variation options
+     *
+     */
+    @Transactional
+    @EnableVariationFilter
+    public List<VariationDto> getAllVariationsWithoutOptions() {
+//        Session session = entityManager.unwrap(Session.class);
+//        session.enableFilter("variationActiveFilter")
+//                .setParameter("isDeleted", false);
+
+        //  fetch variations
+        List<Variation> variations = variationsRepo.findAll();
+
+        return variations.stream()
+                .map(v -> new VariationDto(
+                        v.getVariationId(),
+                        v.getVariationName(),
+                        v.getCreatedAt())
+                ).collect(Collectors.toList());
+    }
+
+
+    /*
+     *
+     *   Get all variations and options
+     *   Associated with sub-category
+     *   Identified by sub-category ID
+     *
+     *
+     */
+    @Transactional
+    public List<VariationWithOptionsDto> getAllVariationsWithOptionsBySub(Components componentType,
                                                                           Long componentId) {
         Map<Long, VariationWithOptionsDto> variationMap = new HashMap<>();
 
         //  fetching data with sub-category ID
         List<Object[]> rows;
         if (componentType.equals(Components.CATEGORY)) {
-            rows = variationsRepo.findAllByCategoryId(componentId, true);
-        } else if(componentType.equals(Components.SUB_CATEGORY)) {
-            rows = variationsRepo.findAllByCategoryId(componentId, false);
+            rows = variationsRepo.findAllByCategoryId(componentId, true, false);
+        } else if (componentType.equals(Components.SUB_CATEGORY)) {
+            rows = variationsRepo.findAllByCategoryId(componentId, false, false);
         } else {
             throw new IllegalArgumentException("Invalid componentType. must be 'CATEGORY' or 'SUB-CATEGORY': " + componentType);
         }
@@ -111,171 +156,49 @@ public class VariationQueryService {
         return new ArrayList<>(variationMap.values());
     }
 
-    //  get all variations without options - TESTED
-    public List<VariationDto> getAllVariations() {
-        Session session = entityManager.unwrap(Session.class);
-        session.enableFilter("variationActiveFilter")
-                .setParameter("isDeleted", false);
-        List<Variation> variations = variationsRepo.findAll();
-        List<VariationDto> variationsList = variations.stream()
-                .map(v -> new VariationDto(
-                        v.getId(),
-                        v.getVariationName(),
-                        v.getCreatedAt())
-                ).collect(Collectors.toList());
-        return variationsList;
-    }
 
-
-    //  get variation-options by given variation name - TESTED
-    public List<String> getOptionsByVariationName(Long categoryId, String variationName) {
-        if (categoryId == null) {
-            List<OptionMinimalDto> optionsDtoList = variationsRepo.findOptionsByVariationName(variationName);
-            return optionsDtoList.stream()
-                    .map(dto -> dto.getOptionValue())
-                    .collect(Collectors.toList());
-        } else {
-            return null;
-        }
-    }
-
-    //  get sizes - TESTED
-    //  ## better to make this as a supplier.. fetching variation for "Size" explicitly
-    //  ## filter for isDeleted false content
+    /*
+     *
+     *   Get sizes or colors
+     *   ## better to make this as a supplier.. fetching variation for "Size" explicitly
+     *   ## filter for isDeleted false content
+     *
+     */
     @Transactional
+    @EnableVariationFilter
+    @EnableOptionFilter
     public VariationOptionsMinimalDto getVariationWithOptionsByVariationName(String variationName) {
 
         //  fetching variation by variation name
-        Session session = entityManager.unwrap(Session.class);
-        session.enableFilter("variationActiveFilter").setParameter("isDeleted", false);
-        session.enableFilter("optionActiveFilter").setParameter("isDeleted", false);
-
         Variation variation = variationsRepo.findByVariationName(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
 
-        //  building nested object for variation & the sizes
-//        NestedVariationDto variationWithSizeList = NestedVariationDto.builder()
-//                .id(variation.getId())
-//                .variationName(variation.getVariationName())
-//                .build();
+        //  building nested object for variation & the options
         VariationOptionsMinimalDto variationWithSizeList = VariationOptionsMinimalDto.builder()
-                .variationId(variation.getId())
+                .variationId(variation.getVariationId())
                 .variationName(variation.getVariationName())
                 .build();
 
-        //  extracting sizes from variation options
-//        List<NestedVariationDto> sizes = variation.getOptions().stream()
-//                .filter(opt -> !opt.getIsDeleted())
-//                .map(opt -> {
-//                    return NestedVariationDto.builder()
-//                            .id(opt.getId())
-//                            .variationName(opt.getOptionValue())
-//                            .build();
-//                }).collect(Collectors.toList());
-//        variationWithSizeList.setOptions(sizes);
+        //  extracting options
         if (variation.getVariationName().equals("Colors")) {
             List<OptionMinimalDto> options = variation.getOptions().stream()
-                    .filter(opt -> !opt.getIsDeleted())
-                    .map(opt -> {
-                        return OptionMinimalDto.builder()
-                                .optionId(opt.getId())
-                                .optionValue(opt.getOptionValue())
-                                .colorCode(opt.getColorCode().getColorHexCode())
-                                .build();
-                    }).collect(Collectors.toList());
+                    .map(opt -> OptionMinimalDto.builder()
+                            .optionId(opt.getOptionId())
+                            .optionValue(opt.getOptionValue())
+                            .colorCodeHex(opt.getColorCode().getColorHexCode())
+                            .build()
+                    ).collect(Collectors.toList());
             variationWithSizeList.setOptions(options);
         } else {
             List<OptionMinimalDto> options = variation.getOptions().stream()
-                    .filter(opt -> !opt.getIsDeleted())
-                    .map(opt -> {
-                        return OptionMinimalDto.builder()
-                                .optionId(opt.getId())
-                                .optionValue(opt.getOptionValue())
-                                .build();
-                    }).collect(Collectors.toList());
+                    .map(opt -> OptionMinimalDto.builder()
+                            .optionId(opt.getOptionId())
+                            .optionValue(opt.getOptionValue())
+                            .build()
+                    ).collect(Collectors.toList());
             variationWithSizeList.setOptions(options);
         }
         return variationWithSizeList;
     }
 
-    //  get options by list of IDs - TESTED
-    public List<VariationOption> getOptionsByIds(List<Long> idList) {
-        return optionsRepo.findByIdIn(idList);
-    }
-
-    //  get option by ID - TESTED
-    public VariationOption getOptionById(Long id) {
-        return optionsRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No variation option found for Option ID: " + id));
-    }
-
-    //  gets variation option by ID - with validating the variation name
-    //  used to get color option by ID - with validating that it is indeed a color option
-    public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
-        Variation variation = variationsRepo.findByVariationName(variationName)
-                .orElseThrow(() -> new EntityNotFoundException("Variation not found with name: " + variationName));
-
-        logger.info("Returning '{}' variation option for option ID: {}", variationName, optionId);
-        return variation.getOptions().stream()
-                .filter(opt -> opt.getId() == optionId)
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("'" +variationName + "' option not found with ID: " + optionId));
-//        return OptionDto.builder()
-//                .optionId(option.getId())
-//                .optionValue(option.getOptionValue())
-//                .variationId(variation.getId())
-//                .variationName(variation.getVariationName())
-//                .colorCode(option.getColorCode().getColorCode())
-//                .build();
-    }
-
-    //  get options by variation ID - TESTED
-    public List<OptionDto> getOptionsByVariationId(Long variationId) {
-        Variation variation = variationsRepo.findById(variationId)
-                .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
-        Session session = entityManager.unwrap(Session.class);
-        session.enableFilter("optionActiveFilter")
-                .setParameter("isDeleted", false);
-        List<VariationOption> options = optionsRepo.findByVariationId(variationId);
-        if (variation.getVariationName().equals("Colors")) {
-            return options.stream().map(opt -> {
-                return OptionDto.builder()
-                        .optionId(opt.getId())
-                        .optionValue(opt.getOptionValue())
-                        .colorCode(opt.getColorCode().getColorHexCode())
-                        .variationName(variation.getVariationName())
-                        .build();
-            }).collect(Collectors.toList());
-        } else {
-            return options.stream().map(opt -> {
-                return OptionDto.builder()
-                        .optionId(opt.getId())
-                        .optionValue(opt.getOptionValue())
-                        .variationName(variation.getVariationName())
-                        .build();
-            }).collect(Collectors.toList());
-        }
-    }
-
-    //  get list of option IDs by variation name - TESTED
-    @Transactional
-    public List<Long> getOptionIdsByVariation(String variationName) {
-        return getVariationWithOptionsByVariationName(variationName).getOptions()
-                .stream()
-                .map(opt -> opt.getOptionId())
-                .collect(Collectors.toList());
-    }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

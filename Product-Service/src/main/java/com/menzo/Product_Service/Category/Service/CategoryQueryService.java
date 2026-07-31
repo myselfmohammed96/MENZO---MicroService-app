@@ -5,7 +5,7 @@ import com.menzo.Product_Service.Modules.Category.Dto.*;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
-import com.menzo.Product_Service.Variation.Repo.VariationRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -27,7 +27,7 @@ public class CategoryQueryService {
     private CategoriesRepo categoriesRepo;
 
     @Autowired
-    private VariationRepo variationsRepo;
+    private VariationsRepository variationsRepo;
 
     @Autowired
     private ProductsRepo productsRepo;

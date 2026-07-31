@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Modules.Variation.Repo;
 
 import com.menzo.Product_Service.Variation.Entity.ColorCode;
-import com.menzo.Product_Service.Variation.Repo.ColorCodeRepo;
+import com.menzo.Product_Service.Variation.Repo.ColorCodeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +12,7 @@ import java.util.List;
 public class ColorCodeRepoTest {
 
     @Autowired
-    private ColorCodeRepo colorCodeRepo;
+    private ColorCodeRepository colorCodeRepo;
 
     @Test
     public void testFindAllColorCode() {

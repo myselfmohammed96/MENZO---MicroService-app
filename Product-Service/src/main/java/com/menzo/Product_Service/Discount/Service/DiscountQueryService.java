@@ -14,7 +14,7 @@ import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemMinDto;
 import com.menzo.Product_Service.Product.Dto.ProductMinDto;
 import com.menzo.Product_Service.Product.Service.ProductsQueryService;
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;

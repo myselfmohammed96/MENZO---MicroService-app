@@ -10,7 +10,7 @@ import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepo;
 import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
 import com.menzo.Product_Service.Product.Service.ProductsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class ProductsServiceTest {
     private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
-    private VariationsOptionRepo optionsRepo;
+    private VariationOptionsRepository optionsRepo;
 
     @Autowired
     private ProductsRepo productsRepo;

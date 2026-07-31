@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.GlobalComponents.Service;
 
 import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
-import com.menzo.Product_Service.Variation.Repo.ColorCodeRepo;
+import com.menzo.Product_Service.Variation.Repo.ColorCodeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class UtilityService {
     private static final Logger logger = LoggerFactory.getLogger(UtilityService.class);
 
     @Autowired
-    private ColorCodeRepo colorCodeRepo;
+    private ColorCodeRepository colorCodeRepo;
 
     @Autowired
     private CategoriesRepo categoriesRepo;

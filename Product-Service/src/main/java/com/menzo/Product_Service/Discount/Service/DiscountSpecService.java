@@ -3,7 +3,7 @@ package com.menzo.Product_Service.Discount.Service;
 import com.menzo.Product_Service.Discount.Entity.Discount;
 import com.menzo.Product_Service.Discount.Enum.*;
 import com.menzo.Product_Service.Modules.Discount.Enum.*;
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.FilterRequestDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.FilterRequestDto;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

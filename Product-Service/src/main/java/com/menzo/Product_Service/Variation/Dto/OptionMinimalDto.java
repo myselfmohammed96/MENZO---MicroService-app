@@ -15,11 +15,6 @@ public class OptionMinimalDto {
 
     private String optionValue;
 
-    private String colorCode;
-
-    public OptionMinimalDto(Long optionId, String optionValue) {
-        this.optionId = optionId;
-        this.optionValue = optionValue;
-    }
+    private String colorCodeHex;
 
 }

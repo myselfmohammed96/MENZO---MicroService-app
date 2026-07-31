@@ -7,8 +7,8 @@ import com.menzo.Product_Service.Variation.Dto.OptionDto;
 import com.menzo.Product_Service.Variation.Entity.ColorCode;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationRepo;
-import com.menzo.Product_Service.Variation.Repo.VariationsOptionRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
+import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +24,10 @@ public class OptionCommandService {
     private static final Logger logger = LoggerFactory.getLogger(OptionCommandService.class);
 
     @Autowired
-    private VariationRepo variationsRepo;
+    private VariationsRepository variationsRepo;
 
     @Autowired
-    private VariationsOptionRepo optionsRepo;
+    private VariationOptionsRepository optionsRepo;
 
     @Autowired
     private UtilityService utilityService;

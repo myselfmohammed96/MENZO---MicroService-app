@@ -7,7 +7,7 @@ import com.menzo.Product_Service.Discount.Enum.DiscountStatusTarget;
 import com.menzo.Product_Service.Discount.Enum.EnumDto;
 import com.menzo.Product_Service.Discount.Service.DiscountQueryService;
 import com.menzo.Product_Service.Discount.Service.DiscountService;
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.RequestDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

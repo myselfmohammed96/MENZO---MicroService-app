@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Product.Service;
 
-import com.menzo.Product_Service.Modules.SearchAndFilter.Dto.FilterTypeDto;
+import com.menzo.Product_Service.SearchAndFilter.Dto.FilterTypeDto;
 import com.menzo.Product_Service.Variation.Dto.VariationWithOptionsDto;
 import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;

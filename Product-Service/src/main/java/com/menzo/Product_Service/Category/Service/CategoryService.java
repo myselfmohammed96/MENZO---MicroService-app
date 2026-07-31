@@ -8,7 +8,7 @@ import com.menzo.Product_Service.Category.Dto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
-import com.menzo.Product_Service.Variation.Repo.VariationRepo;
+import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class CategoryService {
     private CategoriesRepo categoriesRepo;
 
     @Autowired
-    private VariationRepo variationsRepo;
+    private VariationsRepository variationsRepo;
 
     @Autowired
     private UtilityService utilityService;

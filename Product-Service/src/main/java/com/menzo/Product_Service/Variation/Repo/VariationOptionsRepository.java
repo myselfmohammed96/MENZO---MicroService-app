@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VariationsOptionRepo extends JpaRepository<VariationOption, Long> {
+public interface VariationOptionsRepository extends JpaRepository<VariationOption, Long> {
 
-    public boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);     // TESTED
+    boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);     // TESTED
 
-    public List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
+    List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
 
-    public List<VariationOption> findByVariationId(Long variationId);   // TESTED
+    List<VariationOption> findByVariationId(Long variationId);   // TESTED
 
     List<VariationOption> findByOptionValueContainingIgnoreCase(String keyword);
 }
