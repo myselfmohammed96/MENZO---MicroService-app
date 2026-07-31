@@ -3,9 +3,9 @@ package com.menzo.Product_Service.Category.Service;
 import com.menzo.Product_Service.Category.Dto.*;
 import com.menzo.Product_Service.Modules.Category.Dto.*;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
+import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
-import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -24,7 +24,7 @@ public class CategoryQueryService {
     private static final Logger logger = LoggerFactory.getLogger(CategoryQueryService.class);
 
     @Autowired
-    private CategoriesRepo categoriesRepo;
+    private CategoriesRepository categoriesRepo;
 
     @Autowired
     private VariationsRepository variationsRepo;
@@ -50,7 +50,7 @@ public class CategoryQueryService {
         return categoriesList.stream()
                 .map(p -> {
                     return new ParentCategoryDto(
-                            p.getId(),
+                            p.getCategoryId(),
                             p.getCategoryName(),
                             p.getIsActive(),
                             p.getCreatedAt()
@@ -121,7 +121,7 @@ public class CategoryQueryService {
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
         logger.info("Found parent category with ID: {}", parentCategoryId);
         return new ParentCategoryDto(
-                parentCategory.getId(),
+                parentCategory.getCategoryId(),
                 parentCategory.getCategoryName(),
                 parentCategory.getIsActive(),
                 parentCategory.getCreatedAt()
@@ -192,7 +192,7 @@ public class CategoryQueryService {
 
         return subCategories.stream()
                 .map(s -> new SubCategoryDto(
-                        s.getId(),
+                        s.getCategoryId(),
                         s.getParentCategoryId(),
                         s.getCategoryName(),
                         s.getIsActive(),

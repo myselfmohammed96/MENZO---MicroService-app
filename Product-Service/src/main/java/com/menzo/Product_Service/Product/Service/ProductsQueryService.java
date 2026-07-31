@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Product.Service;
 
-import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
+import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
@@ -20,8 +20,8 @@ import com.menzo.Product_Service.Product.Enum.StockStatus;
 import com.menzo.Product_Service.Modules.Product.Dto.*;
 import com.menzo.Product_Service.Variation.Dto.ColorInfo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
-import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class ProductsQueryService {
     private VariationOptionsRepository variationsOptionsRepo;
 
     @Autowired
-    private CategoriesRepo categoriesRepo;
+    private CategoriesRepository categoriesRepo;
 
     @Autowired
     private CategoryQueryService categoriesRetrievalService;
@@ -203,7 +203,7 @@ public class ProductsQueryService {
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
 
         ProductCategory subCategory = product.getCategory();
-        ParentCategoryView category = categoriesRetrievalService.getParentBySubCategoryId(subCategory.getId());
+        ParentCategoryView category = categoriesRetrievalService.getParentBySubCategoryId(subCategory.getCategoryId());
         CountryOfOrigin countryOfOrigin = countryOfOriginRepo.findById(product.getCountryOfOriginId())
                 .orElseThrow(() -> new EntityNotFoundException("Country not found with ID: " + product.getCountryOfOriginId()));
 
@@ -575,13 +575,13 @@ public class ProductsQueryService {
     public ProductMinimalDto getProductByIdForAddItemForm(Long productId) {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
-        ParentCategoryView parentCategoryView = categoriesRetrievalService.getParentBySubCategoryId(product.getCategory().getId());
+        ParentCategoryView parentCategoryView = categoriesRetrievalService.getParentBySubCategoryId(product.getCategory().getCategoryId());
         return new ProductMinimalDto(
                 product.getId(),
                 product.getProductName(),
                 parentCategoryView.getId(),
                 parentCategoryView.getCategoryName(),
-                product.getCategory().getId(),
+                product.getCategory().getCategoryId(),
                 product.getCategory().getCategoryName());
     }
 

@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.Category.Repo;
+package com.menzo.Product_Service.Category.Repository;
 
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface CategoriesRepo extends JpaRepository<ProductCategory, Long> {
+public interface CategoriesRepository extends JpaRepository<ProductCategory, Long> {
 
     /*
      * ********* existence check *********

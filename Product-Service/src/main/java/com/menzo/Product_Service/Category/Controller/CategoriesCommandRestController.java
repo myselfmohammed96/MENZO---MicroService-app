@@ -2,8 +2,7 @@ package com.menzo.Product_Service.Category.Controller;
 
 import com.menzo.Product_Service.Category.Dto.*;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
-import com.menzo.Product_Service.Category.Service.CategoryService;
-import com.menzo.Product_Service.Modules.Category.Dto.*;
+import com.menzo.Product_Service.Category.Service.CategoryCommandService;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -16,138 +15,29 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/categories")
-public class CategoriesRestController {
+@RequestMapping("/category")
+public class CategoriesCommandRestController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CategoriesCommandRestController.class);
 
     @Autowired
-    private CategoryService categoriesService;
+    private CategoryCommandService categoryCommandService;
 
     @Autowired
     private CategoryQueryService categoriesRetrievalService;
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoriesRestController.class);
 
-
-
-
-
-//    ********* GET - Controllers *********
-//    ********* Parent-categories *********
-
-    //  Get all parent categories - without sub-categories (id, categoryName, isActive, createdAt)
-    //  TESTED - with Postman
-    //  usage - admin-service
-    @GetMapping("get-all-parents")
-    public List<ParentCategoryDto> getAllParents() {
-        return categoriesRetrievalService.getAllParents();
-    }
-
-
-
-    //  Get all parent categories - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))
-    //  TESTED - with Postman
-//    //  used - Admin-service
-//    @GetMapping("/get-all")
-//    public List<NestedCategoryDto> getAllParentCategories() {
-//        return categoriesRetrievalService.getAllParentWithSub();
-//    }
-
-
-
-    //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)
-    //  TESTED - with Postman
-    @GetMapping("/get-parent")
-    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
-        if (parentCategoryId == null || parentCategoryId <= 0) {
-            logger.warn("Invalid parent category ID: {}", parentCategoryId);
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
-        }
-        ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
-        return ResponseEntity.ok(parentCategoryDto);
-    }
-
-
-
-    //  Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName)) --- @RequestHeader("roles") String roles,
-    //  TESTED - with Postman
-    @GetMapping("get")
-    public ResponseEntity<?> getParentCategoryByIdWithSub(@RequestParam("id") Long parentCategoryId) {
-        if (parentCategoryId == null || parentCategoryId <= 0) {
-            logger.warn("Invalid parent category ID: {}", parentCategoryId);
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
-        }
-        NestedCategoryDto parentCategoryWithSub = categoriesRetrievalService.getParentCategoryByIdWithSub(parentCategoryId);
-        return ResponseEntity.ok(parentCategoryWithSub);
-    }
-
-
-
-
-
-//    ********* Sub-categories *********
-
-    //  Get all sub category by parent id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-    //  TESTED - with Postman
-    //  usage - admin-service
-    @GetMapping("get-all-sub")
-    public ResponseEntity<?> getAllSubCategoriesByParentId(@RequestHeader("roles") String roles,
-                                                           @RequestParam("id") Long parentId) {
-        if (roles.equals("ADMIN")) {
-            if (parentId == null || parentId <= 0) {
-                logger.warn("Invalid parent ID: {}", parentId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
-            }
-            List<SubCategoryDto> allSubOfParentId = categoriesRetrievalService.getAllSubOfParentId(parentId);
-            return ResponseEntity.ok(allSubOfParentId);
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-
-
-    //  Get sub category by id - without variations (id, parentCategoryId, categoryName, isActive, createdAt)
-    //  TESTED - with Postman
-    @GetMapping("/get-sub")
-    public ResponseEntity<?> getSubCategoryById(@RequestHeader("roles") String roles,
-                                                @RequestParam("id") Long subCategoryId) {
-        if (roles.equals("ADMIN")) {
-            if (subCategoryId == null || subCategoryId <= 0) {
-                logger.warn("Invalid sub-category ID: {}", subCategoryId);
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
-            }
-            ProductCategory subCategory = categoriesRetrievalService.getSubCategoryById(subCategoryId);
-            SubCategoryDto subCategoryDto = new SubCategoryDto(
-                    subCategory.getId(),
-                    subCategory.getParentCategoryId(),
-                    subCategory.getCategoryName(),
-                    subCategory.getIsActive(),
-                    subCategory.getCreatedAt()
-            );
-            return ResponseEntity.ok(subCategoryDto);
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-//    @GetMapping("/get-sub-by-product-id")
-//    public ResponseEntity<ProductCategory> getSubCategoryByProductId(@RequestParam("id") Long productId) {
-//        ProductCategory subCategory = categoriesRetrievalService.getSubByProductId(productId);
-//        return ResponseEntity.ok(subCategory);
-//    }
-
-
-
-
-
-///    ********* POST, PUT, DELETE - Controllers *********
 //    ********* Parent-Categories *********
 
-    //    Add new parent category - admin-service
+
+    /*
+     *
+     *   Add new parent category
+     *
+     */
     @PostMapping("/add-parent")
     public ResponseEntity<?> addParentCategory(@RequestHeader("roles") String roles,
                                                @Valid @RequestBody CreateParentCategoryDto newParentCategory,
@@ -168,9 +58,9 @@ public class CategoriesRestController {
 
             //  response
             if (savedCategory != null) {
-                logger.info("Parent category created successfully with ID: {}", savedCategory.getId());
+                logger.info("Parent category created successfully with ID: {}", savedCategory.getCategoryId());
                 return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Map.of("message", "Parent category created successfully", "categoryId", savedCategory.getId()));
+                        .body(Map.of("message", "Parent category created successfully", "categoryId", savedCategory.getCategoryId()));
             } else {
                 logger.error("Parent category creation failed");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -182,8 +72,12 @@ public class CategoriesRestController {
     }
 
 
-
-    //    Update parent category by id - admin-service
+    /*
+     *
+     *   Update parent category
+     *   Parent category identified by category ID
+     *
+     */
     @PutMapping("/update-parent")
     public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles,
                                                   @RequestParam("id") Long parentCategoryId,
@@ -203,7 +97,7 @@ public class CategoriesRestController {
             if (updatedParentCategory != null) {
                 logger.info("Parent category with ID {} updated successfully", parentCategoryId);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Parent category updated successfully", "categoryId", updatedParentCategory.getId()));
+                        .body(Map.of("message", "Parent category updated successfully", "categoryId", updatedParentCategory.getCategoryId()));
             } else {
                 logger.error("Parent update failed for ID {}", parentCategoryId);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -215,8 +109,22 @@ public class CategoriesRestController {
     }
 
 
+    /*
+     *
+     *   Update parent category active status
+     *
+     */
+    @PutMapping("/update-parent-status")
+    public ResponseEntity<?> updateParentActiveStatus() {
+    }
 
-    //    Delete parent category by id - admin-service
+
+    /*
+     *
+     *   Delete parent category
+     *   Parent category identified by category ID
+     *
+     */
     @DeleteMapping("/delete-parent")
     public ResponseEntity<?> deleteParentCategory(@RequestHeader("roles") String roles,
                                                   @RequestParam("id") Long parentCategoryId) {
@@ -247,12 +155,14 @@ public class CategoriesRestController {
     }
 
 
-
-
-
 //    ********* Sub-categories *********
 
-    //    Add new sub category - admin-service
+
+    /*
+     *
+     *   Add new sub-category
+     *
+     */
     @PostMapping("/add-sub")
     public ResponseEntity<?> addSubCategory(@RequestHeader("roles") String roles,
                                             @Valid @RequestBody CreateSubCategoryDto newSubCategory,
@@ -273,9 +183,9 @@ public class CategoriesRestController {
 
             //  response
             if (savedCategory != null) {
-                logger.info("Sub-category created successfully with ID: {}", savedCategory.getId());
+                logger.info("Sub-category created successfully with ID: {}", savedCategory.getCategoryId());
                 return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Map.of("message", "Sub-category created successfully", "categoryId", savedCategory.getId()));
+                        .body(Map.of("message", "Sub-category created successfully", "categoryId", savedCategory.getCategoryId()));
             } else {
                 logger.error("Sub-category creation failed");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -287,8 +197,12 @@ public class CategoriesRestController {
     }
 
 
-
-    //    Update sub category by ID - admin-service
+    /*
+     *
+     *   Update sub-category
+     *   Sub-category identified by category ID
+     *
+     */
     @PutMapping("/update-sub")
     public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles,
                                                @RequestParam("id") Long subCategoryId,
@@ -308,7 +222,7 @@ public class CategoriesRestController {
             if (updatedSubCategory != null) {
                 logger.info("Sub-category with ID {} updated successfully", subCategoryId);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Sub-category updated successfully", "categoryId", updatedSubCategory.getId()));
+                        .body(Map.of("message", "Sub-category updated successfully", "categoryId", updatedSubCategory.getCategoryId()));
             } else {
                 logger.error("Sub-category update failed for ID {}", subCategoryId);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -320,8 +234,22 @@ public class CategoriesRestController {
     }
 
 
+    /*
+     *
+     *   Update sub-category active status
+     *
+     */
+    @PutMapping("/update-sub-status")
+    public ResponseEntity<?> updateSubActiveStatus() {
+    }
 
-    //    Delete sub category by ID - admin-service
+
+    /*
+     *
+     *   Delete sub-category
+     *   Sub-category identified by category ID
+     *
+     */
     @DeleteMapping("/delete-sub")
     public ResponseEntity<?> deleteSubCategory(@RequestHeader("roles") String roles,
                                                @RequestParam("id") Long subCategoryId) {
@@ -351,34 +279,6 @@ public class CategoriesRestController {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //    Get all parent categories with Banner images - without sub-categories (id, categoryName, categoryBannerImg)
-    @GetMapping("/get-all-with-banner")
-    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
-        return categoriesRetrievalService.getAllCategoriesWithBanner();
-    }
-
-    //    Get all sub-categories by parent id with Banner images - (id, categoryName, categoryBannerImg)
-    @GetMapping("/get-sub-with-banner")
-    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
-        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService
-                .getAllSubCategoriesByParentIdWithBanner(parentId);
-        return ResponseEntity.ok(subCategoriesList);
-    }
 }
 
 

@@ -6,8 +6,8 @@ import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.
 import com.menzo.Product_Service.Variation.Dto.*;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
-import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;

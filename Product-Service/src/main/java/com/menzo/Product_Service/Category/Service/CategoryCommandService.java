@@ -1,30 +1,32 @@
 package com.menzo.Product_Service.Category.Service;
 
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
+import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Exception.DuplicateCategoryException;
 import com.menzo.Product_Service.Category.Dto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
-import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.*;
 
 @Service
-public class CategoryService {
+public class CategoryCommandService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryCommandService.class);
 
     @Autowired
-    private CategoriesRepo categoriesRepo;
+    private CategoriesRepository categoriesRepo;
 
     @Autowired
     private VariationsRepository variationsRepo;
@@ -33,10 +35,14 @@ public class CategoryService {
     private UtilityService utilityService;
 
 
-
 //    ********* Parent categories *********
 
-    //    Add new parent category - TESTED
+
+    /*
+     *
+     *   Add new parent category
+     *
+     */
     public ProductCategory addNewParentCategory(CreateParentCategoryDto newParentCategory) {
 
         //  duplicate - existence validation
@@ -58,8 +64,12 @@ public class CategoryService {
     }
 
 
-
-    //    Update parent category by ID - TESTED
+    /*
+     *
+     *   Update parent category
+     *   Parent category identified by category ID
+     *
+     */
     public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
 
         //  fetching parent category by ID
@@ -82,10 +92,22 @@ public class CategoryService {
         return categoriesRepo.save(parentCategory);
     }
 
+
     /*
-     *  Soft delete parent category by ID
      *
-     *  With 'cascade Delete' option - Deleting all the sub-categories with Soft delete
+     *   Update parent category active status
+     *
+     */
+    public boolean updateParentActiveStatus() {
+    }
+
+
+    /*
+     *
+     *   Delete parent category (soft delete)
+     *   Parent category identified by category ID
+     *   ## With 'cascade Delete' option - Deleting all the sub-categories with Soft delete
+     *
      */
     public boolean deleteParentCategory(Long parentCategoryId) {
 
@@ -94,7 +116,8 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
 
         //  delete check validation
-        if (parentCategory.getIsDeleted()) throw new RuntimeException("Parent category with ID (" + parentCategoryId + ") already deleted");
+        if (parentCategory.getIsDeleted())
+            throw new RuntimeException("Parent category with ID (" + parentCategoryId + ") already deleted");
 
         // soft delete: set isDelete to true if not already
         logger.info("Deleting parent category with ID: {}", parentCategoryId);
@@ -104,11 +127,15 @@ public class CategoryService {
     }
 
 
-
 //    ********* Sub categories *********
 
-    //    Add new sub category - TESTED
-    //  ## Pending: Color & size variations - as default for all
+
+    /*
+     *
+     *   Add new sub-category
+     *   ## Pending: color & size variations - as default for all
+     *
+     */
     public ProductCategory addNewSub(CreateSubCategoryDto newSubCategory) {
 
         //  duplicate - existence validation
@@ -144,7 +171,13 @@ public class CategoryService {
         return categoriesRepo.save(newProductCategory);
     }
 
-    //    Update sub category by ID - TESTED
+
+    /*
+     *
+     *   Update sub-category
+     *   Sub-category identified by category ID
+     *
+     */
     public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
 
         //  fetching sub-category by ID
@@ -180,7 +213,22 @@ public class CategoryService {
         return categoriesRepo.save(subCategory);
     }
 
-    //    Soft delete sub category by ID - TESTED
+
+    /*
+     *
+     *   Update sub-category active status
+     *
+     */
+    public boolean updateSubActiveStatus() {
+    }
+
+
+    /*
+     *
+     *   Delete sub-category (soft delete)
+     *   Sub-category identified by sub-category ID
+     *
+     */
     public boolean deleteSubCategory(Long subCategoryId) {
 
         //  fetching sub-Category by ID
@@ -188,7 +236,8 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
 
         //  delete check validation
-        if (subCategory.getIsDeleted()) throw new RuntimeException("Sub-category with ID (" + subCategoryId + ") already deleted");
+        if (subCategory.getIsDeleted())
+            throw new RuntimeException("Sub-category with ID (" + subCategoryId + ") already deleted");
 
         //  soft delete: set isDelete to true if not already
         logger.info("Deleting sub-category with ID {}", subCategoryId);

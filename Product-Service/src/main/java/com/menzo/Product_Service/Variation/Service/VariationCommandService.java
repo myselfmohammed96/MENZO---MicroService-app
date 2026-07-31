@@ -2,7 +2,7 @@ package com.menzo.Product_Service.Variation.Service;
 
 import com.menzo.Product_Service.Exception.DuplicateVariationException;
 import com.menzo.Product_Service.Variation.Entity.Variation;
-import com.menzo.Product_Service.Variation.Repo.VariationsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import com.menzo.Product_Service.Variation.Dto.CreateVariationDto;
 import com.menzo.Product_Service.Variation.Dto.VariationDto;
 import jakarta.persistence.EntityNotFoundException;

@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.Variation.Repo;
+package com.menzo.Product_Service.Variation.Repository;
 
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,7 +2,6 @@ package com.menzo.Product_Service.Category.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,55 +13,49 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(
-        exclude = "variations"
-)
-@Table(
-        name = "product_categories"
-)
-@JsonIgnoreProperties({
-        "hibernateLazyInitializer",
-        "handler"
-})
+@Table(name = "product_categories")
+//@ToString(exclude = "variations")
+//@JsonIgnoreProperties({
+//        "hibernateLazyInitializer",
+//        "handler"
+//})
 @FilterDef(
-        name = "activeFilter",
+        name = "categoryActiveFilter",
         parameters = @ParamDef(
                 name = "isDeleted",
                 type = Boolean.class
         )
 )
 @Filter(
-        name = "activeFilter",
+        name = "categoryActiveFilter",
         condition = "is_deleted = :isDeleted"
 )
 public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long categoryId;
 
-    @Column(name = "parent_category_id")
-    private Long parentCategoryId;
+    @ManyToOne
+    @JoinColumn(name = "parent_category_id")
+    private ProductCategory parentCategory;
 
-    @Column(
-            name = "category_name",
-            nullable = false,
-            unique = true,
-            length = 100
-    )
+    @OneToMany(mappedBy = "parentCategory")
+    private List<ProductCategory> subCategories;
+
+    @Column(nullable = false, unique = true, length = 100)
     private String categoryName;
 
-    @Column(
-            name = "abbreviation",
-            unique = true
-    )
+    @Column(unique = true)
     private String abbreviation;
 
     @JsonIgnore
@@ -73,44 +66,32 @@ public class ProductCategory {
                     name = "category_id",
                     referencedColumnName = "id"
             ),
-            inverseJoinColumns =  @JoinColumn(
+            inverseJoinColumns = @JoinColumn(
                     name = "variation_id",
                     referencedColumnName = "id"
             )
     )
     private Set<Variation> variations = new HashSet<>();
 
-    @Column(
-            name = "is_active",
-            nullable = false
-    )
-    private Boolean isActive;
+    @Column(nullable = false)
+    private boolean isActive;
 
-    @Column(
-            name = "is_deleted",
-            nullable = false
-    )
-    private Boolean isDeleted;
+    @Column(nullable = false)
+    private boolean isDeleted;
 
-    @Column(
-            name = "created_at",
-            nullable = false,
-            updatable = false
-    )
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime deletedAt;
+
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime updateAt;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = Instant.now();
-    }
-
-    @PreUpdate
-    void onUpdate() {
-        updateAt = LocalDateTime.now();
     }
 
 }

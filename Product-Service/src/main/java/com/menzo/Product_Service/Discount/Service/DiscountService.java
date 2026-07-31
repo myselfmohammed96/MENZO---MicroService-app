@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Discount.Service;
 
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
+import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
 import com.menzo.Product_Service.Discount.Dto.CreateDiscountDto;
 import com.menzo.Product_Service.Discount.Dto.DiscountMappingDto;
 import com.menzo.Product_Service.Discount.Dto.MappedContentDto;
@@ -45,7 +45,7 @@ public class DiscountService {
     private DiscountRepo discountRepo;
 
     @Autowired
-    private CategoriesRepo categoriesRepo;
+    private CategoriesRepository categoriesRepo;
 
     @Autowired
     private ProductsRepo productsRepo;

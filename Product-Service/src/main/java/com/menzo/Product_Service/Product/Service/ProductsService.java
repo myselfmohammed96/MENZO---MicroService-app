@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Product.Service;
 
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
-import com.menzo.Product_Service.Category.Service.CategoryService;
+import com.menzo.Product_Service.Category.Service.CategoryCommandService;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
@@ -18,7 +18,7 @@ import com.menzo.Product_Service.Product.Repo.ProductImagesRepo;
 import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repo.VariationOptionsRepository;
+import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.io.FilenameUtils;
@@ -59,7 +59,7 @@ public class ProductsService {
     private ProductCountryOfOriginRepo countryOfOriginRepo;
 
     @Autowired
-    private CategoryService categoriesService;
+    private CategoryCommandService categoriesService;
 
     @Autowired
     private CategoryQueryService categoriesRetrievalService;

@@ -2,7 +2,7 @@ package com.menzo.Product_Service.Modules.Category.Repo;
 
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Category.Repo.CategoriesRepo;
+import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,7 +20,7 @@ import java.util.Optional;
 class CategoriesRepoTest {
 
     @Autowired
-    private CategoriesRepo categoriesRepo;
+    private CategoriesRepository categoriesRepo;
 
     @Autowired
     private UtilityService utilityService;

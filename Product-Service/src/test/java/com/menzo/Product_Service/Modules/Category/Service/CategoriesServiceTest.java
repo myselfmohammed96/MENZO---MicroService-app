@@ -5,7 +5,7 @@ import com.menzo.Product_Service.Category.Dto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Category.Service.CategoryService;
+import com.menzo.Product_Service.Category.Service.CategoryCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 class CategoriesServiceTest {
 
     @Autowired
-    private CategoryService categoriesService;
+    private CategoryCommandService categoriesService;
 
 
 
