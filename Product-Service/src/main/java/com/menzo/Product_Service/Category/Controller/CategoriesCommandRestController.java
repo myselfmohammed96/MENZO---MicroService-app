@@ -4,6 +4,7 @@ import com.menzo.Product_Service.Category.Dto.*;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Category.Service.CategoryCommandService;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Enum.Components;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,6 @@ public class CategoriesCommandRestController {
     @Autowired
     private CategoryCommandService categoryCommandService;
 
-    @Autowired
-    private CategoryQueryService categoriesRetrievalService;
-
 
 //    ********* Parent-Categories *********
 
@@ -39,9 +37,9 @@ public class CategoriesCommandRestController {
      *
      */
     @PostMapping("/add-parent")
-    public ResponseEntity<?> addParentCategory(@RequestHeader("roles") String roles,
-                                               @Valid @RequestBody CreateParentCategoryDto newParentCategory,
-                                               BindingResult result) {
+    public ResponseEntity<?> addNewParentCategory(@RequestHeader("roles") String roles,
+                                                  @Valid @RequestBody CreateParentCategoryDto newParentCategory,
+                                                  BindingResult result) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
@@ -54,7 +52,7 @@ public class CategoriesCommandRestController {
             }
 
             //  adding parent category
-            ProductCategory savedCategory = categoriesService.addNewParentCategory(newParentCategory);
+            ProductCategory savedCategory = categoryCommandService.addNewParentCategory(newParentCategory);
 
             //  response
             if (savedCategory != null) {
@@ -80,8 +78,8 @@ public class CategoriesCommandRestController {
      */
     @PutMapping("/update-parent")
     public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles,
-                                                  @RequestParam("id") Long parentCategoryId,
-                                                  @RequestBody ParentCategoryDto latestParentCategory) {
+                                          @RequestParam("id") Long parentCategoryId,
+                                          @RequestBody ParentCategoryDto latestParentCategory) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
@@ -91,7 +89,10 @@ public class CategoriesCommandRestController {
             }
 
             //  updating parent category
-            ProductCategory updatedParentCategory = categoriesService.updateParentCategory(parentCategoryId, latestParentCategory);
+            ProductCategory updatedParentCategory = categoryCommandService.updateParentCategory(
+                    parentCategoryId,
+                    latestParentCategory
+            );
 
             //  response
             if (updatedParentCategory != null) {
@@ -115,7 +116,38 @@ public class CategoriesCommandRestController {
      *
      */
     @PutMapping("/update-parent-status")
-    public ResponseEntity<?> updateParentActiveStatus() {
+    public ResponseEntity<?> updateParentCategoryActiveStatus(@RequestHeader("roles") String roles,
+                                                      @RequestParam("id") Long categoryId,
+                                                      @RequestParam("active") boolean isActive) {
+        if (roles.equals("ADMIN")) {
+
+            //  input  validation
+            if (categoryId == null || categoryId <= 0) {
+                logger.warn("Invalid parent category ID: {}", categoryId);
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Invalid parent category ID"));
+            }
+
+            //  update active status
+            boolean updatedActive = categoryCommandService.updateCategoryActiveStatus(
+                    categoryId,
+                    isActive,
+                    Components.CATEGORY
+            );
+
+            //  response
+            if (isActive == updatedActive) {
+                logger.info("Active status for parent category {}, updated successfully", categoryId);
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(Map.of("message", "Parent category active status updated successfully"));
+            } else {
+                logger.error("Active status update failed for parent category ID: {}", categoryId);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("message", "Parent category active status update failed."));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 
@@ -137,7 +169,10 @@ public class CategoriesCommandRestController {
             }
 
             //  deleting parent category
-            boolean deleted = categoriesService.deleteParentCategory(parentCategoryId);
+            boolean deleted = categoryCommandService.deleteCategory(
+                    parentCategoryId,
+                    Components.CATEGORY
+            );
 
             //  response
             if (deleted) {
@@ -164,9 +199,9 @@ public class CategoriesCommandRestController {
      *
      */
     @PostMapping("/add-sub")
-    public ResponseEntity<?> addSubCategory(@RequestHeader("roles") String roles,
-                                            @Valid @RequestBody CreateSubCategoryDto newSubCategory,
-                                            BindingResult result) {
+    public ResponseEntity<?> addNewSubCategory(@RequestHeader("roles") String roles,
+                                       @Valid @RequestBody CreateSubCategoryDto newSubCategory,
+                                       BindingResult result) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
@@ -179,7 +214,7 @@ public class CategoriesCommandRestController {
             }
 
             //  adding sub-category
-            ProductCategory savedCategory = categoriesService.addNewSub(newSubCategory);
+            ProductCategory savedCategory = categoryCommandService.addNewSubCategory(newSubCategory);
 
             //  response
             if (savedCategory != null) {
@@ -216,17 +251,20 @@ public class CategoriesCommandRestController {
             }
 
             //  updating sub-category
-            ProductCategory updatedSubCategory = categoriesService.updateSubCategory(subCategoryId, latestSubCategory);
+            ProductCategory updatedSubCategory = categoryCommandService.updateSubCategory(
+                    subCategoryId,
+                    latestSubCategory
+            );
 
             //  response
             if (updatedSubCategory != null) {
                 logger.info("Sub-category with ID {} updated successfully", subCategoryId);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Sub-category updated successfully", "categoryId", updatedSubCategory.getCategoryId()));
+                        .body(Map.of("message", "Sub-category updated successfully", "subCategoryId", updatedSubCategory.getCategoryId()));
             } else {
                 logger.error("Sub-category update failed for ID {}", subCategoryId);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Sub-category updation failed"));
+                        .body(Map.of("message", "Sub-category update failed"));
             }
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -240,7 +278,38 @@ public class CategoriesCommandRestController {
      *
      */
     @PutMapping("/update-sub-status")
-    public ResponseEntity<?> updateSubActiveStatus() {
+    public ResponseEntity<?> updateSubCategoryActiveStatus(@RequestHeader("roles") String roles,
+                                                   @RequestParam("id") Long categoryId,
+                                                   @RequestParam("active") boolean isActive) {
+        if (roles.equals("ADMIN")) {
+
+            //  input validation
+            if (categoryId == null || categoryId <= 0) {
+                logger.warn("Invalid sub-category ID: {}", categoryId);
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Invalid sub-category ID"));
+            }
+
+            //  update active status
+            boolean updatedActive = categoryCommandService.updateCategoryActiveStatus(
+                    categoryId,
+                    isActive,
+                    Components.SUB_CATEGORY
+            );
+
+            //  response
+            if (isActive == updatedActive) {
+                logger.info("Active status for sub-category {}, updated successfully", categoryId);
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(Map.of("message", "Sub-category active status updated successfully"));
+            } else {
+                logger.error("Active status update failed for sub-category ID: {}", categoryId);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("message", "Sub-category active status update failed."));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 
@@ -262,7 +331,10 @@ public class CategoriesCommandRestController {
             }
 
             //  deleting sub-category
-            boolean deleted = categoriesService.deleteSubCategory(subCategoryId);
+            boolean deleted = categoryCommandService.deleteCategory(
+                    subCategoryId,
+                    Components.SUB_CATEGORY
+            );
 
             //  response
             if (deleted) {
@@ -280,22 +352,5 @@ public class CategoriesCommandRestController {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

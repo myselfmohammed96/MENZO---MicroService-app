@@ -1,6 +1,8 @@
 package com.menzo.Product_Service.Category.Service;
 
 import com.menzo.Product_Service.Category.Dto.*;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableCategoryFilter;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableVariationFilter;
 import com.menzo.Product_Service.Modules.Category.Dto.*;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -116,18 +119,30 @@ public class CategoryQueryService {
 
     //  Get parent category by id - without sub-categories (id, categoryName, isActive, createdAt)  ---@RequestHeader("roles") String roles,
     //  TESTED
-    public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
-        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-        logger.info("Found parent category with ID: {}", parentCategoryId);
-        return new ParentCategoryDto(
-                parentCategory.getCategoryId(),
-                parentCategory.getCategoryName(),
-                parentCategory.getIsActive(),
-                parentCategory.getCreatedAt()
-        );
-    }
+//    public ParentCategoryDto getParentCategoryById(Long parentCategoryId) {
+//        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
+//                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
+//        logger.info("Found parent category with ID: {}", parentCategoryId);
+//        return new ParentCategoryDto(
+//                parentCategory.getCategoryId(),
+//                parentCategory.getCategoryName(),
+//                parentCategory.getIsActive(),
+//                parentCategory.getCreatedAt()
+//        );
+//    }
 
+    /*
+    *
+    *   Get parent category
+    *   Parent category identified by ID
+    *
+     */
+    @Transactional
+    @EnableCategoryFilter
+    public ProductCategory getParentCategoryById(Long parentId) {
+        return categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentId)
+                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentId));
+    }
 
     //  Get parent category by id - with sub-categories (id, categoryName, List<SubCategories> -> (id, categoryName))  ---@RequestHeader("roles") String roles,
     //  TESTED

@@ -15,11 +15,18 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      * ********* existence check *********
      */
 
-    public boolean existsByCategoryName(String categoryName);       //  TESTED
+    boolean existsByCategoryName(String categoryName);       //  TESTED
 
-    public boolean existsByAbbreviation(String abbreviation);       //  TESTED
+    boolean existsByAbbreviation(String abbreviation);       //  TESTED
 
-    public boolean existsByCategoryNameAndParentCategoryId(String categoryName, Long parentCategoryId);     //  TESTED
+
+    /*
+     *
+     *   Existence check for sub-category
+     *   Checked with category name & parent category ID
+     *
+     */
+    boolean existsByCategoryNameAndParentCategory_CategoryId(String categoryName, Long parentCategoryId);     //  TESTED
 
 
     List<ProductCategory> findByCategoryNameContainingIgnoreCase(String keyword);
@@ -30,10 +37,16 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      */
 
     //  find all parent categories
-    public List<ProductCategory> findByParentCategoryIdIsNull();        //  TESTED
+    List<ProductCategory> findByParentCategoryIdIsNull();        //  TESTED
 
-    //  find parent category by ID
-    public Optional<ProductCategory> findByIdAndParentCategoryIdIsNull(Long id);        //  TESTED
+
+    /*
+     *
+     *   Find parent category
+     *   Parent category identified by category ID
+     *
+     */
+    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNull(Long id);
 
     //  find all parent categories with their sub-categories list - excluding the SOFT DELETED entries
     @Query(
@@ -49,7 +62,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                             "AND (child.is_deleted = 0 OR child.is_deleted IS NULL) " +
                             "ORDER BY parent.id, child.id"
     )
-    public List<Object[]> findAllParentWithSub();                                   // TESTED
+    List<Object[]> findAllParentWithSub();                                   // TESTED
 
     //  find parent category by ID with its sub-categories
     @Query(
@@ -64,7 +77,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                             "AND parent.id = :parentCategoryId " +
                             "ORDER BY parent.id, child.id"
     )
-    public List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") Long parentCategoryId);  // TESTED
+    List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") Long parentCategoryId);  // TESTED
 
 
     //  find parent category by given sub-category id
@@ -81,7 +94,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                             ")",
             nativeQuery = true
     )
-    public ParentCategoryView findParentCategoryBySubId(Long subCategoryId);        //  TESTED
+    ParentCategoryView findParentCategoryBySubId(Long subCategoryId);        //  TESTED
 
 
     @Query(value =
@@ -97,7 +110,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                         WHERE p.id = :productId
                     """,
             nativeQuery = true)
-    public ParentCategoryView findParentByProductId(@Param("productId") Long productId);
+    ParentCategoryView findParentByProductId(@Param("productId") Long productId);
 
 
 //    @Query(
@@ -109,18 +122,24 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //                    """,
 //            nativeQuery = true
 //    )
-//    public List<ProductCategory> findIt(@Param("checkNull") boolean checkNull);
+//    List<ProductCategory> findIt(@Param("checkNull") boolean checkNull);
 
 
     /*
      *   ********* Sub-categories *********
      */
 
-    //  find sub-category by ID
-    public Optional<ProductCategory> findByIdAndParentCategoryIdIsNotNull(Long id);         // TESTED
+
+    /*
+     *
+     *   Find sub-category
+     *   Sub-category identified by category ID
+     *
+     */
+    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNotNull(Long id);         // TESTED
 
     //  find all sub-categories by parent category ID
-    public List<ProductCategory> findAllByParentCategoryId(Long parentCategoryId);          // TESTED
+    List<ProductCategory> findAllByParentCategoryId(Long parentCategoryId);          // TESTED
 
 //    //  returns the count of entities of the ids in the list
 //    public long countByIdIn(List<Long> selectionList);
@@ -144,14 +163,14 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //                    "WHERE pc.parentCategoryId IS NOT NULL " +
 //                    "AND pc.id = :subCategoryId"
 //    )
-//    public SubCategoryDto findSubByIdWithoutVariation(@Param("subCategoryId") Long subCategoryId);
+//    SubCategoryDto findSubByIdWithoutVariation(@Param("subCategoryId") Long subCategoryId);
 
 }
 
 
 //    @Query("SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(pc.id, pc.parentCategoryId, pc.categoryName, " +
 //            "pc.isActive, pc.createdAt) FROM ProductCategory pc WHERE pc.parentCategoryId = :parentId")
-//    public List<SubCategoryDto> findAllSubByParentId(@Param("parentId") Long parentId);
+//    List<SubCategoryDto> findAllSubByParentId(@Param("parentId") Long parentId);
 
 
 /// *
@@ -166,7 +185,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //            "WHERE parent_category_id IS NULL " +
 //            "AND id = :parentCategoryId"
 //    )
-//    public void deleteParentById(@Param("parentCategoryId") Long parentCategoryId);
+//    void deleteParentById(@Param("parentCategoryId") Long parentCategoryId);
 //
 //    @Query(
 //            nativeQuery = true,
@@ -174,9 +193,9 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //                    "WHERE parent_category_id IS NOT NULL " +
 //                    "AND id = :subCategoryId"
 //    )
-//    public void deleteSubById(@Param("subCategoryId") Long subCategoryId);
+//    void deleteSubById(@Param("subCategoryId") Long subCategoryId);
 
 
 //    @Query(nativeQuery = true, value = "SELECT pc.id, pc.parent_category_id, pc.category_name, pc.is_active, pc.created_at " +
 //            "FROM product_categories pc WHERE pc.parent_category_id IS NOT NULL AND id = :subCategoryId")
-//    public Optional<ProductCategory> findSubById(@Param("subCategoryId") Long subCategoryId);
+//    Optional<ProductCategory> findSubById(@Param("subCategoryId") Long subCategoryId);

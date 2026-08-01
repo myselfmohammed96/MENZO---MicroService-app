@@ -74,10 +74,10 @@ public class ProductCategory {
     private Set<Variation> variations = new HashSet<>();
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean isActive = true;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime deletedAt;

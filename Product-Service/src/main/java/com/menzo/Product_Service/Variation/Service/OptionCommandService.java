@@ -1,6 +1,8 @@
 package com.menzo.Product_Service.Variation.Service;
 
 import com.menzo.Product_Service.Exception.DuplicateVariationOptionException;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableOptionFilter;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableVariationFilter;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
 import com.menzo.Product_Service.Variation.Dto.CreateOptionDto;
 import com.menzo.Product_Service.Variation.Dto.OptionDto;
@@ -39,6 +41,8 @@ public class OptionCommandService {
     *
     */
     @Transactional
+    @EnableVariationFilter
+    @EnableOptionFilter
     public VariationOption addNewOption(CreateOptionDto newOption) {
 
         // duplicate existence validation
@@ -96,6 +100,7 @@ public class OptionCommandService {
     *
     */
     @Transactional
+    @EnableOptionFilter
     public VariationOption updateOption(Long optionId, OptionDto latestOption) {
 
         //  fetching variation option by ID
@@ -136,6 +141,8 @@ public class OptionCommandService {
     *   Option identified by option ID
     *
     */
+    @Transactional
+    @EnableOptionFilter
     public boolean updateOptionActiveStatus(Long optionId, boolean isActive) {
 
         //  fetching variation by ID
@@ -154,6 +161,8 @@ public class OptionCommandService {
     *   Option identified by option ID
     *
     */
+    @Transactional
+    @EnableOptionFilter
     public boolean deleteOption(Long optionId) {
 
         //  fetching variation option by ID
@@ -168,7 +177,7 @@ public class OptionCommandService {
         logger.info("Deleting variation option with ID {}", optionId);
         option.setDeleted(true);
         option.setDeletedAt(LocalDateTime.now());
-        VariationOption softDeletedOption = optionsRepo.save(option);
-        return softDeletedOption.isDeleted();
+        optionsRepo.save(option);
+        return true;
     }
 }

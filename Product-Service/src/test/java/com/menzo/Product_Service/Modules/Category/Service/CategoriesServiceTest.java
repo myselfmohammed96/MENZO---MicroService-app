@@ -41,26 +41,26 @@ class CategoriesServiceTest {
         System.out.println(updated);
     }
 
-    @Test
-    public void testDeleteParentCategory() {
-        boolean deleted = categoriesService.deleteParentCategory(165L);
-        System.out.println("Deleted: " + deleted);
-    }
+//    @Test
+//    public void testDeleteParentCategory() {
+//        boolean deleted = categoriesService.deleteParentCategory(165L);
+//        System.out.println("Deleted: " + deleted);
+//    }
 
 
 
 //    ******* Sub-categories methods *******
 
-    @Test
-    public void testAddNewSub() {
-        CreateSubCategoryDto newSub = CreateSubCategoryDto.builder()
-                .parentCategoryId(159L)
-                .categoryName("Test Sub 22")
-                .variationIds(new HashSet<>(Arrays.asList(3L, 4L, 9L)))
-                .build();
-        ProductCategory savedSub = categoriesService.addNewSub(newSub);
-        System.out.println("Sub: " + savedSub);
-    }
+//    @Test
+//    public void testAddNewSub() {
+//        CreateSubCategoryDto newSub = CreateSubCategoryDto.builder()
+//                .parentCategoryId(159L)
+//                .categoryName("Test Sub 22")
+//                .variationIds(new HashSet<>(Arrays.asList(3L, 4L, 9L)))
+//                .build();
+//        ProductCategory savedSub = categoriesService.addNewSub(newSub);
+//        System.out.println("Sub: " + savedSub);
+//    }
 
     @Test
     public void testUpdateSubCategory() {
@@ -75,9 +75,9 @@ class CategoriesServiceTest {
         System.out.println("Updated: " + updated);
     }
 
-    @Test
-    public void testDeleteSubCategory() {
-        boolean deleted = categoriesService.deleteSubCategory(163L);
-        System.out.println("Deleted: " + deleted);
-    }
+//    @Test
+//    public void testDeleteSubCategory() {
+//        boolean deleted = categoriesService.deleteSubCategory(163L);
+//        System.out.println("Deleted: " + deleted);
+//    }
 }

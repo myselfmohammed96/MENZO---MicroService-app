@@ -2,22 +2,24 @@ package com.menzo.Product_Service.Category.Service;
 
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
+import com.menzo.Product_Service.Enum.Components;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableCategoryFilter;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Exception.DuplicateCategoryException;
 import com.menzo.Product_Service.Category.Dto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.CreateSubCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
-import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
+import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -29,7 +31,10 @@ public class CategoryCommandService {
     private CategoriesRepository categoriesRepo;
 
     @Autowired
-    private VariationsRepository variationsRepo;
+    private CategoryQueryService categoryQueryService;
+
+    @Autowired
+    private VariationQueryService variationQueryService;
 
     @Autowired
     private UtilityService utilityService;
@@ -43,6 +48,8 @@ public class CategoryCommandService {
      *   Add new parent category
      *
      */
+    @Transactional
+    @EnableCategoryFilter
     public ProductCategory addNewParentCategory(CreateParentCategoryDto newParentCategory) {
 
         //  duplicate - existence validation
@@ -53,11 +60,9 @@ public class CategoryCommandService {
 
         // saving new Parent category
         ProductCategory newProductCategory = ProductCategory.builder()
+                .parentCategory(null)
                 .categoryName(newParentCategory.getCategoryName())
                 .abbreviation(null)
-                .parentCategoryId(null)
-                .isActive(true)
-                .isDeleted(false)
                 .build();
         logger.info("Saving new parent category: {}", newParentCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
@@ -70,10 +75,13 @@ public class CategoryCommandService {
      *   Parent category identified by category ID
      *
      */
-    public ProductCategory updateParentCategory(Long parentCategoryId, ParentCategoryDto latestParentCategory) {
+    @Transactional
+    @EnableCategoryFilter
+    public ProductCategory updateParentCategory(Long parentCategoryId,
+                                                ParentCategoryDto latestParentCategory) {
 
         //  fetching parent category by ID
-        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
+        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
 
         //  updating newly available fields
@@ -83,47 +91,8 @@ public class CategoryCommandService {
                         ? latestParentCategory.getCategoryName()
                         : parentCategory.getCategoryName()
         );
-        parentCategory.setIsActive(
-                latestParentCategory.getIsActive() != null
-                        ? latestParentCategory.getIsActive()
-                        : parentCategory.getIsActive()
-        );
         logger.info("Updated parent category with ID: {}", parentCategoryId);
         return categoriesRepo.save(parentCategory);
-    }
-
-
-    /*
-     *
-     *   Update parent category active status
-     *
-     */
-    public boolean updateParentActiveStatus() {
-    }
-
-
-    /*
-     *
-     *   Delete parent category (soft delete)
-     *   Parent category identified by category ID
-     *   ## With 'cascade Delete' option - Deleting all the sub-categories with Soft delete
-     *
-     */
-    public boolean deleteParentCategory(Long parentCategoryId) {
-
-        //  fetching parent category by ID
-        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategoryIdIsNull(parentCategoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
-
-        //  delete check validation
-        if (parentCategory.getIsDeleted())
-            throw new RuntimeException("Parent category with ID (" + parentCategoryId + ") already deleted");
-
-        // soft delete: set isDelete to true if not already
-        logger.info("Deleting parent category with ID: {}", parentCategoryId);
-        parentCategory.setIsDeleted(true);
-        ProductCategory softDeletedParent = categoriesRepo.save(parentCategory);
-        return softDeletedParent.getIsDeleted();
     }
 
 
@@ -136,10 +105,12 @@ public class CategoryCommandService {
      *   ## Pending: color & size variations - as default for all
      *
      */
-    public ProductCategory addNewSub(CreateSubCategoryDto newSubCategory) {
+    @Transactional
+    @EnableCategoryFilter
+    public ProductCategory addNewSubCategory(CreateSubCategoryDto newSubCategory) {
 
         //  duplicate - existence validation
-        if (categoriesRepo.existsByCategoryNameAndParentCategoryId(
+        if (categoriesRepo.existsByCategoryNameAndParentCategory_CategoryId(
                 newSubCategory.getCategoryName(),
                 newSubCategory.getParentCategoryId()
         )) {
@@ -147,10 +118,12 @@ public class CategoryCommandService {
             throw new DuplicateCategoryException("Category already exists under this parent.");
         }
 
+        //  fetch parent category
+        ProductCategory parent = categoryQueryService.getParentCategoryById(newSubCategory.getParentCategoryId());
+
         //  building variations set
         //  ## pending - provide crud on variation set of the sub-category
-        List<Variation> variationsList = variationsRepo.findAllById(newSubCategory.getVariationIds());
-        Set<Variation> variations = new HashSet<>(variationsList);
+        Set<Variation> variations = variationQueryService.getVariationSetByIds(newSubCategory.getVariationIds());
 
         //  generating abbreviation for the new sub-category name
         String abb = utilityService.generateAbbreviation(
@@ -160,12 +133,10 @@ public class CategoryCommandService {
 
         //  Save new sub-category
         ProductCategory newProductCategory = ProductCategory.builder()
-                .parentCategoryId(newSubCategory.getParentCategoryId())
+                .parentCategory(parent)
                 .categoryName(newSubCategory.getCategoryName())
                 .abbreviation(abb)
                 .variations(variations)
-                .isActive(true)
-                .isDeleted(false)
                 .build();
         logger.info("Saving new sub-category under parent ID {}: {}", newSubCategory.getParentCategoryId(), newSubCategory.getCategoryName());
         return categoriesRepo.save(newProductCategory);
@@ -178,20 +149,15 @@ public class CategoryCommandService {
      *   Sub-category identified by category ID
      *
      */
+    @Transactional
+    @EnableCategoryFilter
     public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
 
         //  fetching sub-category by ID
-        ProductCategory subCategory = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(subCategoryId)
+        ProductCategory subCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
 
         // updating the available fields in latestSubCategory
-        logger.info("Updating sub-category with ID {}", subCategoryId);
-        subCategory.setParentCategoryId(
-                latestSubCategory.getParentCategoryId() != null
-                        && latestSubCategory.getParentCategoryId() > 0
-                        ? latestSubCategory.getParentCategoryId()
-                        : subCategory.getParentCategoryId()
-        );
         subCategory.setCategoryName(
                 latestSubCategory.getCategoryName() != null
                         && !latestSubCategory.getCategoryName().isEmpty()
@@ -204,46 +170,74 @@ public class CategoryCommandService {
                         ? utilityService.generateAbbreviation("sub-category", latestSubCategory.getCategoryName())
                         : subCategory.getAbbreviation()
         );
-        subCategory.setIsActive(
-                latestSubCategory.getIsActive() != null
-                        ? latestSubCategory.getIsActive()
-                        : subCategory.getIsActive()
-        );
         logger.info("Updated sub category with ID: {}", subCategoryId);
         return categoriesRepo.save(subCategory);
     }
 
 
+    //    ********* Common methods - parent & sub categories *********
+
+
     /*
      *
-     *   Update sub-category active status
+     *   Update category active status
+     *   Category identified by category ID
+     *   Category level differentiated by Components - CATEGORY or SUB_CATEGORY
      *
      */
-    public boolean updateSubActiveStatus() {
+    @Transactional
+    @EnableCategoryFilter
+    public boolean updateCategoryActiveStatus(Long categoryId,
+                                              boolean isActive,
+                                              Components categoryLevel) {
+        if (categoryLevel == Components.CATEGORY) {
+            ProductCategory parent = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + categoryId));
+            parent.setActive(isActive);
+            return categoriesRepo.save(parent).isActive();
+        } else if (categoryLevel == Components.SUB_CATEGORY) {
+            ProductCategory sub = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + categoryId));
+            sub.setActive(isActive);
+            return categoriesRepo.save(sub).isActive();
+        } else {
+            throw new IllegalArgumentException("Component of impact should be either parent category or sub-category.");
+        }
     }
 
 
     /*
      *
-     *   Delete sub-category (soft delete)
-     *   Sub-category identified by sub-category ID
+     *   Delete category (soft delete)
+     *   Category identified by category ID
+     *   Category level differentiated by Components - CATEGORY or SUB_CATEGORY
+     *   ## With 'cascade Delete' option - Deleting all the sub-categories with Soft delete
      *
      */
-    public boolean deleteSubCategory(Long subCategoryId) {
+    @Transactional
+    @EnableCategoryFilter
+    public boolean deleteCategory(Long categoryId,
+                                  Components categoryLevel) {
+        //  fetching category
+        ProductCategory category;
+        if (categoryLevel == Components.CATEGORY) {
+            //  parent category
+            category = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Parent category not found with category ID: " + categoryId));
+        } else if (categoryLevel == Components.SUB_CATEGORY) {
+            //  sub-category
+            category = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with category ID: " + categoryId));
+        } else {
+            throw new IllegalArgumentException("Component of impact should be either parent category or sub-category");
+        }
 
-        //  fetching sub-Category by ID
-        ProductCategory subCategory = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(subCategoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
-
-        //  delete check validation
-        if (subCategory.getIsDeleted())
-            throw new RuntimeException("Sub-category with ID (" + subCategoryId + ") already deleted");
-
-        //  soft delete: set isDelete to true if not already
-        logger.info("Deleting sub-category with ID {}", subCategoryId);
-        subCategory.setIsDeleted(true);
-        ProductCategory softDeletedSub = categoriesRepo.save(subCategory);
-        return softDeletedSub.getIsDeleted();
+        // soft delete: set isDelete to true if not already
+        logger.info("Deleting category with ID: {}", categoryId);
+        category.setDeleted(true);
+        category.setDeletedAt(LocalDateTime.now());
+        categoriesRepo.save(category);
+        return true;
     }
 
 }

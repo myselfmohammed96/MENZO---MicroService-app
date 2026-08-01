@@ -201,4 +201,17 @@ public class VariationQueryService {
         return variationWithSizeList;
     }
 
+
+    /*
+    *
+    *   Get set of variations
+    *   Variations identified by set of variation IDs
+    *
+    */
+    @Transactional
+    @EnableVariationFilter
+    public Set<Variation> getVariationSetByIds(Set<Long> ids) {
+        List<Variation> variations = variationsRepo.findAllById(ids);
+        return new HashSet<>(variations);
+    }
 }
