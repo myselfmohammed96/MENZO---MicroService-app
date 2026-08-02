@@ -64,14 +64,14 @@ class VariationsRepoTest {
 //        System.out.println("subCategory -> " + list.size());
 //    }
 
-    @Test
-    public void testFindAllByCategoryId() {
-        List<Object[]> list = variationsRepo.findAllByCategoryId(139L, false, false);
-        for (Object[] o : list) {
-            System.out.println(Arrays.toString(o));
-        }
-        System.out.println("generic one -> " + list.size());
-    }
+//    @Test
+//    public void testFindAllByCategoryId() {
+//        List<Object[]> list = variationsRepo.findAllByCategoryId(139L, false, false);
+//        for (Object[] o : list) {
+//            System.out.println(Arrays.toString(o));
+//        }
+//        System.out.println("generic one -> " + list.size());
+//    }
 
 //    @Test
 //    public void testFindOptionsByVariationName() {

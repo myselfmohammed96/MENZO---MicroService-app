@@ -125,13 +125,13 @@ class CategoriesRepoTest {
 //        }
 //    }
 
-    @Test
-    public void testFindParentByIdWithSub() {
-        List<Object[]> parentByIdWithSub = categoriesRepo.findParentByIdWithSub(1L);
-        for (Object[] obj : parentByIdWithSub) {
-            System.out.println(Arrays.toString(obj));
-        }
-    }
+//    @Test
+//    public void testFindParentByIdWithSub() {
+//        List<Object[]> parentByIdWithSub = categoriesRepo.findParentByIdWithSub(1L);
+//        for (Object[] obj : parentByIdWithSub) {
+//            System.out.println(Arrays.toString(obj));
+//        }
+//    }
 
 //    @Test
 //    public void testFindParentCategoryBySubId() {
@@ -158,11 +158,11 @@ class CategoriesRepoTest {
 //        System.out.println(sub);
 //    }
 
-    @Test
-    public void testFindAllByParentCategoryId() {
-        List<ProductCategory> subList = categoriesRepo.findAllByParentCategoryId(1L);
-        System.out.println(subList);
-    }
+//    @Test
+//    public void testFindAllByParentCategoryId() {
+//        List<ProductCategory> subList = categoriesRepo.findAllByParentCategoryId(1L);
+//        System.out.println(subList);
+//    }
 
 
 

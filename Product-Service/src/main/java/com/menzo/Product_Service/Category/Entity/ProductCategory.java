@@ -29,15 +29,15 @@ import java.util.Set;
 //        "handler"
 //})
 @FilterDef(
-        name = "categoryActiveFilter",
-        parameters = @ParamDef(
-                name = "isDeleted",
-                type = Boolean.class
-        )
+        name = "categoryFilter",
+        parameters = {
+                @ParamDef(name = "isActive", type = Boolean.class),
+                @ParamDef(name = "isDeleted", type = Boolean.class)
+        }
 )
 @Filter(
-        name = "categoryActiveFilter",
-        condition = "is_deleted = :isDeleted"
+        name = "categoryFilter",
+        condition = "is_active = :isActive AND is_deleted = :isDeleted"
 )
 public class ProductCategory {
 

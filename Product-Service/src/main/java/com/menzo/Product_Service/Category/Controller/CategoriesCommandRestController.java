@@ -1,7 +1,6 @@
 package com.menzo.Product_Service.Category.Controller;
 
 import com.menzo.Product_Service.Category.Dto.*;
-import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Category.Service.CategoryCommandService;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Enum.Components;
@@ -79,7 +78,7 @@ public class CategoriesCommandRestController {
     @PutMapping("/update-parent")
     public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles,
                                           @RequestParam("id") Long parentCategoryId,
-                                          @RequestBody ParentCategoryDto latestParentCategory) {
+                                          @RequestBody CategoryDto latestParentCategory) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
@@ -241,7 +240,7 @@ public class CategoriesCommandRestController {
     @PutMapping("/update-sub")
     public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles,
                                                @RequestParam("id") Long subCategoryId,
-                                               @RequestBody SubCategoryDto latestSubCategory) {
+                                               @RequestBody CategoryDto latestSubCategory) {
         if (roles.equals("ADMIN")) {
 
             //  input validation

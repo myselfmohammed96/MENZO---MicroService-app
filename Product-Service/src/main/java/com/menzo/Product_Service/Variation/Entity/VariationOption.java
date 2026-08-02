@@ -29,12 +29,15 @@ import java.util.Date;
                 )
 })
 @FilterDef(
-        name = "optionActiveFilter",
-        parameters = @ParamDef(name = "isDeleted", type = Boolean.class)
+        name = "optionFilter",
+        parameters = {
+                @ParamDef(name = "isActive", type = Boolean.class),
+                @ParamDef(name = "isDeleted", type = Boolean.class)
+        }
 )
 @Filter(
-        name = "optionActiveFilter",
-        condition = "is_deleted = :isDeleted"
+        name = "optionFilter",
+        condition = "is_active = :isActive AND is_deleted = :isDeleted"
 )
 public class VariationOption {
 

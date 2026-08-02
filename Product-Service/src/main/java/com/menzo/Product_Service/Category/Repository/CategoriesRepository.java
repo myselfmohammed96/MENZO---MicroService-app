@@ -82,12 +82,16 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                                 LEFT JOIN product_categories s\s
                                     ON s.parent_category_id = p.category_id\s
                                 WHERE p.parent_category_id IS NULL\s
+                                    AND p.is_active = :isParentActive\s
                                     AND p.is_deleted = :isParentDeleted\s
+                                    AND s.is_active = :isSubActive\s
                                     AND s.is_deleted = :isSubDeleted\s
                                 ORDER BY p.category_id, s.category_id
                             """)
-    List<Object[]> findAllParentWithSub(@Param("isParentDeleted") boolean isParentDeleted,
-                                        @Param("isSubDeleted") boolean isSubDeleted);                                   // TESTED
+    List<Object[]> findAllParentWithSub(@Param("isParentActive") int isParentActive,
+                                        @Param("isParentDeleted") int isParentDeleted,
+                                        @Param("isSubActive") int isSubActive,
+                                        @Param("isSubDeleted") int isSubDeleted);                                   // TESTED
 
 
     /*
@@ -110,13 +114,17 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                                     ON s.parent_category_id = p.category_id\s
                                 WHERE p.parent_category_id IS NULL\s
                                     AND p.category_id = :parentCategoryId\s
+                                    AND p.is_active = :isParentActive\s
                                     AND p.is_deleted = :isParentDeleted\s
+                                    AND s.is_active = :isSubActive\s
                                     AND s.is_deleted = :isSubDeleted\s
                                 ORDER BY p.category_id, s.category_id
                             """)
     List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") Long parentCategoryId,
-                                         @Param("isParentDeleted") boolean isParentDeleted,
-                                         @Param("isSubDeleted") boolean isSubDeleted);  // TESTED
+                                         @Param("isParentActive") int isParentActive,
+                                         @Param("isParentDeleted") int isParentDeleted,
+                                         @Param("isSubActive") int isSubActive,
+                                         @Param("isSubDeleted") int isSubDeleted);
 
 
     /*

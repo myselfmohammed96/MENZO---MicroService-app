@@ -1,7 +1,6 @@
 package com.menzo.Product_Service.Discount.Service;
 
-import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
-import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
+import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Discount.Dto.*;
 import com.menzo.Product_Service.Discount.Enum.*;
@@ -454,19 +453,19 @@ public class DiscountQueryService {
 //        }
         switch (currentLevel) {
             case CATEGORY -> {
-                List<ParentCategoryDto> categories = categoryQueryService.getAllParents();
+                List<CategoryDto> categories = categoryQueryService.getAllParents();
                 return categories.stream()
                         .map(c -> LevelDetailsDto.builder()
-                                .id(c.getId())
+                                .id(c.getCategoryId())
                                 .text(c.getCategoryName())
                                 .build()
                         ).toList();
             }
             case SUB_CATEGORY -> {
-                List<SubCategoryDto> subCategories = categoryQueryService.getAllSubCategoriesByParentId(id);
+                List<CategoryDto> subCategories = categoryQueryService.getAllSubCategoriesByParentId(id);
                 return subCategories.stream()
                         .map(s -> LevelDetailsDto.builder()
-                                .id(s.getId())
+                                .id(s.getCategoryId())
                                 .text(s.getCategoryName())
                                 .build()
                         ).toList();

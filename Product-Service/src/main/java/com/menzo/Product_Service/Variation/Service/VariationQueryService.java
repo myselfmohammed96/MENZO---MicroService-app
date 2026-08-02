@@ -3,6 +3,7 @@ package com.menzo.Product_Service.Variation.Service;
 import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableOptionFilter;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableVariationFilter;
+import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Constants.DbConstant;
 import com.menzo.Product_Service.Variation.Dto.*;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
@@ -117,9 +118,31 @@ public class VariationQueryService {
         //  fetching data with sub-category ID
         List<Object[]> rows;
         if (componentType.equals(Components.CATEGORY)) {
-            rows = variationsRepo.findAllByCategoryId(componentId, true, false);
+            rows = variationsRepo.findAllByCategoryId(
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    true,
+                    componentId
+            );
         } else if (componentType.equals(Components.SUB_CATEGORY)) {
-            rows = variationsRepo.findAllByCategoryId(componentId, false, false);
+            rows = variationsRepo.findAllByCategoryId(
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    DbConstant.TRUE,
+                    DbConstant.FALSE,
+                    false,
+                    componentId
+            );
         } else {
             throw new IllegalArgumentException("Invalid componentType. must be 'CATEGORY' or 'SUB-CATEGORY': " + componentType);
         }
@@ -203,11 +226,11 @@ public class VariationQueryService {
 
 
     /*
-    *
-    *   Get set of variations
-    *   Variations identified by set of variation IDs
-    *
-    */
+     *
+     *   Get set of variations
+     *   Variations identified by set of variation IDs
+     *
+     */
     @Transactional
     @EnableVariationFilter
     public Set<Variation> getVariationSetByIds(Set<Long> ids) {

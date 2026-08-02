@@ -8,4 +8,19 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EnableVariationFilter {
+
+    /*
+     *
+     *   For default values as parameters:
+     *   @EnableVariationFilter
+     *
+     *   For custom values as parameters:
+     *   @EnableVariationFilter(isActive = false, isDeleted = true)
+     *   @EnableVariationFilter(isActive = false)
+     *
+     */
+    boolean isActive() default true;
+
+    boolean isDeleted() default false;
+
 }

@@ -1,10 +1,7 @@
 package com.menzo.Product_Service.Modules.Category.Service;
 
 import com.menzo.Product_Service.Category.Dto.NestedCategoryDto;
-import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
-import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
-import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
-import com.menzo.Product_Service.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +21,7 @@ class CategoriesRetrievalServiceTest {
 
     @Test
     public void testGetAllParents() {
-        List<ParentCategoryDto> parents = categoriesRetrievalService.getAllParents();
+        List<CategoryDto> parents = categoriesRetrievalService.getAllParents();
         System.out.println(parents);
     }
 
@@ -43,7 +40,7 @@ class CategoriesRetrievalServiceTest {
 
     @Test
     public void testGetParentCategoryById() {
-        ParentCategoryDto parent = categoriesRetrievalService.getParentCategoryById(2L);
+        CategoryDto parent = categoriesRetrievalService.getParentCategoryById(2L);
         System.out.println(parent);
     }
 
@@ -65,7 +62,7 @@ class CategoriesRetrievalServiceTest {
 
     @Test
     public void testGetAllSubOfParentId() {
-        List<SubCategoryDto> subList = categoriesRetrievalService.getAllSubCategoriesByParentId(2L);
+        List<CategoryDto> subList = categoriesRetrievalService.getAllSubCategoriesByParentId(2L);
         System.out.println(subList);
     }
 

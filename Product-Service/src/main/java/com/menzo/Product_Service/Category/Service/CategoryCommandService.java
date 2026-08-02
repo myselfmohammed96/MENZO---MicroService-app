@@ -8,8 +8,7 @@ import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Exception.DuplicateCategoryException;
 import com.menzo.Product_Service.Category.Dto.CreateParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.CreateSubCategoryDto;
-import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
-import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
+import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
@@ -78,7 +77,7 @@ public class CategoryCommandService {
     @Transactional
     @EnableCategoryFilter
     public ProductCategory updateParentCategory(Long parentCategoryId,
-                                                ParentCategoryDto latestParentCategory) {
+                                                CategoryDto latestParentCategory) {
 
         //  fetching parent category by ID
         ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentCategoryId)
@@ -151,7 +150,7 @@ public class CategoryCommandService {
      */
     @Transactional
     @EnableCategoryFilter
-    public ProductCategory updateSubCategory(Long subCategoryId, SubCategoryDto latestSubCategory) {
+    public ProductCategory updateSubCategory(Long subCategoryId, CategoryDto latestSubCategory) {
 
         //  fetching sub-category by ID
         ProductCategory subCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)

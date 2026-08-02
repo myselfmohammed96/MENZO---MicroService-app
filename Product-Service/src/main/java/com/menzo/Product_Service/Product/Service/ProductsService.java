@@ -1,8 +1,8 @@
 package com.menzo.Product_Service.Product.Service;
 
+import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Category.Service.CategoryCommandService;
-import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.GlobalComponents.Service.UtilityService;
 import com.menzo.Product_Service.Product.Dto.*;
@@ -114,7 +114,7 @@ public class ProductsService {
 
         //  --------- Data Pre-processing ---------
         //  getting parent category & sub-category
-        ParentCategoryDto parentCategory = categoriesRetrievalService
+        CategoryDto parentCategory = categoriesRetrievalService
                 .getParentCategoryById(productDetails.getCategoryId());
         ProductCategory subCategory = categoriesRetrievalService            //  ## validate - subcategory belongs to category
                 .getSubCategoryEntityById(productDetails.getSubCategoryId());

@@ -23,15 +23,15 @@ import java.util.Set;
 @Table(name = "variations")
 //@ToString(exclude = "options")
 @FilterDef(
-        name = "variationActiveFilter",
-        parameters = @ParamDef(
-                name = "isDeleted",
-                type = Boolean.class
-        )
+        name = "variationFilter",
+        parameters =  {
+                @ParamDef(name = "isActive", type = Boolean.class),
+                @ParamDef(name = "isDeleted", type = Boolean.class)
+        }
 )
 @Filter(
-        name = "variationActiveFilter",
-        condition = "is_deleted = :isDeleted"
+        name = "variationFilter",
+        condition = "is_active = :isActive AND is_deleted = :isDeleted"
 )
 public class Variation {
 

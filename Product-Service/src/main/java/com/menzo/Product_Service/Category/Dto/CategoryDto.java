@@ -11,9 +11,9 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SubCategoryDto {
+public class CategoryDto {
 
-    private Long id;
+    private Long categoryId;
 
     private Long parentCategoryId;
 

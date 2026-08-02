@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ColorCodeRepository extends JpaRepository<ColorCode, Long> {
 
     boolean existsByColorAbbreviation(String abb);       // TESTED
+
 }

@@ -1,9 +1,7 @@
 package com.menzo.Product_Service.Category.Controller;
 
 import com.menzo.Product_Service.Category.Dto.NestedCategoryDto;
-import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
-import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
-import com.menzo.Product_Service.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +34,8 @@ public class CategoriesQueryRestController {
      *
      */
     @GetMapping("get-all-parents")
-    public ResponseEntity<List<ParentCategoryDto>> getAllParents() {
-        List<ParentCategoryDto> parents = categoryQueryService.getAllParents();
+    public ResponseEntity<List<CategoryDto>> getAllParents() {
+        List<CategoryDto> parents = categoryQueryService.getAllParents();
         return ResponseEntity.ok(parents);
     }
 
@@ -69,7 +67,7 @@ public class CategoriesQueryRestController {
             logger.warn("Invalid parent category ID: {}", parentCategoryId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
         }
-        ParentCategoryDto parentCategoryDto = categoryQueryService.getParentCategoryById(parentCategoryId);
+        CategoryDto parentCategoryDto = categoryQueryService.getParentCategoryById(parentCategoryId);
         return ResponseEntity.ok(parentCategoryDto);
     }
 
@@ -123,7 +121,7 @@ public class CategoriesQueryRestController {
                 logger.warn("Invalid parent ID: {}", parentId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
             }
-            List<SubCategoryDto> allSubOfParentId = categoryQueryService.getAllSubCategoriesByParentId(parentId);
+            List<CategoryDto> allSubOfParentId = categoryQueryService.getAllSubCategoriesByParentId(parentId);
             return ResponseEntity.ok(allSubOfParentId);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -146,7 +144,7 @@ public class CategoriesQueryRestController {
                 logger.warn("Invalid sub-category ID: {}", subCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
             }
-            SubCategoryDto subCategory = categoryQueryService.getSubCategoryById(subCategoryId);
+            CategoryDto subCategory = categoryQueryService.getSubCategoryById(subCategoryId);
             return ResponseEntity.ok(subCategory);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);

@@ -37,7 +37,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public List<ParentCategoryDto> getAllParents() {
+    public List<CategoryDto> getAllParents() {
 //        Session session = entityManager.unwrap(Session.class);
 //        session.enableFilter("activeFilter")
 //                .setParameter("isDeleted", false);
@@ -45,12 +45,14 @@ public class CategoryQueryService {
         List<ProductCategory> categoriesList = categoriesRepo.findByParentCategory_CategoryIdIsNull();
 
         return categoriesList.stream()
-                .map(p -> new ParentCategoryDto(
-                        p.getCategoryId(),
-                        p.getCategoryName(),
-                        p.isActive(),
-                        p.getCreatedAt()
-                )).collect(Collectors.toList());
+                .map(p -> CategoryDto.builder()
+                        .categoryId(p.getCategoryId())
+                        .parentCategoryId(p.getParentCategory().getCategoryId())
+                        .categoryName(p.getCategoryName())
+                        .isActive(p.isActive())
+                        .createdAt(p.getCreatedAt())
+                        .build()
+                ).collect(Collectors.toList());
     }
 
 
@@ -63,7 +65,12 @@ public class CategoryQueryService {
     public List<NestedCategoryDto> getAllParentWithSub() {
 
         //  fetch parent categories data
-        List<Object[]> results = categoriesRepo.findAllParentWithSub(false, false);
+        List<Object[]> results = categoriesRepo.findAllParentWithSub(
+                DbConstant.TRUE,
+                DbConstant.FALSE,
+                DbConstant.TRUE,
+                DbConstant.FALSE
+        );
 
         //  organize data into Dto
         Map<Long, NestedCategoryDto> parentMap = new HashMap<>();
@@ -116,11 +123,11 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public ParentCategoryDto getParentCategoryById(Long parentId) {
+    public CategoryDto getParentCategoryById(Long parentId) {
         ProductCategory parent = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentId));
-        return ParentCategoryDto.builder()
-                .id(parent.getCategoryId())
+        return CategoryDto.builder()
+                .categoryId(parent.getCategoryId())
                 .categoryName(parent.getCategoryName())
                 .isActive(parent.isActive())
                 .createdAt(parent.getCreatedAt())
@@ -138,8 +145,10 @@ public class CategoryQueryService {
         //  fetch parent category
         List<Object[]> results = categoriesRepo.findParentByIdWithSub(
                 parentCategoryId,
-                false,
-                false
+                DbConstant.TRUE,
+                DbConstant.FALSE,
+                DbConstant.TRUE,
+                DbConstant.FALSE
         );
 
         //  organize data in Dto
@@ -235,7 +244,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public List<SubCategoryDto> getAllSubCategoriesByParentId(Long parentId) {
+    public List<CategoryDto> getAllSubCategoriesByParentId(Long parentId) {
         if (!categoriesRepo.existsById(parentId)) {
             logger.error("Parent category not found with ID: {}", parentId);
             throw new EntityNotFoundException("Parent category not found with ID: " + parentId);
@@ -244,8 +253,8 @@ public class CategoryQueryService {
         logger.info("Fetching {} sub-categories with parent ID {}", subCategories.size(), parentId);
 
         return subCategories.stream()
-                .map(s -> SubCategoryDto.builder()
-                        .id(s.getCategoryId())
+                .map(s -> CategoryDto.builder()
+                        .categoryId(s.getCategoryId())
                         .parentCategoryId(s.getParentCategory().getCategoryId())
                         .categoryName(s.getCategoryName())
                         .isActive(s.isActive())
@@ -280,11 +289,11 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public SubCategoryDto getSubCategoryById(Long subCategoryId) {
+    public CategoryDto getSubCategoryById(Long subCategoryId) {
         ProductCategory sub = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + subCategoryId));
-        return SubCategoryDto.builder()
-                .id(sub.getCategoryId())
+        return CategoryDto.builder()
+                .categoryId(sub.getCategoryId())
                 .parentCategoryId(sub.getParentCategory().getCategoryId())
                 .categoryName(sub.getCategoryName())
                 .isActive(sub.isActive())

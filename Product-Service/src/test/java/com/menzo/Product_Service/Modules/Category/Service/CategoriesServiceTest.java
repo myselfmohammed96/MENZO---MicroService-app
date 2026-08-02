@@ -1,17 +1,12 @@
 package com.menzo.Product_Service.Modules.Category.Service;
 
 import com.menzo.Product_Service.Category.Dto.CreateParentCategoryDto;
-import com.menzo.Product_Service.Category.Dto.CreateSubCategoryDto;
-import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
-import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
+import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Service.CategoryCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 @SpringBootTest
 class CategoriesServiceTest {
@@ -34,7 +29,7 @@ class CategoriesServiceTest {
 
     @Test
     public void testUpdateParentCategory() {
-        ParentCategoryDto parentDto = ParentCategoryDto.builder()
+        CategoryDto parentDto = CategoryDto.builder()
                 .categoryName("Thirty more")
                 .build();
         ProductCategory updated = categoriesService.updateParentCategory(159L, parentDto);
@@ -64,7 +59,7 @@ class CategoriesServiceTest {
 
     @Test
     public void testUpdateSubCategory() {
-        SubCategoryDto latestData = SubCategoryDto.builder()
+        CategoryDto latestData = CategoryDto.builder()
                 .categoryName("Test sub category")
                 .isActive(false)
                 .build();
