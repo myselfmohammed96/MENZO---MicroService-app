@@ -11,12 +11,25 @@ import java.util.Optional;
 
 public interface CategoriesRepository extends JpaRepository<ProductCategory, Long> {
 
-    /*
-     * ********* existence check *********
-     */
 
+    //  ********* existence check *********
+
+
+    /*
+     *
+     *   Common existence check method
+     *   Checked with category name
+     *
+     */
     boolean existsByCategoryName(String categoryName);       //  TESTED
 
+
+    /*
+     *
+     *   Existence check for sub-category
+     *   Checked with sub-category abbreviation
+     *
+     */
     boolean existsByAbbreviation(String abbreviation);       //  TESTED
 
 
@@ -31,13 +44,13 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 
     List<ProductCategory> findByCategoryNameContainingIgnoreCase(String keyword);
 
-    /*
-     *  ********* find methods *********
-     *  ********* Parent categories *********
-     */
 
-    //  find all parent categories
-    List<ProductCategory> findByParentCategoryIdIsNull();        //  TESTED
+    /*
+     *
+     *   Find all parent categories
+     *
+     */
+    List<ProductCategory> findByParentCategory_CategoryIdIsNull();        //  TESTED
 
 
     /*
@@ -48,69 +61,129 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      */
     Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNull(Long id);
 
-    //  find all parent categories with their sub-categories list - excluding the SOFT DELETED entries
+
+    /*
+     *
+     *   Find all parent categories
+     *   With their sub-categories
+     *   Filtering soft deleted data (params must be false, false)
+     *
+     */
     @Query(
             nativeQuery = true,
             value =
-                    "SELECT parent.id AS parentId, parent.category_name AS parentName, " +
-                            "child.id AS subId, child.category_name AS subName " +
-                            "FROM product_categories parent " +
-                            "LEFT JOIN product_categories child " +
-                            "ON child.parent_category_id = parent.id " +
-                            "WHERE parent.parent_category_id IS NULL " +
-                            "AND parent.is_deleted = 0 " +
-                            "AND (child.is_deleted = 0 OR child.is_deleted IS NULL) " +
-                            "ORDER BY parent.id, child.id"
-    )
-    List<Object[]> findAllParentWithSub();                                   // TESTED
+                    """
+                            SELECT\s
+                                    p.category_id AS parentId,\s
+                                    p.category_name AS parentName,\s
+                                    s.category_id AS subId,\s
+                                    s.category_name AS subName\s
+                                FROM product_categories p\s
+                                LEFT JOIN product_categories s\s
+                                    ON s.parent_category_id = p.category_id\s
+                                WHERE p.parent_category_id IS NULL\s
+                                    AND p.is_deleted = :isParentDeleted\s
+                                    AND s.is_deleted = :isSubDeleted\s
+                                ORDER BY p.category_id, s.category_id
+                            """)
+    List<Object[]> findAllParentWithSub(@Param("isParentDeleted") boolean isParentDeleted,
+                                        @Param("isSubDeleted") boolean isSubDeleted);                                   // TESTED
 
-    //  find parent category by ID with its sub-categories
+
+    /*
+     *
+     *   Find parent category with sub-categories
+     *   Parent category identified by parent category ID
+     *
+     */
     @Query(
             nativeQuery = true,
             value =
-                    "SELECT parent.id AS parentId, parent.category_name AS parentName, " +
-                            "child.id AS subId, child.category_name AS subName " +
-                            "FROM product_categories parent " +
-                            "LEFT JOIN product_categories child " +
-                            "ON child.parent_category_id = parent.id " +
-                            "WHERE parent.parent_category_id IS NULL " +
-                            "AND parent.id = :parentCategoryId " +
-                            "ORDER BY parent.id, child.id"
-    )
-    List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") Long parentCategoryId);  // TESTED
+                    """
+                            SELECT\s
+                                    p.category_id AS parentId,\s
+                                    p.category_name AS parentName,\s
+                                    s.category_id AS subId,\s
+                                    s.category_name AS subName\s
+                                FROM product_categories p\s
+                                LEFT JOIN product_categories s\s
+                                    ON s.parent_category_id = p.category_id\s
+                                WHERE p.parent_category_id IS NULL\s
+                                    AND p.category_id = :parentCategoryId\s
+                                    AND p.is_deleted = :isParentDeleted\s
+                                    AND s.is_deleted = :isSubDeleted\s
+                                ORDER BY p.category_id, s.category_id
+                            """)
+    List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") Long parentCategoryId,
+                                         @Param("isParentDeleted") boolean isParentDeleted,
+                                         @Param("isSubDeleted") boolean isSubDeleted);  // TESTED
 
 
-    //  find parent category by given sub-category id
+    /*
+     *
+     *   Find parent category
+     *   Parent category identified by sub-category ID
+     *
+     */
     @Query(
+            nativeQuery = true,
             value =
-                    "SELECT c1.id AS id, c1.category_name AS categoryName " +
-                            "FROM product_categories c1 " +
-                            "WHERE c1.is_active = 1 AND id = (" +
-                            "SELECT c2.parent_category_id " +
-                            "FROM product_categories c2 " +
-                            "WHERE c2.is_active = 1 " +
-                            "AND c2.parent_category_id IS NOT NULL " +
-                            "AND c2.id = :subCategoryId" +
-                            ")",
-            nativeQuery = true
-    )
-    ParentCategoryView findParentCategoryBySubId(Long subCategoryId);        //  TESTED
+                    """
+                            SELECT 
+                                    p.category_id AS categoryId,\s
+                                    p.category_name AS categoryName\s
+                                FROM product_categories p\s
+                                WHERE p.is_active = :isParentActive\s
+                                    AND p.is_deleted = :isParentDeleted\s
+                                    AND p.category_id = (\s
+                                        SELECT\s
+                                                s.parent_category_id\s
+                                            FROM product_categories s\s
+                                            WHERE s.is_active = :isSubActive\s
+                                                AND s.is_deleted = :isSubDeleted\s
+                                                AND s.parent_category_id IS NOT NULL\s
+                                                AND s.category_id = :subCategoryId\s
+                                    )
+                            """)
+    ParentCategoryView findParentCategoryBySubId(@Param("isParentActive") int isParentActive,
+                                                 @Param("isParentDeleted") int isParentDeleted,
+                                                 @Param("isSubActive") int isSubActive,
+                                                 @Param("isSubDeleted") int isSubDeleted,
+                                                 @Param("subCategoryId") Long subCategoryId);        //  TESTED
 
 
-    @Query(value =
-            """
-                    SELECT 
-                            c.id AS id, 
-                            c.category_name as categoryName
-                        FROM product_categories c
-                        JOIN product_categories sc
-                            ON c.id = sc.parent_category_id 
-                        JOIN products p 
-                            ON sc.id = p.category_id
-                        WHERE p.id = :productId
-                    """,
-            nativeQuery = true)
-    ParentCategoryView findParentByProductId(@Param("productId") Long productId);
+    /*
+     *
+     *   Find parent category
+     *   Parent category identified by product ID
+     *
+     */
+    @Query(nativeQuery = true,
+            value =
+                    """
+                                SELECT 
+                                        p.category_id AS categoryId,\s
+                                        p.category_name as categoryName\s
+                                    FROM product_categories p\s
+                                    JOIN product_categories s\s
+                                        ON c.category_id = sc.parent_category_id\s
+                                    JOIN products pr\s
+                                        ON s.category_id = pr.category_id\s
+                                    WHERE p.is_active = :isParentActive\s
+                                        AND p.is_deleted = :isParentDeleted\s
+                                        AND s.is_active = :isSubActive\s
+                                        AND s.is_deleted = :isSubDeleted\s
+                                        AND pr.is_active = :isProductActive\s
+                                        AND pr.is_deleted = :isProductDeleted\s
+                                        AND pr.product_id = :productId
+                            """)
+    ParentCategoryView findParentByProductId(@Param("isParentActive") int isParentActive,
+                                             @Param("isParentDeleted") int isParentDeleted,
+                                             @Param("isSubActive") int isSubActive,
+                                             @Param("isSubDeleted") int isSubDeleted,
+                                             @Param("isProductActive") int isProductActive,
+                                             @Param("isProductDeleted") int isProductDeleted,
+                                             @Param("productId") Long productId);
 
 
 //    @Query(
@@ -138,8 +211,15 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      */
     Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNotNull(Long id);         // TESTED
 
-    //  find all sub-categories by parent category ID
-    List<ProductCategory> findAllByParentCategoryId(Long parentCategoryId);          // TESTED
+
+    /*
+     *
+     *   Find all sub-categories
+     *   Sub-categories identified by parent category ID
+     *
+     */
+    List<ProductCategory> findAllByParentCategory_CategoryId(Long parentCategoryId);          // TESTED
+
 
 //    //  returns the count of entities of the ids in the list
 //    public long countByIdIn(List<Long> selectionList);

@@ -108,7 +108,7 @@ class ProductsServiceTest {
                 ));
         System.out.println("Getting sub-category - test");
         ProductCategory subCategory = categoriesRetrievalService
-                .getSubCategoryById(121L);
+                .getSubCategoryEntityById(121L);
         Product product = productsRepo.findById(73L)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: 73"));
 

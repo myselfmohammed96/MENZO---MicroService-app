@@ -1,10 +1,13 @@
 package com.menzo.Product_Service.Category.Controller;
 
-import com.menzo.Product_Service.Category.Dto.CategoryMinimalDto;
 import com.menzo.Product_Service.Category.Dto.NestedCategoryDto;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryDto;
 import com.menzo.Product_Service.Category.Dto.SubCategoryDto;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Category.Service.CategoryQueryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,11 @@ import java.util.Map;
 @RequestMapping("/category")
 public class CategoriesQueryRestController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoriesQueryRestController.class);
+
+    @Autowired
+    private CategoryQueryService categoryQueryService;
+
 
 //    ********* Parent-categories *********
 
@@ -28,8 +36,9 @@ public class CategoriesQueryRestController {
      *
      */
     @GetMapping("get-all-parents")
-    public List<ParentCategoryDto> getAllParents() {
-        return categoriesRetrievalService.getAllParents();
+    public ResponseEntity<List<ParentCategoryDto>> getAllParents() {
+        List<ParentCategoryDto> parents = categoryQueryService.getAllParents();
+        return ResponseEntity.ok(parents);
     }
 
 
@@ -40,8 +49,9 @@ public class CategoriesQueryRestController {
      *
      */
     @GetMapping("/get-all")
-    public List<NestedCategoryDto> getAllParentCategories() {
-        return categoriesRetrievalService.getAllParentWithSub();
+    public ResponseEntity<List<NestedCategoryDto>> getAllParentCategories() {
+        List<NestedCategoryDto> parents = categoryQueryService.getAllParentWithSub();
+        return ResponseEntity.ok(parents);
     }
 
 
@@ -54,11 +64,12 @@ public class CategoriesQueryRestController {
      */
     @GetMapping("/get-parent")
     public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
+        //  validation
         if (parentCategoryId == null || parentCategoryId <= 0) {
             logger.warn("Invalid parent category ID: {}", parentCategoryId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
         }
-        ParentCategoryDto parentCategoryDto = categoriesRetrievalService.getParentCategoryById(parentCategoryId);
+        ParentCategoryDto parentCategoryDto = categoryQueryService.getParentCategoryById(parentCategoryId);
         return ResponseEntity.ok(parentCategoryDto);
     }
 
@@ -76,7 +87,7 @@ public class CategoriesQueryRestController {
             logger.warn("Invalid parent category ID: {}", parentCategoryId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
         }
-        NestedCategoryDto parentCategoryWithSub = categoriesRetrievalService.getParentCategoryByIdWithSub(parentCategoryId);
+        NestedCategoryDto parentCategoryWithSub = categoryQueryService.getParentCategoryByIdWithSub(parentCategoryId);
         return ResponseEntity.ok(parentCategoryWithSub);
     }
 
@@ -87,10 +98,11 @@ public class CategoriesQueryRestController {
      *   Without sub-categories
      *
      */
-    @GetMapping("/get-all-with-banner")
-    public List<CategoryMinimalDto> getAllCategoriesWithBanner() {
-        return categoriesRetrievalService.getAllCategoriesWithBanner();
-    }
+//    @GetMapping("/get-all-with-banner")
+//    public ResponseEntity<List<CategoryMinimalDto>> getAllCategoriesWithBanner() {
+//        List<CategoryMinimalDto> categories = categoryQueryService.getAllCategoriesWithBanner();
+//        return ResponseEntity.ok(categories);
+//    }
 
 
 //    ********* Sub-categories *********
@@ -111,7 +123,7 @@ public class CategoriesQueryRestController {
                 logger.warn("Invalid parent ID: {}", parentId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
             }
-            List<SubCategoryDto> allSubOfParentId = categoriesRetrievalService.getAllSubOfParentId(parentId);
+            List<SubCategoryDto> allSubOfParentId = categoryQueryService.getAllSubCategoriesByParentId(parentId);
             return ResponseEntity.ok(allSubOfParentId);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -134,19 +146,13 @@ public class CategoriesQueryRestController {
                 logger.warn("Invalid sub-category ID: {}", subCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
             }
-            ProductCategory subCategory = categoriesRetrievalService.getSubCategoryById(subCategoryId);
-            SubCategoryDto subCategoryDto = new SubCategoryDto(
-                    subCategory.getCategoryId(),
-                    subCategory.getParentCategoryId(),
-                    subCategory.getCategoryName(),
-                    subCategory.getIsActive(),
-                    subCategory.getCreatedAt()
-            );
-            return ResponseEntity.ok(subCategoryDto);
+            SubCategoryDto subCategory = categoryQueryService.getSubCategoryById(subCategoryId);
+            return ResponseEntity.ok(subCategory);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+
 
     /*
      *
@@ -156,7 +162,7 @@ public class CategoriesQueryRestController {
      */
 //    @GetMapping("/get-sub-by-product-id")
 //    public ResponseEntity<ProductCategory> getSubCategoryByProductId(@RequestParam("id") Long productId) {
-//        ProductCategory subCategory = categoriesRetrievalService.getSubByProductId(productId);
+//        ProductCategory subCategory = categoryQueryService.getSubByProductId(productId);
 //        return ResponseEntity.ok(subCategory);
 //    }
 
@@ -167,11 +173,11 @@ public class CategoriesQueryRestController {
      *   Sub-categories identified by parent category ID
      *
      */
-    @GetMapping("/get-sub-with-banner")
-    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
-        List<CategoryMinimalDto> subCategoriesList = categoriesRetrievalService
-                .getAllSubCategoriesByParentIdWithBanner(parentId);
-        return ResponseEntity.ok(subCategoriesList);
-    }
+//    @GetMapping("/get-sub-with-banner")
+//    public ResponseEntity<List<CategoryMinimalDto>> getAllSubCategoriesWithBanner(@RequestParam("id") Long parentId) {
+//        List<CategoryMinimalDto> subCategoriesList = categoryQueryService
+//                .getAllSubCategoriesByParentIdWithBanner(parentId);
+//        return ResponseEntity.ok(subCategoriesList);
+//    }
 
 }

@@ -119,7 +119,7 @@ public class CategoryCommandService {
         }
 
         //  fetch parent category
-        ProductCategory parent = categoryQueryService.getParentCategoryById(newSubCategory.getParentCategoryId());
+        ProductCategory parent = categoryQueryService.getParentCategoryEntityById(newSubCategory.getParentCategoryId());
 
         //  building variations set
         //  ## pending - provide crud on variation set of the sub-category

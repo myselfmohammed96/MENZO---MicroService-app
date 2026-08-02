@@ -42,9 +42,9 @@ public interface VariationsRepository extends JpaRepository<Variation, Long> {
     @Query(
             value = """
                     SELECT\s
-                    		v.id AS variation_id,\s
+                    		v.variation_id AS variation_id,\s
                     		v.variation_name,\s
-                    		o.id AS option_id,\s
+                    		o.option_id AS option_id,\s
                     		o.option_value 
                     	FROM product_categories p 
                     	JOIN product_categories s 

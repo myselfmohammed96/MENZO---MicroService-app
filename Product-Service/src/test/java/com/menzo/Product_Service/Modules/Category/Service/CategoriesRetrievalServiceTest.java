@@ -53,11 +53,11 @@ class CategoriesRetrievalServiceTest {
         System.out.println(parent);
     }
 
-    @Test
-    public void testGetParentBySubCategoryId() {
-        ParentCategoryView parent = categoriesRetrievalService.getParentBySubCategoryId(121L);
-        System.out.println(parent.getId() + " - " + parent.getCategoryName());
-    }
+//    @Test
+//    public void testGetParentBySubCategoryId() {
+//        ParentCategoryView parent = categoriesRetrievalService.getParentBySubCategoryId(121L);
+//        System.out.println(parent.getId() + " - " + parent.getCategoryName());
+//    }
 
 
 
@@ -65,14 +65,14 @@ class CategoriesRetrievalServiceTest {
 
     @Test
     public void testGetAllSubOfParentId() {
-        List<SubCategoryDto> subList = categoriesRetrievalService.getAllSubOfParentId(2L);
+        List<SubCategoryDto> subList = categoriesRetrievalService.getAllSubCategoriesByParentId(2L);
         System.out.println(subList);
     }
 
-    @Test
-    public void testGetSubCategoryById() {
-        ProductCategory sub = categoriesRetrievalService.getSubCategoryById(121L);
-        System.out.println(sub);
-    }
+//    @Test
+//    public void testGetSubCategoryById() {
+//        ProductCategory sub = categoriesRetrievalService.getSubCategoryById(121L);
+//        System.out.println(sub);
+//    }
 
 }

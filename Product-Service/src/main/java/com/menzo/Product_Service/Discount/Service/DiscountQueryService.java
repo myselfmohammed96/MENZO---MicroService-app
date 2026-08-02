@@ -463,7 +463,7 @@ public class DiscountQueryService {
                         ).toList();
             }
             case SUB_CATEGORY -> {
-                List<SubCategoryDto> subCategories = categoryQueryService.getAllSubOfParentId(id);
+                List<SubCategoryDto> subCategories = categoryQueryService.getAllSubCategoriesByParentId(id);
                 return subCategories.stream()
                         .map(s -> LevelDetailsDto.builder()
                                 .id(s.getId())

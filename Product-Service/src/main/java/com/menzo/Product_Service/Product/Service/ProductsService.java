@@ -117,10 +117,10 @@ public class ProductsService {
         ParentCategoryDto parentCategory = categoriesRetrievalService
                 .getParentCategoryById(productDetails.getCategoryId());
         ProductCategory subCategory = categoriesRetrievalService            //  ## validate - subcategory belongs to category
-                .getSubCategoryById(productDetails.getSubCategoryId());
+                .getSubCategoryEntityById(productDetails.getSubCategoryId());
         if (parentCategory == null)
             throw new IllegalArgumentException("Parent category cannot be null");
-        if (subCategory == null || subCategory.getParentCategoryId() == null)
+        if (subCategory == null || subCategory.getParentCategory().getCategoryId() == null)
             throw new IllegalArgumentException("Invalid sub-category with ID: " +
                     productDetails.getSubCategoryId() + " - must have a parent category");
 

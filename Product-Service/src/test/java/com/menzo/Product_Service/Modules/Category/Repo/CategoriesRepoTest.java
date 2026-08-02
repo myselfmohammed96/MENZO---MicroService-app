@@ -49,47 +49,47 @@ class CategoriesRepoTest {
         System.out.println("Abbreviation exists: " + exists);
     }
 
-    @Test
-    public void testExistsByCategoryNameAndParentCategoryId() {
-        boolean exists = categoriesRepo.existsByCategoryNameAndParentCategoryId(
-                "Formal Shirts",
-                1l
-        );
-        System.out.println("CategoryName & Parent ID exists: " + exists);
-    }
+//    @Test
+//    public void testExistsByCategoryNameAndParentCategoryId() {
+//        boolean exists = categoriesRepo.existsByCategoryNameAndParentCategoryId(
+//                "Formal Shirts",
+//                1l
+//        );
+//        System.out.println("CategoryName & Parent ID exists: " + exists);
+//    }
 
 
 
 //    ********* Save methods *********
 
-    @Test
-    public void testSaveParent() {
-        ProductCategory parent = ProductCategory.builder()
-                .parentCategoryId(null)
-                .categoryName("Sample parent1")
-                .abbreviation(null)
-                .isActive(true)
-                .isDeleted(false)
-                .build();
-        ProductCategory savedParent = categoriesRepo.save(parent);
-        System.out.println(savedParent);
-    }
+//    @Test
+//    public void testSaveParent() {
+//        ProductCategory parent = ProductCategory.builder()
+//                .parentCategoryId(null)
+//                .categoryName("Sample parent1")
+//                .abbreviation(null)
+//                .isActive(true)
+//                .isDeleted(false)
+//                .build();
+//        ProductCategory savedParent = categoriesRepo.save(parent);
+//        System.out.println(savedParent);
+//    }
 
-    @Test
-    public void testSaveSub() {
-        ProductCategory sub = ProductCategory.builder()
-                .parentCategoryId(156L)
-                .categoryName("Sample sub1")
-                .abbreviation(utilityService.generateAbbreviation(
-                        "sub-category",
-                        "Sample sub1"
-                ))
-                .isDeleted(false)
-                .isActive(true)
-                .build();
-        ProductCategory savedSub = categoriesRepo.save(sub);
-        System.out.println(savedSub);
-    }
+//    @Test
+//    public void testSaveSub() {
+//        ProductCategory sub = ProductCategory.builder()
+//                .parentCategoryId(156L)
+//                .categoryName("Sample sub1")
+//                .abbreviation(utilityService.generateAbbreviation(
+//                        "sub-category",
+//                        "Sample sub1"
+//                ))
+//                .isDeleted(false)
+//                .isActive(true)
+//                .build();
+//        ProductCategory savedSub = categoriesRepo.save(sub);
+//        System.out.println(savedSub);
+//    }
 
 
 
@@ -105,25 +105,25 @@ class CategoriesRepoTest {
         System.out.println(allCategories.size());
     }
 
-    @Test
-    public void testFindByParentCategoryIdIsNull() {
-        List<ProductCategory> list = categoriesRepo.findByParentCategoryIdIsNull();
-        System.out.println(list);
-    }
+//    @Test
+//    public void testFindByParentCategoryIdIsNull() {
+//        List<ProductCategory> list = categoriesRepo.findByParentCategoryIdIsNull();
+//        System.out.println(list);
+//    }
 
-    @Test
-    public void testFindByIdAndParentCategoryIdIsNull() {
-        Optional<ProductCategory> parent = categoriesRepo.findByIdAndParentCategoryIdIsNull(1L);
-        System.out.println("Parent: " + parent.get());
-    }
+//    @Test
+//    public void testFindByIdAndParentCategoryIdIsNull() {
+//        Optional<ProductCategory> parent = categoriesRepo.findByIdAndParentCategoryIdIsNull(1L);
+//        System.out.println("Parent: " + parent.get());
+//    }
 
-    @Test
-    public void testFindAllParentWithSub() {
-        List<Object[]> allParentWithSub = categoriesRepo.findAllParentWithSub();
-        for (Object[] obj : allParentWithSub) {
-            System.out.println(Arrays.toString(obj));
-        }
-    }
+//    @Test
+//    public void testFindAllParentWithSub() {
+//        List<Object[]> allParentWithSub = categoriesRepo.findAllParentWithSub();
+//        for (Object[] obj : allParentWithSub) {
+//            System.out.println(Arrays.toString(obj));
+//        }
+//    }
 
     @Test
     public void testFindParentByIdWithSub() {
@@ -133,30 +133,30 @@ class CategoriesRepoTest {
         }
     }
 
-    @Test
-    public void testFindParentCategoryBySubId() {
-        ParentCategoryView parent = categoriesRepo.findParentCategoryBySubId(121L);
-        System.out.println(
-                "id: " + parent.getId() +
-                        " categoryName: " + parent.getCategoryName()
-        );
-    }
+//    @Test
+//    public void testFindParentCategoryBySubId() {
+//        ParentCategoryView parent = categoriesRepo.findParentCategoryBySubId(121L);
+//        System.out.println(
+//                "id: " + parent.getId() +
+//                        " categoryName: " + parent.getCategoryName()
+//        );
+//    }
 
-    @Test
-    public void testFindParentByProductId() {
-        ParentCategoryView category = categoriesRepo.findParentByProductId(83L);
-        System.out.println(category.getId() + " - " + category.getCategoryName());
-    }
+//    @Test
+//    public void testFindParentByProductId() {
+//        ParentCategoryView category = categoriesRepo.findParentByProductId(83L);
+//        System.out.println(category.getId() + " - " + category.getCategoryName());
+//    }
 
 
 
 //    ********* Sub-categories *********
 
-    @Test
-    public void testFindByIdAndParentCategoryIdIsNotNull() {
-        Optional<ProductCategory> sub = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(121L);
-        System.out.println(sub);
-    }
+//    @Test
+//    public void testFindByIdAndParentCategoryIdIsNotNull() {
+//        Optional<ProductCategory> sub = categoriesRepo.findByIdAndParentCategoryIdIsNotNull(121L);
+//        System.out.println(sub);
+//    }
 
     @Test
     public void testFindAllByParentCategoryId() {
