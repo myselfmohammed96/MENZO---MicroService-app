@@ -216,7 +216,7 @@ public class ProductsService {
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + newProductItem.getProductId()));
 
         ParentCategoryView category = categoriesRetrievalService.getParentByProductId(product.getId());
-        ProductCategory subCategory = product.getCategory();
+        ProductCategory subCategory = product.getSubCategory();
 
         //  getting list of PRODUCT_VARIATION_CONFIGURATION from 1st found 'productItem' of 'product'
         List<ProductConfiguration> configs = product.getItems().get(0).getConfigurations();
@@ -281,7 +281,7 @@ public class ProductsService {
             stockSum += savedItem.getQtyInStock();
 
             ItemSizeDto sizeDto = ItemSizeDto.builder()
-                    .itemId(savedItem.getId())
+                    .itemId(savedItem.getItemId())
                     .size(sizeDetail.getSizeValue())
                     .sku(savedItem.getSKU())
                     .qtyInStock(savedItem.getQtyInStock())
@@ -350,13 +350,13 @@ public class ProductsService {
 
         Product newProduct = Product.builder()
                 .productName(productDetails.getProductName())
-                .category(subCategory)
+                .subCategory(subCategory)
                 .productDescription(productDetails.getDescription())
                 .genericName(productDetails.getGenericName())
                 .itemWeight(productDetails.getItemWeight())
                 .manufacturerId(companyId)
                 .packersId(companyId)
-                .countryOfOriginId(countryOfOriginId)
+                .countryOfOrigin(countryOfOriginId)
                 .podAvailable(podAvailable)
                 .build();
         return productsRepo.save(newProduct);

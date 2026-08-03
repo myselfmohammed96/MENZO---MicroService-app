@@ -130,7 +130,7 @@ class ProductsServiceTest {
     public void anotherFindTest() {
         List<ProductItem> all = itemsRepo.findAll();
         all.stream().forEach(a -> System.out.println(
-                "[" + a.getId() + " - " +
+                "[" + a.getItemId() + " - " +
                         a.getProduct().getId() +
                         " - " + a.getSKU()
         ));

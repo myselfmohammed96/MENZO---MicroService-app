@@ -2,13 +2,11 @@ package com.menzo.Product_Service.Product.Entity;
 
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,20 +22,14 @@ public class ProductConfiguration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long productConfigurationId;
 
     @ManyToOne
-    @JoinColumn(
-            name = "product_item_id",
-            nullable = false
-    )
+    @JoinColumn(name = "product_item_id", nullable = false)
     private ProductItem productItem;
 
     @ManyToOne
-    @JoinColumn(
-            name = "variation_option_id",
-            nullable = false
-    )
+    @JoinColumn(name = "variation_option_id", nullable = false)
     private VariationOption variationOption;
 
 }

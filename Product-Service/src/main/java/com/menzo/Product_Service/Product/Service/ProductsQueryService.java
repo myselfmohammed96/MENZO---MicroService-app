@@ -202,10 +202,10 @@ public class ProductsQueryService {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
 
-        ProductCategory subCategory = product.getCategory();
+        ProductCategory subCategory = product.getSubCategory();
         ParentCategoryView category = categoriesRetrievalService.getParentBySubCategoryId(subCategory.getCategoryId());
-        CountryOfOrigin countryOfOrigin = countryOfOriginRepo.findById(product.getCountryOfOriginId())
-                .orElseThrow(() -> new EntityNotFoundException("Country not found with ID: " + product.getCountryOfOriginId()));
+        CountryOfOrigin countryOfOrigin = countryOfOriginRepo.findById(product.getCountryOfOrigin())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found with ID: " + product.getCountryOfOrigin()));
 
         //  ITEMs - minimal details
         List<AdminItemListingDto> itemDetailsList = getMinimalItemsDetails(
@@ -286,8 +286,8 @@ public class ProductsQueryService {
         //  other details
         String manufacturer = "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India";
         String packer = "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India";
-        CountryOfOrigin country = countryOfOriginRepo.findById(product.getCountryOfOriginId())
-                .orElseThrow(() -> new EntityNotFoundException("Country of origin not found with ID: " + product.getCountryOfOriginId()));
+        CountryOfOrigin country = countryOfOriginRepo.findById(product.getCountryOfOrigin())
+                .orElseThrow(() -> new EntityNotFoundException("Country of origin not found with ID: " + product.getCountryOfOrigin()));
 
 
         //  returning PRODUCT DETAILS - with ITEMs minimal details
@@ -543,8 +543,8 @@ public class ProductsQueryService {
 //                        startingPrice.set(item.getPrice());
 //                    }
                     return ItemSizeDto.builder()
-                            .itemId(item.getId())
-                            .size(itemsRepo.findSizeByItemId("Size", item.getId()))
+                            .itemId(item.getItemId())
+                            .size(itemsRepo.findSizeByItemId("Size", item.getItemId()))
                             .sku(item.getSKU())
                             .qtyInStock(item.getQtyInStock())
                             .isActive(item.getIsActive())
@@ -575,14 +575,14 @@ public class ProductsQueryService {
     public ProductMinimalDto getProductByIdForAddItemForm(Long productId) {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
-        ParentCategoryView parentCategoryView = categoriesRetrievalService.getParentBySubCategoryId(product.getCategory().getCategoryId());
+        ParentCategoryView parentCategoryView = categoriesRetrievalService.getParentBySubCategoryId(product.getSubCategory().getCategoryId());
         return new ProductMinimalDto(
                 product.getId(),
                 product.getProductName(),
                 parentCategoryView.getId(),
                 parentCategoryView.getCategoryName(),
-                product.getCategory().getCategoryId(),
-                product.getCategory().getCategoryName());
+                product.getSubCategory().getCategoryId(),
+                product.getSubCategory().getCategoryName());
     }
 
 //    public ProductItemDetailsDto getProductItemDetailsById(Long itemId) {
@@ -639,7 +639,7 @@ public class ProductsQueryService {
                     ColorInfo color = getColorFromItem(i);
 
                     return ItemMinDto.builder()
-                            .itemId(i.getId())
+                            .itemId(i.getItemId())
                             .sku(i.getSKU())
                             .imageUrl(imageUrl)
                             .size(size)

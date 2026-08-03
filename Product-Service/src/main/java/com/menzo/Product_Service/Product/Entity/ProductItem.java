@@ -2,21 +2,36 @@ package com.menzo.Product_Service.Product.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = { "configurations", "images" })
+//@ToString(exclude = {"configurations", "images"})
 @Table(name = "product_items")
+@FilterDef(
+        name = "itemFilter",
+        parameters = {
+                @ParamDef(name = "isActive", type = Boolean.class),
+                @ParamDef(name = "isDeleted", type = Boolean.class)
+        }
+)
+@Filter(
+        name = "itemFilter",
+        condition = "is_active = :isActive AND is_deleted = :isDeleted"
+)
 public class ProductItem {
 
 //    @Id
@@ -33,11 +48,7 @@ public class ProductItem {
             strategy = GenerationType.SEQUENCE,
             generator = "item_sequence"
     )
-    private Long id;
-
-
-
-
+    private Long itemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -47,68 +58,43 @@ public class ProductItem {
     )
     private Product product;
 
-
-
-
-    @ManyToMany(
-            mappedBy = "productItems",
-            cascade = CascadeType.ALL
-    )
-    private List<ProductImage> images = new ArrayList<>();
-
-    @Column(
-            nullable = false,
-            name = "super_sku"
-    )
+    @Column(nullable = false)
     private String superSku;
 
-    @Column(
-            nullable = false,
-            unique = true,
-            name = "SKU"
-    )
+    @Column(name = "sku", nullable = false, unique = true)
     private String SKU;
 
-    @Column(
-            nullable = false,
-            name = "qty_in_stock"
-    )
+    @Column(nullable = false)
     private Integer qtyInStock;
 
-    @Column(
-            nullable = false,
-            name = "mrp"
-    )
-    private BigDecimal mrp;
-
-    @Column(
-            nullable = false,
-            name = "selling_price"
-    )
+    @Column(nullable = false)
     private BigDecimal sellingPrice;
 
-    @OneToMany(
-            mappedBy = "productItem",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<ProductConfiguration> configurations = new ArrayList<>();
+    @Column(nullable = false)
+    private BigDecimal mrp;
 
-    @Column(
-            nullable = false,
-            name = "is_active"
-    )
-    private Boolean isActive;
+    @Column(nullable = false)
+    private boolean isActive = true;
 
-    @Column(
-            nullable = false,
-            name = "created_at"
-    )
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "dd-MM-yyyy"
-    )
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime deletedAt;
+
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "productItems", cascade = CascadeType.ALL)
+    private List<ProductImage> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "productItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductConfiguration> configurations = new ArrayList<>();
 
 }
