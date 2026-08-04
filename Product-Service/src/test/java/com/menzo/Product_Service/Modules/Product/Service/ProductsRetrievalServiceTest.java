@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
 import com.menzo.Product_Service.Product.Dto.UserProductDetailsDto;
-import com.menzo.Product_Service.Product.Service.ProductsQueryService;
+import com.menzo.Product_Service.Product.Service.ProductQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ProductsRetrievalServiceTest {
 
     @Autowired
-    private ProductsQueryService productsRetrievalService;
+    private ProductQueryService productsRetrievalService;
 
 //    @Test
 //    public void testGetAdminAllProductListing() {

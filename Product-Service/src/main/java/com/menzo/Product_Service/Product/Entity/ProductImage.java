@@ -12,7 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "product_images")
+@Table(
+        name = "product_images",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"super_sku", "image_url"}),
+                @UniqueConstraint(columnNames = {"super_sku", "image_order"})
+        }
+)
 public class ProductImage {
 
     @Id
@@ -25,6 +31,12 @@ public class ProductImage {
     @Column(nullable = false)
     private String superSku;
 
+    @Column(nullable = false)
+    private int imageOrder;
+
+    @Column(nullable = false)
+    private boolean isPrimaryImage;
+
     @ManyToMany
     @JoinTable(
             name = "item_image_configuration",
@@ -33,11 +45,4 @@ public class ProductImage {
     )
     private List<ProductItem> productItems = new ArrayList<>();
 
-    //    @ManyToOne
-    //    @JoinColumn(name = "product_id")
-    //    private Product product;
-
-    //    @ManyToOne
-    //    @JoinColumn(name = "product_item_id")
-    //    private ProductItem productItem;
 }

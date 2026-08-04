@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Controller;
 
-import com.menzo.Product_Service.Product.Controller.ProductRestController;
+import com.menzo.Product_Service.Product.Controller.ProductCommandRestController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 class ProductRestControllerTest {
 
     @Autowired
-    private ProductRestController productRestController;
+    private ProductCommandRestController productRestController;
 
     @Test
     public void testGetAllProducts() {

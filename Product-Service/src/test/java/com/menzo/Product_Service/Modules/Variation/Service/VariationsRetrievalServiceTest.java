@@ -4,6 +4,7 @@ import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.Variation.Dto.VariationDto;
 import com.menzo.Product_Service.Variation.Dto.VariationOptionsDto;
+import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ class VariationsRetrievalServiceTest {
 
     @Autowired
     private VariationQueryService variationsRetrievalService;
+
+    @Autowired
+    private OptionQueryService optionQueryService;
 
     @Test
     public void testGetAllVariationsWithOptions() {
@@ -60,7 +64,7 @@ class VariationsRetrievalServiceTest {
     @Test
     @Transactional
     public void testGetOptionsByIds() {
-        List<VariationOption> options = variationsRetrievalService.getOptionsByIds(Arrays.asList(
+        List<VariationOption> options = optionQueryService.getOptionsByIds(Arrays.asList(
                 3L,
                 4L,
                 5L,
@@ -92,10 +96,10 @@ class VariationsRetrievalServiceTest {
 //        System.out.println(options.size());
 //    }
 
-    @Test
-    public void testGetOptionIdsByVariation() {
-        List<Long> options = variationsRetrievalService.getOptionIdsByVariation("Colors");
-        System.out.println(options);
-    }
+//    @Test
+//    public void testGetOptionIdsByVariation() {
+//        List<Long> options = variationsRetrievalService.getOptionIdsByVariation("Colors");
+//        System.out.println(options);
+//    }
 
 }

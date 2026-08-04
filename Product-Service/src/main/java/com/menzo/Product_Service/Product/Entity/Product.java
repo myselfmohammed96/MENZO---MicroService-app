@@ -100,10 +100,16 @@ public class Product {
     private boolean podAvailable;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean isActive = true;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isApproved = false;
+
+    @Column(nullable = false)
+    private long approvedBy;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
@@ -129,7 +135,6 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_of_origin_id", nullable = false)
     private CountryOfOrigin countryOfOrigin;
-
     //  ---------
 
     @JsonIgnore

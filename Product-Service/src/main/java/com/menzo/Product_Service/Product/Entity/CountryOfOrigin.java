@@ -16,10 +16,7 @@ public class CountryOfOrigin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long countryId;
 
-    @Column(
-            nullable = false,
-            unique = true
-    )
+    @Column(nullable = false, unique = true)
     private String countryName;
 
 }

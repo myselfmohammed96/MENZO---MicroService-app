@@ -11,7 +11,7 @@ public interface VariationOptionsRepository extends JpaRepository<VariationOptio
 
     boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);     // TESTED
 
-    List<VariationOption> findByIdIn(List<Long> idList);     // TESTED
+    List<VariationOption> findByOptionIdIn(List<Long> idList);     // TESTED
 
     List<VariationOption> findByVariationId(Long variationId);   // TESTED
 

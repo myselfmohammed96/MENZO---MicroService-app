@@ -12,7 +12,7 @@ import com.menzo.Product_Service.Modules.Discount.Enum.*;
 import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemMinDto;
 import com.menzo.Product_Service.Product.Dto.ProductMinDto;
-import com.menzo.Product_Service.Product.Service.ProductsQueryService;
+import com.menzo.Product_Service.Product.Service.ProductQueryService;
 import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,7 +43,7 @@ public class DiscountQueryService {
     private CategoryQueryService categoryQueryService;
 
     @Autowired
-    private ProductsQueryService productsQueryService;
+    private ProductQueryService productsQueryService;
 
 
     //  ## remove isDeleted fields

@@ -11,7 +11,7 @@ import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
-import com.menzo.Product_Service.Product.Service.ProductsService;
+import com.menzo.Product_Service.Product.Service.ProductCommandService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import java.util.Map;
 class ProductsServiceTest {
 
     @Autowired
-    private ProductsService productsService;
+    private ProductCommandService productsService;
 
     @Autowired
     private ProductConfigurationRepo productConfigurationRepo;
@@ -83,7 +83,7 @@ class ProductsServiceTest {
     @Transactional
     @Rollback(value = true)
     public void testSaveNewProductItem() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
+        Method method = ProductCommandService.class.getDeclaredMethod(
                 "saveNewProductItem",
                 Map.class,
                 List.class,
@@ -131,7 +131,7 @@ class ProductsServiceTest {
         List<ProductItem> all = itemsRepo.findAll();
         all.stream().forEach(a -> System.out.println(
                 "[" + a.getItemId() + " - " +
-                        a.getProduct().getId() +
+                        a.getProduct().getProductId() +
                         " - " + a.getSKU()
         ));
     }
@@ -140,27 +140,27 @@ class ProductsServiceTest {
 
 //    ********* utility methods *********
 
-    @Test
-    @Transactional
-    @Rollback(value = false)
-    public void testAddCountryOfOrigin() throws Exception {
-//        Method method = ProductsService.class.getDeclaredMethod(
-//                "addCountryOfOrigin",
-//                String.class
-//        );
-//        method.setAccessible(true);
-//        Long countryId = (Long) method.invoke(
-//                productsService,
-//                "Sudan"
-//        );
-        Long countryId = productsService.addCountryOfOrigin("Sudan");
-
-        System.out.println("Country ID: " + countryId);
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(value = false)
+//    public void testAddCountryOfOrigin() throws Exception {
+////        Method method = ProductsService.class.getDeclaredMethod(
+////                "addCountryOfOrigin",
+////                String.class
+////        );
+////        method.setAccessible(true);
+////        Long countryId = (Long) method.invoke(
+////                productsService,
+////                "Sudan"
+////        );
+//        Long countryId = productsService.addCountryOfOrigin("Sudan");
+//
+//        System.out.println("Country ID: " + countryId);
+//    }
 
     @Test
     public void testProcessVariationsWithVariationsMap() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
+        Method method = ProductCommandService.class.getDeclaredMethod(
                 "processVariations",
                 Map.class,
                 List.class
@@ -183,7 +183,7 @@ class ProductsServiceTest {
 
     @Test
     public void testProcessVariationsWithProductConfigList() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
+        Method method = ProductCommandService.class.getDeclaredMethod(
                 "processVariations",
                 Map.class,
                 List.class
@@ -201,7 +201,7 @@ class ProductsServiceTest {
 
     @Test
     public void testGenerateSKU() throws Exception {
-        Method method = ProductsService.class.getDeclaredMethod(
+        Method method = ProductCommandService.class.getDeclaredMethod(
                 "generateSKU",
                 String.class,
                 String.class,

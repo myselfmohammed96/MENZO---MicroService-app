@@ -10,7 +10,14 @@ import java.util.List;
 
 public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>, ProductsRepoCustom {
 
-    public boolean existsByProductName(String productName);
+    /*
+     *
+     *   Existence check for product
+     *   Checks if product with name and code exists or not
+     *
+     */
+    public boolean existsByProductNameAndProductCode(String productName, String productCode);
+
 
     @Query(value = "SELECT DISTINCT p FROM Product p JOIN p.items i")
     public List<Product> findAllWithItems();
@@ -30,7 +37,6 @@ public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecifica
             nativeQuery = true
     )
     public List<ProductListingView> findAllProductsWithSorting();
-
 
 
     //  get admin products listing
@@ -100,14 +106,6 @@ public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecifica
 }
 
 
-
-
-
-
-
-
-
-
 //    public List<Product> findByProductNameContainingIgnoreCase(String productName);
 
 //    *** Backup - D0 NOT TOUCH ***
@@ -136,6 +134,6 @@ public interface ProductsRepo extends JpaRepository<Product, Long>, JpaSpecifica
 //                    (SELECT MIN(id) FROM product_images GROUP BY product_item_id)) im ON i.id = im.product_item_id
 //                    GROUP BY p.id, p.product_name, c.category_name, im.image_url
 //                    """
-////            nativeQuery = true)
-////    public Page<ProductListingView> findAllProductListing(Pageable pageable);
+/// /            nativeQuery = true)
+/// /    public Page<ProductListingView> findAllProductListing(Pageable pageable);
 

@@ -41,9 +41,9 @@ import java.util.stream.Collectors;
 @Service
 //@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 @PropertySource("classpath:metaConfig.properties")
-public class ProductsQueryService {
+public class ProductQueryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductsQueryService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductQueryService.class);
 
     @Autowired
     private ProductsRepo productsRepo;

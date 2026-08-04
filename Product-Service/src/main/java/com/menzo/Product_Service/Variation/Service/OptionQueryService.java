@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,9 @@ public class OptionQueryService {
 
     @Autowired
     private VariationOptionsRepository optionsRepo;
+
+    @Autowired
+    private VariationQueryService variationQueryService;
 
 
     /*
@@ -57,9 +61,9 @@ public class OptionQueryService {
      *   Get options by list of IDs
      *
      */
-//    public List<VariationOption> getOptionsByIds(List<Long> idList) {
-//        return optionsRepo.findByIdIn(idList);
-//    }
+    public List<VariationOption> getOptionsByIds(List<Long> idList) {
+        return optionsRepo.findByOptionIdIn(idList);
+    }
 
 
     /*
@@ -79,24 +83,18 @@ public class OptionQueryService {
      *   used to get color option by ID - with validating that it is indeed a color option
      *
      */
-//    public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
-//        Variation variation = variationsRepo.findByVariationName(variationName)
-//                .orElseThrow(() -> new EntityNotFoundException("Variation not found with name: " + variationName));
-//
-//        logger.info("Returning '{}' variation option for option ID: {}", variationName, optionId);
-//        return variation.getOptions().stream()
-//                .filter(opt -> opt.getId() == optionId)
-//                .findFirst()
-//                .orElseThrow(() -> new EntityNotFoundException("'" + variationName + "' option not found with ID: " + optionId));
+    public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
 
-    /// /        return OptionDto.builder()
-    /// /                .optionId(option.getId())
-    /// /                .optionValue(option.getOptionValue())
-    /// /                .variationId(variation.getId())
-    /// /                .variationName(variation.getVariationName())
-    /// /                .colorCode(option.getColorCode().getColorCode())
-    /// /                .build();
-//    }
+        //  fetch variation
+        Variation variation = variationsRepo.findByVariationName(variationName)
+                .orElseThrow(() -> new EntityNotFoundException("Variation not found with name: " + variationName));
+
+        logger.info("Returning '{}' variation option for option ID: {}", variationName, optionId);
+        return variation.getOptions().stream()
+                .filter(opt -> Objects.equals(opt.getOptionId(), optionId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("'" + variationName + "' option not found with ID: " + optionId));
+    }
 
 
     /*
@@ -136,10 +134,10 @@ public class OptionQueryService {
 
         } else {
             Set<OptionDto> optionDtos = options.stream().map(opt ->
-                            OptionDto.builder()
-                                    .optionId(opt.getOptionId())
-                                    .optionValue(opt.getOptionValue())
-                                    .build()
+                    OptionDto.builder()
+                            .optionId(opt.getOptionId())
+                            .optionValue(opt.getOptionValue())
+                            .build()
             ).collect(Collectors.toSet());
 
             return VariationOptionsDto.builder()
@@ -155,11 +153,12 @@ public class OptionQueryService {
      *   Get list of option IDs by variation name
      *
      */
-//    @Transactional
-//    public List<Long> getOptionIdsByVariation(String variationName) {
-//        return getVariationWithOptionsByVariationName(variationName).getOptions()
-//                .stream()
-//                .map(opt -> opt.getOptionId())
-//                .collect(Collectors.toList());
-//    }
+    @Transactional
+    public List<Long> getOptionIdsByVariation(String variationName) {
+        return variationQueryService.getVariationWithOptionsByVariationName(variationName).getOptions()
+                .stream()
+                .map(OptionDto::getOptionId)
+                .collect(Collectors.toList());
+    }
+
 }
