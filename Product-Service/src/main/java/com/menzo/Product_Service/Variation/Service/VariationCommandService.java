@@ -109,8 +109,8 @@ public class VariationCommandService {
         Variation variation = variationRepo.findById(variationId)
                 .orElseThrow(() -> new EntityNotFoundException("Variation not found with ID: " + variationId));
 
-        //  soft delete: set isDelete to true if not already
-        logger.info("Deleting variation with ID {}", variationId);
+        //  soft delete: set isDeleted to true if not already
+        logger.info("Deleting variation with ID: {}", variationId);
         variation.setDeleted(true);
         variation.setDeletedAt(LocalDateTime.now());
         variationRepo.save(variation);

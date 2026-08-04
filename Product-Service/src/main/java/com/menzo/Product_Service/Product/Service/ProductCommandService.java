@@ -2,6 +2,8 @@ package com.menzo.Product_Service.Product.Service;
 
 import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
+import com.menzo.Product_Service.Feign.UserFeign;
+import com.menzo.Product_Service.GlobalComponents.Dto.EmailDto;
 import com.menzo.Product_Service.Product.Dto.*;
 import com.menzo.Product_Service.Product.Dto.ProductDto.CreateProductDto;
 import com.menzo.Product_Service.Product.Dto.ProductDto.ProductDto;
@@ -12,6 +14,7 @@ import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepo;
 import com.menzo.Product_Service.Product.Repo.ProductsRepo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -45,6 +49,9 @@ public class ProductCommandService {
 
     @Autowired
     private ProductUtilityService productUtilityService;
+
+    @Autowired
+    private UserFeign userFeign;
 
     //  TARGET_INVENTORY_LEVEL
     private static Long til;
@@ -228,6 +235,70 @@ public class ProductCommandService {
      *
      */
     public boolean updateProductDetails(Long productId, ProductDto latestProduct) {
+
+        //  fetching product by ID
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        //  updating product name
+        product.setProductName(latestProduct.getProductName() != null
+                && !latestProduct.getProductName().isEmpty()
+                ? latestProduct.getProductName()
+                : product.getProductName());
+
+        //  updating product code
+        product.setProductCode(latestProduct.getProductCode() != null
+                && !latestProduct.getProductCode().isEmpty()
+                ? latestProduct.getProductCode()
+                : product.getProductCode());
+
+        //  updating product sub-category
+        if (latestProduct.getSubCategoryId() != null
+                && latestProduct.getSubCategoryId() >= 0L
+                && !Objects.equals(latestProduct.getSubCategoryId(), product.getSubCategory().getCategoryId())) {
+            ProductCategory latestSub = categoriesQueryService.getSubCategoryEntityById(latestProduct.getSubCategoryId());
+            product.setSubCategory(latestSub);
+        }
+
+        //  updating product description
+        product.setProductDescription(latestProduct.getProductDescription() != null
+                && !latestProduct.getProductDescription().isEmpty()
+                ? latestProduct.getProductDescription()
+                : product.getProductDescription());
+
+        //  updating generic name
+        product.setGenericName(latestProduct.getGenericName() != null
+                && !latestProduct.getGenericName().isEmpty()
+                ? latestProduct.getGenericName()
+                : product.getGenericName());
+
+        //  updating item weight
+        product.setItemWeight(latestProduct.getItemWeight() != null
+                && latestProduct.getItemWeight() >= 0f
+                ? latestProduct.getItemWeight()
+                : product.getItemWeight());
+
+        //  updating manufacturer
+        product.setManufacturerId(latestProduct.getManufacturerId() != null
+                && latestProduct.getManufacturerId() >= 0l
+                ? latestProduct.getManufacturerId()
+                : product.getManufacturerId());
+
+        //  updating packer
+        product.setPackersId(latestProduct.getPackerId() != null
+                && latestProduct.getPackerId() >= 0l
+                ? latestProduct.getPackerId()
+                : product.getPackersId());
+
+        //  updating country of origin
+        addCountryOfOrigin(latestProduct.getCountyOfOrigin());
+        product.setCountryOfOrigin(latestProduct.getCountyOfOrigin() != null
+                && !latestProduct.getCountyOfOrigin().isEmpty()
+                ? addCountryOfOrigin(latestProduct.getCountyOfOrigin())
+                : product.getCountryOfOrigin());
+
+        productsRepo.save(product);
+        logger.info("Product details updated for product ID: {}", productId);
         return true;
     }
 
@@ -239,7 +310,14 @@ public class ProductCommandService {
      *
      */
     public boolean updateProductActiveStatus(Long productId, boolean isActive) {
-        return true;
+
+        //  fetching product by ID
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        //  updating product active status
+        product.setActive(isActive);
+        return productsRepo.save(product).isActive();
     }
 
 
@@ -253,7 +331,17 @@ public class ProductCommandService {
     public boolean updateProductApprovalStatus(String staffEmail,
                                                Long productId,
                                                boolean isApproved) {
-        return true;
+        //  fetching product by ID
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        //  fetching staff ID of approving staff
+        long approvingStaffId = userFeign.getStaffIdByStaffEmail(new EmailDto(staffEmail)).getStaffId();
+
+        //  updating product approval status
+        product.setApproved(isApproved);
+        product.setApprovedBy(approvingStaffId);
+        return productsRepo.save(product).isApproved();
     }
 
 
@@ -264,7 +352,14 @@ public class ProductCommandService {
      *
      */
     public boolean updateProductPodStatus(Long productId, boolean podAvailable) {
-        return true;
+
+        //  fetching product by ID
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        //  updating product POD status
+        product.setActive(podAvailable);
+        return productsRepo.save(product).isPodAvailable();
     }
 
 
@@ -274,10 +369,15 @@ public class ProductCommandService {
      *   Product identified by product ID
      *
      */
-    public boolean updateProductImages(Long productId,
-                                       Map<String, MultipartFile> images) {
-        return true;
-    }
+//    public boolean updateProductImages(Long productId,
+//                                       Map<String, MultipartFile> images) {
+//
+//        //  fetching product by ID
+//        Product product = productsRepo.findById(productId)
+//                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+//        product.get
+//        return productUtilityService.updateImages(product);
+//    }
 
 
     /*
@@ -287,6 +387,16 @@ public class ProductCommandService {
      *
      */
     public boolean deleteProduct(Long productId) {
+
+        //  fetching product by ID
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        //  soft delete: set isDeleted to true if not already
+        product.setDeleted(true);
+        product.setDeletedAt(LocalDateTime.now());
+        productsRepo.save(product);
+        logger.info("Deleted product with ID: {}", productId);
         return true;
     }
 

@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Product.Service;
 
+import com.menzo.Product_Service.Product.Entity.Product;
 import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
 import com.menzo.Product_Service.Product.Entity.ProductImage;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
@@ -190,5 +191,13 @@ class ProductUtilityService {
 
         return imagesRepo.saveAll(imageEntities);
     }
+
+
+    /*
+     *
+     *   Update product-item images
+     *
+     */
+//    boolean updateImages(Product product) {}
 
 }

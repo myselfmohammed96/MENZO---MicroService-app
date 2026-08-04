@@ -25,7 +25,7 @@ public class ProductDto {
 
     private String genericName;
 
-    private float itemWeight;
+    private Float itemWeight;
 
     private Long manufacturerId;
 

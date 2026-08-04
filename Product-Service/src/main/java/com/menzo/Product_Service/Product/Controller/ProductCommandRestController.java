@@ -197,14 +197,14 @@ public class ProductCommandRestController {
             }
 
             //  update active status
-            boolean approvalUpdated = productCommandService.updateProductApprovalStatus(
+            boolean updatedApprovalStatus = productCommandService.updateProductApprovalStatus(
                     staffEmail,
                     productId,
                     isApproved
             );
 
             //  response
-            if (isApproved == approvalUpdated) {
+            if (isApproved == updatedApprovalStatus) {
                 logger.info("Approval status for product ID: {}, updated successfully", productId);
                 return ResponseEntity.ok(Map.of("message", "Product approved successfully."));
             } else {
@@ -262,41 +262,41 @@ public class ProductCommandRestController {
      *   Product identified by product ID
      *
      */
-    @PutMapping("/update-images")
-    public ResponseEntity<?> updateProductImages(@RequestHeader("roles") String roles,
-                                                 @RequestParam("id") Long productId,
-                                                 @RequestPart("images") Map<String, MultipartFile> images) {
-        if (roles.equals("ADMIN")) {
-            //  images validation
-            if (images == null || images.isEmpty()) {
-                throw new IllegalArgumentException("Product images required.");
-            }
-            if (images.values().stream().anyMatch(file -> file == null || file.isEmpty()) || images.keySet().stream().anyMatch(k -> k == null || k.trim().isEmpty())) {
-                throw new IllegalArgumentException("Invalid product images");
-            }
-            if (images.size() < 3) {
-                throw new IllegalArgumentException("Minimum 3 images required.");
-            }
-            if (images.size() > 9) {
-                throw new IllegalArgumentException("You can upload a maximum of 9 images.");
-            }
-
-            //  updating product images
-            boolean imageUpdated = productCommandService.updateProductImages(productId, images);
-
-            //  response
-            if (imageUpdated) {
-                logger.info("Images updated for product ID: {}", productId);
-                return ResponseEntity.ok(Map.of("message", "Product images updated successfully."));
-            } else {
-                logger.error("Images update failed for product ID: {}", productId);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Product images update failed."));
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @PutMapping("/update-images")
+//    public ResponseEntity<?> updateProductImages(@RequestHeader("roles") String roles,
+//                                                 @RequestParam("id") Long productId,
+//                                                 @RequestPart("images") Map<String, MultipartFile> images) {
+//        if (roles.equals("ADMIN")) {
+//            //  images validation
+//            if (images == null || images.isEmpty()) {
+//                throw new IllegalArgumentException("Product images required.");
+//            }
+//            if (images.values().stream().anyMatch(file -> file == null || file.isEmpty()) || images.keySet().stream().anyMatch(k -> k == null || k.trim().isEmpty())) {
+//                throw new IllegalArgumentException("Invalid product images");
+//            }
+//            if (images.size() < 3) {
+//                throw new IllegalArgumentException("Minimum 3 images required.");
+//            }
+//            if (images.size() > 9) {
+//                throw new IllegalArgumentException("You can upload a maximum of 9 images.");
+//            }
+//
+//            //  updating product images
+//            boolean imageUpdated = productCommandService.updateProductImages(productId, images);
+//
+//            //  response
+//            if (imageUpdated) {
+//                logger.info("Images updated for product ID: {}", productId);
+//                return ResponseEntity.ok(Map.of("message", "Product images updated successfully."));
+//            } else {
+//                logger.error("Images update failed for product ID: {}", productId);
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body(Map.of("message", "Product images update failed."));
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
 
     /*
