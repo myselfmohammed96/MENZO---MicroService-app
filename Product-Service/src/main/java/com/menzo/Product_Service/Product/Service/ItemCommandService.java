@@ -3,8 +3,10 @@ package com.menzo.Product_Service.Product.Service;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
+import com.menzo.Product_Service.GlobalComponents.Enum.ProductComponents;
 import com.menzo.Product_Service.Product.Dto.ItemDetailsDto;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemImageDto;
+import com.menzo.Product_Service.Product.Dto.ItemDto.PriceDto;
 import com.menzo.Product_Service.Product.Dto.ItemSizeDto;
 import com.menzo.Product_Service.Product.Dto.CreateProductItemDto;
 import com.menzo.Product_Service.Product.Dto.SizeDetailsDto;
@@ -16,10 +18,19 @@ import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;
 import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
 import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Variation.Entity.ColorCode;
+import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Variation.Service.ColorQueryService;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.ws.rs.NotFoundException;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +41,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +64,9 @@ public class ItemCommandService {
     private ProductUtilityService productUtilityService;
 
     @Autowired
+    private ImageQueryService imageQueryService;
+
+    @Autowired
     private VariationQueryService variationQueryService;
 
     @Autowired
@@ -60,6 +74,9 @@ public class ItemCommandService {
 
     @Autowired
     private ProductItemsRepository itemsRepo;
+
+    @Autowired
+    private ColorQueryService colorQueryService;
 
     //  TARGET_INVENTORY_LEVEL
     private static Long til;
@@ -74,9 +91,9 @@ public class ItemCommandService {
      *
      *   Add new product-item
      *
-     *   Every new PRODUCT ITEM saved  ->  will be associated with an existing PRODUCT
-     *   Every new PRODUCT ITEM will have  ->  One 'color variation' unique to the PRODUCT ITEM & Multiple 'Size variations'
-     *   Every new 'Add PRODUCT ITEM'  ->  will create multiple PRODUCT ITEM objects for given number of 'Size variations'
+     *   Every new product-item saved  ->  will be associated with an existing PRODUCT
+     *   Every new product-item will have  ->  One 'color variation' unique to the product-item & Multiple 'Size variations'
+     *   Every new 'Add product-item'  ->  will create multiple product-item objects for given number of 'Size variations'
      *
      */
     @Transactional
@@ -218,7 +235,7 @@ public class ItemCommandService {
 
     /*
      *
-     *   Save new product item
+     *   Save new product-item
      *
      */
     @Transactional
@@ -289,5 +306,369 @@ public class ItemCommandService {
 
         return itemsRepo.save(saved);
     }
+
+
+    /*
+     *
+     *   Update product-item color
+     *   Product-item identified by item ID
+     *   Color identified by color code object ID (colorId)
+     *
+     */
+    @Transactional
+    public boolean updateItemColor(Long itemId,
+                                   Long colorId) {
+        //  fetching product-item by ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+        List<ProductConfiguration> itemConfigs = item.getConfigurations();
+
+        //  fetching color option config of the product-item
+        ProductConfiguration colorOptionConfig = itemConfigs.stream()
+                .filter(config -> {
+                    Variation variation = config.getVariationOption().getVariation();
+                    return variation != null
+                            && variation.getVariationName() != null
+                            && variation.getVariationName()
+                            .equalsIgnoreCase(ProductComponents.COLOR.name());
+                }).findFirst()
+                .orElseThrow(() -> new NotFoundException("Color variation not found in product-item with ID: " + itemId));
+
+        if (Objects.equals(
+                colorOptionConfig.getVariationOption().getColorCode().getColorCodeId(),
+                colorId)) {
+            return true;
+        }
+        ColorCode latestColor = colorQueryService.getColorCodeEntityById(colorId);
+        VariationOption latestColorOption = latestColor.getColorOption();
+        colorOptionConfig.setVariationOption(latestColorOption);
+
+        return true;
+    }
+
+
+    /*
+     *
+     *   Update product-item size
+     *   Product-item identified by item ID
+     *   Size identified by size option ID (sizeId)
+     *
+     */
+    @Transactional
+    public boolean updateItemSize(Long itemId,
+                                  Long sizeId) {
+        //  fetching product-item by ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+        List<ProductConfiguration> itemConfigs = item.getConfigurations();
+
+        //  fetching size option config of the product-item
+        ProductConfiguration sizeOptionConfig = itemConfigs.stream()
+                .filter(config -> {
+                    Variation variation = config.getVariationOption().getVariation();
+                    return variation != null
+                            && variation.getVariationName() != null
+                            && variation.getVariationName()
+                            .equalsIgnoreCase(ProductComponents.SIZE.name());
+                }).findFirst()
+                .orElseThrow(() -> new NotFoundException("Size variation not found in product-item with ID: " + itemId));
+
+        if (Objects.equals(
+                sizeOptionConfig.getVariationOption().getOptionId(),
+                sizeId)) {
+            return true;
+        }
+        VariationOption latestSizeOption = optionQueryService.getOptionByIdAndVariationName(sizeId, ProductComponents.SIZE.name());
+        sizeOptionConfig.setVariationOption(latestSizeOption);
+
+        return true;
+    }
+
+
+    /*
+     *
+     *   Update product-item stock quantity
+     *   Product-item identified by item ID
+     *
+     */
+    public boolean updateItemStockQuantity(Long itemId,
+                                           Integer latestStockQty) {
+        //  fetching product-item by ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+
+        item.setQtyInStock(latestStockQty != null
+                ? latestStockQty
+                : item.getQtyInStock()
+        );
+        itemsRepo.save(item);
+        return true;
+    }
+
+
+    /*
+     *
+     *   Update product-item prices
+     *   Both selling price & MRP
+     *   Product-item identified by item ID
+     *
+     */
+    public boolean updateItemPrices(Long itemId,
+                                    PriceDto latestPrices) {
+        //  fetching product-item by ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+
+        item.setSellingPrice(latestPrices.getSellingPrice() != null
+                && latestPrices.getSellingPrice().compareTo(BigDecimal.ZERO) > 0
+                ? latestPrices.getSellingPrice()
+                : item.getSellingPrice());
+
+        item.setMrp(latestPrices.getMrp() != null
+                && latestPrices.getMrp().compareTo(BigDecimal.ZERO) > 0
+                ? latestPrices.getMrp()
+                : item.getMrp());
+
+        itemsRepo.save(item);
+        return true;
+    }
+
+
+    /*
+     *
+     *   Update product-item active status
+     *   Product-item identified by item ID
+     *
+     */
+    public boolean updateItemActiveStatus(Long itemId,
+                                          boolean isActive) {
+        //  fetching product-item by ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+
+        //  updating item active status
+        item.setActive(isActive);
+        return itemsRepo.save(item).isActive();
+    }
+
+
+    /*
+     *
+     *   Update product-item images
+     *   Images belong to every color (super SKU)
+     *
+     */
+    @Transactional
+    public boolean updateItemImages(Long itemId,
+                                    Map<String, MultipartFile> latestImages,
+                                    Map<String, Integer> imageIds) {
+        if (latestImages.size() != imageIds.size()) {
+            throw new IllegalArgumentException("Images and image IDs are not equal in size.");
+        }
+
+        //  fetching images of product-item by product-item ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+        List<ProductImage> images = item.getImages();
+        Set<Long> imageFileIds = images.stream()
+                .map(ProductImage::getProductImageId)
+                .collect(Collectors.toSet());
+
+        //  Getting upload directory path
+        ProductImage firstImage = images.stream()
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Product image list is empty for product-item ID: " + itemId));
+        Path uploadDir = Paths.get(firstImage.getImageUrl()).getParent();
+
+        //  Getting list of product-items
+        List<ProductItem> productItems = firstImage.getProductItems();
+
+        //  Getting super SKU of product-item
+        String superSku = item.getSuperSku();
+
+        //  finding intact files and new files
+        Map<Long, Integer> intactFileIdsAndOrder = new HashMap<>();
+        List<String> toAddFileOrderKeys = new ArrayList<>();
+
+        latestImages.entrySet().stream()
+                .forEach(e -> {
+                    Integer imageId = imageIds.get(e.getKey());
+                    Integer imageOrder = Integer.parseInt(e.getKey().substring(
+                            e.getKey().indexOf("[") + 1,
+                            e.getKey().indexOf("]")
+                    ));
+
+                    if (imageFileIds.contains(imageId.longValue())) {
+                        intactFileIdsAndOrder.put(
+                                imageId.longValue(),
+                                imageOrder
+                        );
+                    }
+                    if (imageId == null || imageId < 0) {      //  ### front-end must send -1 as id for new images
+                        toAddFileOrderKeys.add(e.getKey());
+                    }
+                });
+
+        //  updating the order of intact images
+        images.stream()
+                .filter(i -> intactFileIdsAndOrder.containsKey(i.getProductImageId()))
+                .forEach(i -> i.setImageOrder(intactFileIdsAndOrder.get(i.getProductImageId())));
+
+        //  removing 'to delete' image files
+        Set<Long> toDeleteFileIds = new HashSet<>(imageFileIds);
+        toDeleteFileIds.removeAll(intactFileIdsAndOrder.keySet());
+
+        Set<ProductImage> toDeleteImages = images.stream()
+                .filter(i -> toDeleteFileIds.contains(i.getProductImageId()))
+                .collect(Collectors.toSet());
+
+        toDeleteImages.forEach(i -> {
+            Path filePath = Paths.get(i.getImageUrl());
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        images.removeAll(toDeleteImages);
+
+        //  adding 'to add' image files
+        List<ProductImage> addedImages = toAddFileOrderKeys.stream()
+                        .map(k -> {
+                            MultipartFile image = latestImages.get(k);
+                            int imageOrder = Integer.parseInt(k.substring(
+                                    k.indexOf("[") + 1,
+                                    k.indexOf("]")
+                            ));
+
+                            //  image file name processing
+                            String contentType = image.getContentType();
+                            String originalFilename = image.getOriginalFilename();
+
+                            if (originalFilename == null || originalFilename.isBlank()) {
+                                throw new IllegalArgumentException("Invalid image name");
+                            }
+                            String name = originalFilename.toLowerCase();
+
+                            boolean validType = "image/png".equals(contentType)
+                                    || "image/jpeg".equals(contentType)
+                                    || contentType == null;
+                            boolean validExt = name.endsWith(".png")
+                                    || name.endsWith(".jpg")
+                                    || name.endsWith(".jpeg");
+
+                            //  image file - sanitizing with white listed formats
+                            if (!(validType && validExt)) {
+                                throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
+                            }
+                            if (image.isEmpty()) {
+                                throw new IllegalArgumentException("Invalid image input");
+                            }
+
+                            //  creating - image filename
+                            String extension = FilenameUtils.getExtension(originalFilename);
+                            String filename = UUID.randomUUID() + "." + extension;
+
+                            //  image file path & storing
+                            Path filePath = Paths.get(String.valueOf(uploadDir), filename);
+                            try {
+                                image.transferTo(filePath);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            return ProductImage.builder()
+                                    .imageFilename(filename)
+                                    .imageUrl(String.valueOf(filePath))
+                                    .superSku(superSku)
+                                    .imageOrder(imageOrder)
+                                    .productItems(productItems)
+                                    .build();
+                        }).toList();
+        images.addAll(addedImages);
+
+        images.stream().forEach(i -> {
+            if (i.getImageOrder() == 0) {
+                i.setPrimaryImage(true);
+            } else {
+                i.setPrimaryImage(false);
+            }
+        });
+
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private ProductImage addImage(Map.Entry<String, MultipartFile> imageEntry) {
+        return null;
+    }
+
+
+    /*
+    *
+    *   update image order (sorting)
+    *
+     */
+
+
+    /*
+     *
+     *   Delete product-item (soft delete)
+     *   Product-item identified by item ID
+     *
+     */
+    public boolean deleteItem(Long itemId) {
+        //  fetching product-item by ID
+        ProductItem item = itemsRepo.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
+
+        //  soft deleting product-item: set isDeleted to true if not already
+        item.setDeleted(true);
+        item.setDeletedAt(LocalDateTime.now());
+        itemsRepo.save(item);
+        logger.info("Deleted product-item with ID: {}", itemId);
+        return true;
+    }
+
+
+    /*
+     *
+     *   ## variation updates
+     *
+     */
+//    public boolean updateVariationsEtc() {}
 
 }

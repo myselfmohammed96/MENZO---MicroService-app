@@ -26,6 +26,9 @@ public class ProductImage {
     private Long productImageId;
 
     @Column(nullable = false)
+    private String imageFilename;
+
+    @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)

@@ -28,7 +28,7 @@ public interface VariationsRepository extends JpaRepository<Variation, Long> {
      *  Identified using variation name
      *
      */
-    Optional<Variation> findByVariationName(String variationName);   // TESTED
+    Optional<Variation> findByVariationNameIgnoreCase(String variationName);   // TESTED
 
 
     /*

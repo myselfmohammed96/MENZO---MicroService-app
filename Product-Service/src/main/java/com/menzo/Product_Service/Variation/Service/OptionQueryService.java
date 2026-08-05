@@ -86,7 +86,7 @@ public class OptionQueryService {
     public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
 
         //  fetch variation
-        Variation variation = variationsRepo.findByVariationName(variationName)
+        Variation variation = variationsRepo.findByVariationNameIgnoreCase(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Variation not found with name: " + variationName));
 
         logger.info("Returning '{}' variation option for option ID: {}", variationName, optionId);

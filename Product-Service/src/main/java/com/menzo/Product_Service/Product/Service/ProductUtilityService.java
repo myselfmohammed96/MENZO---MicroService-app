@@ -150,7 +150,12 @@ class ProductUtilityService {
 
                     //  image file name processing
                     String contentType = image.getContentType();
-                    String name = image.getOriginalFilename().toLowerCase();
+                    String originalFilename = image.getOriginalFilename();
+
+                    if (originalFilename == null || originalFilename.isBlank()) {
+                        throw new IllegalArgumentException("Invalid image name");
+                    }
+                    String name = originalFilename.toLowerCase();
 
                     boolean validType = "image/png".equals(contentType)
                             || "image/jpeg".equals(contentType)
@@ -168,7 +173,7 @@ class ProductUtilityService {
                     }
 
                     //  creating - image filename
-                    String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+                    String extension = FilenameUtils.getExtension(originalFilename);
                     String filename = UUID.randomUUID() + "." + extension;
 
                     //  image file path & storing
@@ -180,6 +185,7 @@ class ProductUtilityService {
                     }
 
                     return ProductImage.builder()
+                            .imageFilename(filename)
                             .imageUrl(String.valueOf(filePath))
                             .superSku(superSku)
                             .imageOrder(imageOrder)
