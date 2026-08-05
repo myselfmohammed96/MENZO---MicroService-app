@@ -3,8 +3,11 @@ package com.menzo.Product_Service.Product.Controller;
 import com.menzo.Product_Service.Product.Dto.ItemDetailsDto;
 import com.menzo.Product_Service.Product.Dto.CreateProductItemDto;
 import com.menzo.Product_Service.Product.Dto.SizeDetailsDto;
+import com.menzo.Product_Service.Product.Service.ItemCommandService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,9 @@ public class ItemCommandRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(ItemCommandRestController.class);
 
+    @Autowired
+    private ItemCommandService itemCommandService;
+
 
     /*
      *
@@ -34,9 +40,9 @@ public class ItemCommandRestController {
             value = "/add-item",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<Map<String, Object>> addProductItem(@RequestPart("newItem") CreateProductItemDto itemDetails,
+    public ResponseEntity<Map<String, Object>> addProductItem(@Valid @RequestPart("newItem") CreateProductItemDto itemDetails,
                                                               @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
-                                                              @RequestPart("images") List<MultipartFile> images) throws IOException {
+                                                              @RequestPart("images") Map<String, MultipartFile> images) throws IOException {
         //  product details validation
         if (itemDetails == null) {
             throw new IllegalArgumentException("Product item details not found.");
@@ -48,6 +54,12 @@ public class ItemCommandRestController {
         }
 
         //  images validation
+        if (images == null || images.isEmpty()) {
+            throw new IllegalArgumentException("Product images required.");
+        }
+        if (images.values().stream().anyMatch(file -> file == null || file.isEmpty()) || images.keySet().stream().anyMatch(k -> k == null || k.trim().isEmpty())) {
+            throw new IllegalArgumentException("Invalid product images");
+        }
         if (images.size() < 3) {
             throw new IllegalArgumentException("Minimum 3 images required.");
         }
@@ -55,34 +67,25 @@ public class ItemCommandRestController {
             throw new IllegalArgumentException("You can upload a maximum of 9 images.");
         }
 
-        System.out.println(itemDetails);
-        System.out.println(sizeDetails);
-        System.out.println("color id: " + itemDetails.getColorId());
-        images.stream().forEach(image -> System.out.println(image.getOriginalFilename()));
-
-        //  forwarding to service layer
-        ItemDetailsDto savedItemDetails = productsService.addNewProductItem(
+        //  save new product item
+        ItemDetailsDto savedItemDetails = itemCommandService.addNewProductItem(
                 itemDetails,
                 sizeDetails,
                 images
         );
-        System.out.println("Saved item:\n" + itemDetails);
 
-        //  building response
+        //  response
         Map<String, Object> responseBody = new HashMap<>();
         if (itemDetails != null) {
             logger.info("Product item saved successfully with super SKU: {}", savedItemDetails.getSuperSku());
-//            logger.info("Item adding successful.");
             responseBody.put("message", "Product item saved successfully");
             responseBody.put("itemDetails", savedItemDetails);
-            System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(responseBody);
         } else {
             logger.warn("Product item saving failed");
             responseBody.put("message", "Product item saving failed");
-            System.out.println(responseBody);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(responseBody);

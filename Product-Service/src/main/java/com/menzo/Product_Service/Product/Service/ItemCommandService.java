@@ -2,7 +2,9 @@ package com.menzo.Product_Service.Product.Service;
 
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
+import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Product.Dto.ItemDetailsDto;
+import com.menzo.Product_Service.Product.Dto.ItemDto.ItemImageDto;
 import com.menzo.Product_Service.Product.Dto.ItemSizeDto;
 import com.menzo.Product_Service.Product.Dto.CreateProductItemDto;
 import com.menzo.Product_Service.Product.Dto.SizeDetailsDto;
@@ -12,13 +14,16 @@ import com.menzo.Product_Service.Product.Entity.ProductImage;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
+import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +32,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,13 +41,33 @@ public class ItemCommandService {
     private static final Logger logger = LoggerFactory.getLogger(ItemCommandService.class);
 
     @Autowired
-    private OptionQueryService optionQueryService;
+    private ProductsRepository productsRepo;
+
+    @Autowired
+    private ProductQueryService productQueryService;
+
+    @Autowired
+    private CategoryQueryService categoryQueryService;
 
     @Autowired
     private ProductUtilityService productUtilityService;
 
     @Autowired
-    private ProductItemsRepo itemsRepo;
+    private VariationQueryService variationQueryService;
+
+    @Autowired
+    private OptionQueryService optionQueryService;
+
+    @Autowired
+    private ProductItemsRepository itemsRepo;
+
+    //  TARGET_INVENTORY_LEVEL
+    private static Long til;
+
+    @Value("#{'${target-inventory-level}'}")
+    public void setTil(String til) {
+        this.til = Long.valueOf(til);
+    }
 
 
     /*
@@ -56,25 +82,27 @@ public class ItemCommandService {
     @Transactional
     public ItemDetailsDto addNewProductItem(CreateProductItemDto newProductItem,
                                             List<SizeDetailsDto> sizeDetails,
-                                            List<MultipartFile> images) throws IOException {
+                                            Map<String, MultipartFile> images) throws IOException {
 
         //  --------- Data Pre-processing ---------
-        //  getting PRODUCT, CATEGORY & SUB-CATEGORY by 'product ID'
+        //  getting product, parent category, sub-category
         logger.info("Add new item: Data pre-processing");
         Product product = productsRepo.findById(newProductItem.getProductId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + newProductItem.getProductId()));
 
-        ParentCategoryView category = categoriesRetrievalService.getParentByProductId(product.getId());
+        ParentCategoryView parentCategory = categoryQueryService.getParentByProductId(product.getProductId());
         ProductCategory subCategory = product.getSubCategory();
 
         //  getting list of PRODUCT_VARIATION_CONFIGURATION from 1st found 'productItem' of 'product'
-        List<ProductConfiguration> configs = product.getItems().get(0).getConfigurations();
+        List<ProductConfiguration> configs = product.getItems()
+                .get(0)
+                .getConfigurations();
         if (configs == null || configs.isEmpty()) {
             throw new EntityNotFoundException("Product doesn't have any Items");
         }
 
         //  getting VARIATION OPTIONS - excluding 'color' & 'size'
-        List<VariationOption> variationOptionList = processVariations(
+        List<VariationOption> variationOptionList = productUtilityService.processVariations(
                 null,
                 configs
         );
@@ -83,16 +111,16 @@ public class ItemCommandService {
         }
 
         //  getting COLOR variation option by 'color ID'
-        VariationOption color = variationsRetrievalService.getOptionByIdAndVariationName(
+        VariationOption color = optionQueryService.getOptionByIdAndVariationName(
                 newProductItem.getColorId(),
                 "Colors"
         );
 
         //  generating SUPER SKU
-        String superSku = generateSKU(
+        String superSku = productUtilityService.generateSKU(
                 null,
                 subCategory.getAbbreviation(),
-                product.getId(),
+                product.getProductId(),
                 color.getColorCode().getColorAbbreviation(),
                 null
         );
@@ -114,7 +142,7 @@ public class ItemCommandService {
                     sizeDetail,
                     variationOptionList,
                     color,
-                    newProductItem.getStatus().equalsIgnoreCase("active")
+                    newProductItem.getActiveStatus().equalsIgnoreCase("active")
             );
             savedItems.add(savedItem);
 
@@ -124,7 +152,7 @@ public class ItemCommandService {
             if (savedItem.getSellingPrice().compareTo(baseSellingPrice) < 0) {
                 baseSellingPrice = savedItem.getSellingPrice();
             }
-            if (savedItem.getIsActive()) {
+            if (savedItem.isActive()) {
                 statusFlag++;
             }
             stockSum += savedItem.getQtyInStock();
@@ -134,7 +162,7 @@ public class ItemCommandService {
                     .size(sizeDetail.getSizeValue())
                     .sku(savedItem.getSKU())
                     .qtyInStock(savedItem.getQtyInStock())
-                    .isActive(savedItem.getIsActive())
+                    .isActive(savedItem.isActive())
                     .createdAt(savedItem.getCreatedAt())
                     .build();
 
@@ -145,7 +173,7 @@ public class ItemCommandService {
         //  get stockStatus & activeStatus
         logger.info("Deriving stock & active status");
         long itemCount = savedItems.size();
-        StockStatus stockStatus = productsRetrievalService.getStockStatus(
+        StockStatus stockStatus = productQueryService.getStockStatus(
                 til,
                 stockSum / itemCount
         );
@@ -155,17 +183,22 @@ public class ItemCommandService {
                 : statusFlag == 0 ? ProductActiveStatus.INACTIVE
                   : ProductActiveStatus.PARTIAL;
 
-        List<ProductImage> savedImages = saveImages(
-                category.getCategoryName(),
+        List<ProductImage> savedImages = productUtilityService.saveImages(
+                parentCategory.getCategoryName(),
                 subCategory.getCategoryName(),
-                product.getId(),
+                product.getProductId(),
                 superSku,
                 savedItems,
                 images
         );
 
-        List<String> imageUrls = savedImages.stream()
-                .map(image -> image.getImageUrl())
+        List<ItemImageDto> imageUrls = savedImages.stream()
+                .map(image -> ItemImageDto.builder()
+                        .productImageId(image.getProductImageId())
+                        .imageUrl(image.getImageUrl())
+                        .imageOrder(image.getImageOrder())
+                        .isPrimaryImage(image.isPrimaryImage())
+                        .build())
                 .toList();
 
         logger.info("Returning item details for super SKU: {}", superSku);
@@ -183,7 +216,6 @@ public class ItemCommandService {
     }
 
 
-    //  Save PRODUCT ITEMs - *** DONE ***
     /*
      *
      *   Save new product item
@@ -194,7 +226,8 @@ public class ItemCommandService {
                             String superSku,
                             SizeDetailsDto sizeDetail,
                             List<VariationOption> variations,
-                            VariationOption color) {
+                            VariationOption color,
+                            boolean isActive) {
 
         //  --------- Data Pre-processing ---------
         //  product object validation
@@ -224,8 +257,9 @@ public class ItemCommandService {
                 .superSku(superSku)
                 .SKU(sku)
                 .qtyInStock(sizeDetail.getSizeStock())
-                .mrp(sizeDetail.getSizeMrp())
                 .sellingPrice(sizeDetail.getSizeSellingPrice())
+                .mrp(sizeDetail.getSizeMrp())
+                .isActive(isActive)
                 .build();
 
         ProductItem saved = itemsRepo.save(item);

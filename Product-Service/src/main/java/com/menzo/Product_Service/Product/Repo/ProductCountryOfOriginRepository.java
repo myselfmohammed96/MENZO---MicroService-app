@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ProductCountryOfOriginRepo extends JpaRepository<CountryOfOrigin, Long> {
+public interface ProductCountryOfOriginRepository extends JpaRepository<CountryOfOrigin, Long> {
 
 //    public boolean existsByCountryNameIgnoreCase(String countryName);
 

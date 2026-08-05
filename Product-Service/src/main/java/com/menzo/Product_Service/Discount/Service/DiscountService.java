@@ -17,8 +17,8 @@ import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
 import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
 import com.menzo.Product_Service.Product.Entity.Product;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -48,10 +48,10 @@ public class DiscountService {
     private CategoriesRepository categoriesRepo;
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
     @Autowired
-    private ProductItemsRepo itemsRepo;
+    private ProductItemsRepository itemsRepo;
 
 
     /// /    ********* ADD, UPDATE, DELETE methods *********

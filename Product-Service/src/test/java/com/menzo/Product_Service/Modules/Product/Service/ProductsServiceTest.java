@@ -6,9 +6,9 @@ import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Product.Entity.Product;
 import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepo;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepository;
+import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
 import com.menzo.Product_Service.Product.Service.ProductCommandService;
@@ -32,7 +32,7 @@ class ProductsServiceTest {
     private ProductCommandService productsService;
 
     @Autowired
-    private ProductConfigurationRepo productConfigurationRepo;
+    private ProductConfigurationRepository productConfigurationRepo;
 
     @Autowired
     private CategoryQueryService categoriesRetrievalService;
@@ -41,10 +41,10 @@ class ProductsServiceTest {
     private VariationOptionsRepository optionsRepo;
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
     @Autowired
-    private ProductItemsRepo itemsRepo;
+    private ProductItemsRepository itemsRepo;
 
 
 

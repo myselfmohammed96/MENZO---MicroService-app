@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface ProductsRepoCustom {
+public interface ProductsRepositoryCustom {
 
     Page<AdminProductListingDto> findAdminProductListing(QueryDetailsDto queryDetails);
 

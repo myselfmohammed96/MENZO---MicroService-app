@@ -81,6 +81,7 @@ public class ProductCommandRestController {
             throw new IllegalArgumentException("You can upload a maximum of 9 images.");
         }
 
+        //  save new product
         Long savedProductId = productCommandService.addNewProduct(
                 productDetails,
                 sizeDetails,

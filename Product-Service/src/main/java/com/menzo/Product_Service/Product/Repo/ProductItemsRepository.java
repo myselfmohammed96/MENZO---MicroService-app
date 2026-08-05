@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ProductItemsRepo extends JpaRepository<ProductItem, Long>, JpaSpecificationExecutor<ProductItem> {
+public interface ProductItemsRepository extends JpaRepository<ProductItem, Long>, JpaSpecificationExecutor<ProductItem> {
 
     public List<ProductItem> findAllByProductId(Long productId);
 

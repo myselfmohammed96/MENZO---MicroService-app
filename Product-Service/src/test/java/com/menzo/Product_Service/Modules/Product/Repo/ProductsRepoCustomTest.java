@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Modules.Product.Repo;
 
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductsRepoCustomTest {
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
     @Test
     public void testFindProductsContaining() {

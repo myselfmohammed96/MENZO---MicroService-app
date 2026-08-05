@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ProductSpecificationServiceV2Test {
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
 //    @Test
 //    public void testGetByIds() {

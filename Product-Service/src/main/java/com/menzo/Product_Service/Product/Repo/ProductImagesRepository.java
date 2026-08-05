@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductImagesRepo extends JpaRepository<ProductImage, Long> {
+public interface ProductImagesRepository extends JpaRepository<ProductImage, Long> {
 
     List<ProductImage> findBySuperSku(String superSku);
 

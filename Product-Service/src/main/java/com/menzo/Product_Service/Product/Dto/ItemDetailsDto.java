@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Product.Dto;
 
+import com.menzo.Product_Service.Product.Dto.ItemDto.ItemImageDto;
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class ItemDetailsDto {
 
     private BigDecimal baseSellingPrice;
 
-    private List<String> imageUrls;
+    private List<ItemImageDto> imageUrls;
 
     private List<ItemSizeDto> sizeDetails;
 

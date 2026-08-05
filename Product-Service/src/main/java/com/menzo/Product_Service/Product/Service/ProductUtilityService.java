@@ -1,10 +1,9 @@
 package com.menzo.Product_Service.Product.Service;
 
-import com.menzo.Product_Service.Product.Entity.Product;
 import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
 import com.menzo.Product_Service.Product.Entity.ProductImage;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductImagesRepo;
+import com.menzo.Product_Service.Product.Repo.ProductImagesRepository;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import org.apache.commons.io.FilenameUtils;
@@ -33,7 +32,7 @@ class ProductUtilityService {
     private OptionQueryService optionQueryService;
 
     @Autowired
-    private ProductImagesRepo imagesRepo;
+    private ProductImagesRepository imagesRepo;
 
 
     /*

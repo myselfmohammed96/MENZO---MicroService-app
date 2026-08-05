@@ -3,7 +3,7 @@ package com.menzo.Product_Service.Modules.Product.Repo;
 import com.menzo.Product_Service.SearchAndFilter.Dto.QueryDetailsDto;
 import com.menzo.Product_Service.Product.Dto.AdminProductListingDto;
 import com.menzo.Product_Service.Product.Dto.UserProductListingDto;
-import com.menzo.Product_Service.Product.Repo.ProductsRepoCustomImpl;
+import com.menzo.Product_Service.Product.Repo.ProductsRepositoryCustomImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,7 @@ import java.util.Map;
 class ProductsRepoCustomImplTest {
 
     @Autowired
-    private ProductsRepoCustomImpl productsRepoCustom;
+    private ProductsRepositoryCustomImpl productsRepoCustom;
 
     @Test
     public void testFindAdminProductListing() {

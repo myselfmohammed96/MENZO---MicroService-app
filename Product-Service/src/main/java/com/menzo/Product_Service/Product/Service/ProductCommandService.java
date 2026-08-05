@@ -10,8 +10,8 @@ import com.menzo.Product_Service.Product.Dto.ProductDto.ProductDto;
 import com.menzo.Product_Service.Product.Entity.*;
 
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepo;
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepository;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,13 +33,13 @@ public class ProductCommandService {
     private static final Logger logger = LoggerFactory.getLogger(ProductCommandService.class);
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
     @Autowired
     private ItemCommandService itemCommandService;
 
     @Autowired
-    private ProductCountryOfOriginRepo countryOfOriginRepo;
+    private ProductCountryOfOriginRepository countryOfOriginRepo;
 
     @Autowired
     private CategoryQueryService categoriesQueryService;
@@ -85,7 +85,7 @@ public class ProductCommandService {
      *
      */
     @Transactional
-    public Long addNewProduct(CreateProductDto productDetails,
+    public Long addNewProduct(CreateProductDto newProductDetails,
                               List<SizeDetailsDto> sizeDetails,
                               Map<String, String> variationDetailsMap,
                               Map<String, MultipartFile> images) throws IOException {
@@ -93,18 +93,18 @@ public class ProductCommandService {
         //  --------- Data Pre-processing ---------
         //  getting parent category & sub-category
         CategoryDto parentCategory = categoriesQueryService
-                .getParentCategoryById(productDetails.getCategoryId());
+                .getParentCategoryById(newProductDetails.getCategoryId());
         ProductCategory subCategory = categoriesQueryService            //  ## validate - subcategory belongs to category
-                .getSubCategoryEntityById(productDetails.getSubCategoryId());
+                .getSubCategoryEntityById(newProductDetails.getSubCategoryId());
         if (parentCategory == null)
             throw new IllegalArgumentException("Parent category cannot be null");
         if (subCategory == null || subCategory.getParentCategory().getCategoryId() == null)
             throw new IllegalArgumentException("Invalid sub-category with ID: " +
-                    productDetails.getSubCategoryId() + " - must have a parent category");
+                    newProductDetails.getSubCategoryId() + " - must have a parent category");
 
         //  saving product
         Product savedProduct = saveNewProduct(
-                productDetails,
+                newProductDetails,
                 subCategory
         );
 
@@ -119,7 +119,7 @@ public class ProductCommandService {
 
         //  getting COLOR variation option by 'color ID'
         VariationOption color = optionQueryService.getOptionByIdAndVariationName(
-                productDetails.getColorId(),
+                newProductDetails.getColorId(),
                 "Colors"
         );
 
@@ -142,7 +142,8 @@ public class ProductCommandService {
                     superSku,
                     sizeDetail,
                     variationOptions,
-                    color
+                    color,
+                    newProductDetails.getActiveStatus().equalsIgnoreCase("active")
             );
             savedItems.add(savedItem);
         }

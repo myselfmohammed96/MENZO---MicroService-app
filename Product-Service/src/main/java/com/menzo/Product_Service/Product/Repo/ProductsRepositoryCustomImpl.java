@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class ProductsRepoCustomImpl implements ProductsRepoCustom {
+public class ProductsRepositoryCustomImpl implements ProductsRepositoryCustom {
 
     private final EntityManager entityManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductsRepoCustomImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductsRepositoryCustomImpl.class);
 
     @Autowired
     private VariationQueryService variationsRetrievalService;

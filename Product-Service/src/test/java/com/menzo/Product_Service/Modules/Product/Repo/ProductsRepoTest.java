@@ -2,7 +2,7 @@ package com.menzo.Product_Service.Modules.Product.Repo;
 
 import com.menzo.Product_Service.Product.Dto.ProductListingView;
 import com.menzo.Product_Service.Product.Entity.Product;
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,7 @@ import java.util.List;
 class ProductsRepoTest {
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
     @Test
     public void testFindAllWithItems() {

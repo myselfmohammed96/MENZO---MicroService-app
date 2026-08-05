@@ -8,11 +8,11 @@ import com.menzo.Product_Service.Product.Dto.*;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemMinDto;
 import com.menzo.Product_Service.Modules.Product.Entity.*;
 import com.menzo.Product_Service.Product.Entity.*;
-import com.menzo.Product_Service.Product.Repo.ProductsRepo;
-import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepo;
-import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepo;
-import com.menzo.Product_Service.Product.Repo.ProductImagesRepo;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepo;
+import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepository;
+import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepository;
+import com.menzo.Product_Service.Product.Repo.ProductImagesRepository;
+import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
 import com.menzo.Product_Service.SearchAndFilter.Dto.QueryDetailsDto;
 import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
@@ -46,16 +46,16 @@ public class ProductQueryService {
     private static final Logger logger = LoggerFactory.getLogger(ProductQueryService.class);
 
     @Autowired
-    private ProductsRepo productsRepo;
+    private ProductsRepository productsRepo;
 
     @Autowired
-    private ProductItemsRepo itemsRepo;
+    private ProductItemsRepository itemsRepo;
 
     @Autowired
-    private ProductImagesRepo productImagesRepo;
+    private ProductImagesRepository productImagesRepo;
 
     @Autowired
-    private ProductConfigurationRepo productConfigurationRepo;
+    private ProductConfigurationRepository productConfigurationRepo;
 
     @Autowired
     private VariationsRepository variationsRepo;
@@ -70,7 +70,7 @@ public class ProductQueryService {
     private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
-    private ProductCountryOfOriginRepo countryOfOriginRepo;
+    private ProductCountryOfOriginRepository countryOfOriginRepo;
 
 
     //  assuming this til as the average til of every product item with common superSku
