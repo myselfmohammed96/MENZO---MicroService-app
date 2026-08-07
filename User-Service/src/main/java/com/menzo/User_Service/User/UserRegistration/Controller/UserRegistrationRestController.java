@@ -29,7 +29,7 @@ public class UserRegistrationRestController {
      *   Form registration
      *
      */
-    @PostMapping("user-signin")
+    @PostMapping("sign-in")
     public ResponseEntity<?> createNewUser(@RequestBody RegNewUser newUser,
                                            HttpServletResponse response){
         Cookie jwtCookie = userRegistrationService.registerNewUser(newUser);

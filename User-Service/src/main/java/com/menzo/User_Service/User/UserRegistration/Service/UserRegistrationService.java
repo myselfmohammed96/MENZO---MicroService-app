@@ -1,5 +1,9 @@
 package com.menzo.User_Service.User.UserRegistration.Service;
 
+import com.menzo.User_Service.Cart.Entity.Cart;
+import com.menzo.User_Service.Cart.Repository.CartRepository;
+import com.menzo.User_Service.Customer.Entity.Customer;
+import com.menzo.User_Service.Customer.Repository.CustomerRepository;
 import com.menzo.User_Service.Exceptions.AuthFeignException;
 import com.menzo.User_Service.Feign.AuthFeign;
 import com.menzo.User_Service.User.Credentials.Dto.EmailDto;
@@ -11,6 +15,8 @@ import com.menzo.User_Service.User.UserProfile.Repository.UserRepository;
 import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.UserRegistration.Dto.RegNewUser;
 import com.menzo.User_Service.User.UserRegistration.Dto.TokenMinimalDto;
+import com.menzo.User_Service.Wishlist.Entity.Wishlist;
+import com.menzo.User_Service.Wishlist.Repository.WishlistRepository;
 import jakarta.servlet.http.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +36,37 @@ public class UserRegistrationService {
     private UserRepository userRepo;
 
     @Autowired
-    private CredentialsService credentialsService;
+    private CustomerRepository customerRepo;
 
+    @Autowired
+    private CartRepository cartRepo;
+
+    @Autowired
+    private WishlistRepository wishlistRepo;
+
+    @Autowired
+    private CredentialsService credentialsService;
 
 
     /*
      *
-     * New User Registration - Customer
+     *   New User Registration (customer)
      *
      */
     public Cookie registerNewUser(RegNewUser newUser) {
-        UserDto savedUser = saveNewUser(newUser);
+        //  creating new user entity
+        User savedUser = saveNewUser(newUser);
+
+        //  creating new customer entity
+        Customer newCustomer = saveNewCustomer(savedUser);
+
+        //  creating new customer cart entity
+        createNewCustomerCart(newCustomer);
+
+        //  creating new customer wishlist entity
+        createNewCustomerWishlist(newCustomer);
+
+        //  creating response with JWT cookie
         TokenMinimalDto jwtToken = null;
         try {
             jwtToken = authFeign.generateToken(new EmailDto(savedUser.getEmail()));
@@ -56,8 +82,8 @@ public class UserRegistrationService {
     }
 
 
-    //  Save new Registered user
-    private UserDto saveNewUser(RegNewUser newUser) {
+    //   Create new Registered user
+    private User saveNewUser(RegNewUser newUser) {
         try {
             if (userRepo.existsByEmail(newUser.getEmail())) {
                 throw new IllegalArgumentException("Email is already in use.");
@@ -65,25 +91,53 @@ public class UserRegistrationService {
             logger.info("New user registration: {}", newUser.getEmail());
 
             String encodedPassword = credentialsService.encodePassword(newUser.getPassword());
-            User user = new User(newUser.getFirstName(),
-                    newUser.getLastName(),
-                    newUser.getEmail(),
-                    newUser.getPhoneNumber(),
-                    newUser.getGender(),
-                    UserTypes.CUSTOMER,
-                    newUser.getDateOfBirth(),
-                    encodedPassword
-            );
+            User user = User.builder()
+                    .firstName(newUser.getFirstName())
+                    .lastName(newUser.getLastName())
+                    .email(newUser.getEmail())
+                    .phoneNumber(newUser.getPhoneNumber())
+                    .gender(newUser.getGender())
+                    .userType(UserTypes.CUSTOMER)
+                    .dateOfBirth(newUser.getDateOfBirth())
+                    .password(encodedPassword)
+                    .build();
             User savedUser = userRepo.save(user);
             if (savedUser.getUserId() == null) {
                 throw new RuntimeException("Failed to save user");
             }
             logger.info("User registered: {}", user.getEmail());
-            return new UserDto(savedUser);
+            return savedUser;
         } catch (Exception e) {
             logger.error("Error saving user: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+
+    //   Create new customer
+    private Customer saveNewCustomer(User newUser) {
+        Customer newCustomer = Customer.builder()
+                .user(newUser)
+                .build();
+        return customerRepo.save(newCustomer);
+    }
+
+
+    //   Create new customer cart
+    private void createNewCustomerCart(Customer newCustomer) {
+        Cart newCustomerCart = Cart.builder()
+                .customer(newCustomer)
+                .build();
+        cartRepo.save(newCustomerCart);
+    }
+
+
+    //   Create new customer wishlist
+    private void createNewCustomerWishlist(Customer newCustomer) {
+        Wishlist newCustomerWishlist = Wishlist.builder()
+                .customer(newCustomer)
+                .build();
+        wishlistRepo.save(newCustomerWishlist);
     }
 
 
@@ -98,13 +152,12 @@ public class UserRegistrationService {
     }
 
 
-
     /*
-    *
-    *   Get Google OAuth user details
-    *   For the user data got from the Google server
-    *
-    */
+     *
+     *   Get Google OAuth user details
+     *   For the user data got from the Google server
+     *
+     */
     public UserDto saveGoogleOAuthUser(OAuthUserDto googleUser) {
         if (googleUser == null || googleUser.getEmail() == null) {
             logger.error("Google OAuth user or email is null");

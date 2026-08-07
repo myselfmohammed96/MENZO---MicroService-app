@@ -22,7 +22,7 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long staffId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 

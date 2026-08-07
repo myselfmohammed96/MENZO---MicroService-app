@@ -15,6 +15,8 @@ public class UserProductListingDto {
 
     private String productName;
 
+    private String productCode;
+
     private String superSku;
 
     private Float minPrice;
@@ -23,11 +25,11 @@ public class UserProductListingDto {
 
     private Integer minStockQty;
 
-    //  discount details
-
     private String iconImage;
 
 //    private List<String> colors;
+
+    //  discount details
 
     //  'limited time deal' details
 

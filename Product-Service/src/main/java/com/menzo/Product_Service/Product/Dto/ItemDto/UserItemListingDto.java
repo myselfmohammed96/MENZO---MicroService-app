@@ -20,8 +20,6 @@ public class UserItemListingDto {
 
     private String iconImage;
 
-//    private Float price;
-
     private BigDecimal mrp;
 
     private BigDecimal sellingPrice;

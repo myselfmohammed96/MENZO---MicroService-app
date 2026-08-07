@@ -1,32 +1,25 @@
 package com.menzo.Product_Service.Product.Dto;
 
+import com.menzo.Product_Service.Product.Dto.ItemDto.UserItemListingDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AdminProductDetailsDto {
+public class UserProductDetailsDto {
 
     private String productName;
 
-    private String categoryName;
-
-    private String subCategoryName;
-
     private String description;
 
-    private boolean pod;
-
-    private Date productCreated;
-
-    private Date productUpdated;
+    private Boolean pod;
 
     private Float itemWeight;
 
@@ -38,6 +31,8 @@ public class AdminProductDetailsDto {
 
     private String packer;
 
-    private List<AdminItemListingDto> productItems;
+    private Map<String, String> variations;
+
+    private List<UserItemListingDto> items;
 
 }

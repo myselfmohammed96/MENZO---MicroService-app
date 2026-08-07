@@ -46,6 +46,18 @@ public class UserQueryService {
 
 
     /*
+    *
+    *   Get user entity
+    *   User identified by user email
+    *
+     */
+    public User getUserEntityByEmail(String userEmail) {
+        return userRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
+    }
+
+
+    /*
      *
      *   Get user status
      *   User identified by user ID

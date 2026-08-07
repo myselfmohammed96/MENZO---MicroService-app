@@ -13,15 +13,17 @@ import java.util.Date;
 @Builder
 public class AdminProductListingDto {
 
-    private Long productId;        //  ---
+    private Long productId;
 
-    private String productName;        //  ---
+    private String productName;
 
-    private String subCategoryName;        //  ---
+    private String productCode;
+
+    private String subCategoryName;
 
     private String categoryName;
 
-    private Float minPrice;        //  ---
+    private Float minPrice;
 
     private Float maxPrice;
 
@@ -33,10 +35,10 @@ public class AdminProductListingDto {
 
     private Date oldestCreatedAt;
 
-    private Integer colorCount;        //  ---
+    private Integer colorCount;
 
-    private String activeStatus;        //  ---
+    private String activeStatus;
 
-    private String iconImage;        //  ---
+    private String iconImage;
 
 }

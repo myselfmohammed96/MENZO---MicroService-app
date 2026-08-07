@@ -1,6 +1,7 @@
 package com.menzo.User_Service.User.UserProfile.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.menzo.User_Service.Customer.Entity.Customer;
 import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.UserProfile.Enum.Gender;
 import com.menzo.User_Service.User.UserProfile.Enum.UserTypes;
@@ -64,30 +65,15 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "customer", fetch = FetchType.LAZY)
+    private Customer customer;
+
     ///////////////////////////////////////////////
 
     public User(OAuthUserDto googleUser) {
         this.firstName = googleUser.getUserName();
         this.email = googleUser.getEmail();
         this.profileUrl = googleUser.getProfileUrl();
-    }
-
-    public User(String firstName,
-                String lastName,
-                String email,
-                String phoneNumber,
-                Gender gender,
-                UserTypes userType,
-                LocalDate dateOfBirth,
-                String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.userType = userType;
-        this.dateOfBirth = dateOfBirth;
-        this.password = password;
     }
 
     public String toString() {
