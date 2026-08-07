@@ -27,14 +27,22 @@ import java.util.UUID;
 @FilterDef(
         name = "cartFilter",
         parameters = {
+                @ParamDef(name = "applySelected", type = Boolean.class),
+                @ParamDef(name = "isSelected", type = Boolean.class),
+                @ParamDef(name = "applyOrdered", type = Boolean.class),
                 @ParamDef(name = "isOrdered", type = Boolean.class),
+                @ParamDef(name = "applyMovedToWishlist", type = Boolean.class),
                 @ParamDef(name = "movedToWishlist", type = Boolean.class),
+                @ParamDef(name = "applyDeleted", type = Boolean.class),
                 @ParamDef(name = "isDeleted", type = Boolean.class)
         }
 )
 @Filter(
         name = "cartFilter",
-        condition = "is_ordered = :isOrdered AND moved_to_wishlist = :movedToWishlist AND is_deleted = :isDeleted"
+        condition = "(:applySelected = false OR is_selected = :isSelected) " +
+                "AND (:applyOrdered = false OR is_ordered = :isOrdered) " +
+                "AND (:applyMovedToWishlist = false OR moved_to_wishlist = :movedToWishlist) " +
+                "AND (:applyDeleted = false OR is_deleted = :isDeleted) "
 )
 public class CartItem {
 
@@ -53,6 +61,9 @@ public class CartItem {
     private String productItemSku;
 
     private Integer quantity = 1;
+
+    @Column(nullable = false)
+    private boolean isSelected = true;
 
     @Column(nullable = false)
     private boolean isOrdered = false;

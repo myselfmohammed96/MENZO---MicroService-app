@@ -1,6 +1,7 @@
 package com.menzo.User_Service.Cart.Controller;
 
 import com.menzo.User_Service.Cart.Service.CartCommandService;
+import com.menzo.User_Service.GlobalComponents.Enum.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +42,26 @@ public class CartCommandRestController {
             }
 
             //  Adding item to cart
-            boolean itemAdded = cartCommandService.addNewCartItem(userEmail, productItemId);
+            Response itemAddedStatus = cartCommandService.addNewCartItem(userEmail, productItemId);
 
             //  building response
-            if (itemAdded) {
-                logger.info("Product-item '{}', added to the cart successfully", productItemId);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "Product-item added to the cart successfully"));
-            } else {
-                logger.error("Failed to add product-item '{}' to the cart", productItemId);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("message", "Failed to add product-item to the cart."));
-            }
+            return switch (itemAddedStatus) {
+                case CREATED -> {
+                    logger.info("Product-item '{}', added to the cart successfully", productItemId);
+                    yield ResponseEntity.status(HttpStatus.CREATED)
+                            .body(Map.of("message", "Product-item added to the cart successfully"));
+                }
+                case ALREADY_EXISTS -> {
+                    logger.error("Product-item '{}' already exists in the cart", productItemId);
+                    yield ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body(Map.of("message", "Product-item already exists in the cart."));
+                }
+                case FAILED -> {
+                    logger.error("Failed to add product-item '{}' to the cart", productItemId);
+                    yield ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(Map.of("message", "Failed to add product-item to the cart."));
+                }
+            };
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -135,7 +144,7 @@ public class CartCommandRestController {
 
     /*
      *
-     *   Delete cart item (soft delete)
+     *   Delete cart-item (soft delete)
      *
      */
     @DeleteMapping("/delete")

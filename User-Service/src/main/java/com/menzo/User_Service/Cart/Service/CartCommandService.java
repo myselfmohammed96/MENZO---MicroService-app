@@ -3,11 +3,12 @@ package com.menzo.User_Service.Cart.Service;
 import com.menzo.User_Service.Cart.Entity.Cart;
 import com.menzo.User_Service.Cart.Entity.CartItem;
 import com.menzo.User_Service.Cart.Repository.CartItemRepository;
-import com.menzo.User_Service.Cart.Repository.CartRepository;
-import com.menzo.User_Service.Customer.Entity.Customer;
+import com.menzo.User_Service.Exceptions.UnauthorizedAccessException;
 import com.menzo.User_Service.Feign.ProductFeign;
+import com.menzo.User_Service.GlobalComponents.Enum.Response;
 import com.menzo.User_Service.User.UserProfile.Entity.User;
 import com.menzo.User_Service.User.UserProfile.Service.UserQueryService;
+import com.menzo.User_Service.Wishlist.Service.WishlistCommandService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,21 +34,26 @@ public class CartCommandService {
     @Autowired
     private ProductFeign productFeign;
 
+    @Autowired
+    private WishlistCommandService wishlistCommandService;
+
 
     /*
      *
      *   Add new product-item in cart
      *
      */
-    public boolean addNewCartItem(String userEmail,
-                                  Long productItemId) {
+    public Response addNewCartItem(String userEmail,
+                                   Long productItemId) {
         //  fetching customer cart
         User user = userQueryService.getUserEntityByEmail(userEmail);
         Cart cart = user.getCustomer().getCart();
 
-        //  fetching product-item SKU
-        //  ## Handle null SKU if the Feign call could fail.
+        //  fetching product-item by SKU
         String sku = productFeign.getSkuByItemId(productItemId).getBody();
+        if (sku == null) {
+            throw new EntityNotFoundException("Product-item SKU not found for product-item ID: " + productItemId);
+        }
 
         //  increment cart-item quantity, if product-item is already in the cart
         Optional<CartItem> cartItemOpt = cartItemRepo.findByCart_CartIdAndProductItemSku(cart.getCartId(), sku);
@@ -55,7 +62,7 @@ public class CartCommandService {
             CartItem cartItem = cartItemOpt.get();
             cartItem.setQuantity(cartItem.getQuantity() + 1);
             cartItemRepo.save(cartItem);
-            return true;
+            return Response.ALREADY_EXISTS;
         }
 
         //  adding new cart-item
@@ -64,8 +71,13 @@ public class CartCommandService {
                 .productItemId(productItemId)
                 .productItemSku(sku)
                 .build();
-        cartItemRepo.save(newCartItem);
-        return true;
+        try {
+            cartItemRepo.save(newCartItem);
+            return Response.CREATED;
+        } catch (Exception e) {
+            logger.error("Failed to save new item to cart: ", e);
+            return Response.FAILED;
+        }
     }
 
 
@@ -83,6 +95,13 @@ public class CartCommandService {
         CartItem cartItem = cartItemRepo.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart-item not found with ID: " + cartItemId));
 
+        //  checking cart-item belongs to authenticated user
+        if (Objects.equals(user.getUserId(),
+                cartItem.getCart().getCustomer().getUser().getUserId())) {
+            throw new UnauthorizedAccessException("Access denied: cart-item does not belong to the authenticated user.");
+        }
+
+        //  updating cart-item quantity
         cartItem.setQuantity(cartItem.getQuantity() + 1);
         cartItemRepo.save(cartItem);
         return user.getCustomer().getCustomerId();
@@ -103,17 +122,68 @@ public class CartCommandService {
         CartItem cartItem = cartItemRepo.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart-item not found with ID: " + cartItemId));
 
-        return true;
+        //  checking cart-item belongs to authenticated user
+        if (!Objects.equals(user.getUserId(),
+                cartItem.getCart().getCustomer().getUser().getUserId())) {
+            throw new UnauthorizedAccessException("Access denied: cart-item does not belong to the authenticated user.");
+        }
+
+        //  move item to wishlist
+        boolean movedToWishlist = wishlistCommandService.moveCartItemToWishlist(
+                user,
+                cartItem.getProductItemId(),
+                cartItem.getProductItemSku()
+        );
+
+        //  mark cart-item as moved
+        if (movedToWishlist) {
+            cartItem.setMovedToWishlist(true);
+            cartItem.setMovedToWishlistAt(LocalDateTime.now());
+            cartItemRepo.save(cartItem);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
     /*
      *
      *   Move wishlist-item to cart
+     *   Used by WishlistCommandService
      *
      */
-    public boolean moveWishlistItemToCart(Long id) {
+    public boolean moveWishlistItemToCart(User user,
+                                          Long productItemId,
+                                          String productItemSku) {
+        //  fetching user cart
+        Cart userCart = user.getCustomer().getCart();
 
+        //  checking if product-item already exists in cart
+        Optional<CartItem> cartItemOpt = cartItemRepo.findByCart_CartIdAndProductItemSku(
+                userCart.getCartId(),
+                productItemSku
+        );
+
+        //  reuse cart-item if already present
+        if (cartItemOpt.isPresent()) {
+            CartItem cartItem = cartItemOpt.get();
+
+            if (cartItem.isMovedToWishlist()) {
+                cartItem.setMovedToWishlist(false);
+                cartItem.setQuantity(1);
+                cartItemRepo.save(cartItem);
+            }
+            return true;
+        }
+
+        //  create new cart-item if not already present
+        CartItem newCartItem = CartItem.builder()
+                .cart(userCart)
+                .productItemId(productItemId)
+                .productItemSku(productItemSku)
+                .build();
+        cartItemRepo.save(newCartItem);
         return true;
     }
 
@@ -131,6 +201,12 @@ public class CartCommandService {
         //  fetching cart-item
         CartItem cartItem = cartItemRepo.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart-item not found with ID: " + cartItemId));
+
+        //  checking cart-item belongs to authenticated user
+        if (Objects.equals(user.getUserId(),
+                cartItem.getCart().getCustomer().getUser().getUserId())) {
+            throw new UnauthorizedAccessException("Access denied: cart-item does not belong to the authenticated user.");
+        }
 
         //  deleting cart-item
         cartItem.setDeleted(true);
