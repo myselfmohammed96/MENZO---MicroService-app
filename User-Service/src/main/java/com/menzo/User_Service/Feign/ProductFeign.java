@@ -14,7 +14,7 @@ public interface ProductFeign {
     *   Product-item identified by item ID
     *
      */
-    @GetMapping("/get-sku")
+    @GetMapping("/product-item/get-sku")
     public ResponseEntity<String> getSkuByItemId(@RequestParam("id") Long itemId);
 
 }

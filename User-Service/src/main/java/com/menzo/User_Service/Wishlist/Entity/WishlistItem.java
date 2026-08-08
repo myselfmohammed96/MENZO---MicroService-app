@@ -25,7 +25,7 @@ import java.util.UUID;
         }
 )
 @FilterDef(
-        name = "wishlistFilter",
+        name = "wishlistItemFilter",
         parameters = {
                 @ParamDef(name = "applyMovedToCart", type = Boolean.class),
                 @ParamDef(name = "movedToCart", type = Boolean.class),
@@ -34,7 +34,7 @@ import java.util.UUID;
         }
 )
 @Filter(
-        name = "wishlistFilter",
+        name = "wishlistItemFilter",
         condition = "(:applyMovedToCart = false OR moved_to_cart = :movedToCart) " +
                 "AND (:applyDeleted = false OR is_deleted = :isDeleted) "
 )

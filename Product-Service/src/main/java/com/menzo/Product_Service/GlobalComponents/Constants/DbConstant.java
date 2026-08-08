@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Constants;
+package com.menzo.Product_Service.GlobalComponents.Constants;
 
 public class DbConstant {
 
