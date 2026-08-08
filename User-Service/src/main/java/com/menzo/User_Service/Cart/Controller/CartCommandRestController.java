@@ -46,15 +46,15 @@ public class CartCommandRestController {
 
             //  building response
             return switch (itemAddedStatus) {
-                case CREATED -> {
+                case RESTORED, CREATED -> {
                     logger.info("Product-item '{}', added to the cart successfully", productItemId);
                     yield ResponseEntity.status(HttpStatus.CREATED)
                             .body(Map.of("message", "Product-item added to the cart successfully"));
                 }
-                case ALREADY_EXISTS -> {
-                    logger.error("Product-item '{}' already exists in the cart", productItemId);
+                case INCREMENTED -> {
+                    logger.error("Product-item '{}' incremented in the cart", productItemId);
                     yield ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body(Map.of("message", "Product-item already exists in the cart."));
+                            .body(Map.of("message", "Product-item incremented in the cart."));
                 }
                 case FAILED -> {
                     logger.error("Failed to add product-item '{}' to the cart", productItemId);

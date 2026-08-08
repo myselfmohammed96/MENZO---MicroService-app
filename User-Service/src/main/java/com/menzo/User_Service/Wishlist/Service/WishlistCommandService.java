@@ -4,6 +4,7 @@ import com.menzo.User_Service.Cart.Entity.CartItem;
 import com.menzo.User_Service.Cart.Service.CartCommandService;
 import com.menzo.User_Service.Exceptions.UnauthorizedAccessException;
 import com.menzo.User_Service.Feign.ProductFeign;
+import com.menzo.User_Service.GlobalComponents.CustomAnnotations.Annotations.EnableWishlistItemFilter;
 import com.menzo.User_Service.GlobalComponents.Enum.Response;
 import com.menzo.User_Service.User.UserProfile.Entity.User;
 import com.menzo.User_Service.User.UserProfile.Service.UserQueryService;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -45,6 +47,7 @@ public class WishlistCommandService {
      *   Add new product-item in wishlist
      *
      */
+    @Transactional
     public Response addNewWishlistItem(String userEmail,
                                        Long productItemId) {
         //  fetching customer wishlist
@@ -57,9 +60,28 @@ public class WishlistCommandService {
             throw new EntityNotFoundException("Product-item SKU not found for product-item ID: " + productItemId);
         }
 
-        //  return if product-item already present in wishlist
-        if (wishlistItemRepo.existsByWishlist_WishlistIdAndProductItemSku(wishlist.getWishlistId(), sku)) {
-            return Response.ALREADY_EXISTS;
+        //  fetching wishlist-item if exist
+        Optional<WishlistItem> wishlistItemOpt = wishlistItemRepo.findByWishlist_WishlistIdAndProductItemSku(wishlist.getWishlistId(), sku);
+
+        if (wishlistItemOpt.isPresent()) {
+            WishlistItem wishlistItem = wishlistItemOpt.get();
+
+            //  return if product-item already exist in wishlist
+            if (!wishlistItem.isDeleted() && !wishlistItem.isMovedToCart()) {
+                return Response.ALREADY_EXISTS;
+            }
+
+            //  undo isDeleted & isMovedToCart and refresh addedAt
+            if (wishlistItem.isDeleted()) {
+                wishlistItem.setDeleted(false);
+            }
+            if (wishlistItem.isMovedToCart()) {
+                wishlistItem.setMovedToCart(false);
+            }
+            wishlistItem.setAddedAt(LocalDateTime.now());
+            wishlistItemRepo.save(wishlistItem);
+
+            return Response.RESTORED;
         }
 
         //  adding new wishlist-item
@@ -67,6 +89,7 @@ public class WishlistCommandService {
                 .wishlist(wishlist)
                 .productItemId(productItemId)
                 .productItemSku(sku)
+                .addedAt(LocalDateTime.now())
                 .build();
         try {
             wishlistItemRepo.save(newWishlistItem);
@@ -163,7 +186,7 @@ public class WishlistCommandService {
      *
      */
     public boolean deleteWishlistItem(String userEmail,
-                                  UUID wishlistItemId) {
+                                      UUID wishlistItemId) {
         //  fetching user
         User user = userQueryService.getUserEntityByEmail(userEmail);
 

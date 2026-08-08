@@ -54,6 +54,9 @@ public class WishlistItem {
     @Column(nullable = false)
     private String productItemSku;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime addedAt;
+
     @Column(nullable = false)
     private boolean movedToCart = false;
 

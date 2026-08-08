@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -43,6 +44,7 @@ public class CartCommandService {
      *   Add new product-item in cart
      *
      */
+    @Transactional
     public Response addNewCartItem(String userEmail,
                                    Long productItemId) {
         //  fetching customer cart
@@ -55,14 +57,34 @@ public class CartCommandService {
             throw new EntityNotFoundException("Product-item SKU not found for product-item ID: " + productItemId);
         }
 
-        //  increment cart-item quantity, if product-item is already in the cart
+
+        //  fetching cart-item if exist
         Optional<CartItem> cartItemOpt = cartItemRepo.findByCart_CartIdAndProductItemSku(cart.getCartId(), sku);
 
         if (cartItemOpt.isPresent()) {
             CartItem cartItem = cartItemOpt.get();
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
+
+            //  increment cart-item quantity, if product-item already exist in the cart
+            if (!cartItem.isOrdered() && !cartItem.isMovedToWishlist() && !cartItem.isDeleted()) {
+                cartItem.setQuantity(cartItem.getQuantity() + 1);
+                cartItemRepo.save(cartItem);
+                return Response.INCREMENTED;
+            }
+
+            //  undo isOrdered, isDeleted & isMovedToWishlist and refresh addAt
+            if (cartItem.isOrdered()) {
+                cartItem.setOrdered(false);
+            }
+            if (cartItem.isDeleted()) {
+                cartItem.setDeleted(false);
+            }
+            if (cartItem.isMovedToWishlist()) {
+                cartItem.setMovedToWishlist(false);
+            }
+            cartItem.setAddedAt(LocalDateTime.now());
             cartItemRepo.save(cartItem);
-            return Response.ALREADY_EXISTS;
+
+            return Response.RESTORED;
         }
 
         //  adding new cart-item
@@ -70,6 +92,7 @@ public class CartCommandService {
                 .cart(cart)
                 .productItemId(productItemId)
                 .productItemSku(sku)
+                .addedAt(LocalDateTime.now())
                 .build();
         try {
             cartItemRepo.save(newCartItem);

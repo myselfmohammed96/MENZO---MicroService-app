@@ -68,6 +68,9 @@ public class CartItem {
     @Column(nullable = false)
     private boolean isOrdered = false;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime addedAt;
+
     @Column(nullable = false)
     private boolean movedToWishlist = false;
 

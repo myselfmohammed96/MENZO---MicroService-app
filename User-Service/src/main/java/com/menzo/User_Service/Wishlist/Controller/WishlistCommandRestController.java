@@ -46,18 +46,16 @@ public class WishlistCommandRestController {
 
             //  building response
             return switch (itemAdded) {
-                case CREATED -> {
+                case RESTORED, CREATED -> {
                     logger.info("Product-item '{}', added to the wishlist successfully", productItemId);
                     yield ResponseEntity.status(HttpStatus.CREATED)
                             .body(Map.of("message", "Product-item added to the wishlist successfully"));
                 }
-
                 case ALREADY_EXISTS -> {
                     logger.error("Product-item '{}' already exists in the wishlist", productItemId);
                     yield ResponseEntity.status(HttpStatus.CONFLICT)
                             .body(Map.of("message", "Product-item already exists in the wishlist."));
                 }
-
                 case FAILED -> {
                     logger.error("Failed to add product-item '{}' to the wishlist", productItemId);
                     yield ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
