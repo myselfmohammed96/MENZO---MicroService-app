@@ -71,7 +71,7 @@ public class CartQueryRestController {
     public ResponseEntity<?> getCartItemCount(@RequestHeader("email") String userEmail) {
 
         //  getting cart-item count
-        Integer cartItemCount = cartQueryService.getCartItemCount(userEmail);
+        Long cartItemCount = cartQueryService.getCartItemCount(userEmail);
 
         //  building response
         return ResponseEntity.ok(cartItemCount);

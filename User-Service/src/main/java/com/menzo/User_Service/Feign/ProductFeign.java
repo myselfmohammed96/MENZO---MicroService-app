@@ -1,5 +1,6 @@
 package com.menzo.User_Service.Feign;
 
+import com.menzo.User_Service.Cart.Dto.CartDto;
 import com.menzo.User_Service.Wishlist.Dto.WishlistDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +29,14 @@ public interface ProductFeign {
      */
     @GetMapping("/product-item/get-wishlist-data")
     public ResponseEntity<List<WishlistDto>> getWishlistItemsData(@RequestParam("item-ids") List<Long> wishlistItemIds);
+
+
+    /*
+    *
+    *   Get cart-item data (product-item details)
+    *
+     */
+    @GetMapping("/product-item/get-cart-data")
+    public ResponseEntity<List<CartDto>> getCartItemsData(@RequestParam("item-ids") List<Long> cartItemIds);
+
 }

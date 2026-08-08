@@ -28,10 +28,10 @@ public interface WishlistItemRepository extends JpaRepository<WishlistItem, UUID
 
 
     /*
-    *
-    *   Find all wishlist-items of customer
-    *   With pagination and createdAt sorting
-    *
+     *
+     *   Find all wishlist-items of customer
+     *   With pagination and createdAt sorting
+     *
      */
     Page<WishlistItem> findAllByWishlist_WishlistId(UUID wishlistId, Pageable sortedPageable);
 

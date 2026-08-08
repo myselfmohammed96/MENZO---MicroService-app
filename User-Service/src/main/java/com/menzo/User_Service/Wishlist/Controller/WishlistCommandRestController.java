@@ -61,6 +61,7 @@ public class WishlistCommandRestController {
                     yield ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                             .body(Map.of("message", "Failed to add product-item to the wishlist."));
                 }
+                default -> ResponseEntity.internalServerError().build();
             };
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
