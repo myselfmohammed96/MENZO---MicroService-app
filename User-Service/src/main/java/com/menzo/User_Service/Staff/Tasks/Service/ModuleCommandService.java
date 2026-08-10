@@ -6,6 +6,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ModuleCommandService {
 
@@ -19,7 +21,7 @@ public class ModuleCommandService {
     *   Module identified by module ID
     *
     */
-    public boolean updateModuleActiveStatus(Long moduleId, boolean isActive) {
+    public boolean updateModuleActiveStatus(UUID moduleId, boolean isActive) {
 
         //  fetching module by ID
         Module module = moduleRepo.findById(moduleId)

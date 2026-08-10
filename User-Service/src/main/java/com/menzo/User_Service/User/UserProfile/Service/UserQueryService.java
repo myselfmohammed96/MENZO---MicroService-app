@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class UserQueryService {
@@ -63,7 +64,7 @@ public class UserQueryService {
      *   User identified by user ID
      *
      */
-    public UserStatusDto getUserStatusByUserId(Long userId) {
+    public UserStatusDto getUserStatusByUserId(UUID userId) {
         try {
             logger.info("Fetching user by ID: {}", userId);
             User user = userRepo.findById(userId)
@@ -137,7 +138,7 @@ public class UserQueryService {
      *   for Admin side
      *
      */
-    public UserDetailsDto getUserDetailsByIdForAdminSide(Long userId) {
+    public UserDetailsDto getUserDetailsByIdForAdminSide(UUID userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
         logger.info("User found for ID: {}", user.getUserId());
@@ -148,7 +149,7 @@ public class UserQueryService {
         }
         logger.info("Making UserDetailsDto for user ID: {}", userId);
         return UserDetailsDto.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
@@ -172,7 +173,7 @@ public class UserQueryService {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("No user found with Email: " + userEmail));
         return UserDetailsDto.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.UUID;
 
 @FeignClient("PRODUCT-SERVICE")
 public interface ProductFeign {
@@ -19,7 +20,7 @@ public interface ProductFeign {
     *
      */
     @GetMapping("/product-item/get-sku")
-    public ResponseEntity<String> getSkuByItemId(@RequestParam("id") Long itemId);
+    public ResponseEntity<String> getSkuByItemId(@RequestParam("id") UUID itemId);
 
 
     /*
@@ -28,7 +29,7 @@ public interface ProductFeign {
     *
      */
     @GetMapping("/product-item/get-wishlist-data")
-    public ResponseEntity<List<WishlistDto>> getWishlistItemsData(@RequestParam("item-ids") List<Long> wishlistItemIds);
+    public ResponseEntity<List<WishlistDto>> getWishlistItemsData(@RequestParam("item-ids") List<UUID> wishlistItemIds);
 
 
     /*
@@ -37,6 +38,6 @@ public interface ProductFeign {
     *
      */
     @GetMapping("/product-item/get-cart-data")
-    public ResponseEntity<List<CartDto>> getCartItemsData(@RequestParam("item-ids") List<Long> cartItemIds);
+    public ResponseEntity<List<CartDto>> getCartItemsData(@RequestParam("item-ids") List<UUID> cartItemIds);
 
 }

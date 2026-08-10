@@ -18,7 +18,7 @@ public class CartDto {
 
     private UUID cartItemId;
 
-    private Long productItemId;
+    private UUID productItemId;
 
     private String sku;
 

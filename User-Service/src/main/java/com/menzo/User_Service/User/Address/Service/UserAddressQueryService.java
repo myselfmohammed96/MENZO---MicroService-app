@@ -38,7 +38,7 @@ public class UserAddressQueryService {
         List<UserAddressDto> userAddressDtos = userAddresses.stream()
                 .map(userAddress -> {
                     return UserAddressDto.builder()
-                            .id(userAddress.getUserAddressId())
+                            .userAddressId(userAddress.getUserAddressId())
                             .firstName(userAddress.getFirstName())
                             .lastName(userAddress.getLastName())
                             .phoneNumber(userAddress.getPhoneNumber())
@@ -76,7 +76,7 @@ public class UserAddressQueryService {
                 .orElseThrow(() -> new RuntimeException("User doesn't have default address"));
 
         return UserAddressDto.builder()
-                .id(defaultAddress.getUserAddressId())
+                .userAddressId(defaultAddress.getUserAddressId())
                 .firstName(defaultAddress.getFirstName())
                 .lastName(defaultAddress.getLastName())
                 .phoneNumber(defaultAddress.getPhoneNumber())

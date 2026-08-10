@@ -2,6 +2,7 @@ package com.menzo.User_Service.Cart.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -51,11 +52,15 @@ public class CartItem {
     private UUID cartItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
+    @JoinColumn(
+            name = "cart_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_cart")
+    )
     private Cart cart;
 
     @Column(nullable = false)
-    private Long productItemId;
+    private UUID productItemId;
 
     @Column(nullable = false)
     private String productItemSku;

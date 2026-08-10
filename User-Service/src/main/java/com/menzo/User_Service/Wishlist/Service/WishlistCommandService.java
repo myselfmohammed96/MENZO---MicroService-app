@@ -49,7 +49,7 @@ public class WishlistCommandService {
      */
     @Transactional
     public Response addNewWishlistItem(String userEmail,
-                                       Long productItemId) {
+                                       UUID productItemId) {
         //  fetching customer wishlist
         User user = userQueryService.getUserEntityByEmail(userEmail);
         Wishlist wishlist = user.getCustomer().getWishlist();
@@ -147,7 +147,7 @@ public class WishlistCommandService {
      *
      */
     public boolean moveCartItemToWishlist(User user,
-                                          Long productItemId,
+                                          UUID productItemId,
                                           String productItemSku) {
         //  fetching user wishlist
         Wishlist userWishlist = user.getCustomer().getWishlist();

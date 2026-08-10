@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,19 +15,30 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "designations")
+@Table(
+        name = "designations",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_designation_name",
+                        columnNames = "designation_name"
+                ),
+                @UniqueConstraint(
+                        name = "uk_designation_level",
+                        columnNames = "level"
+                )
+        }
+)
 public class Designation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer designationId;
+    private UUID designationId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String designationName;
 
     private String description;
 
-    @Column(unique = true)
     private Integer level;
 
     @Column(nullable = false)

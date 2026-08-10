@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class CreateDepartmentDto {
 
     private String description;
 
-    private Long departmentHeadId;
+    private UUID departmentHeadId;
 
     /////////////////////////////////////
 

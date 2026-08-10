@@ -2,6 +2,7 @@ package com.menzo.User_Service.Wishlist.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -45,11 +46,15 @@ public class WishlistItem {
     private UUID wishlistItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wishlist_id", nullable = false)
+    @JoinColumn(
+            name = "wishlist_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_wishlist")
+    )
     private Wishlist wishlist;
 
     @Column(nullable = false)
-    private Long productItemId;
+    private UUID productItemId;
 
     @Column(nullable = false)
     private String productItemSku;

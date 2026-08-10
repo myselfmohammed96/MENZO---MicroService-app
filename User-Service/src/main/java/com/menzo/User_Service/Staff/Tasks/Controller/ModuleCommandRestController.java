@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/module")
@@ -28,12 +29,12 @@ public class ModuleCommandRestController {
     */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateModuleActiveStatus(@RequestHeader("roles") String roles,
-                                                      @RequestParam("id") Long moduleId,
+                                                      @RequestParam("id") UUID moduleId,
                                                       @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (moduleId == null || moduleId <= 0) {
+            if (moduleId == null) {
                 logger.warn("Invalid module ID: {}", moduleId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid module ID"));

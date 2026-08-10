@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/user")
 public class UserQueryRestController {
@@ -43,7 +45,7 @@ public class UserQueryRestController {
     *
     */
     @GetMapping("/get-by-id")
-    public ResponseEntity<UserStatusDto> getUserStatusByUserId(@RequestParam("id") Long userId) {
+    public ResponseEntity<UserStatusDto> getUserStatusByUserId(@RequestParam("id") UUID userId) {
         UserStatusDto userDto = userQueryService.getUserStatusByUserId(userId);
         return ResponseEntity.ok(userDto);
     }
@@ -88,7 +90,7 @@ public class UserQueryRestController {
     *
     */
     @GetMapping("user-details")
-    public ResponseEntity<UserDetailsDto> getUserDetailsById(@RequestParam("id") Long userId) {
+    public ResponseEntity<UserDetailsDto> getUserDetailsById(@RequestParam("id") UUID userId) {
         UserDetailsDto userDetails = userQueryService.getUserDetailsByIdForAdminSide(userId);
         return ResponseEntity.ok(userDetails);
     }

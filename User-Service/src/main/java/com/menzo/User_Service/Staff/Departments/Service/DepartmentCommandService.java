@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class DepartmentCommandService {
@@ -61,7 +62,7 @@ public class DepartmentCommandService {
      *   Update department
      *
      */
-    public Department updateDepartment(Long deptId, UpdateDepartmentDto latestDept) {
+    public Department updateDepartment(UUID deptId, UpdateDepartmentDto latestDept) {
 
         //  fetching department by ID
         Department dept = deptRepo.findById(deptId)
@@ -90,7 +91,7 @@ public class DepartmentCommandService {
      *  Department identified by department ID
      *
      */
-    public boolean updateDepartmentActiveStatus(Long deptId, boolean isActive) {
+    public boolean updateDepartmentActiveStatus(UUID deptId, boolean isActive) {
 
         //  fetching department by ID
         Department dept = deptRepo.findById(deptId)
@@ -109,7 +110,7 @@ public class DepartmentCommandService {
      *  Department head identified by staff ID
      *
      */
-    public ChangeStatus changeDepartmentHead(Long deptId, Long deptHeadId) {
+    public ChangeStatus changeDepartmentHead(UUID deptId, UUID deptHeadId) {
 
         //  fetching data
         Department dept = deptRepo.findById(deptId)
@@ -134,7 +135,7 @@ public class DepartmentCommandService {
      *  (soft delete)
      *
      */
-    public boolean deleteDepartment(Long deptId, String authorEmail) {
+    public boolean deleteDepartment(UUID deptId, String authorEmail) {
 
         //  fetching data
         Department dept = deptRepo.findById(deptId)

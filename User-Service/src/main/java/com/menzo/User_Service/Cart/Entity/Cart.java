@@ -13,7 +13,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "carts")
+@Table(
+        name = "carts",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_customer_cart",
+                columnNames = "customer_id"
+        )
+)
 public class Cart {
 
     @Id
@@ -21,7 +27,10 @@ public class Cart {
     private UUID cartId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false, unique = true)
+    @JoinColumn(name = "customer_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_customer_cart")
+    )
     private Customer customer;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)

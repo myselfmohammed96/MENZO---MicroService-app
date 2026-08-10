@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -81,7 +82,7 @@ public class UserAddressRestController {
     @PostMapping("/address")
     public ResponseEntity<?> addUserAddress(@RequestHeader("loggedInUser") String userEmail,
                                             @RequestBody UserAddressDto userAddress) {
-        Long id = addressCommandService.addUserAddress(
+        UUID id = addressCommandService.addUserAddress(
                 userEmail,
                 userAddress
         );
@@ -107,9 +108,9 @@ public class UserAddressRestController {
     */
     @PutMapping("/address")
     public ResponseEntity<?> updateUserAddress(@RequestHeader("loggedInUser") String userEmail,
-                                               @RequestParam("id") Long addressId,
+                                               @RequestParam("id") UUID addressId,
                                                @RequestBody UserAddressDto userAddress) {
-        Long userAddressId = addressCommandService.updateUserAddress(
+        UUID userAddressId = addressCommandService.updateUserAddress(
                 userEmail,
                 addressId,
                 userAddress

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 
 import java.util.List;
+import java.util.UUID;
 
 public class WishlistQueryService {
 
@@ -53,7 +54,7 @@ public class WishlistQueryService {
 
         //  getting wishlist page data
         List<WishlistItem> pageContent = wishlistItems.getContent();
-        List<Long> wishlistItemIds = pageContent.stream()
+        List<UUID> wishlistItemIds = pageContent.stream()
                 .map(WishlistItem::getProductItemId)
                 .toList();
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class UserCommandService {
@@ -49,7 +50,7 @@ public class UserCommandService {
     *   Update user details
     *
     */
-    public Long updateUserDetails(String userEmail, UserDto latestUser) {
+    public UUID updateUserDetails(String userEmail, UserDto latestUser) {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with Email: " + userEmail));
 

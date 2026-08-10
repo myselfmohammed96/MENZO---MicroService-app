@@ -19,7 +19,7 @@ public class WishlistDto {
 
     private UUID wishlistItemId;
 
-    private Long productItemId;
+    private UUID productItemId;
 
     private String sku;
 

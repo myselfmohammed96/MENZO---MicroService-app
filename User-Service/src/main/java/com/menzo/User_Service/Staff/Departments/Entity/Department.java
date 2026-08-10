@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,24 +16,33 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "departments")
+@Table(
+        name = "departments",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_department_code",
+                columnNames = "department_code"
+        )
+)
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long departmentId;
+    private UUID departmentId;
 
     @Column(nullable = false)
     private String departmentName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String departmentCode;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "department_head_id")
+    @JoinColumn(
+            name = "department_head_id",
+            foreignKey = @ForeignKey(name = "fk_department_head")
+    )
     private Staff departmentHead;
 
     @Column(nullable = false)
@@ -42,7 +52,10 @@ public class Department {
     private boolean isDeleted = false;
 
     @ManyToOne
-    @JoinColumn(name = "deleted_by")
+    @JoinColumn(
+            name = "deleted_by",
+            foreignKey = @ForeignKey(name = "fk_department_deleted_by")
+    )
     private Staff deletedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")

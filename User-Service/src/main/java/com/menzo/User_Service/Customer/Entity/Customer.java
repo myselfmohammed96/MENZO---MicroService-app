@@ -17,7 +17,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "customers")
+@Table(
+        name = "customers",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_customer_user",
+                columnNames = "user_id"
+        )
+)
 public class Customer {
 
     @Id
@@ -25,7 +31,11 @@ public class Customer {
     private UUID customerId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_customer_user")
+    )
     private User user;
 
     private Integer loyaltyPoints;

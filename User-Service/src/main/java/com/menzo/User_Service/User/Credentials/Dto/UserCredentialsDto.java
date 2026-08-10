@@ -12,7 +12,7 @@
 //@Builder
 //public class UserCredentialsDto {
 //
-//    private Long id;
+//    private UUID id;
 //
 //    private String email;
 //

@@ -4,10 +4,11 @@ import com.menzo.User_Service.Staff.Departments.Entity.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface DepartmentRepository extends JpaRepository<Department, Long> {
+public interface DepartmentRepository extends JpaRepository<Department, UUID> {
 
-    public Optional<Department> findById(Long departmentId);
+    public Optional<Department> findById(UUID departmentId);
 
     public boolean existsByDepartmentName(String departmentName);
 

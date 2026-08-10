@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/task")
@@ -28,12 +29,12 @@ public class TaskCommandRestController {
     */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateTaskActiveStatus(@RequestHeader("roles") String roles,
-                                                    @RequestParam("id") Long taskId,
+                                                    @RequestParam("id") UUID taskId,
                                                     @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (taskId == null || taskId <= 0) {
+            if (taskId == null) {
                 logger.warn("Invalid task ID: {}", taskId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid task ID"));

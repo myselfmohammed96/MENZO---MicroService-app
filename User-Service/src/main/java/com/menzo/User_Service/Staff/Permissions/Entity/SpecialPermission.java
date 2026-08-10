@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
         name = "special_permissions",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_special_permission",
+                        name = "uk_special_permission_task",
                         columnNames = {"staff_id", "task_id"}
                 )
         }
@@ -30,14 +31,22 @@ public class SpecialPermission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long permissionId;
+    private UUID permissionId;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(
+            name = "staff_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_staff_special_permission")
+    )
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "task_id", nullable = false)
+    @JoinColumn(
+            name = "task_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_task_special_permission")
+    )
     private Task task;
 
     @Column(nullable = false)
@@ -46,7 +55,10 @@ public class SpecialPermission {
     private String reason;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_special_permission_granted_by")
+    )
     private Staff grantedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
@@ -68,7 +80,10 @@ public class SpecialPermission {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_special_permission_revoked_by")
+    )
     private Staff revokedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")

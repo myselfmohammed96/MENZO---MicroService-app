@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class UserAddressCommandService {
@@ -38,7 +39,7 @@ public class UserAddressCommandService {
      *   Add new user address
      *
      */
-    public Long addUserAddress(String userEmail, UserAddressDto userAddress) {
+    public UUID addUserAddress(String userEmail, UserAddressDto userAddress) {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
         Country country = countryRepo.findByCountryNameIgnoreCase(userAddress.getCountry())
@@ -91,7 +92,7 @@ public class UserAddressCommandService {
      *   Update user address
      *
      */
-    public Long updateUserAddress(String userEmail, Long addressId, UserAddressDto latestUserAddress) {
+    public UUID updateUserAddress(String userEmail, UUID addressId, UserAddressDto latestUserAddress) {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userEmail));
 

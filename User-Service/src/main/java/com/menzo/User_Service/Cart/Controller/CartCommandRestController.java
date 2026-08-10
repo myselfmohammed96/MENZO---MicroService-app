@@ -31,11 +31,11 @@ public class CartCommandRestController {
     @PostMapping("/add")
     public ResponseEntity<?> addNewCartItem(@RequestHeader("roles") String roles,
                                             @RequestHeader("email") String userEmail,
-                                            @RequestParam("id") Long productItemId) {
+                                            @RequestParam("id") UUID productItemId) {
         if (roles.equals("CUSTOMER")) {
 
             //  input validation
-            if (productItemId == null || productItemId <= 0) {
+            if (productItemId == null) {
                 logger.warn("Invalid product-item ID: {}", productItemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));

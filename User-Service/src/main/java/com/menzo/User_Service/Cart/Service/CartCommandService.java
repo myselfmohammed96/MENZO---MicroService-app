@@ -46,7 +46,7 @@ public class CartCommandService {
      */
     @Transactional
     public Response addNewCartItem(String userEmail,
-                                   Long productItemId) {
+                                   UUID productItemId) {
         //  fetching customer cart
         User user = userQueryService.getUserEntityByEmail(userEmail);
         Cart cart = user.getCustomer().getCart();
@@ -177,7 +177,7 @@ public class CartCommandService {
      *
      */
     public boolean moveWishlistItemToCart(User user,
-                                          Long productItemId,
+                                          UUID productItemId,
                                           String productItemSku) {
         //  fetching user cart
         Cart userCart = user.getCustomer().getCart();

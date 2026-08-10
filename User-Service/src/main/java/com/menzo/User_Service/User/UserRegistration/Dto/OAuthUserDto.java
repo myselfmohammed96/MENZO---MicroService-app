@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OAuthUserDto {
 
-    private Long id;
+    private UUID userId;
 
     private String userName;
 
@@ -24,7 +26,7 @@ public class OAuthUserDto {
     /////////////////////////////////
 
     public String toString() {
-        return "OAuthUserDto:\nid: " + id +
+        return "OAuthUserDto:\nid: " + userId +
                 "\nuserName: " + userName +
                 "\nemail: " + email +
                 "\nprofileUrl: " + profileUrl +

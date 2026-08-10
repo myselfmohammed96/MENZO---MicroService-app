@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,14 +15,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "modules")
+@Table(
+        name = "modules",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_module_code",
+                columnNames = "module_code"
+        )
+)
 public class Module {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long moduleId;
+    private UUID moduleId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String moduleCode;
 
     @Column(nullable = false)

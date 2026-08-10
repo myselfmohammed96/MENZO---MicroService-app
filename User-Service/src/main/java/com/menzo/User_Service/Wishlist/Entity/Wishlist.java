@@ -13,7 +13,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "wishlists")
+@Table(
+        name = "wishlists",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_customer_wishlist",
+                columnNames = "customer_id"
+        )
+)
 public class Wishlist {
 
     @Id
@@ -21,7 +27,11 @@ public class Wishlist {
     private UUID wishlistId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false, unique = true)
+    @JoinColumn(
+            name = "customer_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_customer_wishlist")
+    )
     private Customer customer;
 
     @OneToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)

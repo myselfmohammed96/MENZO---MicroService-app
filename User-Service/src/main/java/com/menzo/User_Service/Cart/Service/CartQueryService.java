@@ -14,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CartQueryService {
@@ -55,7 +56,7 @@ public class CartQueryService {
 
         //  getting cart page data
         List<CartItem> pageContent = cartItems.getContent();
-        List<Long> cartItemIds = pageContent.stream()
+        List<UUID> cartItemIds = pageContent.stream()
                 .map(CartItem::getProductItemId)
                 .toList();
 

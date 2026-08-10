@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 public class UserDetailsDto {
 
-    private Long id;
+    private UUID userId;
 
     private String firstName;
 
@@ -38,7 +39,7 @@ public class UserDetailsDto {
     ////////////////////////////////////////
 
     public String toString() {
-        return "User:\nid: " + id +
+        return "User:\nid: " + userId +
                 "\nfirstName: " + firstName +
                 "\nlastName: " + lastName +
                 "\nemail: " + email +

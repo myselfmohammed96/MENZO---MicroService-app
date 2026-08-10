@@ -11,7 +11,7 @@
 //@Builder
 //public class UserMinimalDto {
 //
-//    private Long userId;
+//    private UUID userId;
 //
 //    private String firstName;
 //

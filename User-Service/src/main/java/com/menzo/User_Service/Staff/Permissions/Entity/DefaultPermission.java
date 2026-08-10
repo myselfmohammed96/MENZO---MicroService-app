@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -30,18 +31,30 @@ public class DefaultPermission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long permissionId;
+    private UUID permissionId;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(
+            name = "department_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_department_default_permission")
+    )
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "designation_id", nullable = false)
+    @JoinColumn(
+            name = "designation_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_designation_default_permission")
+    )
     private Designation designation;
 
     @ManyToOne
-    @JoinColumn(name = "task_id", nullable = false)
+    @JoinColumn(
+            name = "task_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_task_default_permission")
+    )
     private Task task;
 
     @Column(nullable = false)

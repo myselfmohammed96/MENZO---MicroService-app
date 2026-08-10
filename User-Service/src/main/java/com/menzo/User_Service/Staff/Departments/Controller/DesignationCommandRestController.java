@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/designation")
@@ -28,12 +29,12 @@ public class DesignationCommandRestController {
     */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateDesignationActiveStatus(@RequestHeader("roles") String roles,
-                                                           @RequestParam("id") Integer designationId,
+                                                           @RequestParam("id") UUID designationId,
                                                            @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (designationId == null || designationId <= 0) {
+            if (designationId == null) {
                 logger.warn("Invalid designation ID: {}", designationId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid designation ID"));

@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class StaffQueryService {
 
@@ -23,7 +25,7 @@ public class StaffQueryService {
      *   Get depart head staff by ID
      *
      */
-    public Staff getHeadStaffById(Long departmentHeadId) {
+    public Staff getHeadStaffById(UUID departmentHeadId) {
         Staff staff = staffRepo.findById(departmentHeadId)
                 .orElseThrow(() -> new EntityNotFoundException("Staff not found with staff ID: " + departmentHeadId));
 

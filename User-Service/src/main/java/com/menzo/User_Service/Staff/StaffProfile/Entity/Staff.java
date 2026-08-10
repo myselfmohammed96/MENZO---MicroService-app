@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,23 +16,40 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "staffs")
+@Table(
+        name = "staffs",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_staff_user",
+                columnNames = "user_id"
+        )
+)
 public class Staff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long staffId;
+    private UUID staffId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_staff_user")
+    )
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(
+            name = "department_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_department")
+    )
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "designation_id")
+    @JoinColumn(
+            name = "designation_id",
+            foreignKey = @ForeignKey(name = "fk_designation")
+    )
     private Designation designation;
 
     @Column(nullable = false)
@@ -39,7 +57,10 @@ public class Staff {
     private LocalDate joiningDate;
 
     @ManyToOne
-    @JoinColumn(name = "superior_id")
+    @JoinColumn(
+            name = "superior_id",
+            foreignKey = @ForeignKey(name = "fk_superior")
+    )
     private Staff superior;
 
     //////////////////////////////////////////////

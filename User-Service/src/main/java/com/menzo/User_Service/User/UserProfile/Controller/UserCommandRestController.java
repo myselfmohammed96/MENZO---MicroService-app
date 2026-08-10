@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -51,7 +52,7 @@ public class UserCommandRestController {
             logger.error("User update details unavailable: {}", userEmail);
             throw new IllegalArgumentException("User update details unavailable: " + userEmail);
         }
-        Long updatedUserId = userCommandService.updateUserDetails(userEmail, latestUserDetails);
+        UUID updatedUserId = userCommandService.updateUserDetails(userEmail, latestUserDetails);
 
         Map<String, Object> response = new HashMap<>();
         if (updatedUserId != null) {

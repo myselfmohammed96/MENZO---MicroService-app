@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @Builder
 public class UserDto {
 
-    private Long id;
+    private UUID userId;
 
     private String firstName;
 
@@ -43,7 +44,7 @@ public class UserDto {
     ///////////////////////////////////////////
 
     public UserDto(User user) {
-        this.id = user.getUserId();
+        this.userId = user.getUserId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
@@ -54,7 +55,7 @@ public class UserDto {
     }
 
     public String toString() {
-        return "\nUserDto:\nid: " + id +
+        return "\nUserDto:\nid: " + userId +
                 "\nfirstName: " + firstName +
                 "\nlastName: " + lastName +
                 "\nemail: " + email +

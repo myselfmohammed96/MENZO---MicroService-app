@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/dept")
@@ -74,12 +75,12 @@ public class DepartmentCommandRestController {
      */
     @PutMapping("/update")
     public ResponseEntity<?> updateDepartment(@RequestHeader("roles") String roles,
-                                              @RequestParam("id") Long deptId,
+                                              @RequestParam("id") UUID deptId,
                                               @RequestBody UpdateDepartmentDto latestDept) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (deptId == null || deptId <= 0) {
+            if (deptId == null) {
                 logger.warn("Invalid department ID: {}", deptId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid department ID"));
             }
@@ -110,12 +111,12 @@ public class DepartmentCommandRestController {
      */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateDepartmentActiveStatus(@RequestHeader("roles") String roles,
-                                                          @RequestParam("id") Long deptId,
+                                                          @RequestParam("id") UUID deptId,
                                                           @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (deptId == null || deptId <= 0) {
+            if (deptId == null) {
                 logger.warn("Invalid department ID: {}", deptId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid department ID"));
@@ -147,17 +148,17 @@ public class DepartmentCommandRestController {
      */
     @PutMapping("/change-head")
     public ResponseEntity<?> changeDepartmentHead(@RequestHeader("roles") String roles,
-                                                  @RequestParam("deptId") Long deptId,
-                                                  @RequestParam("headId") Long deptHeadId) {
+                                                  @RequestParam("deptId") UUID deptId,
+                                                  @RequestParam("headId") UUID deptHeadId) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (deptId == null || deptId <= 0) {
+            if (deptId == null) {
                 logger.warn("Invalid department ID: {}", deptId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid department ID"));
             }
-            if (deptHeadId == null || deptHeadId <= 0) {
+            if (deptHeadId == null) {
                 logger.warn("Invalid department Head ID: {}", deptHeadId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid department head ID"));
@@ -196,11 +197,11 @@ public class DepartmentCommandRestController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteDepartment(@RequestHeader("roles") String roles,
                                               @RequestHeader("email") String authorEmail,
-                                              @RequestParam("deptId") Long deptId) {
+                                              @RequestParam("deptId") UUID deptId) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (deptId == null || deptId <= 0) {
+            if (deptId == null) {
                 logger.warn("Invalid department ID: {}", deptId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid department ID"));

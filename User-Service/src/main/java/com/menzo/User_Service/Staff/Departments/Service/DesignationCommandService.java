@@ -6,6 +6,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class DesignationCommandService {
 
@@ -19,7 +21,7 @@ public class DesignationCommandService {
     *   Designation identified by designation ID
     *
     */
-    public boolean updateDesignationActiveStatus(Integer designationId, boolean isActive) {
+    public boolean updateDesignationActiveStatus(UUID designationId, boolean isActive) {
 
         //  fetching designation by ID
         Designation designation = designationRepo.findById(designationId)

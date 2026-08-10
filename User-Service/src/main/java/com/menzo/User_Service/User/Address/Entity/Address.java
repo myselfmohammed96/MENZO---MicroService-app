@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,14 +15,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "addresses")
+@Table(
+        name = "addresses",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_address",
+                columnNames = {
+                        "country_id",
+                        "state",
+                        "city",
+                        "street",
+                        "unit_address"
+                }
+        )
+)
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long addressId;
+    private UUID addressId;
 
-    @Column(nullable = false)
     private String unitAddress;
 
     @Column(nullable = false)
@@ -34,7 +46,11 @@ public class Address {
     private String state;
 
     @ManyToOne
-    @JoinColumn(name = "country_id", nullable = false)
+    @JoinColumn(
+            name = "country_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_country")
+    )
     private Country country;
 
     @Column(nullable = false)

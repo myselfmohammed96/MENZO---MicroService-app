@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserAddressDto {
 
-    private Long id;
+    private UUID userAddressId;
 
     private String firstName;
 
@@ -38,7 +40,7 @@ public class UserAddressDto {
     /////////////////////////////////////
 
     public String toString() {
-        return "\nUserAddressDto:\nid: " + id +
+        return "\nUserAddressDto:\nid: " + userAddressId +
                 "\nfirstName: " + firstName +
                 "\nlastName: " + lastName +
                 "\nphoneNumber: " + phoneNumber +

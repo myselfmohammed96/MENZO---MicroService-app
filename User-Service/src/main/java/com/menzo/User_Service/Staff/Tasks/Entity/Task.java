@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,21 +15,31 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "tasks")
+@Table(
+        name = "tasks",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_task_code",
+                columnNames = "task_code"
+        )
+)
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long taskId;
+    private UUID taskId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String taskCode;
 
     @Column(nullable = false)
     private String taskName;
 
     @ManyToOne
-    @JoinColumn(name = "module_id", nullable = false)
+    @JoinColumn(
+            name = "module_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_task_module")
+    )
     private Module module;
 
     private String description;
