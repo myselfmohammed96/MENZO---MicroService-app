@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +62,7 @@ public class OptionQueryService {
      *   Get options by list of IDs
      *
      */
-    public List<VariationOption> getOptionsByIds(List<Long> idList) {
+    public List<VariationOption> getOptionsByIds(List<UUID> idList) {
         return optionsRepo.findByOptionIdIn(idList);
     }
 
@@ -83,7 +84,7 @@ public class OptionQueryService {
      *   used to get color option by ID - with validating that it is indeed a color option
      *
      */
-    public VariationOption getOptionByIdAndVariationName(Long optionId, String variationName) {
+    public VariationOption getOptionByIdAndVariationName(UUID optionId, String variationName) {
 
         //  fetch variation
         Variation variation = variationsRepo.findByVariationNameIgnoreCase(variationName)
@@ -105,7 +106,7 @@ public class OptionQueryService {
     @Transactional
     @EnableVariationFilter
     @EnableOptionFilter
-    public VariationOptionsDto getOptionsByVariationId(Long variationId) {
+    public VariationOptionsDto getOptionsByVariationId(UUID variationId) {
 
         //  fetching variation
         Variation variation = variationsRepo.findById(variationId)
@@ -154,7 +155,7 @@ public class OptionQueryService {
      *
      */
     @Transactional
-    public List<Long> getOptionIdsByVariation(String variationName) {
+    public List<UUID> getOptionIdsByVariation(String variationName) {
         return variationQueryService.getVariationWithOptionsByVariationName(variationName).getOptions()
                 .stream()
                 .map(OptionDto::getOptionId)

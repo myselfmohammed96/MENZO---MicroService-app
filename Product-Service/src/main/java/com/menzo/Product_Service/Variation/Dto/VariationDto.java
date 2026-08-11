@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class VariationDto {
 
-    private Long variationId;
+    private UUID variationId;
 
     private String variationName;
 

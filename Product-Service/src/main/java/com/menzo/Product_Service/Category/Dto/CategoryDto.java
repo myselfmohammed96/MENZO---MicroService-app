@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -13,9 +14,9 @@ import java.time.Instant;
 @Builder
 public class CategoryDto {
 
-    private Long categoryId;
+    private UUID categoryId;
 
-    private Long parentCategoryId;
+    private UUID parentCategoryId;
 
     private String categoryName;
 

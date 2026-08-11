@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/category")
@@ -77,12 +78,12 @@ public class CategoriesCommandRestController {
      */
     @PutMapping("/update-parent")
     public ResponseEntity<?> updateParentCategory(@RequestHeader("roles") String roles,
-                                          @RequestParam("id") Long parentCategoryId,
+                                          @RequestParam("id") UUID parentCategoryId,
                                           @RequestBody CategoryDto latestParentCategory) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (parentCategoryId == null || parentCategoryId <= 0) {
+            if (parentCategoryId == null) {
                 logger.warn("Invalid parent category ID: {}", parentCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
             }
@@ -116,12 +117,12 @@ public class CategoriesCommandRestController {
      */
     @PutMapping("/update-parent-status")
     public ResponseEntity<?> updateParentCategoryActiveStatus(@RequestHeader("roles") String roles,
-                                                      @RequestParam("id") Long categoryId,
+                                                      @RequestParam("id") UUID categoryId,
                                                       @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input  validation
-            if (categoryId == null || categoryId <= 0) {
+            if (categoryId == null) {
                 logger.warn("Invalid parent category ID: {}", categoryId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid parent category ID"));
@@ -158,11 +159,11 @@ public class CategoriesCommandRestController {
      */
     @DeleteMapping("/delete-parent")
     public ResponseEntity<?> deleteParentCategory(@RequestHeader("roles") String roles,
-                                                  @RequestParam("id") Long parentCategoryId) {
+                                                  @RequestParam("id") UUID parentCategoryId) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (parentCategoryId == null || parentCategoryId <= 0) {
+            if (parentCategoryId == null) {
                 logger.warn("Invalid parent category ID: {}", parentCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
             }
@@ -239,12 +240,12 @@ public class CategoriesCommandRestController {
      */
     @PutMapping("/update-sub")
     public ResponseEntity<?> updateSubCategory(@RequestHeader("roles") String roles,
-                                               @RequestParam("id") Long subCategoryId,
+                                               @RequestParam("id") UUID subCategoryId,
                                                @RequestBody CategoryDto latestSubCategory) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (subCategoryId == null || subCategoryId <= 0) {
+            if (subCategoryId == null) {
                 logger.warn("Invalid sub-category ID: {}", subCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
             }
@@ -278,12 +279,12 @@ public class CategoriesCommandRestController {
      */
     @PutMapping("/update-sub-status")
     public ResponseEntity<?> updateSubCategoryActiveStatus(@RequestHeader("roles") String roles,
-                                                   @RequestParam("id") Long categoryId,
+                                                   @RequestParam("id") UUID categoryId,
                                                    @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (categoryId == null || categoryId <= 0) {
+            if (categoryId == null) {
                 logger.warn("Invalid sub-category ID: {}", categoryId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid sub-category ID"));
@@ -320,11 +321,11 @@ public class CategoriesCommandRestController {
      */
     @DeleteMapping("/delete-sub")
     public ResponseEntity<?> deleteSubCategory(@RequestHeader("roles") String roles,
-                                               @RequestParam("id") Long subCategoryId) {
+                                               @RequestParam("id") UUID subCategoryId) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (subCategoryId == null || subCategoryId <= 0) {
+            if (subCategoryId == null) {
                 logger.warn("Invalid sub-category ID: {}", subCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
             }

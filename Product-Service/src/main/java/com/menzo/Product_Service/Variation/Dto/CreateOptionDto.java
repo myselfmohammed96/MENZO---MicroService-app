@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class CreateOptionDto {
     private String optionValue;
 
     @NotNull(message = "Variation is required")
-    private Long variationId;
+    private UUID variationId;
 
     private String hexCode;
 

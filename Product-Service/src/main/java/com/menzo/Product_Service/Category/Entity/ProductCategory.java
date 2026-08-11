@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -22,7 +23,19 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "product_categories")
+@Table(
+        name = "product_categories",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_category_name",
+                        columnNames = "category_name"
+                ),
+                @UniqueConstraint(
+                        name = "uk_category_abbreviation",
+                        columnNames = "abbreviation"
+                )
+        }
+)
 //@ToString(exclude = "variations")
 //@JsonIgnoreProperties({
 //        "hibernateLazyInitializer",
@@ -43,35 +56,19 @@ public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    private UUID categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_category_id")
+    @JoinColumn(
+            name = "parent_category_id",
+            foreignKey = @ForeignKey(name = "fk_parent_category")
+    )
     private ProductCategory parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory")
-    private List<ProductCategory> subCategories;
-
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     private String categoryName;
 
-    @Column(unique = true)
     private String abbreviation;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "category_variation_configuration",
-            joinColumns = @JoinColumn(
-                    name = "category_id",
-                    referencedColumnName = "category_id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "variation_id",
-                    referencedColumnName = "variation_id"
-            )
-    )
-    private Set<Variation> variations = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isActive = true;
@@ -88,6 +85,24 @@ public class ProductCategory {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @UpdateTimestamp
     private LocalDateTime updateAt;
+
+    @OneToMany(mappedBy = "parentCategory")
+    private List<ProductCategory> subCategories;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "category_variation_configuration",
+            joinColumns = @JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "category_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "variation_id",
+                    referencedColumnName = "variation_id"
+            )
+    )
+    private Set<Variation> variations = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

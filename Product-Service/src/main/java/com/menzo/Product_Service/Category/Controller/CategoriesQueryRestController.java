@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/category")
@@ -61,9 +62,9 @@ public class CategoriesQueryRestController {
      *
      */
     @GetMapping("/get-parent")
-    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") Long parentCategoryId) {
+    public ResponseEntity<?> getParentCategoryById(@RequestParam("id") UUID parentCategoryId) {
         //  validation
-        if (parentCategoryId == null || parentCategoryId <= 0) {
+        if (parentCategoryId == null) {
             logger.warn("Invalid parent category ID: {}", parentCategoryId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
         }
@@ -80,8 +81,8 @@ public class CategoriesQueryRestController {
      *
      */
     @GetMapping("get")
-    public ResponseEntity<?> getParentCategoryByIdWithSub(@RequestParam("id") Long parentCategoryId) {
-        if (parentCategoryId == null || parentCategoryId <= 0) {
+    public ResponseEntity<?> getParentCategoryByIdWithSub(@RequestParam("id") UUID parentCategoryId) {
+        if (parentCategoryId == null) {
             logger.warn("Invalid parent category ID: {}", parentCategoryId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent category ID"));
         }
@@ -115,9 +116,9 @@ public class CategoriesQueryRestController {
      */
     @GetMapping("get-all-sub")
     public ResponseEntity<?> getAllSubCategoriesByParentId(@RequestHeader("roles") String roles,
-                                                           @RequestParam("id") Long parentId) {
+                                                           @RequestParam("id") UUID parentId) {
         if (roles.equals("ADMIN")) {
-            if (parentId == null || parentId <= 0) {
+            if (parentId == null) {
                 logger.warn("Invalid parent ID: {}", parentId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid parent ID"));
             }
@@ -138,9 +139,9 @@ public class CategoriesQueryRestController {
      */
     @GetMapping("/get-sub")
     public ResponseEntity<?> getSubCategoryById(@RequestHeader("roles") String roles,
-                                                @RequestParam("id") Long subCategoryId) {
+                                                @RequestParam("id") UUID subCategoryId) {
         if (roles.equals("ADMIN")) {
-            if (subCategoryId == null || subCategoryId <= 0) {
+            if (subCategoryId == null) {
                 logger.warn("Invalid sub-category ID: {}", subCategoryId);
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid sub-category ID"));
             }

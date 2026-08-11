@@ -5,15 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface VariationOptionsRepository extends JpaRepository<VariationOption, Long> {
+public interface VariationOptionsRepository extends JpaRepository<VariationOption, UUID> {
 
-    boolean existsByOptionValueAndVariationId(String optionValue, Long variationId);     // TESTED
+    boolean existsByOptionValueAndVariationId(String optionValue, UUID variationId);     // TESTED
 
-    List<VariationOption> findByOptionIdIn(List<Long> idList);     // TESTED
+    List<VariationOption> findByOptionIdIn(List<UUID> idList);     // TESTED
 
-    List<VariationOption> findByVariationId(Long variationId);   // TESTED
+    List<VariationOption> findByVariationId(UUID variationId);   // TESTED
 
     List<VariationOption> findByOptionValueContainingIgnoreCase(String keyword);
 

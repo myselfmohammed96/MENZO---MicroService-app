@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface VariationsRepository extends JpaRepository<Variation, Long> {
+public interface VariationsRepository extends JpaRepository<Variation, UUID> {
 
 
     /*
@@ -86,7 +87,7 @@ public interface VariationsRepository extends JpaRepository<Variation, Long> {
                                        @Param("isOptionActive") int isOptionActive,
                                        @Param("isOptionDeleted") int isOptionDeleted,
                                        @Param("isParent") boolean isParent,
-                                       @Param("categoryId") Long categoryId);
+                                       @Param("categoryId") UUID categoryId);
 
 
 

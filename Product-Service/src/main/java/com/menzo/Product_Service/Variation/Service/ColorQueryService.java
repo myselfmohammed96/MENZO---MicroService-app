@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ColorQueryService {
 
@@ -22,7 +24,7 @@ public class ColorQueryService {
      *   Get color by color code ID
      *
      */
-    public ColorCode getColorCodeEntityById(Long colorId) {
+    public ColorCode getColorCodeEntityById(UUID colorId) {
         return colorRepo.findById(colorId)
                 .orElseThrow(() -> new EntityNotFoundException("Color code not found with ID: " + colorId));
     }

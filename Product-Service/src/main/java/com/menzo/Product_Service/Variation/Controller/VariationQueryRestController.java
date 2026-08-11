@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/variation")
@@ -59,7 +60,7 @@ public class VariationQueryRestController {
      *
      */
     @GetMapping("get-variations")
-    public ResponseEntity<List<VariationOptionsDto>> getAllVariationsWithOptionsBySub(@RequestParam("id") Long subCategoryId) {
+    public ResponseEntity<List<VariationOptionsDto>> getAllVariationsWithOptionsBySub(@RequestParam("id") UUID subCategoryId) {
         List<VariationOptionsDto> variations = variationQueryService.getAllVariationsWithOptionsBySub(
                 Components.SUB_CATEGORY,
                 subCategoryId

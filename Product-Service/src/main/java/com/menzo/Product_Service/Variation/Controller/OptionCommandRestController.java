@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/option")
@@ -68,11 +69,11 @@ public class OptionCommandRestController {
      *
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateOption(@RequestParam("id") Long optionId,
+    public ResponseEntity<?> updateOption(@RequestParam("id") UUID optionId,
                                           @RequestBody OptionDto latestVariationOption) {
 
         //  input validation
-        if (optionId == null || optionId <= 0) {
+        if (optionId == null) {
             logger.warn("Invalid variation option ID: {}", optionId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid variation option ID"));
         }
@@ -100,12 +101,12 @@ public class OptionCommandRestController {
      */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateOptionActiveStatus(@RequestHeader("roles") String roles,
-                                                      @RequestParam("id") Long optionId,
+                                                      @RequestParam("id") UUID optionId,
                                                       @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (optionId == null || optionId <= 0) {
+            if (optionId == null) {
                 logger.warn("Invalid variation option ID: {}", optionId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid variation option ID"));
@@ -137,10 +138,10 @@ public class OptionCommandRestController {
      *
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteOption(@RequestParam("id") Long optionId) {
+    public ResponseEntity<?> deleteOption(@RequestParam("id") UUID optionId) {
 
         //  input validation
-        if (optionId == null || optionId <= 0) {
+        if (optionId == null) {
             logger.warn("Invalid variation option ID: {}", optionId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid variation option ID"));
         }

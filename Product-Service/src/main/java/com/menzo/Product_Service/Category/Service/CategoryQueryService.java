@@ -4,7 +4,7 @@ import com.menzo.Product_Service.Category.Dto.*;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableCategoryFilter;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
-import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Constants.DbConstant;
+import com.menzo.Product_Service.GlobalComponents.Constants.DbConstant;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -108,7 +108,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public ProductCategory getParentCategoryEntityById(Long parentId) {
+    public ProductCategory getParentCategoryEntityById(UUID parentId) {
         return categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentId));
     }
@@ -123,7 +123,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public CategoryDto getParentCategoryById(Long parentId) {
+    public CategoryDto getParentCategoryById(UUID parentId) {
         ProductCategory parent = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentId));
         return CategoryDto.builder()
@@ -141,7 +141,7 @@ public class CategoryQueryService {
      *   Parent category identified by category ID
      *
      */
-    public NestedCategoryDto getParentCategoryByIdWithSub(Long parentCategoryId) {
+    public NestedCategoryDto getParentCategoryByIdWithSub(UUID parentCategoryId) {
         //  fetch parent category
         List<Object[]> results = categoriesRepo.findParentByIdWithSub(
                 parentCategoryId,
@@ -203,7 +203,7 @@ public class CategoryQueryService {
      *   Parent category identified by sub-category ID
      *
      */
-    public ParentCategoryView getParentBySubCategoryId(Long subCategoryId) {
+    public ParentCategoryView getParentBySubCategoryId(UUID subCategoryId) {
         return categoriesRepo.findParentCategoryBySubId(
                 DbConstant.TRUE,
                 DbConstant.FALSE,
@@ -220,7 +220,7 @@ public class CategoryQueryService {
      *   Parent category identified by product ID
      *
      */
-    public ParentCategoryView getParentByProductId(Long productId) {
+    public ParentCategoryView getParentByProductId(UUID productId) {
         return categoriesRepo.findParentByProductId(
                 DbConstant.TRUE,
                 DbConstant.FALSE,
@@ -244,7 +244,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public List<CategoryDto> getAllSubCategoriesByParentId(Long parentId) {
+    public List<CategoryDto> getAllSubCategoriesByParentId(UUID parentId) {
         if (!categoriesRepo.existsById(parentId)) {
             logger.error("Parent category not found with ID: {}", parentId);
             throw new EntityNotFoundException("Parent category not found with ID: " + parentId);
@@ -273,7 +273,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public ProductCategory getSubCategoryEntityById(Long subCategoryId) {
+    public ProductCategory getSubCategoryEntityById(UUID subCategoryId) {
         logger.info("Fetching sub-category with ID: {}", subCategoryId);
         return categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + subCategoryId));
@@ -289,7 +289,7 @@ public class CategoryQueryService {
      */
     @Transactional
     @EnableCategoryFilter
-    public CategoryDto getSubCategoryById(Long subCategoryId) {
+    public CategoryDto getSubCategoryById(UUID subCategoryId) {
         ProductCategory sub = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + subCategoryId));
         return CategoryDto.builder()

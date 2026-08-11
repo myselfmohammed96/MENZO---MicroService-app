@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class OptionCommandService {
@@ -101,7 +102,7 @@ public class OptionCommandService {
     */
     @Transactional
     @EnableOptionFilter
-    public VariationOption updateOption(Long optionId, OptionDto latestOption) {
+    public VariationOption updateOption(UUID optionId, OptionDto latestOption) {
 
         //  fetching variation option by ID
         VariationOption option = optionsRepo.findById(optionId)
@@ -143,7 +144,7 @@ public class OptionCommandService {
     */
     @Transactional
     @EnableOptionFilter
-    public boolean updateOptionActiveStatus(Long optionId, boolean isActive) {
+    public boolean updateOptionActiveStatus(UUID optionId, boolean isActive) {
 
         //  fetching variation by ID
         VariationOption option = optionsRepo.findById(optionId)
@@ -163,7 +164,7 @@ public class OptionCommandService {
     */
     @Transactional
     @EnableOptionFilter
-    public boolean deleteOption(Long optionId) {
+    public boolean deleteOption(UUID optionId) {
 
         //  fetching variation option by ID
         VariationOption option = optionsRepo.findById(optionId)

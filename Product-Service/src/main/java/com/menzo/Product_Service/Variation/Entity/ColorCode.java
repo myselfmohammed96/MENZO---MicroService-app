@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,22 +16,42 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 //@ToString(exclude = "colorOption")
-@Table(name = "color_code")
+@Table(
+        name = "color_code",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_color_option",
+                        columnNames = "color_option_id"
+                ),
+                @UniqueConstraint(
+                        name = "uk_color_hex_code",
+                        columnNames = "color_hex_code"
+                ),
+                @UniqueConstraint(
+                        name = "uk_color_abbreviation",
+                        columnNames = "color_abbreviation"
+                )
+        }
+)
 public class ColorCode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long colorCodeId;
+    private UUID colorCodeId;
 
     @OneToOne
-    @JoinColumn(name = "color_option_id", nullable = false, unique = true)
+    @JoinColumn(
+            name = "color_option_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_color_option")
+    )
     @JsonIgnore
     private VariationOption colorOption;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String colorHexCode;
 
-    @Column(nullable = false, unique = true, name = "color_abbreviation")
+    @Column(nullable = false)
     private String colorAbbreviation;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")

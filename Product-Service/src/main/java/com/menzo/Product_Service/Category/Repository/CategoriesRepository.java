@@ -8,8 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CategoriesRepository extends JpaRepository<ProductCategory, Long> {
+public interface CategoriesRepository extends JpaRepository<ProductCategory, UUID> {
 
 
     //  ********* existence check *********
@@ -39,7 +40,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      *   Checked with category name & parent category ID
      *
      */
-    boolean existsByCategoryNameAndParentCategory_CategoryId(String categoryName, Long parentCategoryId);     //  TESTED
+    boolean existsByCategoryNameAndParentCategory_CategoryId(String categoryName, UUID parentCategoryId);     //  TESTED
 
 
     List<ProductCategory> findByCategoryNameContainingIgnoreCase(String keyword);
@@ -59,7 +60,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      *   Parent category identified by category ID
      *
      */
-    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNull(Long id);
+    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNull(UUID id);
 
 
     /*
@@ -120,7 +121,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                                     AND s.is_deleted = :isSubDeleted\s
                                 ORDER BY p.category_id, s.category_id
                             """)
-    List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") Long parentCategoryId,
+    List<Object[]> findParentByIdWithSub(@Param("parentCategoryId") UUID parentCategoryId,
                                          @Param("isParentActive") int isParentActive,
                                          @Param("isParentDeleted") int isParentDeleted,
                                          @Param("isSubActive") int isSubActive,
@@ -157,7 +158,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                                                  @Param("isParentDeleted") int isParentDeleted,
                                                  @Param("isSubActive") int isSubActive,
                                                  @Param("isSubDeleted") int isSubDeleted,
-                                                 @Param("subCategoryId") Long subCategoryId);        //  TESTED
+                                                 @Param("subCategoryId") UUID subCategoryId);        //  TESTED
 
 
     /*
@@ -191,7 +192,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
                                              @Param("isSubDeleted") int isSubDeleted,
                                              @Param("isProductActive") int isProductActive,
                                              @Param("isProductDeleted") int isProductDeleted,
-                                             @Param("productId") Long productId);
+                                             @Param("productId") UUID productId);
 
 
 //    @Query(
@@ -217,7 +218,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      *   Sub-category identified by category ID
      *
      */
-    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNotNull(Long id);         // TESTED
+    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNotNull(UUID id);         // TESTED
 
 
     /*
@@ -226,14 +227,14 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
      *   Sub-categories identified by parent category ID
      *
      */
-    List<ProductCategory> findAllByParentCategory_CategoryId(Long parentCategoryId);          // TESTED
+    List<ProductCategory> findAllByParentCategory_CategoryId(UUID parentCategoryId);          // TESTED
 
 
 //    //  returns the count of entities of the ids in the list
 //    public long countByIdIn(List<Long> selectionList);
 
     //  returns list of available entities with provided idList
-    List<ProductCategory> findByIdIn(List<Long> selectionList);
+    List<ProductCategory> findByIdIn(List<UUID> selectionList);
 
 
 
@@ -251,14 +252,14 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //                    "WHERE pc.parentCategoryId IS NOT NULL " +
 //                    "AND pc.id = :subCategoryId"
 //    )
-//    SubCategoryDto findSubByIdWithoutVariation(@Param("subCategoryId") Long subCategoryId);
+//    SubCategoryDto findSubByIdWithoutVariation(@Param("subCategoryId") UUID subCategoryId);
 
 }
 
 
 //    @Query("SELECT new com.menzo.Product_Service.Dto.CategoriesDto.SubCategoryDto(pc.id, pc.parentCategoryId, pc.categoryName, " +
 //            "pc.isActive, pc.createdAt) FROM ProductCategory pc WHERE pc.parentCategoryId = :parentId")
-//    List<SubCategoryDto> findAllSubByParentId(@Param("parentId") Long parentId);
+//    List<SubCategoryDto> findAllSubByParentId(@Param("parentId") UUID parentId);
 
 
 /// *
@@ -273,7 +274,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //            "WHERE parent_category_id IS NULL " +
 //            "AND id = :parentCategoryId"
 //    )
-//    void deleteParentById(@Param("parentCategoryId") Long parentCategoryId);
+//    void deleteParentById(@Param("parentCategoryId") UUID parentCategoryId);
 //
 //    @Query(
 //            nativeQuery = true,
@@ -281,9 +282,9 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, Lon
 //                    "WHERE parent_category_id IS NOT NULL " +
 //                    "AND id = :subCategoryId"
 //    )
-//    void deleteSubById(@Param("subCategoryId") Long subCategoryId);
+//    void deleteSubById(@Param("subCategoryId") UUID subCategoryId);
 
 
 //    @Query(nativeQuery = true, value = "SELECT pc.id, pc.parent_category_id, pc.category_name, pc.is_active, pc.created_at " +
 //            "FROM product_categories pc WHERE pc.parent_category_id IS NOT NULL AND id = :subCategoryId")
-//    Optional<ProductCategory> findSubById(@Param("subCategoryId") Long subCategoryId);
+//    Optional<ProductCategory> findSubById(@Param("subCategoryId") UUID subCategoryId);

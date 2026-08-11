@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/variation")
@@ -66,10 +67,10 @@ public class VariationCommandRestController {
      *
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateVariation(@RequestParam("id") Long variationId,
+    public ResponseEntity<?> updateVariation(@RequestParam("id") UUID variationId,
                                              @RequestBody VariationDto latestVariation) {
         //  input validation
-        if (variationId == null || variationId <= 0) {
+        if (variationId == null) {
             logger.warn("Invalid variation ID: {}", variationId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid Variation ID"));
         }
@@ -97,12 +98,12 @@ public class VariationCommandRestController {
      */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateVariationActiveStatus(@RequestHeader("roles") String roles,
-                                                         @RequestParam("id") Long variationId,
+                                                         @RequestParam("id") UUID variationId,
                                                          @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (variationId == null || variationId <= 0) {
+            if (variationId == null) {
                 logger.warn("Invalid variation ID: {}", variationId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid variation ID"));
@@ -134,10 +135,10 @@ public class VariationCommandRestController {
      *
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteVariation(@RequestParam("id") Long variationId) {
+    public ResponseEntity<?> deleteVariation(@RequestParam("id") UUID variationId) {
 
         //  input validation
-        if (variationId == null || variationId <= 0) {
+        if (variationId == null) {
             logger.warn("Invalid variation ID: {}", variationId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid variation ID"));
         }

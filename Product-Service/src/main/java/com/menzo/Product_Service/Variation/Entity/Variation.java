@@ -9,10 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -20,32 +17,36 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "variations")
+@Table(
+        name = "variations",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_variation_name",
+                columnNames = "variation_name"
+        )
+)
 //@ToString(exclude = "options")
 @FilterDef(
         name = "variationFilter",
         parameters =  {
+                @ParamDef(name = "applyActive", type = Boolean.class),
                 @ParamDef(name = "isActive", type = Boolean.class),
+                @ParamDef(name = "applyDeleted", type = Boolean.class),
                 @ParamDef(name = "isDeleted", type = Boolean.class)
         }
 )
 @Filter(
         name = "variationFilter",
-        condition = "is_active = :isActive AND is_deleted = :isDeleted"
+        condition = "(:applyActive = false OR is_active = :isActive)" +
+                "AND (:applyDeleted = false OR is_deleted = :isDeleted"
 )
 public class Variation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long variationId;
+    private UUID variationId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String variationName;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "variation_id", referencedColumnName = "variationId")
-    private Set<VariationOption> options = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isActive = true;
@@ -64,6 +65,11 @@ public class Variation {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "variation_id", referencedColumnName = "variationId")
+    private Set<VariationOption> options = new HashSet<>();
 
     ////////////////////////////////////////////////////////
 

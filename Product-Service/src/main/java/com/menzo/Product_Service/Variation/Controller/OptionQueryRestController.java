@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/option")
 public class OptionQueryRestController {
@@ -27,7 +29,7 @@ public class OptionQueryRestController {
      *
      */
     @GetMapping("get-options")
-    public ResponseEntity<VariationOptionsDto> getOptionsByVariationId(@RequestParam("id") Long variationId) {
+    public ResponseEntity<VariationOptionsDto> getOptionsByVariationId(@RequestParam("id") UUID variationId) {
         VariationOptionsDto options = optionQueryService.getOptionsByVariationId(variationId);
         return ResponseEntity.ok(options);
     }

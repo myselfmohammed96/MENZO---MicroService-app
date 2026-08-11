@@ -3,7 +3,7 @@ package com.menzo.Product_Service.Variation.Service;
 import com.menzo.Product_Service.Enum.Components;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableOptionFilter;
 import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Annotations.EnableVariationFilter;
-import com.menzo.Product_Service.GlobalComponents.CustomAnnotations.Constants.DbConstant;
+import com.menzo.Product_Service.GlobalComponents.Constants.DbConstant;
 import com.menzo.Product_Service.Variation.Dto.*;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
@@ -112,8 +112,8 @@ public class VariationQueryService {
      */
     @Transactional
     public List<VariationOptionsDto> getAllVariationsWithOptionsBySub(Components componentType,
-                                                                      Long componentId) {
-        Map<Long, VariationOptionsDto> variationMap = new HashMap<>();
+                                                                      UUID componentId) {
+        Map<UUID, VariationOptionsDto> variationMap = new HashMap<>();
 
         //  fetching data with sub-category ID
         List<Object[]> rows;
@@ -154,9 +154,9 @@ public class VariationQueryService {
                     return (!variationName.equals("Colors") && !variationName.equals("Size"));
                 })
                 .forEach(row -> {
-                    Long variationId = ((Number) row[0]).longValue();
+                    UUID variationId = (UUID) row[0];
                     String variationName = (String) row[1];
-                    Long optionId = ((Number) row[2]).longValue();
+                    UUID optionId = (UUID) row[2];
                     String optionValue = (String) row[3];
 
                     VariationOptionsDto variation = variationMap.computeIfAbsent(variationId, id -> {
@@ -193,7 +193,7 @@ public class VariationQueryService {
     public VariationOptionsDto getVariationWithOptionsByVariationName(String variationName) {
 
         //  fetching variation by variation name
-        Variation variation = variationsRepo.findByVariationName(variationName)
+        Variation variation = variationsRepo.findByVariationNameIgnoreCase(variationName)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found for variation: " + variationName));
 
         //  building nested object for variation & the options
@@ -233,7 +233,7 @@ public class VariationQueryService {
      */
     @Transactional
     @EnableVariationFilter
-    public Set<Variation> getVariationSetByIds(Set<Long> ids) {
+    public Set<Variation> getVariationSetByIds(Set<UUID> ids) {
         List<Variation> variations = variationsRepo.findAllById(ids);
         return new HashSet<>(variations);
     }

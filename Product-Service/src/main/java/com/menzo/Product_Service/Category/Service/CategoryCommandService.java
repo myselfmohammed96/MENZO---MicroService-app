@@ -76,7 +76,7 @@ public class CategoryCommandService {
      */
     @Transactional
     @EnableCategoryFilter
-    public ProductCategory updateParentCategory(Long parentCategoryId,
+    public ProductCategory updateParentCategory(UUID parentCategoryId,
                                                 CategoryDto latestParentCategory) {
 
         //  fetching parent category by ID
@@ -150,7 +150,7 @@ public class CategoryCommandService {
      */
     @Transactional
     @EnableCategoryFilter
-    public ProductCategory updateSubCategory(Long subCategoryId, CategoryDto latestSubCategory) {
+    public ProductCategory updateSubCategory(UUID subCategoryId, CategoryDto latestSubCategory) {
 
         //  fetching sub-category by ID
         ProductCategory subCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
@@ -186,7 +186,7 @@ public class CategoryCommandService {
      */
     @Transactional
     @EnableCategoryFilter
-    public boolean updateCategoryActiveStatus(Long categoryId,
+    public boolean updateCategoryActiveStatus(UUID categoryId,
                                               boolean isActive,
                                               Components categoryLevel) {
         if (categoryLevel == Components.CATEGORY) {
@@ -215,7 +215,7 @@ public class CategoryCommandService {
      */
     @Transactional
     @EnableCategoryFilter
-    public boolean deleteCategory(Long categoryId,
+    public boolean deleteCategory(UUID categoryId,
                                   Components categoryLevel) {
         //  fetching category
         ProductCategory category;

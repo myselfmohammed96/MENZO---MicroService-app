@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -20,14 +22,14 @@ import java.util.Date;
 //@ToString(exclude = {"variation", "colorCode"})
 @Table(
         name = "variation_options",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = {
-                                "variation_id",
-                                "option_value"
-                        }
-                )
-})
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_variation_option",
+                columnNames = {
+                        "variation_id",
+                        "option_value"
+                }
+        )
+)
 @FilterDef(
         name = "optionFilter",
         parameters = {
@@ -43,19 +45,20 @@ public class VariationOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long optionId;
+    private UUID optionId;
 
     @Column(nullable = false)
     private String optionValue;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variation_id", referencedColumnName = "variationId", nullable = false)
+    @JoinColumn(
+            name = "variation_id",
+            referencedColumnName = "variationId",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_option_variation")
+    )
     private Variation variation;
-
-    @OneToOne(mappedBy = "colorOption", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private ColorCode colorCode;
 
     @Column(nullable = false)
     private boolean isActive = true;
@@ -75,12 +78,11 @@ public class VariationOption {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "colorOption", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private ColorCode colorCode;
+
 }
-
-
-
-
-
 
 
 //    @OneToMany(mappedBy = "variationOption", cascade = CascadeType.ALL, orphanRemoval = true)

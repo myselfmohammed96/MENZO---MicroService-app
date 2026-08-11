@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class VariationCommandService {
@@ -56,7 +57,7 @@ public class VariationCommandService {
      */
     @Transactional
     @EnableVariationFilter
-    public Variation updateVariation(Long variationId, VariationDto latestVariation) {
+    public Variation updateVariation(UUID variationId, VariationDto latestVariation) {
 
         //  fetching variation by ID
         Variation variation = variationRepo.findById(variationId)
@@ -82,7 +83,7 @@ public class VariationCommandService {
     */
     @Transactional
     @EnableVariationFilter
-    public boolean updateVariationActiveStatus(Long variationId, boolean isActive) {
+    public boolean updateVariationActiveStatus(UUID variationId, boolean isActive) {
 
         //  fetching variation by ID
         Variation variation = variationRepo.findById(variationId)
@@ -103,7 +104,7 @@ public class VariationCommandService {
     */
     @Transactional
     @EnableVariationFilter
-    public boolean deleteVariation(Long variationId) {
+    public boolean deleteVariation(UUID variationId) {
 
         //  fetching variation by ID
         Variation variation = variationRepo.findById(variationId)
