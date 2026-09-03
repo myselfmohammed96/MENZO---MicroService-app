@@ -1,0 +1,30 @@
+app:
+  route:
+    store-front:
+      page:
+        index: /index
+    user-auth:
+      page:
+        sign-in: /sign-in
+        login: /login
+        otp-verification: /otp-verification
+        forgot-password: /forgot-password
+        reset-password: /reset-password
+      action:
+        sign-in-submit: /user/sign-in
+        login-submit: /login-submit
+        forgot-password-submit: /forlksjfdaskjffl;
+        otp-submit:
+          user-sign-in: /submit-otp-for-user-signin
+        social-sign-in:
+          google: https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/auth/grantcode&response_type=code&client_id=692936531788-hrsvcv5ckbhnc42kvvo0ktqpek3itf7e.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline
+  api:
+    user-auth:
+      check-email-existence: /check-email-exist
+
+
+
+
+
+#  routes:   # MVC/page/form URLs
+#  api:      # REST API URLs

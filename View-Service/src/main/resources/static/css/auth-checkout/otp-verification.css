@@ -1,0 +1,33 @@
+.otp-input {
+    border: 1px solid #ccc;
+}
+
+.otp-input:focus {
+    border: 2px solid #939393
+}
+
+.button-form-1:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+#send-otp-again a:hover {
+    color: #5260b7;
+}
+
+#send-otp-again a {
+    transition: color 0.15s ease, transform 0.1s ease;
+}
+
+#send-otp-again a:active {
+    transform: scale(0.95);
+}
+
+.button-form-1 {
+    transition: box-shadow 0.2s, color 0.15s ease, transform 0.07s ease !important;
+}
+
+.button-form-1:active,
+.button-google:active {
+    transform: scale(0.98);
+}

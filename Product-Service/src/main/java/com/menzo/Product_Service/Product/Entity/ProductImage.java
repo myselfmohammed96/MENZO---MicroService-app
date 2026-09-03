@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,15 +16,22 @@ import java.util.List;
 @Table(
         name = "product_images",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"super_sku", "image_url"}),
-                @UniqueConstraint(columnNames = {"super_sku", "image_order"})
+                @UniqueConstraint(
+                        name = "uk_image_url_for_super_sku",
+                        columnNames = {"super_sku", "image_url"}
+                ),
+                @UniqueConstraint(
+                        name = "uk_image_order_for_super_sku",
+                        columnNames = {"super_sku", "image_order"}
+                )
         }
 )
 public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productImageId;
+    @Column(name = "product_image_id")
+    private UUID productImageId;
 
     @Column(nullable = false)
     private String imageFilename;

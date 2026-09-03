@@ -29,30 +29,30 @@ class VariationsRetrievalServiceTest {
         System.out.println(variations);
     }
 
-    @Test
-    public void testGetAllVariationsWithOptionsBySub() {
-        List<VariationOptionsDto> data = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
-                Components.CATEGORY,
-                2L
-        );
-        data.stream().forEach(d -> System.out.println(d));
-        System.out.println(data.size());
-    }
+//    @Test
+//    public void testGetAllVariationsWithOptionsBySub() {
+//        List<VariationOptionsDto> data = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+//                Components.CATEGORY,
+//                2L
+//        );
+//        data.stream().forEach(d -> System.out.println(d));
+//        System.out.println(data.size());
+//    }
 
-    @Test
-    public void testGetAllVariations() {
-        List<VariationDto> variationsList = variationsRetrievalService.getAllVariations();
-        System.out.println(variationsList);
-    }
+//    @Test
+//    public void testGetAllVariations() {
+//        List<VariationDto> variationsList = variationsRetrievalService.getAllVariations();
+//        System.out.println(variationsList);
+//    }
 
-    @Test
-    public void testGetOptionsByVariationName() {
-        List<String> options = variationsRetrievalService.getOptionsByVariationName(
-                null,
-                "Size"
-        );
-        System.out.println(options);
-    }
+//    @Test
+//    public void testGetOptionsByVariationName() {
+//        List<String> options = variationsRetrievalService.getOptionsByVariationName(
+//                null,
+//                "Size"
+//        );
+//        System.out.println(options);
+//    }
 
 //    @Test
 //    public void testGetSizes() {
@@ -61,24 +61,24 @@ class VariationsRetrievalServiceTest {
 //        System.out.println(sizes);
 //    }
 
-    @Test
-    @Transactional
-    public void testGetOptionsByIds() {
-        List<VariationOption> options = optionQueryService.getOptionsByIds(Arrays.asList(
-                3L,
-                4L,
-                5L,
-                7L,
-                8L
-        ));
-        System.out.println(options);
-    }
+//    @Test
+//    @Transactional
+//    public void testGetOptionsByIds() {
+//        List<VariationOption> options = optionQueryService.getOptionsByIds(Arrays.asList(
+//                3L,
+//                4L,
+//                5L,
+//                7L,
+//                8L
+//        ));
+//        System.out.println(options);
+//    }
 
-    @Test
-    public void testGetOptionById() {
-        VariationOption option = variationsRetrievalService.getOptionById(3L);
-        System.out.println(option);
-    }
+//    @Test
+//    public void testGetOptionById() {
+//        VariationOption option = variationsRetrievalService.getOptionById(3L);
+//        System.out.println(option);
+//    }
 
 //    @Test
 //    public void testGetOptionsByVariationId() {

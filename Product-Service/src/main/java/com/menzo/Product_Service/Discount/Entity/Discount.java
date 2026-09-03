@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.Product_Service.Discount.Enum.CapType;
 import com.menzo.Product_Service.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Discount.Enum.DiscountType;
-import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
-import jakarta.annotation.Nullable;
+import com.menzo.Product_Service.Discount.Enum.OperationalStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,84 +22,75 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "discount")
+@Table(
+        name = "discount",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_discount_code",
+                columnNames = "discount_code"
+        )
+)
 public class Discount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID discountId;
 
-    @Column(
-            name = "discount_code",
-            nullable = false,
-            unique = true
-    )
+    @Column(nullable = false, unique = true)
     private String discountCode;    //  ## unique index (indexing) and other indexes
 
-    @Column(
-            name = "discount_name",
-            nullable = false
-    )
+    @Column(nullable = false)
     private String discountName;
 
-    @Column(name = "discount_description")
     private String discountDescription;
 
     @Enumerated(EnumType.STRING)
-    @Column(
-            name = "discount_level",
-            nullable = false
-    )
-    private DiscountLevel level;
+    @Column(nullable = false)
+    private DiscountLevel discountLevel;
 
     @Enumerated(EnumType.STRING)
-    @Column(
-            name = "discount_type",
-            nullable = false
-    )
-    private DiscountType type;
+    @Column(nullable = false)
+    private DiscountType discountType;
 
-    @Column(
-            name = "discount_value",
-            nullable = false
-    )
-    private BigDecimal value;       //  ## precision/scale for price fields @Column(precision = 10, scale = 2)
+    @Column(nullable = false)
+    private BigDecimal discountValue;       //  ## precision/scale for price fields @Column(precision = 10, scale = 2)
 
     @Enumerated(EnumType.STRING)
-    @Column(
-            name = "cap_type",
-            nullable = false
-    )
+    @Column(nullable = false)
     private CapType capType;
 
-    @Column(name = "cap_value")
     private BigDecimal capValue;
 
-    @Column(name = "priority")
     private Integer priority;
 
-    @Column(
-            name = "start_at",
-            nullable = false
-    )
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime startAt;
 
-    @Column(
-            name = "end_at",
-            nullable = false
-    )
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime endAt;
 
-    @Nullable
-    @Column(name = "resume_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime resumeAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(
-            name = "discount_status",
-            nullable = false
-    )
-    private PromotionStatus discountStatus;
+    @Column(nullable = false)
+    private OperationalStatus discountStatus;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime deletedAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -109,6 +99,27 @@ public class Discount {
             orphanRemoval = true
     )
     private Set<DiscountCategory> discountCategories = new HashSet<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "discount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<DiscountProduct> discountProducts = new HashSet<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "discount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<DiscountVariant> discountVariants = new HashSet<>();
+
+//    @PreUpdate
+//    void onUpdate() {
+//        updatedAt = LocalDateTime.now();
+//    }
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(
@@ -122,13 +133,6 @@ public class Discount {
 //                    referencedColumnName = "id"
 //            )
 //    )
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "discount",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<DiscountProduct> discountProducts = new HashSet<>();
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(
@@ -142,35 +146,5 @@ public class Discount {
 //                    referencedColumnName = "id"
 //            )
 //    )
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "discount",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<DiscountVariant> discountVariants = new HashSet<>();
-
-    @Column(
-            name = "is_deleted",
-            nullable = false
-    )
-    private Boolean isDeleted;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @Column(
-            nullable = false,
-            updatable = false
-    )
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime updatedAt;
-
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 
 }

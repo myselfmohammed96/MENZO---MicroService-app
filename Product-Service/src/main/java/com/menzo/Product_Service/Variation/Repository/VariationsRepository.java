@@ -1,5 +1,6 @@
 package com.menzo.Product_Service.Variation.Repository;
 
+import com.menzo.Product_Service.Variation.Dto.OptionDto;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -120,12 +121,12 @@ public interface VariationsRepository extends JpaRepository<Variation, UUID> {
      *   ## must be moved to options repo
      *
      */
-//    @Query("""
-//                    SELECT new com.menzo.Product_Service.Modules.Variation.Dto.OptionMinimalDto(o.id, o.optionValue)
-//                    FROM Variation v
-//                    JOIN v.options o
-//                    WHERE v.variationName = :variationName
-//            """)
-//    List<OptionMinimalDto> findOptionsByVariationName(@Param("variationName") String variationName);      // TESTED
+    @Query("""
+                    SELECT new com.menzo.Product_Service.Variation.Dto.OptionDto(o.optionId, o.optionValue)
+                    FROM Variation v
+                    JOIN v.options o
+                    WHERE v.variationName = :variationName
+            """)
+    List<OptionDto> findOptionsByVariationName(@Param("variationName") String variationName);      // TESTED
 
 }

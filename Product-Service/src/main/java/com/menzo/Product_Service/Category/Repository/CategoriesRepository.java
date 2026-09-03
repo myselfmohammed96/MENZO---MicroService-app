@@ -60,7 +60,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, UUI
      *   Parent category identified by category ID
      *
      */
-    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNull(UUID id);
+    Optional<ProductCategory> findByCategoryIdAndParentCategory_CategoryIdIsNull(UUID categoryId);
 
 
     /*
@@ -218,7 +218,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, UUI
      *   Sub-category identified by category ID
      *
      */
-    Optional<ProductCategory> findByIdAndParentCategory_CategoryIdIsNotNull(UUID id);         // TESTED
+    Optional<ProductCategory> findByCategoryIdAndParentCategory_CategoryIdIsNotNull(UUID id);         // TESTED
 
 
     /*
@@ -234,7 +234,7 @@ public interface CategoriesRepository extends JpaRepository<ProductCategory, UUI
 //    public long countByIdIn(List<Long> selectionList);
 
     //  returns list of available entities with provided idList
-    List<ProductCategory> findByIdIn(List<UUID> selectionList);
+    List<ProductCategory> findByCategoryIdIn(List<UUID> selectionList);
 
 
 

@@ -1,0 +1,34 @@
+admin-preference:
+  inventory:
+    preference:
+      - key: DEFAULT_PRODUCT_MARGIN
+        value-type: PERCENTAGE
+        description: Global default product margin
+        config-level: REQUIRED
+
+      - key: DEFAULT_CURRENCY
+        value-type: CURRENCY
+        description: Default currency
+        config-level: REQUIRED
+
+      - key: DEFAULT_TAX_RATE
+        value-type: type
+        description: description
+        config-level: level
+
+      - key: DEFAULT_DISCOUNT_CAP
+        value-type: AMOUNT
+        description: Default discount cap
+        config-level: REQUIRED
+
+      - key: DEFAULT_MIN_STOCK_LEVEL
+        value-type: INTEGER
+        description: Default minimum stock level
+        config-level: REQUIRED
+
+
+
+
+#configuration error:
+#  Block affected operations
+#  Show a critical admin notification: "Business settings incomplete"

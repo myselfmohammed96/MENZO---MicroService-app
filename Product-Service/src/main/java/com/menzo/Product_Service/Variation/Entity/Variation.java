@@ -43,6 +43,7 @@ public class Variation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "variation_id")
     private UUID variationId;
 
     @Column(nullable = false)
@@ -68,7 +69,7 @@ public class Variation {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "variation_id", referencedColumnName = "variationId")
+    @JoinColumn(name = "variation_id", referencedColumnName = "variation_id")
     private Set<VariationOption> options = new HashSet<>();
 
     ////////////////////////////////////////////////////////

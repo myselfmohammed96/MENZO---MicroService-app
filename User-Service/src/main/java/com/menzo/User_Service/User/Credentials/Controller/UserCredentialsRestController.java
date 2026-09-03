@@ -31,8 +31,8 @@ public class UserCredentialsRestController {
     *
     */
     @PostMapping("/is-exists")
-    public ResponseEntity<Map<String, Boolean>> isUserEmailExists(@RequestBody EmailDto emailDto) {
-        boolean emailExists = userQueryService.isUserEmailExists(emailDto);
+    public ResponseEntity<Map<String, Boolean>> checkUserEmailExists(@RequestBody EmailDto emailDto) {
+        boolean emailExists = userQueryService.checkUserEmailExists(emailDto);
         return ResponseEntity.ok(Map.of("exists", emailExists));
     }
 

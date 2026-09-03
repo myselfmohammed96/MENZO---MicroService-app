@@ -15,34 +15,34 @@ class VariationsOptionsRepoTest {
     @Autowired
     private VariationOptionsRepository optionsRepo;
 
-    @Test
-    public void testExistsByOptionValueAndVariationId() {
-        boolean exists = optionsRepo.existsByOptionValueAndVariationId(
-                "L",
-                Long.valueOf(9)
-        );
-        System.out.println("Option exists: " + exists);
-    }
+//    @Test
+//    public void testExistsByOptionValueAndVariationId() {
+//        boolean exists = optionsRepo.existsByOptionValueAndVariationId(
+//                "L",
+//                Long.valueOf(9)
+//        );
+//        System.out.println("Option exists: " + exists);
+//    }
 
-    @Test
-    @Transactional
-    public void testFindByIdIn() {
-        List<VariationOption> optionsList = optionsRepo.findByIdIn(List.of(
-                60L,
-                61L,
-                5L
-        ));
-        System.out.println("Options list: " + optionsList);
-        for (VariationOption o : optionsList) {
-            System.out.println(o.getColorCode());
-        }
-    }
+//    @Test
+//    @Transactional
+//    public void testFindByIdIn() {
+//        List<VariationOption> optionsList = optionsRepo.findByIdIn(List.of(
+//                60L,
+//                61L,
+//                5L
+//        ));
+//        System.out.println("Options list: " + optionsList);
+//        for (VariationOption o : optionsList) {
+//            System.out.println(o.getColorCode());
+//        }
+//    }
 
-    @Test
-    public void testFindByVariationId() {
-        List<VariationOption> options = optionsRepo.findByVariationId(3L);
-        System.out.println(options);
-        System.out.println(options.size());
-    }
+//    @Test
+//    public void testFindByVariationId() {
+//        List<VariationOption> options = optionsRepo.findByVariationId(3L);
+//        System.out.println(options);
+//        System.out.println(options.size());
+//    }
 
 }

@@ -3,6 +3,7 @@ package com.menzo.Product_Service.Product.Service;
 import com.menzo.Product_Service.SearchAndFilter.Dto.FilterTypeDto;
 import com.menzo.Product_Service.Variation.Dto.VariationOptionsDto;
 import com.menzo.Product_Service.Enum.Components;
+import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +21,10 @@ import java.util.stream.Collectors;
 public class ProductFilterService {
 
     @Autowired
-    private VariationQueryService variationsRetrievalService;
+    private VariationQueryService variationQueryService;
+
+    @Autowired
+    private OptionQueryService optionQueryService;
 
     private List<String> userProductFilters;
 
@@ -96,14 +101,14 @@ public class ProductFilterService {
             List<VariationOptionsDto> variations;
             String[] typeParams = listingType.split(",");
             if (typeParams[0].toLowerCase().equals("cat")) {
-                variations = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+                variations = variationQueryService.getAllVariationsWithOptionsByCategory(
                         Components.CATEGORY,
-                        Long.valueOf(typeParams[1])
+                        UUID.fromString(typeParams[1])
                 );
             } else if(typeParams[0].toLowerCase().equals("sub")) {
-                variations = variationsRetrievalService.getAllVariationsWithOptionsByCategory(
+                variations = variationQueryService.getAllVariationsWithOptionsByCategory(
                         Components.SUB_CATEGORY,
-                        Long.valueOf(typeParams[1])
+                        UUID.fromString(typeParams[1])
                 );
             } else {
                 throw new IllegalArgumentException("Invalid listing type argument. Must be either 'cat' or 'sub': " + listingType);
@@ -144,14 +149,14 @@ public class ProductFilterService {
                 yield FilterTypeDto.builder()
                         .filterType(ProductFilterType.COLORS.toString())
                         .typeValue("colors")
-                        .filterOptions(variationsRetrievalService.getOptionsByVariationName(null, "Colors"))
+                        .filterOptions(optionQueryService.getOptionsByVariationName(null, "Colors"))
                         .build();
             }
             case "size" -> {
                 yield FilterTypeDto.builder()
                         .filterType(ProductFilterType.SIZE.toString())
                         .typeValue("size")
-                        .filterOptions(variationsRetrievalService.getOptionsByVariationName(null, "Size"))
+                        .filterOptions(optionQueryService.getOptionsByVariationName(null, "Size"))
                         .build();
             }
             case "stock" -> {
@@ -180,8 +185,8 @@ public class ProductFilterService {
         Map<ProductFilterType, List<String>> filters = new LinkedHashMap<>();
 
         filters.put(ProductFilterType.PRICE, priceRanges);
-        filters.put(ProductFilterType.COLORS, variationsRetrievalService.getOptionsByVariationName(null, "Colors"));
-        filters.put(ProductFilterType.SIZE, variationsRetrievalService.getOptionsByVariationName(null, "Size"));
+        filters.put(ProductFilterType.COLORS, optionQueryService.getOptionsByVariationName(null, "Colors"));
+        filters.put(ProductFilterType.SIZE, optionQueryService.getOptionsByVariationName(null, "Size"));
 //        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(null, "Fit type"));
 
         return filters;
@@ -191,8 +196,8 @@ public class ProductFilterService {
         Map<ProductFilterType, List<String>> filters = new LinkedHashMap<>();
 
         filters.put(ProductFilterType.PRICE, priceRanges);
-        filters.put(ProductFilterType.COLORS, variationsRetrievalService.getOptionsByVariationName(categoryId, "Colors"));
-        filters.put(ProductFilterType.SIZE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Size"));
+        filters.put(ProductFilterType.COLORS, optionQueryService.getOptionsByVariationName(categoryId, "Colors"));
+        filters.put(ProductFilterType.SIZE, optionQueryService.getOptionsByVariationName(categoryId, "Size"));
 //        filters.put(ProductFilterType.FIT_TYPE, variationsRetrievalService.getOptionsByVariationName(categoryId, "Fit type"));
 
         return filters;

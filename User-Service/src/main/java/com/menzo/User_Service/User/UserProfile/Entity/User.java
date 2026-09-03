@@ -5,6 +5,7 @@ import com.menzo.User_Service.Customer.Entity.Customer;
 import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.UserProfile.Enum.Gender;
 import com.menzo.User_Service.User.UserProfile.Enum.UserTypes;
+import com.menzo.User_Service.User.UserRegistration.Enum.UserRegistrationSource;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,7 +31,7 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
 
     @Column(nullable = false)
@@ -64,6 +65,12 @@ public class User {
     private boolean isActive = true;
 
     @Column(nullable = false)
+    private boolean isVerified = false;
+
+    @Column(name = "reg_source", nullable = false)
+    private UserRegistrationSource userRegistrationSource;
+
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -72,7 +79,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Customer customer;
 
     ///////////////////////////////////////////////

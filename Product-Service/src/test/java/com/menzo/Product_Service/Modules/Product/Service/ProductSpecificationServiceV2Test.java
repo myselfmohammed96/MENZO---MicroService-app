@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

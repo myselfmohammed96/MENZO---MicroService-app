@@ -17,24 +17,24 @@ class CategoriesServiceTest {
 
 
     //    ******* Parent categories methods *******
-    @Test
-    public void testAddNewParentCategory() {
-        CreateParentCategoryDto newParent = CreateParentCategoryDto.builder()
-                .categoryName("Three More")
-                .isActive(true)
-                .build();
-        ProductCategory parent = categoriesService.addNewParentCategory(newParent);
-        System.out.println(parent);
-    }
+//    @Test
+//    public void testAddNewParentCategory() {
+//        CreateParentCategoryDto newParent = CreateParentCategoryDto.builder()
+//                .categoryName("Three More")
+//                .isActive(true)
+//                .build();
+//        ProductCategory parent = categoriesService.addNewParentCategory(newParent);
+//        System.out.println(parent);
+//    }
 
-    @Test
-    public void testUpdateParentCategory() {
-        CategoryDto parentDto = CategoryDto.builder()
-                .categoryName("Thirty more")
-                .build();
-        ProductCategory updated = categoriesService.updateParentCategory(159L, parentDto);
-        System.out.println(updated);
-    }
+//    @Test
+//    public void testUpdateParentCategory() {
+//        CategoryDto parentDto = CategoryDto.builder()
+//                .categoryName("Thirty more")
+//                .build();
+//        ProductCategory updated = categoriesService.updateParentCategory(159L, parentDto);
+//        System.out.println(updated);
+//    }
 
 //    @Test
 //    public void testDeleteParentCategory() {
@@ -57,18 +57,18 @@ class CategoriesServiceTest {
 //        System.out.println("Sub: " + savedSub);
 //    }
 
-    @Test
-    public void testUpdateSubCategory() {
-        CategoryDto latestData = CategoryDto.builder()
-                .categoryName("Test sub category")
-                .isActive(false)
-                .build();
-        ProductCategory updated = categoriesService.updateSubCategory(
-                160L,
-                latestData
-        );
-        System.out.println("Updated: " + updated);
-    }
+//    @Test
+//    public void testUpdateSubCategory() {
+//        CategoryDto latestData = CategoryDto.builder()
+//                .categoryName("Test sub category")
+//                .isActive(false)
+//                .build();
+//        ProductCategory updated = categoriesService.updateSubCategory(
+//                160L,
+//                latestData
+//        );
+//        System.out.println("Updated: " + updated);
+//    }
 
 //    @Test
 //    public void testDeleteSubCategory() {

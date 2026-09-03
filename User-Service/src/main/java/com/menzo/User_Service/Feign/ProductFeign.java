@@ -1,7 +1,7 @@
 package com.menzo.User_Service.Feign;
 
-import com.menzo.User_Service.Cart.Dto.CartDto;
-import com.menzo.User_Service.Wishlist.Dto.WishlistDto;
+import com.menzo.User_Service.WishlistCart.Cart.Dto.CartDto;
+import com.menzo.User_Service.WishlistCart.Wishlist.Dto.WishlistDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

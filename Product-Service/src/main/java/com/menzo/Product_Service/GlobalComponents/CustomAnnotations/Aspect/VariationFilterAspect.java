@@ -16,14 +16,16 @@ public class VariationFilterAspect {
 
     private final EntityManager entityManager;
 
-    @Around("@annotation(EnableVariationFilter")
+    @Around("@annotation(EnableVariationFilter)")
     public Object applyFilter(ProceedingJoinPoint joinPoint,
                               EnableVariationFilter enableVariationFilter) throws Throwable {
 
         Session session = entityManager.unwrap(Session.class);
 
         session.enableFilter("variationFilter")
+                .setParameter("applyActive", enableVariationFilter.applyActive())
                 .setParameter("isActive", enableVariationFilter.isActive())
+                .setParameter("applyDeleted", enableVariationFilter.applyDeleted())
                 .setParameter("isDeleted", enableVariationFilter.isDeleted());
 
         try {

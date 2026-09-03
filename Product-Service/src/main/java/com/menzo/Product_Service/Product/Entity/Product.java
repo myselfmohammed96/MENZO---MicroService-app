@@ -3,18 +3,21 @@ package com.menzo.Product_Service.Product.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Product.Dto.AdminProductListingDto;
-import com.menzo.Product_Service.Product.Dto.UserProductListingDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.AdminProductListingDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.UserProductListingDto;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -34,6 +37,7 @@ import java.util.List;
                         columns = {
                                 @ColumnResult(name = "productId", type = Long.class),
                                 @ColumnResult(name = "productName", type = String.class),
+                                @ColumnResult(name = "productCode", type = String.class),
                                 @ColumnResult(name = "subCategoryName", type = String.class),
                                 @ColumnResult(name = "categoryName", type = String.class),
                                 @ColumnResult(name = "minPrice", type = Float.class),
@@ -44,6 +48,7 @@ import java.util.List;
                                 @ColumnResult(name = "oldestCreatedAt", type = Timestamp.class),
                                 @ColumnResult(name = "colorCount", type = Integer.class),
                                 @ColumnResult(name = "activeStatus", type = String.class),
+                                @ColumnResult(name = "iconImage", type = String.class)
                         }
                 )
         ),
@@ -54,6 +59,7 @@ import java.util.List;
                         columns = {
                                 @ColumnResult(name = "productId", type = Long.class),
                                 @ColumnResult(name = "productName", type = String.class),
+                                @ColumnResult(name = "productCode", type = String.class),
                                 @ColumnResult(name = "superSku", type = String.class),
                                 @ColumnResult(name = "minPrice", type = Float.class),
                                 @ColumnResult(name = "maxPrice", type = Float.class),
@@ -63,7 +69,13 @@ import java.util.List;
                 )
         )
 })
-@Table(name = "products")
+@Table(
+        name = "products",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_product_code",
+                columnNames = "product_code"
+        )
+)
 @FilterDef(
         name = "productFilter",
         parameters = {
@@ -79,7 +91,8 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    @Column(name = "product_id")
+    private UUID productId;
 
     @Column(nullable = false)
     private String productName;
@@ -89,7 +102,11 @@ public class Product {
 
     //  uni-directional mapping
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(
+            name = "category_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_product_sub_category")
+    )
     private ProductCategory subCategory;   //  sub-category - ## name change to sub-category
 
     @Lob
@@ -106,7 +123,7 @@ public class Product {
     private boolean isApproved = false;
 
     @Column(nullable = false)
-    private long approvedBy;
+    private UUID approvedBy;
 
     @Column(nullable = false)
     private boolean isDeleted = false;
@@ -126,14 +143,18 @@ public class Product {
     //  ---------
     private String genericName;
 
-    private Float itemWeight;
+    private BigDecimal itemWeight;
 
-    private Long manufacturerId;
+    private UUID manufacturerId;
 
-    private Long packersId;
+    private UUID packersId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "county_of_origin_id", nullable = false)
+    @JoinColumn(
+            name = "county_of_origin_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_product_country_of_origin")
+    )
     private CountryOfOrigin countryOfOrigin;
     //  ---------
 

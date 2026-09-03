@@ -8,6 +8,8 @@ import com.menzo.User_Service.Staff.Tasks.Service.ModuleQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class SystemAccessSyncService {
 

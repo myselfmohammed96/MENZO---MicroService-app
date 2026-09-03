@@ -5,31 +5,34 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ProductDto {
 
-    private Long productId;
+    private UUID productId;
 
     private String productName;
 
     private String productCode;
 
-    private Long categoryId;
+    private UUID categoryId;
 
-    private Long subCategoryId;
+    private UUID subCategoryId;
 
     private String productDescription;
 
     private String genericName;
 
-    private Float itemWeight;
+    private BigDecimal itemWeight;
 
-    private Long manufacturerId;
+    private UUID manufacturerId;
 
-    private Long packerId;
+    private UUID packerId;
 
     private String countyOfOrigin;
 

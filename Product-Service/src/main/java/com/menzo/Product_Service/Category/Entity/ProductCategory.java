@@ -56,6 +56,7 @@ public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private UUID categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)

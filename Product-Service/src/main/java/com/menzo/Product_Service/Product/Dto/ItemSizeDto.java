@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +15,7 @@ import java.util.Date;
 @Builder
 public class ItemSizeDto {
 
-    private Long itemId;
+    private UUID itemId;
 
     private String size;
 

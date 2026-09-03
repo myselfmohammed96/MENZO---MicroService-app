@@ -1,0 +1,237 @@
+/* ********* font ********* */
+
+/* *****font-size***** */
+
+/* em */
+.fs-0_7em {
+    font-size: 0.7em;
+}
+
+.fs-0_8em {
+    font-size: 0.8em;
+}
+
+.fs-0_85em {
+    font-size: 0.85em;
+}
+
+.fs-0_9em {
+    font-size: 0.9em;
+}
+
+.fs-1em {
+    font-size: 1em;
+}
+
+.fs-1_1em {
+    font-size: 1.1em;
+}
+
+.fs-1_2em {
+    font-size: 1.2em;
+}
+
+.fs-1_3em {
+    font-size: 1.3em;
+}
+
+.fs-1_4em {
+    font-size: 1.4em;
+}
+
+.fs-1_5em {
+    font-size: 1.5em;
+}
+
+.fs-1_7em {
+    font-size: 1.7em;
+}
+
+.fs-1_8em {
+    font-size: 1.8em;
+}
+
+.fs-1_9em {
+    font-size: 1.9em;
+}
+
+.fs-2_3em {
+    font-size: 2.3em;
+}
+
+.fs-2_5em {
+    font-size: 2.5em;
+}
+
+.fs-2_7em {
+    font-size: 2.7em;
+}
+
+.fs-3em {
+    font-size: 3em;
+}
+
+
+/* rem */
+.fs-0_75rem {
+    font-size: 0.75rem;
+}
+
+.fs-0_8rem {
+    font-size: .8rem;
+}
+
+.fs-0_9rem {
+    font-size: 0.9rem;
+}
+
+.fs-1rem {
+    font-size: 1rem;
+}
+
+.fs-1_2rem {
+    font-size: 1.2rem;
+}
+
+.fs-2_5rem {
+    font-size: 2.5rem;
+}
+
+
+/* px */
+.fs-13px {
+    font-size: 13px;
+}
+
+.fs-14px {
+    font-size: 14px;
+}
+
+.fs-15px {
+    font-size: 15px;
+}
+
+.fs-16px {
+    font-size: 16px;
+}
+
+.fs-20px {
+    font-size: 20px;
+}
+
+.fs-25px {
+    font-size: 25px;
+}
+
+.fs-30px {
+    font-size: 30px;
+}
+
+.fs-40px {
+    font-size: 40px;
+}
+
+/* vh */
+.fs-1_75vh {
+    font-size: 1.75vh;
+}
+
+.fs-1_8vh {
+    font-size: 1.8vh;
+}
+
+.fs-2vh {
+    font-size: 2vh;
+}
+
+.fs-2_2vh {
+    font-size: 2.2vh;
+}
+
+.fs-2_8vh {
+    font-size: 2.8vh;
+}
+
+.fs-3_2vh {
+    font-size: 3.2vh;
+}
+
+.fs-4_5vh {
+    font-size: 4.5vh;
+}
+
+.fs-4_55vh {
+    font-size: 4.55vh;
+}
+
+/* vw */
+.fs-1_2vw {
+    font-size: 1.2vw;
+}
+
+
+/* font-weight */
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-550 {
+    font-weight: 550;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.fw-light {
+    font-weight: lighter;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+
+/* text */
+.txt-d-none {
+    text-decoration: none;
+}
+
+.txt-d-ul {
+    text-decoration: underline;
+}
+
+.txt-d-lt {
+    text-decoration: line-through;
+}
+
+.txt-aln-c {
+    text-align: center;
+}
+
+.txt-aln-l {
+    text-align: left;
+}
+
+
+/* line height */
+.lh-1 {
+    line-height: 1;
+}
+
+
+
+/* *** White space *** */
+.ws-nw {
+    white-space: nowrap;
+}
+
+/* ////////////////////////// */

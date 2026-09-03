@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Product.Controller;
 
-import com.menzo.Product_Service.Product.Dto.ItemDetailsDto;
-import com.menzo.Product_Service.Product.Dto.CreateProductItemDto;
+import com.menzo.Product_Service.Product.Dto.ItemDto.ItemDetailsDto;
+import com.menzo.Product_Service.Product.Dto.ItemDto.CreateItemDto;
 import com.menzo.Product_Service.Product.Dto.ItemDto.PriceDto;
 import com.menzo.Product_Service.Product.Dto.SizeDetailsDto;
 import com.menzo.Product_Service.Product.Service.ItemCommandService;
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/product-item")
@@ -43,7 +44,7 @@ public class ItemCommandRestController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Map<String, Object>> addProductItem(@RequestHeader("roles") String roles,
-                                                              @Valid @RequestPart("newItem") CreateProductItemDto itemDetails,
+                                                              @Valid @RequestPart("newItem") CreateItemDto itemDetails,
                                                               @RequestPart("sizeDetails") List<SizeDetailsDto> sizeDetails,
                                                               @RequestPart("images") Map<String, MultipartFile> images) throws IOException {
         if (roles.equals("ADMIN")) {
@@ -108,16 +109,16 @@ public class ItemCommandRestController {
      */
     @PutMapping("/update-color")
     public ResponseEntity<?> updateProductItemColor(@RequestHeader("roles") String roles,
-                                                    @RequestParam("id") Long itemId,
-                                                    @RequestParam("colorId") Long colorId) {
+                                                    @RequestParam("id") UUID itemId,
+                                                    @RequestParam("colorId") UUID colorId) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));
             }
-            if (colorId == null || colorId <= 0) {
+            if (colorId == null) {
                 logger.warn("Invalid color ID: {}", colorId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid color ID"));
@@ -149,16 +150,16 @@ public class ItemCommandRestController {
      */
     @PutMapping("/update-size")
     public ResponseEntity<?> updateProductItemSize(@RequestHeader("roles") String roles,
-                                                   @RequestParam("id") Long itemId,
-                                                   @RequestParam("sizeId") Long sizeId) {
+                                                   @RequestParam("id") UUID itemId,
+                                                   @RequestParam("sizeId") UUID sizeId) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));
             }
-            if (sizeId == null || sizeId <= 0) {
+            if (sizeId == null) {
                 logger.warn("Invalid size ID: {}", sizeId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid size ID"));
@@ -178,7 +179,6 @@ public class ItemCommandRestController {
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-
     }
 
 
@@ -190,11 +190,11 @@ public class ItemCommandRestController {
      */
     @PutMapping("/update-stock-qty")
     public ResponseEntity<?> updateProductItemStockQuantity(@RequestHeader("roles") String roles,
-                                                            @RequestParam("id") Long itemId,
+                                                            @RequestParam("id") UUID itemId,
                                                             @RequestParam("stockQty") Integer latestStockQty) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));
@@ -232,11 +232,11 @@ public class ItemCommandRestController {
      */
     @PutMapping("/update-price")
     public ResponseEntity<?> updateProductItemPrice(@RequestHeader("roles") String roles,
-                                                    @RequestParam("id") Long itemId,
+                                                    @RequestParam("id") UUID itemId,
                                                     @RequestParam("price") PriceDto latestPrice) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));
@@ -268,11 +268,11 @@ public class ItemCommandRestController {
      */
     @PutMapping("/update-status")
     public ResponseEntity<?> updateProductItemActiveStatus(@RequestHeader("roles") String roles,
-                                                           @RequestParam("id") Long itemId,
+                                                           @RequestParam("id") UUID itemId,
                                                            @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));
@@ -306,12 +306,12 @@ public class ItemCommandRestController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<?> updateProductItemImages(@RequestHeader("roles") String roles,
-                                                     @RequestParam("id") Long itemId,
+                                                     @RequestParam("id") UUID itemId,
                                                      @RequestPart("images") Map<String, MultipartFile> latestImages,
                                                      @RequestPart("imageIds") Map<String, Integer> imageIds) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));
@@ -360,10 +360,10 @@ public class ItemCommandRestController {
      */
     @DeleteMapping(value = "/delete")
     public ResponseEntity<?> deleteProductItem(@RequestHeader("roles") String roles,
-                                               @RequestParam("id") Long itemId) {
+                                               @RequestParam("id") UUID itemId) {
         if (roles.equals("ADMIN")) {
             //  input validation
-            if (itemId == null || itemId <= 0) {
+            if (itemId == null) {
                 logger.warn("Invalid product-item ID: {}", itemId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product-item ID"));

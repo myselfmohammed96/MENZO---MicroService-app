@@ -47,7 +47,7 @@ public class OptionCommandService {
     public VariationOption addNewOption(CreateOptionDto newOption) {
 
         // duplicate existence validation
-        if (optionsRepo.existsByOptionValueAndVariationId(
+        if (optionsRepo.existsByOptionValueAndVariation_VariationId(
                 newOption.getOptionValue(),
                 newOption.getVariationId()
         )) {

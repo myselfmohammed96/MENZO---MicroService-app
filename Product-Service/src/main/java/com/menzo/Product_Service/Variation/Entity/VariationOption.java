@@ -54,7 +54,7 @@ public class VariationOption {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "variation_id",
-            referencedColumnName = "variationId",
+            referencedColumnName = "variation_id",
             nullable = false,
             foreignKey = @ForeignKey(name = "fk_option_variation")
     )

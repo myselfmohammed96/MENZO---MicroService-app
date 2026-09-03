@@ -31,7 +31,7 @@ import java.util.UUID;
 public class Designation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID designationId;
 
     @Column(nullable = false)

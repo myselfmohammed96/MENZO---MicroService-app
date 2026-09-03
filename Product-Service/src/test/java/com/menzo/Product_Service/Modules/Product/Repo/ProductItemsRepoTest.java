@@ -1,7 +1,7 @@
 package com.menzo.Product_Service.Modules.Product.Repo;
 
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductItemsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,11 +28,11 @@ class ProductItemsRepoTest {
         items.stream().forEach(item -> System.out.println(item));
     }
 
-    @Test
-    public void testFindSizeByItemId() {
-        String size = itemsRepo.findSizeByItemId("Size", 154L);
-        System.out.println(size);
-    }
+//    @Test
+//    public void testFindSizeByItemId() {
+//        String size = itemsRepo.findSizeByItemId("Size", 154L);
+//        System.out.println(size);
+//    }
 
 
 

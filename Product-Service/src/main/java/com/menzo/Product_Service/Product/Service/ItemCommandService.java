@@ -4,11 +4,11 @@ import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.GlobalComponents.Enum.ProductComponents;
-import com.menzo.Product_Service.Product.Dto.ItemDetailsDto;
+import com.menzo.Product_Service.Product.Dto.ItemDto.ItemDetailsDto;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemImageDto;
 import com.menzo.Product_Service.Product.Dto.ItemDto.PriceDto;
 import com.menzo.Product_Service.Product.Dto.ItemSizeDto;
-import com.menzo.Product_Service.Product.Dto.CreateProductItemDto;
+import com.menzo.Product_Service.Product.Dto.ItemDto.CreateItemDto;
 import com.menzo.Product_Service.Product.Dto.SizeDetailsDto;
 import com.menzo.Product_Service.Product.Entity.Product;
 import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
@@ -16,14 +16,12 @@ import com.menzo.Product_Service.Product.Entity.ProductImage;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductItemsRepository;
 import com.menzo.Product_Service.Variation.Entity.ColorCode;
 import com.menzo.Product_Service.Variation.Entity.Variation;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.ColorQueryService;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
-import com.menzo.Product_Service.Variation.Service.VariationQueryService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.NotFoundException;
 
@@ -52,9 +50,6 @@ public class ItemCommandService {
     private static final Logger logger = LoggerFactory.getLogger(ItemCommandService.class);
 
     @Autowired
-    private ProductsRepository productsRepo;
-
-    @Autowired
     private ProductQueryService productQueryService;
 
     @Autowired
@@ -62,12 +57,6 @@ public class ItemCommandService {
 
     @Autowired
     private ProductUtilityService productUtilityService;
-
-    @Autowired
-    private ImageQueryService imageQueryService;
-
-    @Autowired
-    private VariationQueryService variationQueryService;
 
     @Autowired
     private OptionQueryService optionQueryService;
@@ -97,15 +86,14 @@ public class ItemCommandService {
      *
      */
     @Transactional
-    public ItemDetailsDto addNewProductItem(CreateProductItemDto newProductItem,
+    public ItemDetailsDto addNewProductItem(CreateItemDto newProductItem,
                                             List<SizeDetailsDto> sizeDetails,
                                             Map<String, MultipartFile> images) throws IOException {
 
         //  --------- Data Pre-processing ---------
         //  getting product, parent category, sub-category
         logger.info("Add new item: Data pre-processing");
-        Product product = productsRepo.findById(newProductItem.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + newProductItem.getProductId()));
+        Product product = productQueryService.getProductEntityById(newProductItem.getProductId());
 
         ParentCategoryView parentCategory = categoryQueryService.getParentByProductId(product.getProductId());
         ProductCategory subCategory = product.getSubCategory();
@@ -248,7 +236,7 @@ public class ItemCommandService {
 
         //  --------- Data Pre-processing ---------
         //  product object validation
-        if (product == null || product.getProductId() == null || product.getProductId() <= 0) {
+        if (product == null || product.getProductId() == null) {
             throw new IllegalArgumentException("Product or productId required.");
         }
 
@@ -316,8 +304,8 @@ public class ItemCommandService {
      *
      */
     @Transactional
-    public boolean updateItemColor(Long itemId,
-                                   Long colorId) {
+    public boolean updateItemColor(UUID itemId,
+                                   UUID colorId) {
         //  fetching product-item by ID
         ProductItem item = itemsRepo.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
@@ -355,8 +343,8 @@ public class ItemCommandService {
      *
      */
     @Transactional
-    public boolean updateItemSize(Long itemId,
-                                  Long sizeId) {
+    public boolean updateItemSize(UUID itemId,
+                                  UUID sizeId) {
         //  fetching product-item by ID
         ProductItem item = itemsRepo.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
@@ -391,7 +379,7 @@ public class ItemCommandService {
      *   Product-item identified by item ID
      *
      */
-    public boolean updateItemStockQuantity(Long itemId,
+    public boolean updateItemStockQuantity(UUID itemId,
                                            Integer latestStockQty) {
         //  fetching product-item by ID
         ProductItem item = itemsRepo.findById(itemId)
@@ -413,7 +401,7 @@ public class ItemCommandService {
      *   Product-item identified by item ID
      *
      */
-    public boolean updateItemPrices(Long itemId,
+    public boolean updateItemPrices(UUID itemId,
                                     PriceDto latestPrices) {
         //  fetching product-item by ID
         ProductItem item = itemsRepo.findById(itemId)
@@ -440,7 +428,7 @@ public class ItemCommandService {
      *   Product-item identified by item ID
      *
      */
-    public boolean updateItemActiveStatus(Long itemId,
+    public boolean updateItemActiveStatus(UUID itemId,
                                           boolean isActive) {
         //  fetching product-item by ID
         ProductItem item = itemsRepo.findById(itemId)
@@ -459,7 +447,7 @@ public class ItemCommandService {
      *
      */
     @Transactional
-    public boolean updateItemImages(Long itemId,
+    public boolean updateItemImages(UUID itemId,
                                     Map<String, MultipartFile> latestImages,
                                     Map<String, Integer> imageIds) {
         if (latestImages.size() != imageIds.size()) {
@@ -470,7 +458,7 @@ public class ItemCommandService {
         ProductItem item = itemsRepo.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));
         List<ProductImage> images = item.getImages();
-        Set<Long> imageFileIds = images.stream()
+        Set<UUID> imageFileIds = images.stream()
                 .map(ProductImage::getProductImageId)
                 .collect(Collectors.toSet());
 
@@ -515,7 +503,7 @@ public class ItemCommandService {
                 .forEach(i -> i.setImageOrder(intactFileIdsAndOrder.get(i.getProductImageId())));
 
         //  removing 'to delete' image files
-        Set<Long> toDeleteFileIds = new HashSet<>(imageFileIds);
+        Set<UUID> toDeleteFileIds = new HashSet<>(imageFileIds);
         toDeleteFileIds.removeAll(intactFileIdsAndOrder.keySet());
 
         Set<ProductImage> toDeleteImages = images.stream()
@@ -534,57 +522,57 @@ public class ItemCommandService {
 
         //  adding 'to add' image files
         List<ProductImage> addedImages = toAddFileOrderKeys.stream()
-                        .map(k -> {
-                            MultipartFile image = latestImages.get(k);
-                            int imageOrder = Integer.parseInt(k.substring(
-                                    k.indexOf("[") + 1,
-                                    k.indexOf("]")
-                            ));
+                .map(k -> {
+                    MultipartFile image = latestImages.get(k);
+                    int imageOrder = Integer.parseInt(k.substring(
+                            k.indexOf("[") + 1,
+                            k.indexOf("]")
+                    ));
 
-                            //  image file name processing
-                            String contentType = image.getContentType();
-                            String originalFilename = image.getOriginalFilename();
+                    //  image file name processing
+                    String contentType = image.getContentType();
+                    String originalFilename = image.getOriginalFilename();
 
-                            if (originalFilename == null || originalFilename.isBlank()) {
-                                throw new IllegalArgumentException("Invalid image name");
-                            }
-                            String name = originalFilename.toLowerCase();
+                    if (originalFilename == null || originalFilename.isBlank()) {
+                        throw new IllegalArgumentException("Invalid image name");
+                    }
+                    String name = originalFilename.toLowerCase();
 
-                            boolean validType = "image/png".equals(contentType)
-                                    || "image/jpeg".equals(contentType)
-                                    || contentType == null;
-                            boolean validExt = name.endsWith(".png")
-                                    || name.endsWith(".jpg")
-                                    || name.endsWith(".jpeg");
+                    boolean validType = "image/png".equals(contentType)
+                            || "image/jpeg".equals(contentType)
+                            || contentType == null;
+                    boolean validExt = name.endsWith(".png")
+                            || name.endsWith(".jpg")
+                            || name.endsWith(".jpeg");
 
-                            //  image file - sanitizing with white listed formats
-                            if (!(validType && validExt)) {
-                                throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
-                            }
-                            if (image.isEmpty()) {
-                                throw new IllegalArgumentException("Invalid image input");
-                            }
+                    //  image file - sanitizing with white listed formats
+                    if (!(validType && validExt)) {
+                        throw new IllegalArgumentException("Only PNG and JPG images are allowed.");
+                    }
+                    if (image.isEmpty()) {
+                        throw new IllegalArgumentException("Invalid image input");
+                    }
 
-                            //  creating - image filename
-                            String extension = FilenameUtils.getExtension(originalFilename);
-                            String filename = UUID.randomUUID() + "." + extension;
+                    //  creating - image filename
+                    String extension = FilenameUtils.getExtension(originalFilename);
+                    String filename = UUID.randomUUID() + "." + extension;
 
-                            //  image file path & storing
-                            Path filePath = Paths.get(String.valueOf(uploadDir), filename);
-                            try {
-                                image.transferTo(filePath);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                    //  image file path & storing
+                    Path filePath = Paths.get(String.valueOf(uploadDir), filename);
+                    try {
+                        image.transferTo(filePath);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
-                            return ProductImage.builder()
-                                    .imageFilename(filename)
-                                    .imageUrl(String.valueOf(filePath))
-                                    .superSku(superSku)
-                                    .imageOrder(imageOrder)
-                                    .productItems(productItems)
-                                    .build();
-                        }).toList();
+                    return ProductImage.builder()
+                            .imageFilename(filename)
+                            .imageUrl(String.valueOf(filePath))
+                            .superSku(superSku)
+                            .imageOrder(imageOrder)
+                            .productItems(productItems)
+                            .build();
+                }).toList();
         images.addAll(addedImages);
 
         images.stream().forEach(i -> {
@@ -599,58 +587,13 @@ public class ItemCommandService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private ProductImage addImage(Map.Entry<String, MultipartFile> imageEntry) {
-        return null;
-    }
-
-
-    /*
-    *
-    *   update image order (sorting)
-    *
-     */
-
-
     /*
      *
      *   Delete product-item (soft delete)
      *   Product-item identified by item ID
      *
      */
-    public boolean deleteItem(Long itemId) {
+    public boolean deleteItem(UUID itemId) {
         //  fetching product-item by ID
         ProductItem item = itemsRepo.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Product-item not found with ID: " + itemId));

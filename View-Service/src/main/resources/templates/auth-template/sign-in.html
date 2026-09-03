@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www/thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <link rel="stylesheet" href="/css/global/element/sizing.css">
+    <link rel="stylesheet" href="/css/global/element/spacing.css">
+    <link rel="stylesheet" href="/css/global/element/colors.css">
+    <link rel="stylesheet" href="/css/global/element/element.css">
+    <link rel="stylesheet" href="/css/global/element/text.css">
+    <link rel="stylesheet" href="/css/global/modal-toast.css">
+
+    <link rel="stylesheet" href="/css/auth-checkout/auth-checkout-nav-bar-footer.css"/>
+    <link rel="stylesheet" href="/css/auth-checkout/log-in-reset-forgot-password.css"/>
+    <link rel="stylesheet" href="/css/auth-checkout/sign-in.css"/>
+
+    <title>Sign in</title>
+</head>
+<body>
+
+<!-- Nav bar -->
+<nav id="auth-checkout-nav-bar-container" class="w-100p h-9_7vh d-f jc-c ai-c bg-black">
+    <div class="d-f jc-c" id="auth-checkout-nav-bar-logo">
+        <a th:href=${pageUrls.indexPage} class="w-23_7vh">
+            <img src="/media/global/logo/MENZO_logo.jpg" class="w-100p" alt="">
+        </a>
+    </div>
+</nav>
+
+<!-- Page content -->
+<div id="auth-checkout-page-content-container" class="mt-9_7vh min-h-70vh">
+
+    <div class="reg-page-content w-100p pt-50px pb-1p d-f">
+        <div class="reg-profile-pic-container f-1_3">
+
+            <!-- Custom upload Box Click or Drag Image Here -->
+            <div id="uploadBox" class="w-255px d-f ai-c jc-c crsr-p mt-15p ml-30p br-rs-50p bg-fff fs-16px">
+                <span id="upload-box-plus-sign" class="plus-sign fs-40px">+</span>
+                <input type="file" id="uploadImage" accept="image/*">
+                <img id="uploadedPreview" class="br-rs-50p">
+            </div>
+
+            <!-- Cropping area -->
+            <div id="modal-back-drop">
+                <div id="imageContainer">
+                        <span>
+                            <p id="close-modal">X</p>
+                        </span>
+                    <div id="previewImage">
+                        <img id="previewImage-img"/>
+                    </div>
+                    <button id="cropButton">Crop image</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- page content -->
+        <div class="f-2">
+            <h1 class="pl-10px fs-2_3em txt-3e3e3e fw-600">Hi! Welcome</h1>
+            <p class="txt-a1a1a1 fs-14px mb-5p ml-12px">Let's create an account</p>
+
+            <!-- form -->
+            <form id="reg-form" class="m-auto ml-5px c-gp-15px" th:action="${pageUrls.signInFormSubmit}" th:object="${user}"
+                  method="post">
+
+                <!-- first name -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="text" th:field="*{firstName}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="first-name" name="first-name" placeholder="First Name">
+                    <p id="first-name-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- last name -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="text" th:field="*{lastName}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="last-name" name="last-name" placeholder="Last Name">
+                    <p id="last-name-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- phone number -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="text" th:field="*{phoneNumber}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="phone-number" name="phone-number" placeholder="Phone Number">
+                    <p id="phone-number-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- date of birth -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="date"
+                           th:field="*{dateOfBirth}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="dateOfBirth" name="dateOfBirth" placeholder="Date of Birth">
+                    <p id="dob-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- email -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="email" th:field="*{email}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="email" name="email" placeholder="Email">
+                    <p id="email-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- gender -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <select name="gender" th:field="*{gender}"
+                            class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                            id="reg-form-gender">
+                        <option value="" selected hidden>Gender</option>
+                        <option th:each="g : ${genders}"
+                                th:value="${g}"
+                                th:text="${g.displayName}"></option>
+<!--                        <option th:each="g : ${T(com.menzo.Home_Service.Enum.Gender).values()}" th:value="${g}"-->
+<!--                                th:text="${g.displayName}">-->
+<!--                        </option>-->
+                    </select>
+                    <p id="gender-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- password -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="password" th:field="*{password}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="password" name="password" placeholder="Password">
+                    <p id="password-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+
+                <!-- confirm password -->
+                <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
+                    <input type="password" th:field="*{confirmPassword}"
+                           class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
+                           id="confirm-password" name="confirm-password" placeholder="Confirm Password">
+                    <p id="confirm-password-error-message" class="error-message txt-red fs-13px m-0"></p>
+                </div>
+                <input type="hidden" th:field="*{profilePic}" name="croppedImage" id="croppedImageInput">
+
+                <!-- submit button -->
+                <button id="button-form"
+                        class="pt-8px pb-8px pr-0 pl-0 crsr-p br-rs-5px br-none fs-1em bg-3e3e3e txt-e2e2e2 mt-30px"
+                        type="submit">Sign up
+                </button>
+
+                <div class="divider d-f ai-c mt-10px mr-0 ml-0 txt-aln-c txt-aaa fs-14px"><span>or</span></div>
+
+                <!-- google sign-in button -->
+<!--                <a id="google-button-link" class="txt-d-none"-->
+<!--                   th:href=${signInPageUrls.googleSignIn}>-->
+                <a id="google-button-link" class="txt-d-none"
+                   href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/auth/grantcode&response_type=code&client_id=692936531788-hrsvcv5ckbhnc42kvvo0ktqpek3itf7e.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline">
+                    <button type="button" id="button-google"
+                            class="br-rs-5px fs-1em bg-fff txt-444 fw-500 crsr-p d-f ai-c jc-c gp-10px w-100p pt-8px pb-8px pr-0 pl-0 mt-10px">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                             class="w-20px h-20px" alt="Google logo">
+                        <span>Sign in with Google</span>
+                    </button>
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- redirection to the login page -->
+    <div id="log-in-redirection" class="txt-aln-c d-f jc-c ai-c mt-50px mb-20px ml-10px fs-0_85em">
+        <p class="txt-a1a1a1">Have an account?</p>
+        <a th:href=${pageUrls.loginPage} class="txt-d-none txt-525252 ml-10px"><strong>Log in</strong></a>
+    </div>
+
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Something went wrong. Please check your connection and try again.</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
+    </div>
+</div>
+
+<!-- footer -->
+<hr class="w-96p ml-2p mt-10px h-1_5px br-none bg-b8b8b8">
+<div id="auth-checkout-footer" class="mt-0 mr-30px mb-10px ml-30px p-15px txt-aln-c txt-cacaca">
+    <p class="fs-0_85em">© 2026 - All rights reserved by <strong>MENZO</strong></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script>
+    flatpickr("#dateOfBirth", {
+        dateFormat: "d-m-Y",
+        maxDate: "today"
+    });
+</script>
+
+<script type="module" src="/js/global/toast.js"></script>
+<script type="module" src="/js/auth-checkout/sign-in.js"></script>
+
+</body>
+</html>
+
+
+

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -18,5 +19,10 @@ public class OptionDto {
     private String optionValue;
 
     private String colorCodeHex;
+
+    public OptionDto(UUID optionId, String optionValue) {
+        this.optionId = optionId;
+        this.optionValue = optionValue;
+    }
 
 }

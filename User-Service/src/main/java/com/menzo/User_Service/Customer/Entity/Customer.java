@@ -1,9 +1,9 @@
 package com.menzo.User_Service.Customer.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.menzo.User_Service.Cart.Entity.Cart;
+import com.menzo.User_Service.WishlistCart.Cart.Entity.Cart;
 import com.menzo.User_Service.User.UserProfile.Entity.User;
-import com.menzo.User_Service.Wishlist.Entity.Wishlist;
+import com.menzo.User_Service.WishlistCart.Wishlist.Entity.Wishlist;
 import jakarta.persistence.*;
 import lombok.*;
 

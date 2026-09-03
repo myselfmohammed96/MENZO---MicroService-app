@@ -61,7 +61,7 @@ public class VariationQueryRestController {
      */
     @GetMapping("get-variations")
     public ResponseEntity<List<VariationOptionsDto>> getAllVariationsWithOptionsBySub(@RequestParam("id") UUID subCategoryId) {
-        List<VariationOptionsDto> variations = variationQueryService.getAllVariationsWithOptionsBySub(
+        List<VariationOptionsDto> variations = variationQueryService.getAllVariationsWithOptionsByCategory(
                 Components.SUB_CATEGORY,
                 subCategoryId
         );

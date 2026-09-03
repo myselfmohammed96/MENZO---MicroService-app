@@ -6,8 +6,8 @@ import com.menzo.Product_Service.Discount.Dto.MappedContentDto;
 import com.menzo.Product_Service.Discount.Enum.CapType;
 import com.menzo.Product_Service.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Discount.Enum.DiscountType;
-import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
-import com.menzo.Product_Service.Discount.Service.DiscountService;
+import com.menzo.Product_Service.Discount.Enum.OperationalStatus;
+import com.menzo.Product_Service.Discount.Service.DiscountCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +23,7 @@ import java.util.UUID;
 class DiscountServiceTest {
 
     @Autowired
-    private DiscountService discountService;
+    private DiscountCommandService discountService;
 
     //  test for Add new discount
     @Test
@@ -32,10 +32,10 @@ class DiscountServiceTest {
                 .discountCode("NY24-PA-26746-20P")
                 .discountName("New year sale")
                 .discountDescription("New year sale for 2024")
-                .level(DiscountLevel.CATEGORY)
-                .type(DiscountType.PERCENT)
-                .discountStatus(PromotionStatus.ACTIVE)
-                .value(BigDecimal.valueOf(20))
+                .discountLevel(DiscountLevel.CATEGORY)
+                .discountType(DiscountType.PERCENT)
+                .discountStatus(OperationalStatus.ACTIVE)
+                .discountValue(BigDecimal.valueOf(20))
                 .capType(CapType.PERCENT)
                 .capValue(BigDecimal.valueOf(30))
                 .startAt(LocalDateTime.of(2025, Month.DECEMBER, 28, 12, 35))

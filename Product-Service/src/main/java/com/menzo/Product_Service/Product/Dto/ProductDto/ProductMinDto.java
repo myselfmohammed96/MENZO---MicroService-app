@@ -1,9 +1,11 @@
-package com.menzo.Product_Service.Product.Dto;
+package com.menzo.Product_Service.Product.Dto.ProductDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductMinDto {
 
-    private Long productId;
+    private UUID productId;
 
     private String productName;
 

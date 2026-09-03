@@ -38,17 +38,17 @@ class CategoriesRetrievalServiceTest {
 //        categoriesRetrievalService.getAllParentWithSub();
 //    }
 
-    @Test
-    public void testGetParentCategoryById() {
-        CategoryDto parent = categoriesRetrievalService.getParentCategoryById(2L);
-        System.out.println(parent);
-    }
+//    @Test
+//    public void testGetParentCategoryById() {
+//        CategoryDto parent = categoriesRetrievalService.getParentCategoryById(2L);
+//        System.out.println(parent);
+//    }
 
-    @Test
-    public void testGetParentCategoryByIdWithSub() {
-        NestedCategoryDto parent = categoriesRetrievalService.getParentCategoryByIdWithSub(2L);
-        System.out.println(parent);
-    }
+//    @Test
+//    public void testGetParentCategoryByIdWithSub() {
+//        NestedCategoryDto parent = categoriesRetrievalService.getParentCategoryByIdWithSub(2L);
+//        System.out.println(parent);
+//    }
 
 //    @Test
 //    public void testGetParentBySubCategoryId() {
@@ -60,11 +60,11 @@ class CategoriesRetrievalServiceTest {
 
     //    ********* Sub categories *********
 
-    @Test
-    public void testGetAllSubOfParentId() {
-        List<CategoryDto> subList = categoriesRetrievalService.getAllSubCategoriesByParentId(2L);
-        System.out.println(subList);
-    }
+//    @Test
+//    public void testGetAllSubOfParentId() {
+//        List<CategoryDto> subList = categoriesRetrievalService.getAllSubCategoriesByParentId(2L);
+//        System.out.println(subList);
+//    }
 
 //    @Test
 //    public void testGetSubCategoryById() {

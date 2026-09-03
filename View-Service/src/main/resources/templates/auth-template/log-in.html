@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/global/element/sizing.css">
+    <link rel="stylesheet" href="/css/global/element/spacing.css">
+    <link rel="stylesheet" href="/css/global/element/colors.css">
+    <link rel="stylesheet" href="/css/global/element/element.css">
+    <link rel="stylesheet" href="/css/global/element/text.css">
+    <link rel="stylesheet" href="/css/global/modal-toast.css">
+
+    <link rel="stylesheet" href="/css/auth-checkout/auth-checkout-nav-bar-footer.css"/>
+    <link rel="stylesheet" href="/css/auth-checkout/log-in-reset-forgot-password.css"/>
+
+    <title>Log in</title>
+</head>
+<body>
+
+<!-- Nav bar -->
+<nav id="auth-checkout-nav-bar-container" class="w-100p h-9_7vh d-f jc-c ai-c bg-black">
+    <div class="d-f jc-c" id="auth-checkout-nav-bar-logo">
+        <a th:href=${pageUrls.indexPage} class="w-23_7vh">
+            <img src="/media/global/logo/MENZO_logo.jpg" class="w-100p" alt="">
+        </a>
+    </div>
+</nav>
+
+<!-- Page content -->
+<div id="auth-checkout-page-content-container" class="mt-9_7vh min-h-70vh">
+
+    <div>
+        <h1 class="txt-aln-c fs-2_3em txt-3e3e3e fw-600 pt-20px pb-20px pr-0 pl-0 mt-130px mb-1p mr-0 ml-0">Log in</h1>
+
+        <!-- login form -->
+        <form class="d-f fd-c jc-c ai-c" th:action="${pageUrls.loginFormSubmit}" th:object="${loginCred}" method="post">
+
+            <!-- email input -->
+            <div class="w-30p d-f fd-c jc-fs mb-5px h-auto">
+                <input type="email" th:field="*{email}"
+                       class="form-input fs-1em pt-10px pr-25px pb-5px pl-25px mb-15px ol-none br-none txt-383838 bg-trans"
+                       id="email"
+                       name="email" placeholder="Email">
+                <p id="email-error-message" class="error-message m-0 txt-red fs-13px"></p>
+            </div>
+
+            <!-- password input-->
+            <div class="w-30p d-f fd-c jc-fs  h-auto">
+                <input type="password" th:field="*{password}"
+                       class="form-input fs-1em pt-10px pr-25px pb-5px pl-25px mb-10px ol-none br-none txt-383838 bg-trans"
+                       id="password"
+                       name="password" placeholder="Password">
+                <p id="password-error-message" class="error-message m-0 txt-red fs-13px"></p>
+            </div>
+
+            <!-- forgot password -->
+            <a th:href=${pageUrls.forgotPasswordPage} id="forgot-password" class="txt-d-none txt-a1a1a1 fs-0_85em ml-22p">Forgot password?</a>
+
+            <!-- submit button -->
+            <button id="button-form"
+                    class="w-30p mt-45px pt-8px pb-8px pr-0 pl-0 crsr-p br-rs-5px br-none fs-1em txt-e2e2e2 bg-3e3e3e"
+                    type="submit">Log In
+            </button>
+
+            <div class="divider w-30p d-f ai-c txt-aln-c txt-aaa fs-14px m-10px"><span>or</span></div>
+
+            <!-- google sign-in button -->
+            <a class="txt-d-none w-30p"
+               href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/auth/grantcode&response_type=code&client_id=692936531788-hrsvcv5ckbhnc42kvvo0ktqpek3itf7e.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline">
+                <button type="button" id="button-google"
+                        class="w-100p p-8px crsr-p d-f ai-c jc-c gp-10px fs-1em br-rs-5px bg-fff txt-444 fw-500">
+                    <img class="w-20px h-20px" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                         alt="Google logo">
+                    <span>Sign in with Google</span>
+                </button>
+            </a>
+        </form>
+    </div>
+
+    <!-- redirection to the sign-in page -->
+    <div id="sign-in-redirection" class="txt-aln-c d-f jc-c ai-c mt-50px mb-20px ml-10px fs-0_85em">
+        <p class="txt-a1a1a1">Don't have an account?</p>
+        <a th:href=${pageUrls.signInPage} class="txt-d-none txt-525252 ml-10px"><strong>Sign in</strong></a>
+    </div>
+
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Something went wrong. Please check your connection and try again.</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
+    </div>
+</div>
+
+<!-- footer -->
+<hr class="w-96p ml-2p mt-10px h-1_5px br-none bg-b8b8b8">
+<div id="auth-checkout-footer" class="mt-0 mr-30px mb-10px ml-30px p-15px txt-aln-c txt-cacaca">
+    <p class="fs-0_85em">© 2026 - All rights reserved by <strong>MENZO</strong></p>
+</div>
+
+<!--<script src="/home-js/login-form.js"></script>-->
+<script type="module" src="/js/global/toast.js"></script>
+</body>
+</html>

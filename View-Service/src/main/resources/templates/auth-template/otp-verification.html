@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/global/element/sizing.css">
+    <link rel="stylesheet" href="/css/global/element/spacing.css">
+    <link rel="stylesheet" href="/css/global/element/colors.css">
+    <link rel="stylesheet" href="/css/global/element/element.css">
+    <link rel="stylesheet" href="/css/global/element/text.css">
+    <link rel="stylesheet" href="/css/global/modal-toast.css">
+
+    <link rel="stylesheet" href="/css/auth-checkout/auth-checkout-nav-bar-footer.css"/>
+    <link rel="stylesheet" href="/css/auth-checkout/log-in-reset-forgot-password.css"/>
+    <link rel="stylesheet" href="/css/auth-checkout/otp-verification.css"/>
+
+    <title>OTP verification</title>
+</head>
+<body>
+
+<!-- Nav bar -->
+<nav id="auth-checkout-nav-bar-container" class="w-100p h-9_7vh d-f jc-c ai-c bg-black">
+    <div class="d-f jc-c" id="auth-checkout-nav-bar-logo">
+        <a th:href=${pageUrls.indexPage} class="w-23_7vh">
+            <img src="/media/global/logo/MENZO_logo.jpg" class="w-100p" alt="">
+        </a>
+    </div>
+</nav>
+
+<!-- Page content -->
+<div id="auth-checkout-page-content-container" class="mt-9_7vh d-f fd-c min-h-70vh">
+
+    <div id="otp-verification-heading-container" class="txt-aln-c d-ib w-100p h-fc mt-9_7vh mb-50px">
+        <h1 class="auth-heading fs-2_3em txt-3e3e3e fw-600">OTP Verification</h1>
+        <p class="auth-text mt-20px txt-a1a1a1 fs-14px">Please enter the OTP (One-Time Password) sent to <br>
+            your registered email/phone number to complete <br>
+            your verification.</p>
+    </div>
+    <form class="auth-form otp-verification-form mb-30px d-f fd-c jc-c ai-c" id="otp-form" action="">
+        <div>
+            <div class="otp-container d-f gp-10px jc-c">
+                <input type="text" maxlength="1" class="otp-input txt-aln-c fs-20px br-rs-8px w-40px h-50px"/>
+                <input type="text" maxlength="1" class="otp-input txt-aln-c fs-20px br-rs-8px w-40px h-50px"/>
+                <input type="text" maxlength="1" class="otp-input txt-aln-c fs-20px br-rs-8px w-40px h-50px"/>
+                <input type="text" maxlength="1" class="otp-input txt-aln-c fs-20px br-rs-8px w-40px h-50px"/>
+                <input type="text" maxlength="1" class="otp-input txt-aln-c fs-20px br-rs-8px w-40px h-50px"/>
+                <!-- <input type="text" maxlength="1" class="otp-input txt-aln-c fs-20px br-rs-8px w-40px h-50px" /> -->
+            </div>
+            <p class="error-message txt-red fs-13px d-b mt-5px"></p>
+
+        </div>
+
+        <button class="otp-verification-button button-form-1 br-rs-5px br-none fs-1em txt-e2e2e2 bg-3e3e3e w-20p mt-40px pt-8px pb-8px pr-0 pl-0 crsr-p"
+                type="submit">verify OTP
+        </button>
+    </form>
+    <div class="otp-timer txt-aln-c mb-30px">
+        <p class="txt-a1a1a1 d-i">Remaining time:</p>
+        <strong class="txt-d-none txt-525252" id="timer">00:59s</strong>
+    </div>
+
+</div>
+
+<!-- send otp again -->
+<div id="send-otp-again" class="txt-aln-c d-f jc-c mt-50px mb-20px fs-0_85em">
+    <p class="txt-a1a1a1">Didn't get the OTP?</p>
+    <a class="txt-d-none txt-525252 ml-10px" href=""><strong>Resend</strong></a>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+    <div class="toast-icon toast-success-icon" id="toast-icon"></div>
+    <div class="toast-message-container">
+        <h3 id="toast-title">Success!</h3>
+        <p id="toast-message">Something went wrong. Please check your connection and try again.</p>
+    </div>
+    <div class="toast-close-container">
+        <span id="toast-close-btn">&#10005;</span>
+    </div>
+</div>
+
+<!-- Footer -->
+<hr class="w-96p ml-2p mt-10px h-1_5px br-none bg-b8b8b8">
+<div id="auth-checkout-footer" class="mt-0 mr-30px mb-10px ml-30px p-15px txt-aln-c txt-cacaca">
+    <p class="fs-0_85em">© 2026 - All rights reserved by <strong>MENZO</strong></p>
+</div>
+
+<script type="module" src="/js/global/toast.js"></script>
+
+</body>
+</html>

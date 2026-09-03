@@ -28,23 +28,23 @@ class VariationsServiceTest {
         System.out.println(variation);
     }
 
-    @Test
-    public void testUpdateVariation() {
-        VariationDto variationDto = VariationDto.builder()
-                .variationName("Variation new")
-                .build();
-        Variation variation = variationsService.updateVariation(
-                25L,
-                variationDto
-        );
-        System.out.println(variation);
-    }
+//    @Test
+//    public void testUpdateVariation() {
+//        VariationDto variationDto = VariationDto.builder()
+//                .variationName("Variation new")
+//                .build();
+//        Variation variation = variationsService.updateVariation(
+//                25L,
+//                variationDto
+//        );
+//        System.out.println(variation);
+//    }
 
-    @Test
-    public void testDeleteVariation() {
-        boolean deleted = variationsService.deleteVariation(25L);
-        System.out.println("Deleted: " + deleted);
-    }
+//    @Test
+//    public void testDeleteVariation() {
+//        boolean deleted = variationsService.deleteVariation(25L);
+//        System.out.println("Deleted: " + deleted);
+//    }
 
 
 

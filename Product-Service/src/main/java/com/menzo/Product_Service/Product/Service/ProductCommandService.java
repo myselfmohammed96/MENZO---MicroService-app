@@ -10,8 +10,8 @@ import com.menzo.Product_Service.Product.Dto.ProductDto.ProductDto;
 import com.menzo.Product_Service.Product.Entity.*;
 
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepository;
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductCountryOfOriginRepository;
+import com.menzo.Product_Service.Product.Repository.ProductsRepository;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import jakarta.persistence.EntityNotFoundException;
@@ -85,7 +85,7 @@ public class ProductCommandService {
      *
      */
     @Transactional
-    public Long addNewProduct(CreateProductDto newProductDetails,
+    public UUID addNewProduct(CreateProductDto newProductDetails,
                               List<SizeDetailsDto> sizeDetails,
                               Map<String, String> variationDetailsMap,
                               Map<String, MultipartFile> images) throws IOException {
@@ -127,7 +127,7 @@ public class ProductCommandService {
         String superSku = productUtilityService.generateSKU(
                 null,
                 subCategory.getAbbreviation(),
-                savedProduct.getProductId(),
+                savedProduct.getProductId(),    //  ## need to have a number replacement for this UUID productId
                 color.getColorCode().getColorAbbreviation(),
                 null
         );
@@ -155,7 +155,7 @@ public class ProductCommandService {
         List<ProductImage> savedImages = productUtilityService.saveImages(
                 parentCategory.getCategoryName(),
                 subCategory.getCategoryName(),
-                savedProduct.getProductId(),
+                savedProduct.getProductId(),    //  ## need to have a number replacement for this UUID productId
                 superSku,
                 savedItems,
                 images
@@ -191,7 +191,7 @@ public class ProductCommandService {
         boolean isActive = newProductDetails.getActiveStatus()
                 .equalsIgnoreCase("active");
         CountryOfOrigin country = addCountryOfOrigin(newProductDetails.getCountryOfOrigin());
-        long companyId = 1L;
+        UUID companyId = UUID.randomUUID();
 
         //  saving product
         Product newProduct = Product.builder()
@@ -235,7 +235,7 @@ public class ProductCommandService {
      *   Product identified by product ID
      *
      */
-    public boolean updateProductDetails(Long productId, ProductDto latestProduct) {
+    public boolean updateProductDetails(UUID productId, ProductDto latestProduct) {
 
         //  fetching product by ID
         Product product = productsRepo.findById(productId)
@@ -255,7 +255,6 @@ public class ProductCommandService {
 
         //  updating product sub-category
         if (latestProduct.getSubCategoryId() != null
-                && latestProduct.getSubCategoryId() >= 0L
                 && !Objects.equals(latestProduct.getSubCategoryId(), product.getSubCategory().getCategoryId())) {
             ProductCategory latestSub = categoriesQueryService.getSubCategoryEntityById(latestProduct.getSubCategoryId());
             product.setSubCategory(latestSub);
@@ -275,24 +274,21 @@ public class ProductCommandService {
 
         //  updating item weight
         product.setItemWeight(latestProduct.getItemWeight() != null
-                && latestProduct.getItemWeight() >= 0f
                 ? latestProduct.getItemWeight()
                 : product.getItemWeight());
 
         //  updating manufacturer
         product.setManufacturerId(latestProduct.getManufacturerId() != null
-                && latestProduct.getManufacturerId() >= 0l
                 ? latestProduct.getManufacturerId()
                 : product.getManufacturerId());
 
         //  updating packer
         product.setPackersId(latestProduct.getPackerId() != null
-                && latestProduct.getPackerId() >= 0l
                 ? latestProduct.getPackerId()
                 : product.getPackersId());
 
         //  updating country of origin
-        addCountryOfOrigin(latestProduct.getCountyOfOrigin());
+//        addCountryOfOrigin(latestProduct.getCountyOfOrigin());
         product.setCountryOfOrigin(latestProduct.getCountyOfOrigin() != null
                 && !latestProduct.getCountyOfOrigin().isEmpty()
                 ? addCountryOfOrigin(latestProduct.getCountyOfOrigin())
@@ -310,7 +306,7 @@ public class ProductCommandService {
      *   Product identified by product ID
      *
      */
-    public boolean updateProductActiveStatus(Long productId, boolean isActive) {
+    public boolean updateProductActiveStatus(UUID productId, boolean isActive) {
 
         //  fetching product by ID
         Product product = productsRepo.findById(productId)
@@ -330,14 +326,14 @@ public class ProductCommandService {
      *
      */
     public boolean updateProductApprovalStatus(String staffEmail,
-                                               Long productId,
+                                               UUID productId,
                                                boolean isApproved) {
         //  fetching product by ID
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
 
         //  fetching staff ID of approving staff
-        long approvingStaffId = userFeign.getStaffIdByStaffEmail(new EmailDto(staffEmail)).getStaffId();
+        UUID approvingStaffId = userFeign.getStaffIdByStaffEmail(new EmailDto(staffEmail)).getStaffId();
 
         //  updating product approval status
         product.setApproved(isApproved);
@@ -352,7 +348,7 @@ public class ProductCommandService {
      *   product identified by product ID
      *
      */
-    public boolean updateProductPodStatus(Long productId, boolean podAvailable) {
+    public boolean updateProductPodStatus(UUID productId, boolean podAvailable) {
 
         //  fetching product by ID
         Product product = productsRepo.findById(productId)
@@ -366,28 +362,11 @@ public class ProductCommandService {
 
     /*
      *
-     *   Update product images
-     *   Product identified by product ID
-     *
-     */
-//    public boolean updateProductImages(Long productId,
-//                                       Map<String, MultipartFile> images) {
-//
-//        //  fetching product by ID
-//        Product product = productsRepo.findById(productId)
-//                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
-//        product.get
-//        return productUtilityService.updateImages(product);
-//    }
-
-
-    /*
-     *
      *   Delete product (soft delete)
      *   Product identified by product ID
      *
      */
-    public boolean deleteProduct(Long productId) {
+    public boolean deleteProduct(UUID productId) {
 
         //  fetching product by ID
         Product product = productsRepo.findById(productId)

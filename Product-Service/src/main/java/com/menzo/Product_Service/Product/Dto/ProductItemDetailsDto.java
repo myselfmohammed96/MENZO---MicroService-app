@@ -13,7 +13,7 @@ import java.util.*;
 @Builder
 public class ProductItemDetailsDto {
 
-    private Long productItemId;
+    private UUID productItemId;
 
     private String productName;
 
@@ -26,7 +26,6 @@ public class ProductItemDetailsDto {
     private boolean podAvailable;
 
     private Date addedDate;
-
 
     private String sku;
 

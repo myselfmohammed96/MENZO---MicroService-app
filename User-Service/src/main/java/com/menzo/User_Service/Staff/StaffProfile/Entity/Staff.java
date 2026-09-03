@@ -26,7 +26,7 @@ import java.util.UUID;
 public class Staff {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID staffId;
 
     @OneToOne(fetch = FetchType.LAZY)

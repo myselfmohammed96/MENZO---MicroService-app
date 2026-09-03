@@ -192,7 +192,7 @@ public class UserQueryService {
      *   User email existence check
      *
      */
-    public boolean isUserEmailExists(EmailDto emailDto) {
+    public boolean checkUserEmailExists(EmailDto emailDto) {
         return userRepo.existsByEmail(emailDto.getEmail());
     }
 }

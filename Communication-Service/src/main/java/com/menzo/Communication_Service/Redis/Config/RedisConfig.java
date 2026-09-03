@@ -22,6 +22,7 @@ public class RedisConfig {
         return new JedisConnectionFactory(config, jedisClientConfiguration);
     }
 
+
 //    public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory jedisConnectionFactory) {
 //        RedisTemplate<String, Object> template = new RedisTemplate<>();
 //        template.setConnectionFactory(jedisConnectionFactory);
@@ -35,6 +36,7 @@ public class RedisConfig {
 //        jsonSerializer.setObjectMapper(mapper);
 //    }
 
+
 //    @Bean
 //    public JedisConnectionFactory jedisConnectionFactory() {
 //        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -47,7 +49,8 @@ public class RedisConfig {
 //        return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration);
 ////        return jedisConnectionFactory;
 //    }
-//
+
+
 //    @Bean
 //    public RedisTemplate<String, Object> redisTemplate() {
 //        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
@@ -61,6 +64,7 @@ public class RedisConfig {
 //        redisTemplate.afterPropertiesSet();
 //        return redisTemplate;
 //    }
+
 
 //    @Bean
 //    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {

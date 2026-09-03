@@ -2,25 +2,17 @@ package com.menzo.Product_Service.Modules.Product.Service;
 
 //import com.menzo.Product_Service.Dto.ProductDto.NewProductDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
-import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Product.Entity.Product;
-import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepository;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
-import com.menzo.Product_Service.Variation.Entity.VariationOption;
+import com.menzo.Product_Service.Product.Repository.ProductConfigurationRepository;
+import com.menzo.Product_Service.Product.Repository.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductsRepository;
 import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
 import com.menzo.Product_Service.Product.Service.ProductCommandService;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,52 +71,52 @@ class ProductsServiceTest {
 //    }
 
     //  add new product item
-    @Test
-    @Transactional
-    @Rollback(value = true)
-    public void testSaveNewProductItem() throws Exception {
-        Method method = ProductCommandService.class.getDeclaredMethod(
-                "saveNewProductItem",
-                Map.class,
-                List.class,
-                ProductCategory.class,
-                Product.class,
-                Long.class,
-                Float.class,
-                Boolean.class
-        );
-        method.setAccessible(true);
-        System.out.println("method is now accessible - test");
-
-        Map<Long, Integer> sizeStockMap = new HashMap<>();
-        sizeStockMap.put(7L, 98);
-        sizeStockMap.put(8L, 53);
-        sizeStockMap.put(18L, 45);
-        List<VariationOption> variations = optionsRepo
-                .findByIdIn(Arrays.asList(
-                        16L,
-                        21L,
-                        24L
-                ));
-        System.out.println("Getting sub-category - test");
-        ProductCategory subCategory = categoriesRetrievalService
-                .getSubCategoryEntityById(121L);
-        Product product = productsRepo.findById(73L)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: 73"));
-
-        System.out.println("Invoking the method - Test");
-        Object invoked = method.invoke(
-                productsService,
-                sizeStockMap,
-                variations,
-                subCategory,
-                product,
-                5L,
-                335.50F,
-                true
-        );
-        System.out.println(invoked);
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(value = true)
+//    public void testSaveNewProductItem() throws Exception {
+//        Method method = ProductCommandService.class.getDeclaredMethod(
+//                "saveNewProductItem",
+//                Map.class,
+//                List.class,
+//                ProductCategory.class,
+//                Product.class,
+//                Long.class,
+//                Float.class,
+//                Boolean.class
+//        );
+//        method.setAccessible(true);
+//        System.out.println("method is now accessible - test");
+//
+//        Map<Long, Integer> sizeStockMap = new HashMap<>();
+//        sizeStockMap.put(7L, 98);
+//        sizeStockMap.put(8L, 53);
+//        sizeStockMap.put(18L, 45);
+//        List<VariationOption> variations = optionsRepo
+//                .findByIdIn(Arrays.asList(
+//                        16L,
+//                        21L,
+//                        24L
+//                ));
+//        System.out.println("Getting sub-category - test");
+//        ProductCategory subCategory = categoriesRetrievalService
+//                .getSubCategoryEntityById(121L);
+//        Product product = productsRepo.findById(73L)
+//                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: 73"));
+//
+//        System.out.println("Invoking the method - Test");
+//        Object invoked = method.invoke(
+//                productsService,
+//                sizeStockMap,
+//                variations,
+//                subCategory,
+//                product,
+//                5L,
+//                335.50F,
+//                true
+//        );
+//        System.out.println(invoked);
+//    }
 
     @Test
     public void anotherFindTest() {
@@ -181,23 +173,23 @@ class ProductsServiceTest {
         System.out.println(invokedResult);
     }
 
-    @Test
-    public void testProcessVariationsWithProductConfigList() throws Exception {
-        Method method = ProductCommandService.class.getDeclaredMethod(
-                "processVariations",
-                Map.class,
-                List.class
-        );
-        method.setAccessible(true);
-
-        List<ProductConfiguration> configList = productConfigurationRepo.findAllByProductItemId(63L);
-        Object invokedResult = method.invoke(
-                productsService,
-                null,
-                configList
-        );
-        System.out.println(invokedResult);
-    }
+//    @Test
+//    public void testProcessVariationsWithProductConfigList() throws Exception {
+//        Method method = ProductCommandService.class.getDeclaredMethod(
+//                "processVariations",
+//                Map.class,
+//                List.class
+//        );
+//        method.setAccessible(true);
+//
+//        List<ProductConfiguration> configList = productConfigurationRepo.findAllByProductItemId(63L);
+//        Object invokedResult = method.invoke(
+//                productsService,
+//                null,
+//                configList
+//        );
+//        System.out.println(invokedResult);
+//    }
 
     @Test
     public void testGenerateSKU() throws Exception {

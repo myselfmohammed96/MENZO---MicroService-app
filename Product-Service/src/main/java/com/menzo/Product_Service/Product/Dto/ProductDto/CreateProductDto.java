@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,10 +22,10 @@ public class CreateProductDto {
     private String productCode;
 
     @NotBlank(message = "Product parent category id required")
-    private Long categoryId;
+    private UUID categoryId;
 
     @NotBlank(message = "Product sub-category id required")
-    private Long subCategoryId;
+    private UUID subCategoryId;
 
     @NotBlank(message = "Product description required")
     private String description;
@@ -32,7 +35,7 @@ public class CreateProductDto {
     private String activeStatus;
 
     @NotBlank(message = "Product color required")
-    private Long colorId;
+    private UUID colorId;
 
     private String discount;
 
@@ -40,7 +43,7 @@ public class CreateProductDto {
 
     private String genericName;
 
-    private Float itemWeight;
+    private BigDecimal itemWeight;
 
     private String manufacturer;
 

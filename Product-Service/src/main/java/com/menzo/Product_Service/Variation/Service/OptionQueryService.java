@@ -45,16 +45,16 @@ public class OptionQueryService {
      *   Get options by variation name
      *
      */
-//    public List<String> getOptionsByVariationName(Long categoryId, String variationName) {
-//        if (categoryId == null) {
-//            List<OptionMinimalDto> optionsDtoList = variationsRepo.findOptionsByVariationName(variationName);
-//            return optionsDtoList.stream()
-//                    .map(dto -> dto.getOptionValue())
-//                    .collect(Collectors.toList());
-//        } else {
-//            return null;
-//        }
-//    }
+    public List<String> getOptionsByVariationName(Long categoryId, String variationName) {
+        if (categoryId == null) {
+            List<OptionDto> optionsDtoList = variationsRepo.findOptionsByVariationName(variationName);
+            return optionsDtoList.stream()
+                    .map(OptionDto::getOptionValue)
+                    .collect(Collectors.toList());
+        } else {
+            return null;
+        }
+    }
 
 
     /*
@@ -118,7 +118,7 @@ public class OptionQueryService {
 //                .setParameter("isDeleted", false);
 
         //  fetching options
-        List<VariationOption> options = optionsRepo.findByVariationId(variationId);
+        List<VariationOption> options = optionsRepo.findByVariation_VariationId(variationId);
         if (variation.getVariationName().equals("Colors")) {
             Set<OptionDto> optionDtos = options.stream().map(opt ->
                     OptionDto.builder()

@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.Product.Dto;
+package com.menzo.Product_Service.Product.Dto.ItemDto;
 
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;

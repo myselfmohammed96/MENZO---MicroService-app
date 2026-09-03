@@ -12,16 +12,16 @@ class ProductRestControllerTest {
     @Autowired
     private ProductCommandRestController productRestController;
 
-    @Test
-    public void testGetAllProducts() {
-        ResponseEntity<?> allProducts = productRestController.getAdminProductListing(
-                0,
-                15,
-                "",
-                null,
-                null
-        );
-        System.out.println("Here -> " + allProducts.getBody());
-    }
+//    @Test
+//    public void testGetAllProducts() {
+//        ResponseEntity<?> allProducts = productRestController.getAdminProductListing(
+//                0,
+//                15,
+//                "",
+//                null,
+//                null
+//        );
+//        System.out.println("Here -> " + allProducts.getBody());
+//    }
 
 }

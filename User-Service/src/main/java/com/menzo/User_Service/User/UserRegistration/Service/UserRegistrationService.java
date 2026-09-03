@@ -1,7 +1,10 @@
 package com.menzo.User_Service.User.UserRegistration.Service;
 
-import com.menzo.User_Service.Cart.Entity.Cart;
-import com.menzo.User_Service.Cart.Repository.CartRepository;
+import com.menzo.User_Service.Feign.CommunicationFeign;
+import com.menzo.User_Service.User.UserProfile.Service.UserQueryService;
+import com.menzo.User_Service.User.UserRegistration.Enum.UserRegistrationSource;
+import com.menzo.User_Service.WishlistCart.Cart.Entity.Cart;
+import com.menzo.User_Service.WishlistCart.Cart.Repository.CartRepository;
 import com.menzo.User_Service.Customer.Entity.Customer;
 import com.menzo.User_Service.Customer.Repository.CustomerRepository;
 import com.menzo.User_Service.Exceptions.AuthFeignException;
@@ -15,14 +18,16 @@ import com.menzo.User_Service.User.UserProfile.Repository.UserRepository;
 import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
 import com.menzo.User_Service.User.UserRegistration.Dto.RegNewUser;
 import com.menzo.User_Service.User.UserRegistration.Dto.TokenMinimalDto;
-import com.menzo.User_Service.Wishlist.Entity.Wishlist;
-import com.menzo.User_Service.Wishlist.Repository.WishlistRepository;
+import com.menzo.User_Service.WishlistCart.Wishlist.Entity.Wishlist;
+import com.menzo.User_Service.WishlistCart.Wishlist.Repository.WishlistRepository;
 import jakarta.servlet.http.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class UserRegistrationService {
@@ -31,6 +36,9 @@ public class UserRegistrationService {
 
     @Autowired
     private AuthFeign authFeign;
+
+    @Autowired
+    private CommunicationFeign communicationFeign;
 
     @Autowired
     private UserRepository userRepo;
@@ -47,47 +55,41 @@ public class UserRegistrationService {
     @Autowired
     private CredentialsService credentialsService;
 
+    @Autowired
+    private UserQueryService userQueryService;
+
 
     /*
      *
-     *   New User Registration (customer)
+     *   Add new user
+     *   From user sign in form
      *
      */
-    public Cookie registerNewUser(RegNewUser newUser) {
-        //  creating new user entity
-        User savedUser = saveNewUser(newUser);
-
-        //  creating new customer entity
-        Customer newCustomer = saveNewCustomer(savedUser);
-
-        //  creating new customer cart entity
-        createNewCustomerCart(newCustomer);
-
-        //  creating new customer wishlist entity
-        createNewCustomerWishlist(newCustomer);
-
-        //  creating response with JWT cookie
-        TokenMinimalDto jwtToken = null;
-        try {
-            jwtToken = authFeign.generateToken(new EmailDto(savedUser.getEmail()));
-        } catch (AuthFeignException ex) {
-            logger.error("Feign error while JWT token: status = {}, message = {}", ex.getStatus(), ex.getMessage());
-            throw new RuntimeException("Identity service failed while creating JWT token", ex);
-        }
-        if (jwtToken == null || jwtToken.getToken() == null) {
-            logger.error("JWT token is null");
-            throw new RuntimeException("JWT token is null");
-        }
-        return createCookie(jwtToken.getToken());
-    }
-
-
-    //   Create new Registered user
-    private User saveNewUser(RegNewUser newUser) {
+    public boolean addNewUser(RegNewUser newUser) {
         try {
             if (userRepo.existsByEmail(newUser.getEmail())) {
                 throw new IllegalArgumentException("Email is already in use.");
             }
+
+            //  age validation - must be at least 5+ years old
+            LocalDate minDate = LocalDate.now()
+                    .minusYears(5);
+
+            if (newUser.getDateOfBirth().isAfter(minDate)) {
+                throw new IllegalArgumentException("Age is below 5 years. Please enter correct date of birth.");
+            }
+
+            //  password validation
+            if (!newUser.getPassword().trim().equals(newUser.getConfirmPassword().trim())) {
+                throw new IllegalArgumentException("Passwords don't match.");
+            }
+
+            //  check user email already exists
+            if (userQueryService.checkUserEmailExists(new EmailDto(newUser.getEmail()))) {
+                throw new IllegalArgumentException("User email already exists.");
+            }
+
+            //  creating new user entity
             logger.info("New user registration: {}", newUser.getEmail());
 
             String encodedPassword = credentialsService.encodePassword(newUser.getPassword());
@@ -100,18 +102,58 @@ public class UserRegistrationService {
                     .userType(UserTypes.CUSTOMER)
                     .dateOfBirth(newUser.getDateOfBirth())
                     .password(encodedPassword)
+                    .userRegistrationSource(UserRegistrationSource.USER_SIGN_IN)
                     .build();
             User savedUser = userRepo.save(user);
             if (savedUser.getUserId() == null) {
                 throw new RuntimeException("Failed to save user");
             }
             logger.info("User registered: {}", user.getEmail());
-            return savedUser;
+
+            //  returning boolean value after sending OTP to user email
+            return Boolean.TRUE.equals(communicationFeign
+                    .sendUserOtp(new EmailDto(savedUser.getEmail()))
+                    .getBody());
+
         } catch (Exception e) {
             logger.error("Error saving user: {}", e.getMessage(), e);
             throw e;
         }
     }
+
+
+    /*
+     *
+     *   New User Registration (customer)
+     *
+     */
+//    public Cookie registerNewUser(RegNewUser newUser) {
+//        //  creating new user entity
+//        User savedUser = saveNewUser(newUser);
+//
+//        //  creating new customer entity
+//        Customer newCustomer = saveNewCustomer(savedUser);
+//
+//        //  creating new customer cart entity
+//        createNewCustomerCart(newCustomer);
+//
+//        //  creating new customer wishlist entity
+//        createNewCustomerWishlist(newCustomer);
+//
+//        //  creating response with JWT cookie
+//        TokenMinimalDto jwtToken = null;
+//        try {
+//            jwtToken = authFeign.generateToken(new EmailDto(savedUser.getEmail()));
+//        } catch (AuthFeignException ex) {
+//            logger.error("Feign error while JWT token: status = {}, message = {}", ex.getStatus(), ex.getMessage());
+//            throw new RuntimeException("Identity service failed while creating JWT token", ex);
+//        }
+//        if (jwtToken == null || jwtToken.getToken() == null) {
+//            logger.error("JWT token is null");
+//            throw new RuntimeException("JWT token is null");
+//        }
+//        return createCookie(jwtToken.getToken());
+//    }
 
 
     //   Create new customer

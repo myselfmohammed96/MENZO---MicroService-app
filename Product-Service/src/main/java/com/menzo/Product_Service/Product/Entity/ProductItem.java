@@ -3,6 +3,7 @@ package com.menzo.Product_Service.Product.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -20,7 +22,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 //@ToString(exclude = {"configurations", "images"})
-@Table(name = "product_items")
+@Table(
+        name = "product_items",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_product_item_sku",
+                columnNames = "sku"
+        )
+)
 @FilterDef(
         name = "itemFilter",
         parameters = {
@@ -39,29 +47,32 @@ public class ProductItem {
 //    private Long id;
 
     @Id
-    @SequenceGenerator(
-            name = "item_sequence",
-            sequenceName = "item_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "item_sequence"
-    )
-    private Long itemId;
+//    @SequenceGenerator(
+//            name = "item_sequence",
+//            sequenceName = "item_sequence",
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "item_sequence"
+//    )
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "item_id")
+    private UUID itemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "product_id",
-            referencedColumnName = "id",
-            nullable = false
+            referencedColumnName = "product_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_item_product")
     )
     private Product product;
 
     @Column(nullable = false)
     private String superSku;
 
-    @Column(name = "sku", nullable = false, unique = true)
+    @Column(name = "sku", nullable = false)
     private String SKU;
 
     @Column(nullable = false)
@@ -72,6 +83,8 @@ public class ProductItem {
 
     @Column(nullable = false)
     private BigDecimal mrp;
+
+    private BigDecimal minSellingPrice;
 
     @Column(nullable = false)
     private boolean isActive = true;

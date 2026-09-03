@@ -15,12 +15,15 @@ public @interface EnableVariationFilter {
      *   @EnableVariationFilter
      *
      *   For custom values as parameters:
+     *   @EnableVariationFilter(applyActive = false, applyDeleted = true, isDeleted = false)
      *   @EnableVariationFilter(isActive = false, isDeleted = true)
      *   @EnableVariationFilter(isActive = false)
      *
      */
+    boolean applyActive() default true;
     boolean isActive() default true;
 
+    boolean applyDeleted() default true;
     boolean isDeleted() default false;
 
 }

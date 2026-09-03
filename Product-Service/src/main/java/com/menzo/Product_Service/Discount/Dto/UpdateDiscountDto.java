@@ -1,7 +1,8 @@
 package com.menzo.Product_Service.Discount.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.Product_Service.Discount.Enum.CapType;
-import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
+import com.menzo.Product_Service.Discount.Enum.OperationalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class UpdateDiscountDto {
 
     private String discountDescription;
 
-    private BigDecimal value;
+    private BigDecimal discountValue;
 
     private CapType capType;
 
@@ -28,12 +29,15 @@ public class UpdateDiscountDto {
 
     private Integer priority;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime startAt;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime endAt;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime resumeAt;
 
-    private PromotionStatus discountStatus;
+    private OperationalStatus discountStatus;
 
 }

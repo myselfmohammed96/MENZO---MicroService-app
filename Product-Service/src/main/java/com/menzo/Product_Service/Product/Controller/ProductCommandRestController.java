@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/product")
@@ -82,7 +83,7 @@ public class ProductCommandRestController {
         }
 
         //  save new product
-        Long savedProductId = productCommandService.addNewProduct(
+        UUID savedProductId = productCommandService.addNewProduct(
                 productDetails,
                 sizeDetails,
                 variationDetailsMap,
@@ -91,7 +92,7 @@ public class ProductCommandRestController {
 
         //  response
         Map<String, Object> responseBody = new HashMap<>();
-        if (savedProductId != null && savedProductId > 0) {
+        if (savedProductId != null) {
             logger.info("Product saved successfully with ID: {}", savedProductId);
             responseBody.put("message", "Product saved successfully");
             responseBody.put("productId", savedProductId);
@@ -115,10 +116,10 @@ public class ProductCommandRestController {
      *
      */
     @PutMapping(value = "/update")
-    public ResponseEntity<?> updateProductDetails(@RequestParam("id") Long productId,
+    public ResponseEntity<?> updateProductDetails(@RequestParam("id") UUID productId,
                                                   @RequestBody ProductDto latestProduct) {
         //  input validation
-        if (productId == null || productId <= 0) {
+        if (productId == null) {
             logger.warn("Invalid product ID: {}", productId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid Product ID"));
         }
@@ -146,12 +147,12 @@ public class ProductCommandRestController {
      */
     @PutMapping(value = "/update-status")
     public ResponseEntity<?> updateProductActiveStatus(@RequestHeader("roles") String roles,
-                                                       @RequestParam("id") Long productId,
+                                                       @RequestParam("id") UUID productId,
                                                        @RequestParam("active") boolean isActive) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (productId == null || productId <= 0) {
+            if (productId == null) {
                 logger.warn("Invalid product ID: {}", productId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product ID"));
@@ -183,12 +184,12 @@ public class ProductCommandRestController {
     @PutMapping("/update-approval")
     public ResponseEntity<?> updateProductApprovalStatus(@RequestHeader("roles") String roles,
                                                          @RequestHeader("email") String staffEmail,
-                                                         @RequestParam("id") Long productId,
+                                                         @RequestParam("id") UUID productId,
                                                          @RequestParam("approved") boolean isApproved) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (productId == null || productId <= 0) {
+            if (productId == null) {
                 logger.warn("Invalid product ID: {}", productId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product ID"));
@@ -226,12 +227,12 @@ public class ProductCommandRestController {
      */
     @PutMapping("/update-pod")
     public ResponseEntity<?> updateProductPodStatus(@RequestHeader("roles") String roles,
-                                                    @RequestParam("id") Long productId,
+                                                    @RequestParam("id") UUID productId,
                                                     @RequestParam("podAvailable") boolean podAvailable) {
         if (roles.equals("ADMIN")) {
 
             //  input validation
-            if (productId == null || productId <= 0) {
+            if (productId == null) {
                 logger.warn("Invalid product ID: {}", productId);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid product ID"));
@@ -264,9 +265,9 @@ public class ProductCommandRestController {
      *
      */
     @DeleteMapping(value = "/delete")
-    public ResponseEntity<?> deleteProduct(@RequestParam("id") Long productId) {
+    public ResponseEntity<?> deleteProduct(@RequestParam("id") UUID productId) {
         //  input validation
-        if (productId == null || productId <= 0) {
+        if (productId == null) {
             logger.warn("Invalid product ID: {}", productId);
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid product ID"));
         }

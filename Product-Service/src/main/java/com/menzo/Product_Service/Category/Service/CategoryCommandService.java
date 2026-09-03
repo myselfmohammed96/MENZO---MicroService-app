@@ -80,7 +80,7 @@ public class CategoryCommandService {
                                                 CategoryDto latestParentCategory) {
 
         //  fetching parent category by ID
-        ProductCategory parentCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentCategoryId)
+        ProductCategory parentCategory = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNull(parentCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentCategoryId));
 
         //  updating newly available fields
@@ -153,7 +153,7 @@ public class CategoryCommandService {
     public ProductCategory updateSubCategory(UUID subCategoryId, CategoryDto latestSubCategory) {
 
         //  fetching sub-category by ID
-        ProductCategory subCategory = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
+        ProductCategory subCategory = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub category not found with ID: " + subCategoryId));
 
         // updating the available fields in latestSubCategory
@@ -190,12 +190,12 @@ public class CategoryCommandService {
                                               boolean isActive,
                                               Components categoryLevel) {
         if (categoryLevel == Components.CATEGORY) {
-            ProductCategory parent = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(categoryId)
+            ProductCategory parent = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNull(categoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + categoryId));
             parent.setActive(isActive);
             return categoriesRepo.save(parent).isActive();
         } else if (categoryLevel == Components.SUB_CATEGORY) {
-            ProductCategory sub = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(categoryId)
+            ProductCategory sub = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNotNull(categoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + categoryId));
             sub.setActive(isActive);
             return categoriesRepo.save(sub).isActive();
@@ -221,11 +221,11 @@ public class CategoryCommandService {
         ProductCategory category;
         if (categoryLevel == Components.CATEGORY) {
             //  parent category
-            category = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(categoryId)
+            category = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNull(categoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Parent category not found with category ID: " + categoryId));
         } else if (categoryLevel == Components.SUB_CATEGORY) {
             //  sub-category
-            category = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(categoryId)
+            category = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNotNull(categoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with category ID: " + categoryId));
         } else {
             throw new IllegalArgumentException("Component of impact should be either parent category or sub-category");

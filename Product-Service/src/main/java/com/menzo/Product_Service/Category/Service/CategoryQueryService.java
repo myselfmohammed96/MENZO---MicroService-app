@@ -109,7 +109,7 @@ public class CategoryQueryService {
     @Transactional
     @EnableCategoryFilter
     public ProductCategory getParentCategoryEntityById(UUID parentId) {
-        return categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentId)
+        return categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNull(parentId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentId));
     }
 
@@ -124,7 +124,7 @@ public class CategoryQueryService {
     @Transactional
     @EnableCategoryFilter
     public CategoryDto getParentCategoryById(UUID parentId) {
-        ProductCategory parent = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNull(parentId)
+        ProductCategory parent = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNull(parentId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent category not found with ID: " + parentId));
         return CategoryDto.builder()
                 .categoryId(parent.getCategoryId())
@@ -275,7 +275,7 @@ public class CategoryQueryService {
     @EnableCategoryFilter
     public ProductCategory getSubCategoryEntityById(UUID subCategoryId) {
         logger.info("Fetching sub-category with ID: {}", subCategoryId);
-        return categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
+        return categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + subCategoryId));
     }
 
@@ -290,7 +290,7 @@ public class CategoryQueryService {
     @Transactional
     @EnableCategoryFilter
     public CategoryDto getSubCategoryById(UUID subCategoryId) {
-        ProductCategory sub = categoriesRepo.findByIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
+        ProductCategory sub = categoriesRepo.findByCategoryIdAndParentCategory_CategoryIdIsNotNull(subCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Sub-category not found with ID: " + subCategoryId));
         return CategoryDto.builder()
                 .categoryId(sub.getCategoryId())

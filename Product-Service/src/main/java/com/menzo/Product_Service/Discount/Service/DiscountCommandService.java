@@ -13,12 +13,12 @@ import com.menzo.Product_Service.Discount.Entity.DiscountVariant;
 import com.menzo.Product_Service.Discount.Enum.CapType;
 import com.menzo.Product_Service.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Discount.Enum.DiscountType;
-import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
-import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
+import com.menzo.Product_Service.Discount.Enum.OperationalStatus;
+import com.menzo.Product_Service.Discount.Repository.DiscountRepository;
 import com.menzo.Product_Service.Product.Entity.Product;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -37,12 +37,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class DiscountService {
+public class DiscountCommandService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DiscountService.class);
+    private static final Logger logger = LoggerFactory.getLogger(DiscountCommandService.class);
 
     @Autowired
-    private DiscountRepo discountRepo;
+    private DiscountRepository discountRepo;
 
     @Autowired
     private CategoriesRepository categoriesRepo;
@@ -54,9 +54,11 @@ public class DiscountService {
     private ProductItemsRepository itemsRepo;
 
 
-    /// /    ********* ADD, UPDATE, DELETE methods *********
-
-    //  Add new discount
+    /*
+     *
+     *   Add new discount
+     *
+     */
     public UUID addNewDiscount(CreateDiscountDto dto) {
 
         //  data validation
@@ -64,7 +66,7 @@ public class DiscountService {
             logger.warn("Duplicate discount code: Discount already exists with code {}", dto.getDiscountCode());
             throw new IllegalArgumentException("Invalid code: Discount already exists with code: " + dto.getDiscountCode());
         }
-        if (dto.getType() == DiscountType.PERCENT && (dto.getValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
+        if (dto.getDiscountType() == DiscountType.PERCENT && (dto.getDiscountValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
             throw new IllegalArgumentException("Invalid input: Discount value should be less than 100%");
         }
         if (dto.getCapType() == CapType.PERCENT && (dto.getCapValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
@@ -80,16 +82,16 @@ public class DiscountService {
 
         //  status evaluation
         LocalDateTime now = LocalDateTime.now();
-        PromotionStatus status;
+        OperationalStatus status;
 
-        if (dto.getDiscountStatus() == PromotionStatus.INACTIVE) {
-            status = PromotionStatus.INACTIVE;
+        if (dto.getDiscountStatus() == OperationalStatus.INACTIVE) {
+            status = OperationalStatus.INACTIVE;
         } else if (dto.getStartAt().isAfter(now)) {
-            status = PromotionStatus.SCHEDULED;
+            status = OperationalStatus.SCHEDULED;
         } else if (dto.getStartAt().isBefore(now) && dto.getEndAt().isAfter(now)) {
-            status = PromotionStatus.ACTIVE;
+            status = OperationalStatus.ACTIVE;
         } else {
-            status = PromotionStatus.INACTIVE;
+            status = OperationalStatus.INACTIVE;
         }
 
         //  saving discount
@@ -97,134 +99,148 @@ public class DiscountService {
                 .discountCode(dto.getDiscountCode())
                 .discountName(dto.getDiscountName())
                 .discountDescription(dto.getDiscountDescription())
-                .level(dto.getLevel())
-                .type(dto.getType())
-                .value(dto.getValue())
+                .discountLevel(dto.getDiscountLevel())
+                .discountType(dto.getDiscountType())
+                .discountValue(dto.getDiscountValue())
                 .capType(dto.getCapType())
                 .capValue(dto.getCapValue())
                 .priority(dto.getPriority())
                 .startAt(dto.getStartAt())
                 .endAt(dto.getEndAt())
                 .discountStatus(status)
-                .isDeleted(false)
                 .build();
 
-        Discount savedDiscount = discountRepo.save(discount);
-
-        return savedDiscount != null ? savedDiscount.getId() : null;
+        return discountRepo.save(discount).getDiscountId();
     }
 
 
-    //  Update discount (patch/partial update)
-    public boolean updateDiscount(UUID discountId, UpdateDiscountDto dto) {
-        Discount discountInDb = discountRepo.findById(discountId)
+    /*
+     *
+     *   Update discount (partial/patch update)
+     *   ## user must be able to change the discountLevel and discountCode and discountType
+     *
+     */
+    public boolean updateDiscount(UUID discountId, UpdateDiscountDto latestDiscountDto) {
+        //  fetching discount by discount ID
+        Discount discount = discountRepo.findById(discountId)
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + discountId));
 
-        if (dto.getDiscountName() != null && !dto.getDiscountName().isEmpty()) {
-            if (dto.getDiscountName().length() < 5 || dto.getDiscountName().length() > 100) {
+        //  updating discount name
+        if (latestDiscountDto.getDiscountName() != null && !latestDiscountDto.getDiscountName().isEmpty()) {
+            if (latestDiscountDto.getDiscountName().length() < 5 || latestDiscountDto.getDiscountName().length() > 100) {
                 throw new IllegalArgumentException("Discount name must be 5 to 100 characters long");
             }
-            discountInDb.setDiscountName(dto.getDiscountName());
+            discount.setDiscountName(latestDiscountDto.getDiscountName());
         }
 
-        if (dto.getDiscountDescription() != null && !dto.getDiscountDescription().isEmpty()) {
-            if (dto.getDiscountDescription().length() > 255) {
+        //  updating discount description
+        if (latestDiscountDto.getDiscountDescription() != null && !latestDiscountDto.getDiscountDescription().isEmpty()) {
+            if (latestDiscountDto.getDiscountDescription().length() > 255) {
                 throw new IllegalArgumentException("Discount description must not exceed 255 characters");
             }
-            discountInDb.setDiscountDescription(dto.getDiscountDescription());
+            discount.setDiscountDescription(latestDiscountDto.getDiscountDescription());
         }
 
-        if (dto.getValue() != null) {
-            if (dto.getValue().compareTo(BigDecimal.valueOf(0)) <= 0) {
+        //  updating discount value
+        if (latestDiscountDto.getDiscountValue() != null) {
+            if (latestDiscountDto.getDiscountValue().compareTo(BigDecimal.valueOf(0)) <= 0) {
                 throw new IllegalArgumentException("Discount value should be a positive number");
             }
-            if (discountInDb.getType() == DiscountType.PERCENT && (dto.getValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
+            if (discount.getDiscountType() == DiscountType.PERCENT
+                    && (latestDiscountDto.getDiscountValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
                 throw new IllegalArgumentException("Discount value should be less than 100%");
             }
-            discountInDb.setValue(dto.getValue());
+            discount.setDiscountValue(latestDiscountDto.getDiscountValue());
         }
 
-        if (dto.getCapType() != null) {
-            discountInDb.setCapType(dto.getCapType());
+        //  updating cap type
+        if (latestDiscountDto.getCapType() != null) {
+            discount.setCapType(latestDiscountDto.getCapType());
         }
 
-        if (dto.getCapValue() != null) {
-            if (discountInDb.getCapType() == CapType.NONE) {
-                throw new IllegalArgumentException("Discount cap type available for given cap value is NONE");
+        //  updating cap value
+        if (latestDiscountDto.getCapValue() != null) {
+            if (discount.getCapType() == CapType.NONE) {
+                throw new IllegalArgumentException("Discount cap value is provided. Discount cap type must not be NONE.");
             }
-            if (dto.getCapValue().compareTo(BigDecimal.valueOf(0)) <= 0) {
+            if (latestDiscountDto.getCapValue().compareTo(BigDecimal.valueOf(0)) <= 0) {
                 throw new IllegalArgumentException("Discount cap value should be a positive number");
             }
-            if (discountInDb.getCapType() == CapType.PERCENT && (dto.getCapValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
+            if (discount.getCapType() == CapType.PERCENT && (latestDiscountDto.getCapValue().compareTo(BigDecimal.valueOf(100)) > 0)) {
                 throw new IllegalArgumentException("Discount cap value should be less than 100%");
             }
-            discountInDb.setCapValue(dto.getCapValue());
+            discount.setCapValue(latestDiscountDto.getCapValue());
         }
 
-        if (dto.getPriority() != null) {
-            if (dto.getPriority() == 0) {
+        //  updating priority
+        if (latestDiscountDto.getPriority() != null) {
+            if (latestDiscountDto.getPriority() == 0) {
                 throw new IllegalArgumentException("Discount priority should not be less than 0");
             }
-            discountInDb.setPriority(dto.getPriority());
+            discount.setPriority(latestDiscountDto.getPriority());
         }
 
         LocalDateTime now = LocalDateTime.now();
 
-        if (dto.getStartAt() != null) {
-            if (discountInDb.getStartAt().isBefore(now)) {
+        //  updating start at
+        if (latestDiscountDto.getStartAt() != null) {
+            if (discount.getStartAt().isBefore(now)) {
                 throw new IllegalArgumentException("Discount already activated. Cannot update Start date.");
             }
-            if (dto.getStartAt().isAfter(discountInDb.getEndAt())) {
+            if (latestDiscountDto.getStartAt().isAfter(discount.getEndAt())) {
                 throw new IllegalArgumentException("Discount start date cannot be after the end date");
             }
-            if (dto.getEndAt() != null && dto.getStartAt().isAfter(dto.getEndAt())) {
+            if (latestDiscountDto.getEndAt() != null && latestDiscountDto.getStartAt().isAfter(latestDiscountDto.getEndAt())) {
                 throw new IllegalArgumentException("Discount start date cannot be after then new end date");
             }
-            if (dto.getStartAt().isBefore(now)) {
+            if (latestDiscountDto.getStartAt().isBefore(now)) {
                 throw new IllegalArgumentException("Discount start date cannot be in past");
             }
-            discountInDb.setStartAt(dto.getStartAt());
+            discount.setStartAt(latestDiscountDto.getStartAt());
         }
 
-        if (dto.getEndAt() != null) {
-            if (discountInDb.getEndAt().isBefore(now)) {
+        //  updating end at
+        if (latestDiscountDto.getEndAt() != null) {
+            if (discount.getEndAt().isBefore(now)) {
                 throw new IllegalArgumentException("Discount already expired. Cannot update End date.");
             }
-            if (dto.getEndAt().isBefore(discountInDb.getStartAt())) {
+            if (latestDiscountDto.getEndAt().isBefore(discount.getStartAt())) {
                 throw new IllegalArgumentException("Discount end date cannot be before start date");
             }
-            if (dto.getEndAt().isBefore(now)) {
+            if (latestDiscountDto.getEndAt().isBefore(now)) {
                 throw new IllegalArgumentException("Discount end date cannot be in past");
             }
-            discountInDb.setEndAt(dto.getEndAt());
+            discount.setEndAt(latestDiscountDto.getEndAt());
         }
 
-        if (dto.getDiscountStatus() != PromotionStatus.PAUSED
-                && discountInDb.getDiscountStatus() != PromotionStatus.PAUSED
-                && dto.getResumeAt() != null) {
+        //  updating resume at - ## revise
+        if (latestDiscountDto.getDiscountStatus() != OperationalStatus.PAUSED
+                && discount.getDiscountStatus() != OperationalStatus.PAUSED
+                && latestDiscountDto.getResumeAt() != null) {
             throw new IllegalArgumentException("Discount resume date is allowed only for PAUSED discount");
         }
 
-        if (dto.getDiscountStatus() != null) {
-            PromotionStatus requestStatus = dto.getDiscountStatus();
-            PromotionStatus currentStatus = discountInDb.getDiscountStatus();
+        //  updating discount status - ## revise
+        if (latestDiscountDto.getDiscountStatus() != null) {
+            OperationalStatus requestStatus = latestDiscountDto.getDiscountStatus();
+            OperationalStatus currentStatus = discount.getDiscountStatus();
 
-            if (currentStatus == PromotionStatus.CANCELLED) {
+            if (currentStatus == OperationalStatus.CANCELLED) {
                 throw new IllegalArgumentException("Discount already CANCELLED. Cannot revive");
             }
-            if (currentStatus == PromotionStatus.EXPIRED) {
+            if (currentStatus == OperationalStatus.EXPIRED) {
                 throw new IllegalArgumentException("Discount already EXPIRED. Cannot revive");
             }
-            if (requestStatus != PromotionStatus.ACTIVE
-                    && requestStatus != PromotionStatus.INACTIVE
-                    && requestStatus != PromotionStatus.PAUSED
-                    && requestStatus != PromotionStatus.CANCELLED) {
+            if (requestStatus != OperationalStatus.ACTIVE
+                    && requestStatus != OperationalStatus.INACTIVE
+                    && requestStatus != OperationalStatus.PAUSED
+                    && requestStatus != OperationalStatus.CANCELLED) {
                 throw new IllegalArgumentException("Invalid Discount status");
             }
-            if (requestStatus == PromotionStatus.PAUSED) {
-                LocalDateTime resumeAt = dto.getResumeAt() != null
-                        ? dto.getResumeAt()
-                        : discountInDb.getResumeAt();
+            if (requestStatus == OperationalStatus.PAUSED) {
+                LocalDateTime resumeAt = latestDiscountDto.getResumeAt() != null
+                        ? latestDiscountDto.getResumeAt()
+                        : discount.getResumeAt();
 
                 if (resumeAt == null) {
                     throw new IllegalArgumentException("Discount PAUSED requires Resume date");
@@ -232,144 +248,155 @@ public class DiscountService {
                 if (resumeAt.isBefore(now)) {
                     throw new IllegalArgumentException("Discount resume date cannot be in past");
                 }
-                discountInDb.setResumeAt(resumeAt);
+                discount.setResumeAt(resumeAt);
             }
 
-            PromotionStatus finalStatus;
+            OperationalStatus finalStatus;
 
             //  user can select - ACTIVE || INACTIVE || PAUSE || CANCEL
-            if (requestStatus == PromotionStatus.INACTIVE || requestStatus == PromotionStatus.PAUSED || requestStatus == PromotionStatus.CANCELLED) {
+            if (requestStatus == OperationalStatus.INACTIVE || requestStatus == OperationalStatus.PAUSED || requestStatus == OperationalStatus.CANCELLED) {
                 finalStatus = requestStatus;
-            } else if (discountInDb.getStartAt().isAfter(now)) {
-                finalStatus = PromotionStatus.SCHEDULED;
+            } else if (discount.getStartAt().isAfter(now)) {
+                finalStatus = OperationalStatus.SCHEDULED;
             } else {
-                finalStatus = PromotionStatus.ACTIVE;
+                finalStatus = OperationalStatus.ACTIVE;
             }
 
-            discountInDb.setDiscountStatus(finalStatus);
+            discount.setDiscountStatus(finalStatus);
         }
 
-        Discount updated = discountRepo.save(discountInDb);
-
-        return updated != null;
+        discountRepo.save(discount);
+        return true;
     }
 
 
-    //  Delete discount (soft delete)
-    public void softDeleteDiscount(UUID discountId) {
-        Discount discountInDb = discountRepo.findById(discountId)
+    /*
+     *
+     *   Delete discount (soft delete)
+     *
+     */
+    public boolean deleteDiscount(UUID discountId) {
+
+        //  fetching discount by ID
+        Discount discount = discountRepo.findById(discountId)
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + discountId));
 
-        if (Boolean.TRUE.equals(discountInDb.getIsDeleted())) {
-            throw new IllegalArgumentException("Discount already deleted");     // ## or use IllegalStateException
-        }
-
-        discountInDb.setIsDeleted(true);
-        discountRepo.save(discountInDb);
+        //  soft deleting: set isDeleted to true if not already
+        logger.info("Deleting discount with ID: {}", discountId);
+        discount.setDeleted(true);
+        discount.setDeletedAt(LocalDateTime.now());
+        discountRepo.save(discount);
+        return true;
     }
 
 
-    /// /    ********* Discount mapping methods *********
+    //    ********* Discount mapping *********
 
+
+    /*
+     *
+     *   Add discount mapping
+     *
+     */
     public List<MappedContentDto> addDiscountMapping(DiscountMappingDto mappingDto) {
 
         //  ## better to use domain-level exception instead of IllegalArgumentException: BadRequestException || ValidationException
         //  ## missing duplicate prevention: if same category/product (which is already mapped) is mapped twice - silently ignored by Set. check before add if needed.
 
-        Discount discountInDb = discountRepo.findById(mappingDto.getDiscountId())
+        Discount discount = discountRepo.findById(mappingDto.getDiscountId())
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + mappingDto.getDiscountId()));
 
-        if (discountInDb.getLevel() != mappingDto.getLevel()) {
+        if (discount.getDiscountLevel() != mappingDto.getLevel()) {
             throw new IllegalArgumentException("Discount level does not match");
         }
 
         if (mappingDto.getLevel() == DiscountLevel.CATEGORY
                 || mappingDto.getLevel() == DiscountLevel.SUB_CATEGORY) {
             //  ------- Discount level - CATEGORY || SUB_CATEGORY -------
-            List<ProductCategory> categories = categoriesRepo.findByIdIn(mappingDto.getSelectionList());
+            List<ProductCategory> categories = categoriesRepo.findByCategoryIdIn(mappingDto.getSelectionList());
 
             if (categories.size() != mappingDto.getSelectionList().size()) {
                 throw new IllegalArgumentException("Some categories not found");
             }
 
             if (mappingDto.getLevel() == DiscountLevel.CATEGORY) {
-                if (categories.stream().anyMatch(c -> c.getParentCategoryId() != null)) {
+                if (categories.stream().anyMatch(c -> c.getParentCategory().getCategoryId() != null)) {
                     throw new IllegalArgumentException("Sub-category present in category list");
                 }
             }
 
             if (mappingDto.getLevel() == DiscountLevel.SUB_CATEGORY) {
-                if (categories.stream().anyMatch(c -> c.getParentCategoryId() == null)) {
+                if (categories.stream().anyMatch(c -> c.getParentCategory().getCategoryId() == null)) {
                     throw new IllegalArgumentException("Parent category present in sub-category list");
                 }
             }
 
             Set<DiscountCategory> mappedSet = categories.stream()
                     .map(c -> DiscountCategory.builder()
-                            .discount(discountInDb)
+                            .discount(discount)
                             .category(c)
                             .isSubCategory(mappingDto.getLevel() == DiscountLevel.SUB_CATEGORY)
                             .build()
                     ).collect(Collectors.toSet());
 
-            discountInDb.getDiscountCategories().addAll(mappedSet);
+            discount.getDiscountCategories().addAll(mappedSet);
 //            Discount mappedDiscount = discountRepo.save(discountInDb);
 
-            Set<DiscountCategory> discountCategories = discountInDb.getDiscountCategories();
+            Set<DiscountCategory> discountCategories = discount.getDiscountCategories();
             if (mappingDto.getLevel() == DiscountLevel.CATEGORY) {
                 return discountCategories.stream()
                         .filter(DiscountQueryService::isParentCategory)
-                        .map(dc -> DiscountQueryService.toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                        .map(dc -> DiscountQueryService.toMappedContent(dc.getDiscountCategoryId(), dc.getCategory().getCategoryName()))
                         .toList();
             } else {
                 return discountCategories.stream()
                         .filter(DiscountQueryService::isSubCategory)
-                        .map(dc -> DiscountQueryService.toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                        .map(dc -> DiscountQueryService.toMappedContent(dc.getDiscountCategoryId(), dc.getCategory().getCategoryName()))
                         .toList();
             }
 //            return !mappedDiscount.getDiscountCategories().isEmpty() ? mappedDiscount.getId() : null;
 
         } else if (mappingDto.getLevel() == DiscountLevel.PRODUCT) {
             //  ------- Discount level - PRODUCT -------
-            List<Product> products = productsRepo.findByIdIn(mappingDto.getSelectionList());
+            List<Product> products = productsRepo.findByProductIdIn(mappingDto.getSelectionList());
 
             if (products.size() != mappingDto.getSelectionList().size()) {
                 throw new IllegalArgumentException("Some products not found");
             }
 
             Set<DiscountProduct> mappedSet = products.stream()
-                            .map(p -> DiscountProduct.builder()
-                                    .discount(discountInDb)
-                                    .product(p)
-                                    .build()
-                            ).collect(Collectors.toSet());
-            discountInDb.getDiscountProducts().addAll(mappedSet);
+                    .map(p -> DiscountProduct.builder()
+                            .discount(discount)
+                            .product(p)
+                            .build()
+                    ).collect(Collectors.toSet());
+            discount.getDiscountProducts().addAll(mappedSet);
 //            Discount mappedDiscount = discountRepo.save(discountInDb);
 
-            return discountInDb.getDiscountProducts().stream()
-                    .map(dp -> DiscountQueryService.toMappedContent(dp.getId(), dp.getProduct().getProductName()))
+            return discount.getDiscountProducts().stream()
+                    .map(dp -> DiscountQueryService.toMappedContent(dp.getDiscountProductId(), dp.getProduct().getProductName()))
                     .toList();
 
 //            return !mappedDiscount.getDiscountProducts().isEmpty() ? mappedDiscount.getId() : null;
 
         } else if (mappingDto.getLevel() == DiscountLevel.VARIANT) {
             //  ------- Discount level - VARIANT -------
-            List<ProductItem> items = itemsRepo.findByIdIn(mappingDto.getSelectionList());
+            List<ProductItem> items = itemsRepo.findByItemIdIn(mappingDto.getSelectionList());
 
             if (items.size() != mappingDto.getSelectionList().size()) {
                 throw new IllegalArgumentException("Some product items not found");
             }
 
             Set<DiscountVariant> mappedSet = items.stream()
-                            .map(i -> DiscountVariant.builder()
-                                    .discount(discountInDb)
-                                    .productItem(i)
-                                    .build()
-                            ).collect(Collectors.toSet());
-            discountInDb.getDiscountVariants().addAll(mappedSet);
+                    .map(i -> DiscountVariant.builder()
+                            .discount(discount)
+                            .productItem(i)
+                            .build()
+                    ).collect(Collectors.toSet());
+            discount.getDiscountVariants().addAll(mappedSet);
 //            Discount mappedDiscount = discountRepo.save(discountInDb);
 
-            return discountInDb.getDiscountVariants().stream()
+            return discount.getDiscountVariants().stream()
                     .map(DiscountQueryService::mapVariant)
                     .toList();
 //            return !mappedDiscount.getDiscountVariants().isEmpty() ? mappedDiscount.getId() : null;

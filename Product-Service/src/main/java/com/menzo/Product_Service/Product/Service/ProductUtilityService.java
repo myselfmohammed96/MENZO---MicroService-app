@@ -3,7 +3,7 @@ package com.menzo.Product_Service.Product.Service;
 import com.menzo.Product_Service.Product.Entity.ProductConfiguration;
 import com.menzo.Product_Service.Product.Entity.ProductImage;
 import com.menzo.Product_Service.Product.Entity.ProductItem;
-import com.menzo.Product_Service.Product.Repo.ProductImagesRepository;
+import com.menzo.Product_Service.Product.Repository.ProductImagesRepository;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
 import com.menzo.Product_Service.Variation.Service.OptionQueryService;
 import org.apache.commons.io.FilenameUtils;
@@ -48,8 +48,8 @@ class ProductUtilityService {
         if (variationDetailsMap != null && productConfigs == null) {
             //  process for product saving
             logger.info("Processing variations: variations map");
-            List<Long> optionIds = variationDetailsMap.values().stream()
-                    .map(Long::valueOf)
+            List<UUID> optionIds = variationDetailsMap.values().stream()
+                    .map(UUID::fromString)
                     .collect(Collectors.toList());
             return optionQueryService.getOptionsByIds(optionIds);
 
@@ -58,7 +58,7 @@ class ProductUtilityService {
             logger.info("Processing variations: config list");
 
             //  fetching the IDs of all 'size' & 'color' options available in DB
-            List<Long> optionIds = new ArrayList<>(optionQueryService.getOptionIdsByVariation("Size"));
+            List<UUID> optionIds = new ArrayList<>(optionQueryService.getOptionIdsByVariation("Size"));
             optionIds.addAll(optionQueryService.getOptionIdsByVariation("Colors"));
 
             //  getting the variation options of the product available in the ProductConfiguration table - other than 'size' & 'color'
@@ -80,9 +80,9 @@ class ProductUtilityService {
      */
     String generateSKU(String superSku,
                        String subCategoryAbbreviation,
-                       Long productId,
+                       UUID productId,
                        String colorAbbreviation,
-                       String size) {
+                       String size) {       //  ## need to have a number replacement for this UUID productId
         if (superSku == null && size == null) {
             logger.info("Generating super SKU");
             return subCategoryAbbreviation + "-" +
@@ -103,7 +103,7 @@ class ProductUtilityService {
      */
     List<ProductImage> saveImages(String categoryName,
                                   String subCategoryName,
-                                  Long productId,
+                                  UUID productId,
                                   String superSku,
                                   List<ProductItem> productItems,
                                   Map<String, MultipartFile> images) throws IOException {

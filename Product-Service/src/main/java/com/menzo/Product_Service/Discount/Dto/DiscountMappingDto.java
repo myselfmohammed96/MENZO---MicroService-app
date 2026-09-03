@@ -24,6 +24,6 @@ public class DiscountMappingDto {
     private DiscountLevel level;
 
     @NotEmpty(message = "Selection list cannot be empty")
-    private List<Long> selectionList;
+    private List<UUID> selectionList;
 
 }

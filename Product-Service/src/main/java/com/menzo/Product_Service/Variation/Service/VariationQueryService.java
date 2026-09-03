@@ -111,8 +111,8 @@ public class VariationQueryService {
      *
      */
     @Transactional
-    public List<VariationOptionsDto> getAllVariationsWithOptionsBySub(Components componentType,
-                                                                      UUID componentId) {
+    public List<VariationOptionsDto> getAllVariationsWithOptionsByCategory(Components componentType,
+                                                                           UUID componentId) {
         Map<UUID, VariationOptionsDto> variationMap = new HashMap<>();
 
         //  fetching data with sub-category ID

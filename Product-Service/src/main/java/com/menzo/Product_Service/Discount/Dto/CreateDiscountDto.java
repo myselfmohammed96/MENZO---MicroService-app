@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.menzo.Product_Service.Discount.Enum.CapType;
 import com.menzo.Product_Service.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Discount.Enum.DiscountType;
-import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
+import com.menzo.Product_Service.Discount.Enum.OperationalStatus;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,13 +45,10 @@ public class CreateDiscountDto {
     private String discountDescription;
 
     @NotNull(message = "Discount level is required")
-    private DiscountLevel level;
+    private DiscountLevel discountLevel;
 
     @NotNull(message = "Discount type is required")
-    private DiscountType type;
-
-    @NotNull(message = "Discount status is required")
-    private PromotionStatus discountStatus;
+    private DiscountType discountType;
 
     @NotNull(message = "Discount value is required")
     @DecimalMin(
@@ -59,7 +56,7 @@ public class CreateDiscountDto {
             inclusive = false,
             message = "Discount value must be greater than 0"
     )
-    private BigDecimal value;
+    private BigDecimal discountValue;
 
     @NotNull(message = "Cap type is required")
     private CapType capType;
@@ -71,20 +68,18 @@ public class CreateDiscountDto {
     )
     private BigDecimal capValue;
 
-    @Min(
-            value = 0,
-            message = "Discount priority should not be less than 0"
-    )
+    @Min(value = 0, message = "Discount priority should not be less than 0")
     private Integer priority;
 
     @NotNull(message = "Start date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-//    @JsonFormat(pattern = "dd-MM-yyyy hh:mm a")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime startAt;
 
     @NotNull(message = "End date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-//    @JsonFormat(pattern = "dd-MM-yyyy hh:mm a")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime endAt;
+
+    @NotNull(message = "Discount status is required")
+    private OperationalStatus discountStatus;
 
 }

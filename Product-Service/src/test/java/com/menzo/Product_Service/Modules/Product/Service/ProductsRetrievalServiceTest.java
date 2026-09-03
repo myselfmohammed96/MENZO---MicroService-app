@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Modules.Product.Service;
 
-import com.menzo.Product_Service.Product.Dto.UserProductDetailsDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.UserProductDetailsDto;
 import com.menzo.Product_Service.Product.Service.ProductQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

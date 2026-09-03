@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class SizeDetailsDto {
 
     @NotNull
     @Positive
-    private Long sizeId;
+    private UUID sizeId;
 
     @NotBlank
     private String sizeValue;

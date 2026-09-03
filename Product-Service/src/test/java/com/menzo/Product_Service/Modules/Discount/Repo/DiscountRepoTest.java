@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Modules.Discount.Repo;
 
-import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
+import com.menzo.Product_Service.Discount.Repository.DiscountRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DiscountRepoTest {
 
     @Autowired
-    private DiscountRepo discountRepo;
+    private DiscountRepository discountRepo;
 
     @Test
     public void testExistsByDiscountCode() {

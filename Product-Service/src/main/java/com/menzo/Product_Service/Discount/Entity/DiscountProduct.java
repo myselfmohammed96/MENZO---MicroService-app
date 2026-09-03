@@ -25,19 +25,21 @@ public class DiscountProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID discountProductId;
 
     @ManyToOne
     @JoinColumn(
             name = "discount_id",
-            nullable = false
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_discount_product_discount")
     )
     private Discount discount;
 
     @ManyToOne
     @JoinColumn(
             name = "product_id",
-            nullable = false
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_discount_product_product")
     )
     private Product product;
 

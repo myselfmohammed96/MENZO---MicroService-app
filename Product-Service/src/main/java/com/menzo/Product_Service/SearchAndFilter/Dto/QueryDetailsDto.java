@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -33,6 +34,6 @@ public class QueryDetailsDto {
 
     private Map<String, Integer> statusFlags;
 
-    private List<Long> searchResultProductIds;
+    private List<UUID> searchResultProductIds;
 
 }

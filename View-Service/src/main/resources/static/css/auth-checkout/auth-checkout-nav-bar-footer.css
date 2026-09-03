@@ -1,0 +1,72 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+/* ////////////////////////// */
+
+
+
+
+
+
+
+/* ******* Nav bars ******* */
+
+#auth-checkout-nav-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 998;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* //////////////////// */
+
+
+
+
+
+
+
+/* ******* Footer ******* */
+
+#auth-checkout-footer {
+    font-size: max(15px, 1vw);
+}
+
+/* ////////////////////////// */
+
+
+
+
+
+
+
+/* ******* Media query ******* */
+
+/* ***** Landscape ***** */
+@media (min-aspect-ratio: 2.5/1) {
+    #auth-checkout-nav-bar-container {
+        height: 13vh;
+    }
+
+    #auth-checkout-nav-bar-logo a {
+        width: 30vh;
+    }
+}
+
+/* ***** Portrait ***** */
+@media (max-aspect-ratio: 1/2.6) {
+    #auth-checkout-nav-bar-container {
+        height: 8vh;
+    }
+
+    #auth-checkout-nav-bar-logo a {
+        width: 20vh;
+    }
+}
+
+/* ////////////////////////////// */

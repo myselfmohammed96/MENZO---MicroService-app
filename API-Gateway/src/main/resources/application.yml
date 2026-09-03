@@ -5,15 +5,17 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/**, /user-css/**, /user-js/**, /user-media/**
+            - Path=/user/**
           filters:
             - AuthenticationFilter
+#            - , /user-css/**, /user-js/**, /user-media/**
 
         - id: admin-service
           uri: lb://ADMIN-SERVICE
           predicates:
-            - Path=/admin/**, /css/**, /js/**, /media/**
+            - Path=/admin/**
 #            - Path=/**
+#          , /css/**, /js/**, /media/**
           filters:
             - AuthenticationFilter
 #            - RewritePath=/admin/(?<path>.*), /${path}
@@ -39,12 +41,68 @@ spring:
         #            - Path=/admin/**/*.css
         #            - Path=/admin/**/*.js
 
-        - id: home-service
-          uri: lb://HOME-SERVICE
+        - id: view-store-front
+          uri: lb://VIEW-SERVICE
           predicates:
-            - Path=/index, /login, /sign-in, /all-categories, /product-listing, /product, /category/**, /home-css/**, /home-js/**, /home-media/**
-          filters:
-            - AuthenticationFilter
+            - Path=/index, 
+              /all-categories, 
+              /category/**, 
+              /product-listing, 
+              /product, 
+              /contact-us, 
+              /about-us, 
+              /faq, 
+              /privacy-policy, 
+              /terms-and-conditions
+#          filters:
+#            - AuthenticationFilter
+
+        - id: view-auth
+          uri: lb://VIEW-SERVICE
+          predicates:
+            - Path=/sign-in,
+              /login,
+              /forgot-password,
+              /otp-verification,
+              /reset-password
+#          filters:
+#            - AuthenticationFilter
+
+        - id: view-checkout
+          uri: lb://VIEW-SERVICE
+          predicates:
+            - Path=/check-out
+#          filters:
+#            - AuthenticationFilter
+
+        - id: view-user
+          uri: lb://VIEW-SERVICE
+          predicates:
+            - Path=/user-profile,
+              /user-address,
+              /user-cart,
+              /user-wishlist,
+              /user-coupon,
+              /user-order,
+              /user-wallet
+#          filters:
+#            - AuthenticationFilter
+
+        - id: view-static
+          uri: lb://VIEW-SERVICE
+          predicates:
+            - Path=/css/**,
+              /js/**,
+              /media/**
+#          filters:
+#            - AuthenticationFilter
+
+#        - id: view-service
+#          uri: lb://VIEW-SERVICE
+#          predicates:
+#            - Path >
+#          filters:
+#            - AuthenticationFilter
   #
   #      globalcors:
   #        corsConfigurations:

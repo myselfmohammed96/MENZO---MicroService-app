@@ -1,27 +1,23 @@
 package com.menzo.Product_Service.Product.Service;
 
-import com.menzo.Product_Service.Category.Repository.CategoriesRepository;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Category.Dto.ParentCategoryView;
 import com.menzo.Product_Service.Category.Entity.ProductCategory;
-import com.menzo.Product_Service.Product.Dto.*;
+import com.menzo.Product_Service.Product.Dto.ItemDto.AdminItemListingDto;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemMinDto;
-import com.menzo.Product_Service.Modules.Product.Entity.*;
+import com.menzo.Product_Service.Product.Dto.ItemDto.UserItemListingDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.*;
 import com.menzo.Product_Service.Product.Entity.*;
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
-import com.menzo.Product_Service.Product.Repo.ProductConfigurationRepository;
-import com.menzo.Product_Service.Product.Repo.ProductCountryOfOriginRepository;
-import com.menzo.Product_Service.Product.Repo.ProductImagesRepository;
-import com.menzo.Product_Service.Product.Repo.ProductItemsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductCountryOfOriginRepository;
+import com.menzo.Product_Service.Product.Repository.ProductImagesRepository;
+import com.menzo.Product_Service.Product.Repository.ProductItemsRepository;
 import com.menzo.Product_Service.SearchAndFilter.Dto.QueryDetailsDto;
 import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import com.menzo.Product_Service.Product.Enum.ProductActiveStatus;
 import com.menzo.Product_Service.Product.Enum.StockStatus;
-import com.menzo.Product_Service.Modules.Product.Dto.*;
 import com.menzo.Product_Service.Variation.Dto.ColorInfo;
 import com.menzo.Product_Service.Variation.Entity.VariationOption;
-import com.menzo.Product_Service.Variation.Repository.VariationOptionsRepository;
-import com.menzo.Product_Service.Variation.Repository.VariationsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,18 +49,6 @@ public class ProductQueryService {
     private ProductImagesRepository productImagesRepo;
 
     @Autowired
-    private ProductConfigurationRepository productConfigurationRepo;
-
-    @Autowired
-    private VariationsRepository variationsRepo;
-
-    @Autowired
-    private VariationOptionsRepository variationsOptionsRepo;
-
-    @Autowired
-    private CategoriesRepository categoriesRepo;
-
-    @Autowired
     private CategoryQueryService categoriesRetrievalService;
 
     @Autowired
@@ -83,12 +65,60 @@ public class ProductQueryService {
 
 
     /*
-     *   -------------------------------------------------------------------------
-     *   ********* Product listing methods - with PAGINATION & FILTERING *********
-     *   -------------------------------------------------------------------------
+     *
+     *   Get product listing for user/client side
+     *   With filter, sort & search
+     *
      */
+    public Page<UserProductListingDto> getUserProductListing(Integer page,
+                                                             Integer size,
+                                                             String searchRequest,
+                                                             String sortRequest,
+                                                             RequestDto filterRequest) {
+        //  ------- validation -------
 
-    //  ADMIN side - product listing
+        //  ------- data pre-processing -------
+
+        //  processing search results - getting matched product IDs
+        List<UUID> searchResults = processSearchRequest(searchRequest.trim());
+
+        //  processing sort request
+        String sortParam = getSortValue(sortRequest);
+
+        Map<String, Integer> statusFlags = new HashMap<>();
+        statusFlags.put("isItemActive", 1);
+        statusFlags.put("podAvailable", 1);
+        statusFlags.put("isCategoryDeleted", 0);
+        statusFlags.put("isSubCategoryDeleted", 0);
+        statusFlags.put("isCategoryActive", 1);
+        statusFlags.put("isSubCategoryActive", 1);
+
+        QueryDetailsDto queryDetails = QueryDetailsDto.builder()
+                .page(page)
+                .size(size)
+                .searchResultProductIds(searchResults)
+                .sortRequest(sortParam)
+                .filterValues(filterRequest.getFilterRequestDtos())
+                .statusFlags(statusFlags)
+                .build();
+
+        //  getting page content - repo call
+        Page<UserProductListingDto> pageContent = productsRepo.findUserProductListing(queryDetails);
+
+        for (UserProductListingDto p : pageContent.getContent()) {
+            System.out.println(p);
+        }
+
+        return pageContent;
+    }
+
+
+    /*
+     *
+     *   Get product listing for admin side
+     *   With filters, sort & search
+     *
+     */
     public Page<AdminProductListingDto> getAdminProductListing(Integer page,
                                                                Integer size,
                                                                String searchRequest,
@@ -101,7 +131,7 @@ public class ProductQueryService {
         //  ------- data pre-processing -------
 
         //  processing search results - getting matched product IDs
-        List<Long> searchResults = processSearchRequest(searchRequest.trim());
+        List<UUID> searchResults = processSearchRequest(searchRequest.trim());
 
         //  processing sort request
         String sortParam = getSortValue(sortRequest);
@@ -149,91 +179,13 @@ public class ProductQueryService {
         //        Map<String, List<?>> filterValues = getFilterValues(filterRequest.getFilterRequestDtos());
     }
 
-    //  CLIENT side - product listing
-    public Page<UserProductListingDto> getClientProductListing(Integer page,
-                                                               Integer size,
-                                                               String searchRequest,
-                                                               String sortRequest,
-                                                               RequestDto filterRequest) {
-        //  ------- validation -------
 
-        //  ------- data pre-processing -------
-
-        //  processing search results - getting matched product IDs
-        List<Long> searchResults = processSearchRequest(searchRequest.trim());
-
-        //  processing sort request
-        String sortParam = getSortValue(sortRequest);
-
-        Map<String, Integer> statusFlags = new HashMap<>();
-        statusFlags.put("isItemActive", 1);
-        statusFlags.put("podAvailable", 1);
-        statusFlags.put("isCategoryDeleted", 0);
-        statusFlags.put("isSubCategoryDeleted", 0);
-        statusFlags.put("isCategoryActive", 1);
-        statusFlags.put("isSubCategoryActive", 1);
-
-        QueryDetailsDto queryDetails = QueryDetailsDto.builder()
-                .page(page)
-                .size(size)
-                .searchResultProductIds(searchResults)
-                .sortRequest(sortParam)
-                .filterValues(filterRequest.getFilterRequestDtos())
-                .statusFlags(statusFlags)
-                .build();
-
-        //  getting page content - repo call
-        Page<UserProductListingDto> pageContent = productsRepo.findUserProductListing(queryDetails);
-
-        for (UserProductListingDto p : pageContent.getContent()) {
-            System.out.println(p);
-        }
-
-        return pageContent;
-    }
-
-
-    /// /   ********* Product details methods *********
-
-    //  ADMIN side - product details - with items minimal details
-    public AdminProductDetailsDto getProductDetailsWithAllItems(Long productId) {
-
-        //  getting PRODUCT, CATEGORY, SUB-CATEGORY & COUNTRY OF ORIGIN
-        Product product = productsRepo.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
-
-        ProductCategory subCategory = product.getSubCategory();
-        ParentCategoryView category = categoriesRetrievalService.getParentBySubCategoryId(subCategory.getCategoryId());
-        CountryOfOrigin countryOfOrigin = countryOfOriginRepo.findById(product.getCountryOfOrigin())
-                .orElseThrow(() -> new EntityNotFoundException("Country not found with ID: " + product.getCountryOfOrigin()));
-
-        //  ITEMs - minimal details
-        List<AdminItemListingDto> itemDetailsList = getMinimalItemsDetails(
-                product,
-                "ADMIN"
-        );
-        if (itemDetailsList == null || itemDetailsList.isEmpty()) {
-            throw new RuntimeException("Item minimal details not found");
-        }
-
-        //  returning PRODUCT DETAILS - with ITEMs minimal details - for ITEMs listing
-        return AdminProductDetailsDto.builder()
-                .productName(product.getProductName())
-                .categoryName(category.getCategoryName())
-                .subCategoryName(subCategory.getCategoryName())
-                .description(product.getProductDescription())
-                .pod(product.getPodAvailable())
-                .productCreated(product.getCreatedAt())
-                .itemWeight(product.getItemWeight())
-                .genericName(product.getGenericName())
-                .countryOfOrigin(countryOfOrigin.getCountryName())
-                .manufacturer(null)
-                .packer(null)
-                .productItems(itemDetailsList)     //  items list details
-                .build();
-    }
-
-    //  USER side - product details - with items minimal details
+    /*
+     *
+     *   Get product details for user/client side
+     *   With items minimal details
+     *
+     */
     @Transactional
     public UserProductDetailsDto getUserProductDetails(String superSku) {
 
@@ -286,7 +238,7 @@ public class ProductQueryService {
         //  other details
         String manufacturer = "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India";
         String packer = "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India";
-        CountryOfOrigin country = countryOfOriginRepo.findById(product.getCountryOfOrigin())
+        CountryOfOrigin country = countryOfOriginRepo.findById(product.getCountryOfOrigin().getCountryId())
                 .orElseThrow(() -> new EntityNotFoundException("Country of origin not found with ID: " + product.getCountryOfOrigin()));
 
 
@@ -301,18 +253,79 @@ public class ProductQueryService {
                 .packer(packer)
                 .countryOfOrigin(country.getCountryName())
 
-                .pod(product.getPodAvailable())
+                .pod(product.isPodAvailable())
                 .variations(variations)
                 .items(itemDetailsList)
                 .build();
     }
 
 
+    /*
+     *
+     *   Get product details for admin side
+     *   With items minimal details
+     *
+     */
+    public AdminProductDetailsDto getProductDetailsWithAllItems(UUID productId) {
+
+        //  getting PRODUCT, CATEGORY, SUB-CATEGORY & COUNTRY OF ORIGIN
+        Product product = productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        ProductCategory subCategory = product.getSubCategory();
+        ParentCategoryView category = categoriesRetrievalService.getParentBySubCategoryId(subCategory.getCategoryId());
+        CountryOfOrigin countryOfOrigin = countryOfOriginRepo.findById(product.getCountryOfOrigin().getCountryId())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found with ID: " + product.getCountryOfOrigin()));
+
+        //  ITEMs - minimal details
+        List<AdminItemListingDto> itemDetailsList = getMinimalItemsDetails(
+                product,
+                "ADMIN"
+        );
+        if (itemDetailsList == null || itemDetailsList.isEmpty()) {
+            throw new RuntimeException("Item minimal details not found");
+        }
+
+        //  returning PRODUCT DETAILS - with ITEMs minimal details - for ITEMs listing
+        return AdminProductDetailsDto.builder()
+                .productName(product.getProductName())
+                .categoryName(category.getCategoryName())
+                .subCategoryName(subCategory.getCategoryName())
+                .description(product.getProductDescription())
+                .pod(product.isPodAvailable())
+                .productCreated(product.getCreatedAt())
+                .itemWeight(product.getItemWeight())
+                .genericName(product.getGenericName())
+                .countryOfOrigin(countryOfOrigin.getCountryName())
+                .manufacturer(null)
+                .packer(null)
+                .productItems(itemDetailsList)     //  items list details
+                .build();
+    }
+
+
+    /*
+     *
+     *   Get product images
+     *
+     */
     public List<String> getProductImages(String superSku) {
         List<ProductImage> images = productImagesRepo.findBySuperSku(superSku);
         return images.stream()
                 .map(ProductImage::getImageUrl)
                 .toList();
+    }
+
+
+    /*
+     *
+     *   Get product entity by ID
+     *   For internal usage
+     *
+     */
+    public Product getProductEntityById(UUID productId) {
+        return productsRepo.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
     }
 
 
@@ -343,7 +356,7 @@ public class ProductQueryService {
         };
     }
 
-    private List<Long> processSearchRequest(String searchRequest) {
+    private List<UUID> processSearchRequest(String searchRequest) {
         if (searchRequest == null || searchRequest.isEmpty()) {
             return Collections.emptyList();
         }
@@ -388,7 +401,7 @@ public class ProductQueryService {
                 items.stream()
                         .filter(item -> superSku.equals(item.getSuperSku()))
                         .forEach(item -> {
-                            if (item.getIsActive()) {
+                            if (item.isActive()) {
                                 statusFlag.incrementAndGet();
                             }
                             stockSum.addAndGet(item.getQtyInStock());
@@ -416,7 +429,7 @@ public class ProductQueryService {
                 ProductActiveStatus activeStatus = statusFlag.get() == itemCount
                         ? ProductActiveStatus.ACTIVE
                         : statusFlag.get() == 0 ? ProductActiveStatus.INACTIVE
-                        : ProductActiveStatus.PARTIAL;
+                          : ProductActiveStatus.PARTIAL;
 
                 //  get image icon url
                 List<ProductImage> imageUrls = productImagesRepo.findBySuperSku(superSku);
@@ -519,67 +532,16 @@ public class ProductQueryService {
     }
 
 
-    //  ********* get product item details by given super SKU *********
-
-    public ItemDetailsDto getItemDetails(String superSku) {
-        boolean exists = itemsRepo.existsBySuperSku(superSku);
-        if (!exists) throw new IllegalArgumentException("super SKU doesn't exist");
-
-        List<ProductItem> items = itemsRepo.findAllBySuperSku(superSku);
-
-//        AtomicReference<Float> startingPrice = new AtomicReference<>(Float.MAX_VALUE);
-        AtomicReference<BigDecimal> baseMrp = new AtomicReference<>(BigDecimal.valueOf(Float.MAX_VALUE));
-        AtomicReference<BigDecimal> baseSelling = new AtomicReference<>(BigDecimal.valueOf(Float.MAX_VALUE));
-
-        List<ItemSizeDto> sizeDetails = items.stream()
-                .map(item -> {
-                    if (item.getMrp().compareTo(baseMrp.get()) < 0) {
-                        baseMrp.set(item.getMrp());
-                    }
-                    if (item.getSellingPrice().compareTo(baseSelling.get()) < 0) {
-                        baseSelling.set(item.getSellingPrice());
-                    }
-//                    if (item.getPrice() < startingPrice.get()) {
-//                        startingPrice.set(item.getPrice());
-//                    }
-                    return ItemSizeDto.builder()
-                            .itemId(item.getItemId())
-                            .size(itemsRepo.findSizeByItemId("Size", item.getItemId()))
-                            .sku(item.getSKU())
-                            .qtyInStock(item.getQtyInStock())
-                            .isActive(item.getIsActive())
-                            .createdAt(item.getCreatedAt())
-                            .build();
-                }).toList();
-
-        List<String> imageUrls = productImagesRepo.findBySuperSku(superSku).stream()
-                .map(image -> image.getImageUrl())
-                .toList();
-
-        return ItemDetailsDto.builder()
-                .baseMrp(baseMrp.get() != BigDecimal.valueOf(Float.MAX_VALUE) ? baseMrp.get() : null)
-                .baseSellingPrice(baseSelling.get() != BigDecimal.valueOf(Float.MAX_VALUE) ? baseSelling.get() : null)
-//                .startingPrice(startingPrice.get() != Float.MAX_VALUE ? startingPrice.get() : null)
-                .imageUrls(imageUrls)
-                .sizeDetails(sizeDetails)
-
-//                .superSku()
-//                .stockStatus()
-//                .activeStatus()
-//                .color()
-//                .hexCode()
-                .build();
-    }
 
 
-    public ProductMinimalDto getProductByIdForAddItemForm(Long productId) {
+    public ProductMinimalDto getProductByIdForAddItemForm(UUID productId) {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
         ParentCategoryView parentCategoryView = categoriesRetrievalService.getParentBySubCategoryId(product.getSubCategory().getCategoryId());
         return new ProductMinimalDto(
-                product.getId(),
+                product.getProductId(),
                 product.getProductName(),
-                parentCategoryView.getId(),
+                parentCategoryView.getCategoryId(),
                 parentCategoryView.getCategoryName(),
                 product.getSubCategory().getCategoryId(),
                 product.getSubCategory().getCategoryName());
@@ -607,8 +569,8 @@ public class ProductQueryService {
 
 
     //  Get products by Sub-category ID
-    public List<ProductMinDto> getProductsBySubCategory(Long subCategoryId) {
-        return productsRepo.findByCategoryId(subCategoryId).stream()
+    public List<ProductMinDto> getProductsBySubCategory(UUID subCategoryId) {
+        return productsRepo.findBySubCategory_CategoryId(subCategoryId).stream()
                 .map(p -> {
                     String imageUrl = p.getItems()
                             .stream()
@@ -618,14 +580,14 @@ public class ProductQueryService {
                             .orElse(null);
 
                     return ProductMinDto.builder()
-                            .productId(p.getId())
+                            .productId(p.getProductId())
                             .productName(p.getProductName())
                             .iconImage(imageUrl)
                             .build();
                 }).toList();
     }
 
-    public List<ItemMinDto> getProductItemByProductId(Long productId) {
+    public List<ItemMinDto> getProductItemByProductId(UUID productId) {
         Product product = productsRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
         return product.getItems().stream()

@@ -1,18 +1,11 @@
-package com.menzo.Product_Service.Product.Dto;
+package com.menzo.Product_Service.Product.Dto.ProductDto;
 
 import java.util.Date;
+import java.util.UUID;
 
 public interface ProductListingView {
 
-//    Long getId();
-//    String getProductName();
-//    String getSubCategoryName();
-//    Float getStartingPrice();
-//    Integer getTotalQty();
-//    ProductActiveStatus getActiveStatus();
-//    String getIconImage();
-
-    Long getProductId();
+    UUID getProductId();
 
     String getProductName();
 
@@ -20,7 +13,7 @@ public interface ProductListingView {
 
     String getCategoryName();
 
-    Float getMinPrice();
+    Float getMinPrice();        //  must be BigDecimal probably
 
     Float getMaxPrice();
 
@@ -34,8 +27,6 @@ public interface ProductListingView {
 
     String getActiveStatus();
 
-
-//
 //    Boolean getPodAvailable();
 //
 //    Date getProductCreateAt();
@@ -51,4 +42,7 @@ public interface ProductListingView {
 //    String getItemSku();
 //
 //    Boolean getItemActive();
+//
+//    String getIconImage();
+
 }

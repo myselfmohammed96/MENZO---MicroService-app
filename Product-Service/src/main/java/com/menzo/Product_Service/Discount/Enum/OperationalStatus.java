@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Discount.Enum;
 
-public enum PromotionStatus {
+public enum OperationalStatus {
 
 //  Lifecycle
     SCHEDULED,

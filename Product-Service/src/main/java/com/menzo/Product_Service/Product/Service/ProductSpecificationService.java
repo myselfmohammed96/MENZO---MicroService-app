@@ -1,6 +1,5 @@
-package com.menzo.Product_Service.Product.Service;
-
-import com.menzo.Product_Service.Modules.Product.Entity.*;
+//package com.menzo.Product_Service.Product.Service;
+//
 
 //@Service
 //public class ProductSpecificationService<T> {

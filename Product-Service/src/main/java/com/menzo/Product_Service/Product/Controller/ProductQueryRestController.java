@@ -1,6 +1,8 @@
 package com.menzo.Product_Service.Product.Controller;
 
-import com.menzo.Product_Service.Product.Dto.*;
+import com.menzo.Product_Service.Product.Dto.ProductDto.AdminProductListingDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.UserProductDetailsDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.UserProductListingDto;
 import com.menzo.Product_Service.Product.Service.ProductQueryService;
 import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import org.slf4j.Logger;
@@ -27,17 +29,17 @@ public class ProductQueryRestController {
 
     /*
      *
-     *   Get product listing
-     *   With filter, sort
+     *   Get product listing for user/client side
+     *   With filter, sort & search
      *
      */
-    @PostMapping
-    public ResponseEntity<?> getClientProductListing(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                     @RequestParam(name = "size", defaultValue = "10") Integer size,
-                                                     @RequestParam(name = "search", required = false) String searchRequest,
-                                                     @RequestParam(name = "sort", required = false) String sortRequest,
-                                                     @RequestBody(required = false) RequestDto requestDto) {
-        //  validations
+    @PostMapping("/get-listing")
+    public ResponseEntity<?> getUserProductListing(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                   @RequestParam(name = "size", defaultValue = "10") Integer size,
+                                                   @RequestParam(name = "search", required = false) String searchRequest,
+                                                   @RequestParam(name = "sort", required = false) String sortRequest,
+                                                   @RequestBody(required = false) RequestDto requestDto) {
+        //  input validation
         if (page < 0) {
             throw new IllegalArgumentException("Page cannot be less than 0.");
         }
@@ -48,7 +50,7 @@ public class ProductQueryRestController {
             throw new IllegalArgumentException("Search text too long.");
         }
 
-        Page<UserProductListingDto> pageContent = productsRetrievalService.getClientProductListing(
+        Page<UserProductListingDto> pageContent = productQueryService.getUserProductListing(
                 page,
                 size,
                 searchRequest == null ? "" : searchRequest,
@@ -72,36 +74,11 @@ public class ProductQueryRestController {
 
     /*
      *
-     *   Get product details
+     *   Get product listing for admin side
+     *   With filters, sort & search
      *
      */
-    @GetMapping("/get-user-product-details")
-    public ResponseEntity<?> getProductDetails(@RequestParam("ssku") String superSku) {
-        UserProductDetailsDto productDetails = productsRetrievalService.getUserProductDetails(superSku);
-        return ResponseEntity.ok(productDetails);
-    }
-
-
-    /*
-     *
-     *   Get product images
-     *
-     */
-    @GetMapping("/image-urls")
-    public ResponseEntity<?> getProductImages(@RequestParam("ssku") String superSku) {
-        List<String> productImages = productsRetrievalService.getProductImages(superSku);
-        return ResponseEntity.ok(productImages);
-    }
-
-
-    /*
-     *
-     *   Get product listing
-     *   With filters, sort
-     *   for Admin-side
-     *
-     */
-    @PostMapping("/all-products")
+    @PostMapping("/get-admin-listing")
     public ResponseEntity<?> getAdminProductListing(@RequestParam(defaultValue = "0") Integer page,
                                                     @RequestParam(defaultValue = "10") Integer size,
                                                     @RequestParam(name = "search", required = false) String searchRequest,
@@ -120,7 +97,7 @@ public class ProductQueryRestController {
         //  ## whitelist the allowable sort requests
 
         //  get page content
-        Page<AdminProductListingDto> pageContent = productsRetrievalService.getAdminProductListing(
+        Page<AdminProductListingDto> pageContent = productQueryService.getAdminProductListing(
                 page,
                 size,
                 searchRequest == null ? "" : searchRequest,
@@ -139,6 +116,32 @@ public class ProductQueryRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(responseBody);
         }
+    }
+
+
+    /*
+     *
+     *   Get product details for user/client side
+     *   With items minimal details
+     *   Product identified by super SKU
+     *
+     */
+    @GetMapping("/get-details")
+    public ResponseEntity<?> getUserProductDetails(@RequestParam("ssku") String superSku) {
+        UserProductDetailsDto productDetails = productQueryService.getUserProductDetails(superSku);
+        return ResponseEntity.ok(productDetails);
+    }
+
+
+    /*
+     *
+     *   Get product images
+     *
+     */
+    @GetMapping("/get-images")
+    public ResponseEntity<?> getProductImages(@RequestParam("ssku") String superSku) {
+        List<String> productImages = productQueryService.getProductImages(superSku);
+        return ResponseEntity.ok(productImages);
     }
 
 }

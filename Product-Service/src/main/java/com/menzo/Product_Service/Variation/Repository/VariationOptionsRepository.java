@@ -10,11 +10,11 @@ import java.util.UUID;
 @Repository
 public interface VariationOptionsRepository extends JpaRepository<VariationOption, UUID> {
 
-    boolean existsByOptionValueAndVariationId(String optionValue, UUID variationId);     // TESTED
+    boolean existsByOptionValueAndVariation_VariationId(String optionValue, UUID variationId);     // TESTED
 
     List<VariationOption> findByOptionIdIn(List<UUID> idList);     // TESTED
 
-    List<VariationOption> findByVariationId(UUID variationId);   // TESTED
+    List<VariationOption> findByVariation_VariationId(UUID variationId);   // TESTED
 
     List<VariationOption> findByOptionValueContainingIgnoreCase(String keyword);
 

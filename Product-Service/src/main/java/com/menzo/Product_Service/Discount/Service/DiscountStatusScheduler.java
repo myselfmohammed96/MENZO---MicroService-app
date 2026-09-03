@@ -1,6 +1,6 @@
 package com.menzo.Product_Service.Discount.Service;
 
-import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
+import com.menzo.Product_Service.Discount.Repository.DiscountRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class DiscountStatusScheduler {
     private static final Logger logger = LoggerFactory.getLogger(DiscountStatusScheduler.class);
 
     @Autowired
-    private final DiscountRepo discountRepo;
+    private final DiscountRepository discountRepo;
 
     @Transactional
     @Scheduled(fixedRate = 60000)

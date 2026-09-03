@@ -2,7 +2,6 @@ package com.menzo.Product_Service.Discount.Service;
 
 import com.menzo.Product_Service.Discount.Entity.Discount;
 import com.menzo.Product_Service.Discount.Enum.*;
-import com.menzo.Product_Service.Modules.Discount.Enum.*;
 import com.menzo.Product_Service.SearchAndFilter.Dto.FilterRequestDto;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,7 +24,7 @@ public class DiscountSpecService {
             Map<String, Function<FilterRequestDto, Predicate>> filterMap = Map.of(
                     "level", r -> root.get("level").in(toEnum(DiscountLevel.class, r.getValues())),
                     "type", r -> root.get("type").in(toEnum(DiscountType.class, r.getValues())),
-                    "status", r -> root.get("discountStatus").in(toEnum(PromotionStatus.class, r.getValues())),
+                    "status", r -> root.get("discountStatus").in(toEnum(OperationalStatus.class, r.getValues())),
                     "capType", r -> root.get("capType").in(toEnum(CapType.class, r.getValues())),
                     "priority", r -> root.get("priority").in(convertToIntLIst(r.getValues()))
 //                    "startAt", r -> null,

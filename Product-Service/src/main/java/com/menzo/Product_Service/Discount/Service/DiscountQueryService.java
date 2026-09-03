@@ -4,14 +4,12 @@ import com.menzo.Product_Service.Category.Dto.CategoryDto;
 import com.menzo.Product_Service.Category.Service.CategoryQueryService;
 import com.menzo.Product_Service.Discount.Dto.*;
 import com.menzo.Product_Service.Discount.Enum.*;
-import com.menzo.Product_Service.Modules.Discount.Dto.*;
 import com.menzo.Product_Service.Discount.Entity.Discount;
 import com.menzo.Product_Service.Discount.Entity.DiscountCategory;
 import com.menzo.Product_Service.Discount.Entity.DiscountVariant;
-import com.menzo.Product_Service.Modules.Discount.Enum.*;
-import com.menzo.Product_Service.Discount.Repo.DiscountRepo;
+import com.menzo.Product_Service.Discount.Repository.DiscountRepository;
 import com.menzo.Product_Service.Product.Dto.ItemDto.ItemMinDto;
-import com.menzo.Product_Service.Product.Dto.ProductMinDto;
+import com.menzo.Product_Service.Product.Dto.ProductDto.ProductMinDto;
 import com.menzo.Product_Service.Product.Service.ProductQueryService;
 import com.menzo.Product_Service.SearchAndFilter.Dto.RequestDto;
 import jakarta.annotation.Nullable;
@@ -34,7 +32,7 @@ public class DiscountQueryService {
     private static final Logger logger = LoggerFactory.getLogger(DiscountQueryService.class);
 
     @Autowired
-    private DiscountRepo discountRepo;
+    private DiscountRepository discountRepo;
 
     @Autowired
     private DiscountSpecService specService;
@@ -91,13 +89,13 @@ public class DiscountQueryService {
                 ? discount.getDiscountDescription()
                 : null;
         return DiscountSummaryDto.builder()
-                .discountId(discount.getId())
+                .discountId(discount.getDiscountId())
                 .discountCode(discount.getDiscountCode())
                 .discountName(discount.getDiscountName())
                 .discountDescription(description)
-                .level(discount.getLevel())
-                .type(discount.getType())
-                .value(discount.getValue())
+                .level(discount.getDiscountLevel())
+                .type(discount.getDiscountType())
+                .value(discount.getDiscountValue())
                 .capType(discount.getCapType())
                 .capValue(discount.getCapValue())
                 .priority(discount.getPriority())
@@ -117,18 +115,18 @@ public class DiscountQueryService {
                                                            RequestDto filterRequest) {
         Discount discount = discountRepo.findById(discountId)
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found with ID: " + discountId));
-        return switch (discount.getLevel()) {
+        return switch (discount.getDiscountLevel()) {
             case GLOBAL -> List.of();
             case CATEGORY -> discount.getDiscountCategories().stream()
                     .filter(DiscountQueryService::isParentCategory)
-                    .map(dc -> toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                    .map(dc -> toMappedContent(dc.getDiscountCategoryId(), dc.getCategory().getCategoryName()))
                     .toList();
             case SUB_CATEGORY -> discount.getDiscountCategories().stream()
                     .filter(DiscountQueryService::isSubCategory)
-                    .map(dc -> toMappedContent(dc.getId(), dc.getCategory().getCategoryName()))
+                    .map(dc -> toMappedContent(dc.getDiscountCategoryId(), dc.getCategory().getCategoryName()))
                     .toList();
             case PRODUCT -> discount.getDiscountProducts().stream()
-                    .map(dp -> toMappedContent(dp.getId(), dp.getProduct().getProductName()))
+                    .map(dp -> toMappedContent(dp.getDiscountProductId(), dp.getProduct().getProductName()))
                     .toList();
             case VARIANT -> discount.getDiscountVariants().stream()
                     .map(DiscountQueryService::mapVariant)
@@ -178,16 +176,16 @@ public class DiscountQueryService {
 
     //  get Discount status
     public EnumDto getDiscountStatus(DiscountStatusTarget target) {
-        List<PromotionStatus> whiteList = switch (target) {
+        List<OperationalStatus> whiteList = switch (target) {
             case FORM -> List.of(
-                    PromotionStatus.ACTIVE,
-                    PromotionStatus.INACTIVE
+                    OperationalStatus.ACTIVE,
+                    OperationalStatus.INACTIVE
             );
             case SUMMARY -> List.of(
-                    PromotionStatus.ACTIVE,
-                    PromotionStatus.INACTIVE,
-                    PromotionStatus.PAUSED,
-                    PromotionStatus.CANCELLED
+                    OperationalStatus.ACTIVE,
+                    OperationalStatus.INACTIVE,
+                    OperationalStatus.PAUSED,
+                    OperationalStatus.CANCELLED
             );
             default -> throw new IllegalArgumentException(
                     "Invalid target for DiscountStatus: " + target
@@ -339,49 +337,49 @@ public class DiscountQueryService {
     //  Convert: Discount -> DiscountListingDto
     private DiscountListingDto convertToListingDto(Discount discount) {
         try {
-            PromotionStatus status = validateStatus(discount);
+            OperationalStatus status = validateStatus(discount);
 
             return DiscountListingDto.builder()
-                    .discountId(discount.getId())
+                    .discountId(discount.getDiscountId())
                     .discountCode(discount.getDiscountCode())
                     .discountName(discount.getDiscountName())
-                    .level(discount.getLevel())
-                    .type(discount.getType())
-                    .value(discount.getValue())
+                    .level(discount.getDiscountLevel())
+                    .type(discount.getDiscountType())
+                    .value(discount.getDiscountValue())
                     .status(status)
                     .build();
         } catch (Exception e) {
-            logger.error("Error converting Discount to DiscountListingDto, Disocunt ID: {}", discount.getId(), e);
+            logger.error("Error converting Discount to DiscountListingDto, Disocunt ID: {}", discount.getDiscountId(), e);
             return null;
         }
     }
 
     //  validate discount status: Safety check
-    private PromotionStatus validateStatus(Discount discount) {
+    private OperationalStatus validateStatus(Discount discount) {
         LocalDateTime now = LocalDateTime.now();
-        if (discount.getDiscountStatus() != PromotionStatus.PAUSED
-                && discount.getDiscountStatus() != PromotionStatus.INACTIVE
-                && discount.getDiscountStatus() != PromotionStatus.CANCELLED) {
+        if (discount.getDiscountStatus() != OperationalStatus.PAUSED
+                && discount.getDiscountStatus() != OperationalStatus.INACTIVE
+                && discount.getDiscountStatus() != OperationalStatus.CANCELLED) {
 
             if (now.isBefore(discount.getStartAt())
-                    && discount.getDiscountStatus() != PromotionStatus.SCHEDULED) {
+                    && discount.getDiscountStatus() != OperationalStatus.SCHEDULED) {
                 logger.warn("Discount status mismatch: Changing status, {} -> SCHEDULED", discount.getDiscountStatus());
-                discount.setDiscountStatus(PromotionStatus.SCHEDULED);
+                discount.setDiscountStatus(OperationalStatus.SCHEDULED);
                 Discount updated = discountRepo.save(discount);
                 return updated.getDiscountStatus();
 
             } else if (discount.getStartAt().isBefore(now)
                     && discount.getEndAt().isAfter(now)
-                    && discount.getDiscountStatus() != PromotionStatus.ACTIVE) {
+                    && discount.getDiscountStatus() != OperationalStatus.ACTIVE) {
                 logger.warn("Discount status mismatch: Changing status, {} -> ACTIVE", discount.getDiscountStatus());
-                discount.setDiscountStatus(PromotionStatus.ACTIVE);
+                discount.setDiscountStatus(OperationalStatus.ACTIVE);
                 Discount updated = discountRepo.save(discount);
                 return updated.getDiscountStatus();
 
             } else if (discount.getEndAt().isBefore(now)
-                    && discount.getDiscountStatus() != PromotionStatus.EXPIRED) {
+                    && discount.getDiscountStatus() != OperationalStatus.EXPIRED) {
                 logger.warn("Discount status mismatch: Changing status, {} -> EXPIRED", discount.getDiscountStatus());
-                discount.setDiscountStatus(PromotionStatus.EXPIRED);
+                discount.setDiscountStatus(OperationalStatus.EXPIRED);
                 Discount updated = discountRepo.save(discount);
                 return updated.getDiscountStatus();
 
@@ -399,8 +397,8 @@ public class DiscountQueryService {
 
     //  check if mapped category is a parent category
     public static boolean isParentCategory(DiscountCategory dc) {
-        if (dc.getCategory().getParentCategoryId() != null) {
-            logger.error("Sub-category found in Category mapping with mapping ID: {}", dc.getId());
+        if (dc.getCategory().getParentCategory() != null) {
+            logger.error("Sub-category found in Category mapping with mapping ID: {}", dc.getDiscountCategoryId());
             return false;
         }
         return true;
@@ -408,8 +406,8 @@ public class DiscountQueryService {
 
     //  check if mapped category is a sub-category
     public static boolean isSubCategory(DiscountCategory dc) {
-        if (dc.getCategory().getParentCategoryId() == null) {
-            logger.error("Parent category found in Sub-category mapping with mapping ID: {}", dc.getId());
+        if (dc.getCategory().getParentCategory() == null) {
+            logger.error("Parent category found in Sub-category mapping with mapping ID: {}", dc.getDiscountCategoryId());
             return false;
         }
         return true;
@@ -432,7 +430,7 @@ public class DiscountQueryService {
                         (a, b) -> a
                 ));
         return MappedContentDto.builder()
-                .mappingId(dv.getId())
+                .mappingId(dv.getDiscountVariantId())
                 .textContent(dv.getProductItem().getSKU())
                 .color(mm.get("colors"))
                 .size(mm.get("size"))
@@ -447,7 +445,7 @@ public class DiscountQueryService {
                 .build();
     }
 
-    public List<LevelDetailsDto> getLevelDetails(@Nullable Long id,
+    public List<LevelDetailsDto> getLevelDetails(@Nullable UUID id,
                                                  DiscountLevel currentLevel) {
 //        if (targetLevel == currentLevel) {
 //        }

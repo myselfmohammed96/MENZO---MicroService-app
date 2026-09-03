@@ -3,7 +3,7 @@ package com.menzo.Product_Service.Discount.Dto;
 import com.menzo.Product_Service.Discount.Enum.CapType;
 import com.menzo.Product_Service.Discount.Enum.DiscountLevel;
 import com.menzo.Product_Service.Discount.Enum.DiscountType;
-import com.menzo.Product_Service.Discount.Enum.PromotionStatus;
+import com.menzo.Product_Service.Discount.Enum.OperationalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,7 +43,7 @@ public class DiscountSummaryDto {
 
     private LocalDateTime endAt;
 
-    private PromotionStatus status;
+    private OperationalStatus status;
 
     private LocalDateTime resumeAt;
 

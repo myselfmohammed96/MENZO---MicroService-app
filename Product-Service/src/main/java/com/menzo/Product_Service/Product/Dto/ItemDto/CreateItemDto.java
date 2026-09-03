@@ -1,4 +1,4 @@
-package com.menzo.Product_Service.Product.Dto;
+package com.menzo.Product_Service.Product.Dto.ItemDto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,11 +17,11 @@ public class CreateItemDto {
 
     @NotNull
     @Positive
-    private Long productId;
+    private UUID productId;
 
     @NotNull
     @Positive
-    private  Long colorId;
+    private  UUID colorId;
 
     private String activeStatus;
 

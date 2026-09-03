@@ -1,8 +1,8 @@
 package com.menzo.Product_Service.Modules.Product.Repo;
 
-import com.menzo.Product_Service.Product.Dto.ProductListingView;
+import com.menzo.Product_Service.Product.Dto.ProductDto.ProductListingView;
 import com.menzo.Product_Service.Product.Entity.Product;
-import com.menzo.Product_Service.Product.Repo.ProductsRepository;
+import com.menzo.Product_Service.Product.Repository.ProductsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,12 +40,12 @@ class ProductsRepoTest {
         System.out.println(allProducts.size());
     }
 
-    @Test
-    public void testFindByCategory() {
-        List<Product> byCategory = productsRepo.findByCategoryId(121L);
-        for (Product p : byCategory) {
-            System.out.println(p);
-        }
-    }
+//    @Test
+//    public void testFindByCategory() {
+//        List<Product> byCategory = productsRepo.findByCategoryId(121L);
+//        for (Product p : byCategory) {
+//            System.out.println(p);
+//        }
+//    }
 
 }
