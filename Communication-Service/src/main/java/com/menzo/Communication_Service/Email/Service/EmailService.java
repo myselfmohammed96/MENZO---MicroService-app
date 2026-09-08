@@ -1,18 +1,19 @@
 package com.menzo.Communication_Service.Email.Service;
 
-import com.menzo.Communication_Service.Email.Config.MailProperties;
 import com.menzo.Communication_Service.Email.Dto.EmailRequest;
+import com.menzo.Communication_Service.Email.Enum.EmailPurpose;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.javamail.JavaMailSender;
-
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
+import java.time.LocalDate;
+
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Service
 public class EmailService {
@@ -20,65 +21,60 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-//    @Autowired
-//    private MailProperties adminMailProperties;
+    @Value("${email.context.app-name}")
+    private String appName;
 
-//    private String lastOtp;
-//    private Instant otpTimeStamp;
+    @Value("${email.context.otp-validity-minutes}")
+    private String otpValidityMinutes;
+
+    @Value("${email.display-name.sign-in-otp}")
+    private String signInOtpEmailDisplayName;
+
+    private final SpringTemplateEngine templateEngine;
+
+    public EmailService(SpringTemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
+    }
 
 
-    public void send(EmailRequest emailRequest) throws MessagingException, UnsupportedEncodingException {
+    /*
+     *
+     *   Send OTP email
+     *
+     */
+    public void sendSignInOtpEmail(EmailRequest emailRequest, String otp) throws MessagingException, UnsupportedEncodingException {
 
-//        SimpleMailMessage msg = new SimpleMailMessage();
-//        msg.setTo(emailRequest.getTo());
-//        msg.setSubject(emailRequest.getSubject());
-//        msg.setText(emailRequest.getBody());
-//        mailSender.send(msg);
-
-        System.out.println("Start.. here...");
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-//        System.out.println(fromEmail);
-//        System.out.println(emailRequest.getFromName());
-        //   display name needed...
-
-
-        helper.setFrom(fromEmail, emailRequest.getFromName());
+        helper.setFrom(fromEmail, signInOtpEmailDisplayName);       //  displayName
         helper.setTo(emailRequest.getTo());
         helper.setSubject(emailRequest.getSubject());
-        helper.setText(emailRequest.getBody());
+        helper.setText(
+                getSignInOtpEmailTemplate(otp, emailRequest.getUserName()),
+                true        //  true -> HTML email
+        );
 
         mailSender.send(message);
-        System.out.println("End.. here...");
     }
 
-//    public void sendOtp() {
-//        String otp = otpGenerator();
-//
-////        this.lastOtp = otp;
-////        this.otpTimeStamp = Instant.now();
-//
-//        mailSender(otp);
-//    }
 
-//    private void mailSender(String payLoad) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//
-//        message.setFrom(adminMailProperties.getUsername());
-//        message.setTo("todo@gmail.com");
-//        message.setText("Your OTP is: " + payLoad);
-//        message.setSubject("OTP Verification,");
-//
-//        gmailSender.send(message);
-//    }
+    //  get sign-in OTP email template
+    private String getSignInOtpEmailTemplate(String otp, String userName) {
+        Context context = new Context();
 
-//    private String otpGenerator() {
-//        return String.format("%05d", new Random().nextInt(100000));
-//    }
+        context.setVariable("appName", appName);
+        context.setVariable("actionName", EmailPurpose.SIGN_IN.name().toLowerCase().replace('_', '-'));
+        context.setVariable("userName", userName);
+        context.setVariable("otpValidityMinutes", otpValidityMinutes);
+        context.setVariable("otpCode", otp);
+        context.setVariable("supportLink", "");
+        context.setVariable("currentYear", LocalDate.now().getYear());
+
+        return templateEngine.process("otp-email", context);
+    }
 
 }
