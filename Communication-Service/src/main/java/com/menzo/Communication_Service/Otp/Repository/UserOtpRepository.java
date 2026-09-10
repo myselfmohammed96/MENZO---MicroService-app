@@ -11,22 +11,6 @@ public interface UserOtpRepository extends JpaRepository<UserOtp, UUID> {
 
     /*
      *
-     *   check user OTP existence by user email
-     *
-     */
-    boolean existsByUserEmail(String userEmail);
-
-
-    /*
-     *
-     *   find user OTP by user email
-     *
-     */
-    Optional<UserOtp> findByUserEmail(String userEmail);
-
-
-    /*
-     *
      *   find user OTP by user email & purpose
      *
      */
