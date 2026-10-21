@@ -1,6 +1,7 @@
-import { showToast } from "/js/global/toast.js";
+import {showToast} from "/js/global/toast.js";
 
 let form;
+const {redirectUrl, otpVerificationPage, checkEmailExistenceUrl} = window.pageUrls;
 
 
 /* ******* Fetch APIs ******* */
@@ -14,8 +15,8 @@ async function checkEmailExistence(email) {
     try {
         const response = await fetch(checkEmailExistenceUrl, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email})
         });
 
         const data = await response.json().catch(() => ({}));
@@ -33,14 +34,14 @@ async function checkEmailExistence(email) {
 
 /*
 *
-*   Post sign-in form data
+*   Post signup form data
 *
 */
-async function postFormData(formFields) {
+async function postFormData(formFields)     {
     try {
         const response = await fetch(form.getAttribute("action"), {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 firstName: formFields.firstName,
                 lastName: formFields.lastName,
@@ -49,15 +50,13 @@ async function postFormData(formFields) {
                 email: formFields.email,
                 gender: formFields.gender,
                 password: formFields.password,
-                confirmPassword: formFields.confirmPassword
+                confirmPassword: formFields.confirmPassword,
+                redirectUrl: redirectUrl
             })
         });
 
-        // const data = await response.json().catch(() => ({}));
-
         if (response.status === 201) {
             window.location.href = otpVerificationPage;
-            //  ## need to store the redirect url (came from page) somewhere and should redirect after otp verification
         } else if (response.status >= 400 && response.status < 500) {
             showToast("Unable to register user. Try again.", false);
         } else if (response.status >= 500) {
@@ -75,7 +74,7 @@ async function postFormData(formFields) {
 
 /*
 *
-*   Sign-in form data processing
+*   Signup form data processing
 *
 */
 async function processFormData() {
@@ -87,7 +86,7 @@ async function processFormData() {
         phone: document.getElementById('phone-number').value.trim(),
         dob: document.getElementById('dateOfBirth').value.trim(),
         email: document.getElementById('email').value.trim(),
-        gender: document.getElementById('reg-form-gender').value.trim(),
+        gender: document.getElementById('gender').value.trim(),
         password: document.getElementById('password').value.trim(),
         confirmPassword: document.getElementById('confirm-password').value.trim()
     };
@@ -103,10 +102,9 @@ async function processFormData() {
         confirmPassword: document.getElementById('confirm-password-error-message')
     };
 
-    Object.values(fieldErrorMsg).forEach(el => el.textContent = "");
+    Object.values(fieldErrorMsg).forEach(errMsg => errMsg.textContent = "");
 
-    // validation
-
+    // ----- validation -----
     //  name
     if (!formFields.firstName || !formFields.lastName) {
         fieldErrorMsg.firstName.textContent = !formFields.firstName ? "*First name is required." : "";
@@ -195,8 +193,7 @@ async function processFormData() {
 *
 */
 document.addEventListener("DOMContentLoaded", () => {
-
-    form = document.querySelector('#reg-form');
+    form = document.querySelector('#sign-in-form');
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         await processFormData();

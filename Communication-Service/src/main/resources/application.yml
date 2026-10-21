@@ -1,0 +1,49 @@
+server:
+  port: 8282
+
+spring:
+  application:
+    name: COMMUNICATION-SERVICE
+  config:
+    import:
+      - "optional:classpath:creds.properties"
+  jpa:
+    open-in-view: false
+  mail:
+    protocol: smtp
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttle.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+app:
+  mail:
+    from: ${SMTP_USERNAME}
+    brand-name: MENZO
+    display-name:
+      sign-in-otp: MENZO Verification
+    subject:
+      sign-in-otp: Sign-in Verification Code
+  otp:
+    hmac-secret: ${OTP_HMAC_SECRET}   # >= 32 chars, from env / secret manager
+    expiry: 5m
+    resend-cooldown: 60s
+    max-send-attempts: 5
+    max-verify-attempts: 5
+    attempt-window: 1h
+    block-duration: 30m

@@ -14,49 +14,45 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
-public class UserCredentialsRestController {
-
-    @Autowired
-    private UserQueryService userQueryService;
+public class CredentialsRestController {
 
     @Autowired
     private CredentialsService credentialsService;
 
 
-
     /*
-    *
-    *   User email existence check
-    *   for user sign-in validation
-    *
-    */
-    @PostMapping("/is-exists")
-    public ResponseEntity<Map<String, Boolean>> checkUserEmailExists(@RequestBody EmailDto emailDto) {
-        boolean emailExists = userQueryService.checkUserEmailExists(emailDto);
+     *
+     *   User email existence check
+     *   Used for user sign-in form validation
+     *
+     */
+    @PostMapping("/email-exists")
+    public ResponseEntity<Map<String, Boolean>> checkUserEmailExistence(@RequestBody EmailDto emailDto) {
+        boolean emailExists = credentialsService.checkUserEmailExists(emailDto);
         return ResponseEntity.ok(Map.of("exists", emailExists));
     }
 
 
-
     /*
-    *
-    *   Update user password
-    *   User identified by user email
-    *
-    */
+     *
+     *   Update user password
+     *   User identified by user email
+     *
+     */
     @PutMapping("/update-password")
     public ResponseEntity<?> updatePassword(@RequestHeader("loggedInUser") String userEmail,
                                             @RequestParam("present") boolean passwordPresent,
                                             @RequestBody ChangePasswordDto passwordDto) {
         if (passwordDto == null ||
-            passwordDto.getNewPassword() == null || passwordDto.getNewPassword().isEmpty() ||
-            passwordDto.getConfirmPassword() == null || passwordDto.getConfirmPassword().isEmpty() ||
-            !Objects.equals(passwordDto.getNewPassword(), passwordDto.getConfirmPassword()) ||
-            (passwordPresent && (passwordDto.getCurrentPassword() == null || passwordDto.getCurrentPassword().isEmpty()))) {
+                passwordDto.getNewPassword() == null || passwordDto.getNewPassword().isEmpty() ||
+                passwordDto.getConfirmPassword() == null || passwordDto.getConfirmPassword().isEmpty() ||
+                !Objects.equals(passwordDto.getNewPassword(), passwordDto.getConfirmPassword()) ||
+                (passwordPresent && (passwordDto.getCurrentPassword() == null || passwordDto.getCurrentPassword().isEmpty()))) {
             throw new IllegalArgumentException("Password dto invalid.");
         }
         boolean passwordUpdated = credentialsService.updatePassword(userEmail, passwordPresent, passwordDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("success", passwordUpdated));
     }
+
 }

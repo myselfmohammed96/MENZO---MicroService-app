@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PasswordDto {
+public class HashDto {
 
-    private String password;
+    private String string;
 
 }

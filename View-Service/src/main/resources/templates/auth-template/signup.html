@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www/thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
@@ -66,7 +66,8 @@
             <p class="txt-a1a1a1 fs-14px mb-5p ml-12px">Let's create an account</p>
 
             <!-- form -->
-            <form id="reg-form" class="m-auto ml-5px c-gp-15px" th:action="${pageUrls.signInFormSubmit}" th:object="${user}"
+            <form id="sign-in-form" class="m-auto ml-5px c-gp-15px" th:action="${pageUrls.signInFormSubmit}"
+                  th:object="${user}"
                   method="post">
 
                 <!-- first name -->
@@ -114,14 +115,11 @@
                 <div class="w-100p d-f fd-c jc-fs h-auto mb-5px">
                     <select name="gender" th:field="*{gender}"
                             class="ol-none br-none txt-383838 fs-1em bg-trans w-100p pt-10px pb-10px pr-5px pl-5px"
-                            id="reg-form-gender">
+                            id="gender">
                         <option value="" selected hidden>Gender</option>
                         <option th:each="g : ${genders}"
                                 th:value="${g}"
                                 th:text="${g.displayName}"></option>
-<!--                        <option th:each="g : ${T(com.menzo.Home_Service.Enum.Gender).values()}" th:value="${g}"-->
-<!--                                th:text="${g.displayName}">-->
-<!--                        </option>-->
                     </select>
                     <p id="gender-error-message" class="error-message txt-red fs-13px m-0"></p>
                 </div>
@@ -152,10 +150,8 @@
                 <div class="divider d-f ai-c mt-10px mr-0 ml-0 txt-aln-c txt-aaa fs-14px"><span>or</span></div>
 
                 <!-- google sign-in button -->
-<!--                <a id="google-button-link" class="txt-d-none"-->
-<!--                   th:href=${signInPageUrls.googleSignIn}>-->
                 <a id="google-button-link" class="txt-d-none"
-                   href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/auth/grantcode&response_type=code&client_id=692936531788-hrsvcv5ckbhnc42kvvo0ktqpek3itf7e.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline">
+                   th:href=${pageUrls.googleSignIn}>
                     <button type="button" id="button-google"
                             class="br-rs-5px fs-1em bg-fff txt-444 fw-500 crsr-p d-f ai-c jc-c gp-10px w-100p pt-8px pb-8px pr-0 pl-0 mt-10px">
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -190,7 +186,7 @@
 <!-- footer -->
 <hr class="w-96p ml-2p mt-10px h-1_5px br-none bg-b8b8b8">
 <div id="auth-checkout-footer" class="mt-0 mr-30px mb-10px ml-30px p-15px txt-aln-c txt-cacaca">
-    <p class="fs-0_85em">© 2026 - All rights reserved by <strong>MENZO</strong></p>
+    <p class="fs-0_85em">© <span th:text="${currentYear}"></span> - All rights reserved by <strong>MENZO</strong></p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -201,9 +197,15 @@
         maxDate: "today"
     });
 </script>
-
+<script th:inline="javascript">
+    window.pageUrls = {
+        redirectUrl: /*[[${pageUrls.redirectUrl}]]*/,
+        otpVerificationPage: /*[[${pageUrls.otpVerificationPage}]]*/,
+        checkEmailExistenceUrl: /*[[${pageUrls.checkEmailExistence}]]*/
+    }
+</script>
 <script type="module" src="/js/global/toast.js"></script>
-<script type="module" src="/js/auth-checkout/sign-in.js"></script>
+<script type="module" src="/js/auth-checkout/signup.js"></script>
 
 </body>
 </html>
