@@ -1,8 +1,8 @@
 package com.menzo.Identity_Service.JWT.Service;
 
-import com.menzo.Identity_Service.Dto.EmailDto;
-import com.menzo.Identity_Service.Dto.User;
-import com.menzo.Identity_Service.Feign.UserFeign;
+//import com.menzo.Identity_Service.Auth.Dto.EmailDto;
+//import com.menzo.Identity_Service.Auth.Dto.User;
+//import com.menzo.Identity_Service.Global.FeignClient.FeignDep.UserFeign;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -17,8 +17,8 @@ import java.util.Map;
 @Component
 public class JwtUtilityService {
 
-    @Autowired
-    private UserFeign userFeign;
+//    @Autowired
+//    private UserFeign userFeign;
 
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
@@ -29,11 +29,11 @@ public class JwtUtilityService {
     *   Generate JWT
     *
     */
-    public String generateToken(String userEmail){
-        User user = userFeign.getUserbyUserEmail(new EmailDto(userEmail));
-        Map<String, Object> claims = Map.of("roles", user.getRoles());
-        return createToken(claims, userEmail);
-    }
+//    public String generateToken(String userEmail){
+//        User user = userFeign.getUserbyUserEmail(new EmailDto(userEmail));
+//        Map<String, Object> claims = Map.of("roles", user.getRoles());
+//        return createToken(claims, userEmail);
+//    }
 
 
 

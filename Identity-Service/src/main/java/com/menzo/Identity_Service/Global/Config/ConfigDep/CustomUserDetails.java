@@ -1,0 +1,55 @@
+package com.menzo.Identity_Service.Global.Config.ConfigDep;
+
+//import com.menzo.Identity_Service.Auth.Dto.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+
+public class CustomUserDetails implements UserDetails {
+
+    private String username;
+    private String password;
+    private boolean isActive;
+
+//    CustomUserDetails(User user){
+//        this.username = user.getEmail();
+//        this.password = user.getPassword();
+//        this.isActive = user.isActive();
+//    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive;
+    }
+}

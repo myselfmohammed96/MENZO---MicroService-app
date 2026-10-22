@@ -27,15 +27,15 @@ public class OAuthRestController {
     *   with authorization code
     *
     */
-    @GetMapping("/grantcode")
-    public void grantCode(@RequestParam("code") String code,
-//                          @RequestParam("scope") String scope,
-//                          @RequestParam("authuser") String authUser,
-//                          @RequestParam("prompt") String prompt,
-                          HttpServletResponse response) throws IOException {
-        Cookie cookie = oAuthService.processGrantCode(code);
-        response.addCookie(cookie);
-        response.sendRedirect("http://localhost:8080/index");
-    }
+//    @GetMapping("/grantcode")
+//    public void grantCode(@RequestParam("code") String code,
+////                          @RequestParam("scope") String scope,
+////                          @RequestParam("authuser") String authUser,
+////                          @RequestParam("prompt") String prompt,
+//                          HttpServletResponse response) throws IOException {
+//        Cookie cookie = oAuthService.processGrantCode(code);
+//        response.addCookie(cookie);
+//        response.sendRedirect("http://localhost:8080/index");
+//    }
 
 }

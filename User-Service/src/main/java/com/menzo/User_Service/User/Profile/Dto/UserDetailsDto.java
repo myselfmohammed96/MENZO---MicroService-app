@@ -1,0 +1,52 @@
+package com.menzo.User_Service.User.Profile.Dto;
+
+import com.menzo.User_Service.User.Profile.Enum.Gender;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserDetailsDto {
+
+    private UUID userId;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
+    private String phoneNumber;
+
+    private LocalDate dateOfBirth;
+
+    private Gender gender;
+
+    private boolean passwordPresent;
+
+    private LocalDateTime createdAt;
+
+    private boolean isActive;
+
+    ////////////////////////////////////////
+
+    public String toString() {
+        return "User:\nid: " + userId +
+                "\nfirstName: " + firstName +
+                "\nlastName: " + lastName +
+                "\nemail: " + email +
+                "\nphoneNumber: " + phoneNumber +
+                "\ndateOfBirth: " + dateOfBirth +
+                "\ngender: " + gender +
+                "\ncreatedAt: " + createdAt +
+                "\nisActive: " + isActive + "\n";
+    }
+}

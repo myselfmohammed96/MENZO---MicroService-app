@@ -1,0 +1,74 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: USER-SERVICE
+  config:
+    import:
+      - "optional:classpath:creds.properties"
+      - "classpath:seed-data.yml"
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties.hibernate.dialect: org.hibernate.dialect.MariaDBDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB        # hard cap enforced by the container (-> 413 FILE_TOO_LARGE)
+      max-request-size: 3MB
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+  output:
+    ansi.enabled: ALWAYS
+  cloud:
+    openfeign:
+      client:
+        config:
+          communication-service:
+            connect-timeout: 2000
+            read-timeout: 10000     # SMTP can be slow; keep above communication-service's mail timeout
+            logger-level: basic
+          identity-service:
+            connect-timeout: 2000
+            read-timeout: 8000
+            logger-level: basic
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+app:
+  storage:
+    profile-dir: ./uploads/profile
+    public-url-prefix: /uploads/profile
+    max-profile-pic-size: 2MB
+  signup:
+    default-redirect-url: /
+    redirect-ttl: 24h
+    allowed-redirect-hosts:
+      - localhost
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        web.HttpLogging: INFO
+        web.client.RestTemplate: INFO
+        cloud:
+          netflix.eureka: OFF
+          client.discovery: OFF
+    com:
+      netflix:
+        discovery: OFF
+        discovery.shared.transport.jersey: OFF
+
+

@@ -1,0 +1,105 @@
+package com.menzo.User_Service.User.Profile.Entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.menzo.User_Service.User.Customer.Entity.Customer;
+//import com.menzo.User_Service.User.UserRegistration.Dto.OAuthUserDto;
+import com.menzo.User_Service.User.Profile.Enum.Gender;
+import com.menzo.User_Service.User.Profile.Enum.UserTypes;
+import com.menzo.User_Service.Onboarding.Enum.UserRegistrationSource;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(
+        name = "users",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_user_email",
+                columnNames = "email"
+        )
+)
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userId;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    private String lastName;
+
+    @Column(nullable = false)
+    private String email;
+
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserTypes userType;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "password_hash")
+    private String password;
+
+    @Column(name = "profile_pic")
+    private String profileUrl;
+
+    @Column(nullable = false)
+    private boolean isActive = true;
+
+    @Column(nullable = false)
+    private boolean isVerified = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reg_source", nullable = false)
+    private UserRegistrationSource userRegistrationSource;
+
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Customer customer;
+
+    ///////////////////////////////////////////////
+
+//    public User(OAuthUserDto googleUser) {
+//        this.firstName = googleUser.getUserName();
+//        this.email = googleUser.getEmail();
+//        this.profileUrl = googleUser.getProfileUrl();
+//    }
+
+    public String toString() {
+        return "User:\nuserId: " + userId +
+                "\nfirstName: " + firstName +
+                "\nlastName: " + lastName +
+                "\nemail: " + email +
+                "\nphoneNumber: " + phoneNumber +
+                "\ngender: " + gender +
+                "\nuserType: " + userType +
+                "\ndateOfBirth: " + dateOfBirth +
+                "\nisActive: " + isActive + "\n";
+    }
+}

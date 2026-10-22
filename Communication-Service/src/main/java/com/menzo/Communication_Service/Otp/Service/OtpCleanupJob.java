@@ -16,9 +16,7 @@ import java.time.LocalDateTime;
 public class OtpCleanupJob {
 
     private final OtpCacheRepository otpCacheRepo;
-
     private final Clock clock;
-
 
     @Scheduled(cron = "${app.otp.cleanup-cron:0 0 * * * *}")
     @Transactional

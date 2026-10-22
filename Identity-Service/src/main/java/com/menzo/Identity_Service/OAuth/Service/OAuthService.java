@@ -1,10 +1,10 @@
 package com.menzo.Identity_Service.OAuth.Service;
 
-import com.menzo.Identity_Service.Authentication.Service.AuthService;
-import com.menzo.Identity_Service.JWT.Service.JwtService;
+import com.menzo.Identity_Service.Auth.Authentication.Service.AuthService;
+//import com.menzo.Identity_Service.JWT.Service.JwtService;
 import com.menzo.Identity_Service.OAuth.Dto.OAuthUserDto;
-import com.menzo.Identity_Service.Dto.User;
-import com.menzo.Identity_Service.Feign.UserFeign;
+//import com.menzo.Identity_Service.Auth.Dto.User;
+//import com.menzo.Identity_Service.Global.FeignClient.FeignDep.UserFeign;
 import com.nimbusds.jose.shaded.gson.Gson;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import jakarta.servlet.http.Cookie;
@@ -47,11 +47,11 @@ public class OAuthService {
     @Value("${google.scopes.email}")
     private String emailScope;
 
-    @Autowired
-    private UserFeign userFeign;
+//    @Autowired
+//    private UserFeign userFeign;
 
-    @Autowired
-    private JwtService jwtService;
+//    @Autowired
+//    private JwtService jwtService;
 
     @Autowired
     private AuthService authService;
@@ -65,17 +65,17 @@ public class OAuthService {
      *   with authorization code
      *
      */
-    public Cookie processGrantCode(String code) {
-        String accessToken = getOauthAccessTokenGoogle(code);
-        OAuthUserDto googleUserDetails = getProfileDetailsGoogle(accessToken);
-
-        User user = userFeign.googleOAuthUser(googleUserDetails);
-
-        String token = jwtService.generateToken(user.getEmail());
-        logger.info("JWT token created for google oauth user: {}", user.getEmail());
-
-        return authService.createCookie(token);
-    }
+//    public Cookie processGrantCode(String code) {
+//        String accessToken = getOauthAccessTokenGoogle(code);
+//        OAuthUserDto googleUserDetails = getProfileDetailsGoogle(accessToken);
+//
+//        User user = userFeign.googleOAuthUser(googleUserDetails);
+//
+//        String token = jwtService.generateToken(user.getEmail());
+//        logger.info("JWT token created for google oauth user: {}", user.getEmail());
+//
+//        return authService.createCookie(token);
+//    }
 
 
 

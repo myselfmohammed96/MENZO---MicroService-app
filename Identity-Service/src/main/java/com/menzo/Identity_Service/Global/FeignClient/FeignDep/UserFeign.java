@@ -1,0 +1,36 @@
+//package com.menzo.Identity_Service.Global.FeignClient.FeignDep;
+//
+////import com.menzo.Identity_Service.Auth.Dto.EmailDto;
+//import com.menzo.Identity_Service.OAuth.Dto.OAuthUserDto;
+////import com.menzo.Identity_Service.Auth.Dto.User;
+////import com.menzo.Identity_Service.Auth.Dto.UserStatusDto;
+//import org.springframework.cloud.openfeign.FeignClient;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestParam;
+//
+//@FeignClient(name = "USER-SERVICE")
+//public interface UserFeign {
+//
+//
+//
+////    @PostMapping("/user/get-by-email")
+////    public User getUserbyUserEmail(@RequestBody EmailDto userEmail);
+//
+//
+//
+////    @GetMapping("/user/get-by-id")
+////    public UserStatusDto getUserByUserId(@RequestParam("id") Long userId);
+//
+//
+//
+////    @PostMapping("/user/google-oauth-access")
+////    public User googleOAuthUser(@RequestBody OAuthUserDto googleUser);
+//
+//
+//
+////    @PostMapping("/user/get-cred-by-email")
+////    public User getUserCredentialsbyUserEmail(@RequestBody EmailDto userEmail);
+//
+//}

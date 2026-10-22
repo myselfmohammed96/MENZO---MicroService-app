@@ -1,6 +1,20 @@
+server:
+  address: localhost
+  port: 9090
+
 spring:
   application:
     name: IDENTITY-SERVICE
+  jpa:
+    open-in-view: false
+    cloud:
+      openfeign:
+        client:
+          config:
+            USER-SERVICE:               # must match the @FeignClient name exactly
+              connect-timeout: 2000
+              read-timeout: 5000
+              logger-level: basic
 
 eureka:
   instance:
@@ -8,11 +22,25 @@ eureka:
     prefer-ip-address: false
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
 
-server:
-  address: localhost
-  port: 9090
+app:
+  internal:
+    api-key: ${INTERNAL_API_KEY}        # >= 32 chars, same value in user-service
+  jwt:
+    secret: ${JWT_SECRET}               # base64, >= 256 bits; same key the gateway validates with
+    issuer: shop-identity
+    ttl: 10d
+    cookie-name: access_token           # must be the cookie name your gateway reads
+    cookie-secure: true
+    cookie-same-site: Lax               # use None (+ Secure) only if the SPA is on a different site
+    cookie-path: /
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+  security:
+    max-failed-logins: 5
+    failure-window: 15m
+    lock-duration: 15m
 
 logging:
   level:
